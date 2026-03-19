@@ -1,0 +1,30 @@
+{
+  "channel_platform": {},
+  "user_summary": {},
+  "channel_summary": {
+    "channel_name": "Channel",
+    "uploaded_count": "Uploaded Count",
+    "created_count": "Created Count",
+    "published_count": "Published Count",
+    "uploaded_duration": "Uploaded Duration (hh:mm:ss)",
+    "created_duration": "Created Duration (hh:mm:ss)",
+    "published_duration": "Published Duration (hh:mm:ss)"
+  },
+  "language": {},
+  "channel_user": {},
+  "output_type": {},
+  "input_type": {},
+  "monthly": {},
+  "_meta": {
+    "generated_at": "2026-03-19T19:34:02.155873",
+    "roles_mapped": [
+      "monthly",
+      "output_type",
+      "channel_user",
+      "user_summary",
+      "language",
+      "input_type",
+      "channel_platform"
+    ]
+  }
+}

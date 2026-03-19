@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "datasets": {
+    "channel_summary": {
+      "description": "Per-channel upload/process/publish counts and durations",
+      "filename_patterns": ["client", "combined_data"],
+      "filename_excludes": ["by ", "user"],
+      "semantic_columns": {
+        "channel_name":       {"description": "Channel identifier (letter or short name)", "dtype_hint": "categorical"},
+        "uploaded_count":     {"description": "Count of source videos uploaded by users", "dtype_hint": "integer"},
+        "created_count":      {"description": "Count of AI-created/processed clips", "dtype_hint": "integer"},
+        "published_count":    {"description": "Count of clips published to social platforms", "dtype_hint": "integer"},
+        "uploaded_duration":  {"description": "Total duration of uploaded videos in hh:mm:ss", "dtype_hint": "duration"},
+        "created_duration":   {"description": "Total duration of created clips in hh:mm:ss", "dtype_hint": "duration"},
+        "published_duration": {"description": "Total duration of published clips in hh:mm:ss", "dtype_hint": "duration"}
+      }
+    },
+    "monthly": {
+      "description": "Monthly aggregated upload/process/publish counts",
+      "filename_patterns": ["monthly-chart"],
+      "filename_excludes": [],
+      "semantic_columns": {
+        "month_label":        {"description": "Month label e.g. 'Apr, 2025'", "dtype_hint": "categorical"},
+        "monthly_uploaded":   {"description": "Total uploads in that month", "dtype_hint": "integer"},
+        "monthly_created":    {"description": "Total created/processed in that month", "dtype_hint": "integer"},
+        "monthly_published":  {"description": "Total published in that month", "dtype_hint": "integer"}
+      }
+    },
+    "channel_user": {
+      "description": "Per-channel per-user activity breakdown",
+      "filename_patterns": ["by channel and user"],
+      "filename_excludes": [],
+      "semantic_columns": {
+        "channel_name":    {"description": "Channel identifier", "dtype_hint": "categorical"},
+        "user_name":       {"description": "User or operator name", "dtype_hint": "categorical"},
+        "uploaded_count":  {"description": "Count of uploads", "dtype_hint": "integer"},
+        "created_count":   {"description": "Count of created clips", "dtype_hint": "integer"},
+        "published_count": {"description": "Count of published clips", "dtype_hint": "integer"}
+      }
+    },
+    "user_summary": {
+      "description": "Per-user aggregated metrics",
+      "filename_patterns": ["by user"],
+      "filename_excludes": ["channel"],
+      "semantic_columns": {
+        "user_name":       {"description": "User or operator name", "dtype_hint": "categorical"},
+        "uploaded_count":  {"description": "Count of uploads", "dtype_hint": "integer"},
+        "created_count":   {"description": "Count of created clips", "dtype_hint": "integer"},
+        "published_count": {"description": "Count of published clips", "dtype_hint": "integer"}
+      }
+    },
+    "output_type": {
+      "description": "Metrics broken down by output type (Key Moments, Summary, Shorts, etc.)",
+      "filename_patterns": ["by output type"],
+      "filename_excludes": [],
+      "semantic_columns": {
+        "output_type_name": {"description": "Type of output clip", "dtype_hint": "categorical"},
+        "uploaded_count":   {"description": "Count of uploads", "dtype_hint": "integer"},
+        "created_count":    {"description": "Count of created clips", "dtype_hint": "integer"},
+        "published_count":  {"description": "Count of published clips", "dtype_hint": "integer"}
+      }
+    },
+    "input_type": {
+      "description": "Metrics broken down by input type (interview, press conference, etc.)",
+      "filename_patterns": ["by input type"],
+      "filename_excludes": [],
+      "semantic_columns": {
+        "input_type_name":  {"description": "Type of input source", "dtype_hint": "categorical"},
+        "uploaded_count":   {"description": "Count of uploads", "dtype_hint": "integer"},
+        "created_count":    {"description": "Count of created clips", "dtype_hint": "integer"},
+        "published_count":  {"description": "Count of published clips", "dtype_hint": "integer"}
+      }
+    },
+    "language": {
+      "description": "Metrics broken down by language",
+      "filename_patterns": ["by language"],
+      "filename_excludes": [],
+      "semantic_columns": {
+        "language_name":   {"description": "Language code or name", "dtype_hint": "categorical"},
+        "uploaded_count":  {"description": "Count of uploads", "dtype_hint": "integer"},
+        "created_count":   {"description": "Count of created clips", "dtype_hint": "integer"},
+        "published_count": {"description": "Count of published clips", "dtype_hint": "integer"}
+      }
+    },
+    "channel_platform": {
+      "description": "Publishing counts per channel per social platform",
+      "filename_patterns": ["channel-wise-publishing"],
+      "filename_excludes": ["duration"],
+      "semantic_columns": {
+        "channel_name":     {"description": "Channel identifier", "dtype_hint": "categorical"},
+        "facebook_count":   {"description": "Count published to Facebook", "dtype_hint": "integer"},
+        "instagram_count":  {"description": "Count published to Instagram", "dtype_hint": "integer"},
+        "linkedin_count":   {"description": "Count published to LinkedIn", "dtype_hint": "integer"},
+        "youtube_count":    {"description": "Count published to YouTube", "dtype_hint": "integer"},
+        "x_count":          {"description": "Count published to X/Twitter", "dtype_hint": "integer"},
+        "shorts_count":     {"description": "Count published as Shorts", "dtype_hint": "integer"},
+        "reels_count":      {"description": "Count published as Reels", "dtype_hint": "integer"},
+        "threads_count":    {"description": "Count published to Threads", "dtype_hint": "integer"}
+      }
+    }
+  },
+  "analytics_items": [
+    {
+      "id": "kpis",
+      "type": "kpi_bundle",
+      "name": "All KPI Metrics",
+      "description": "Core KPI metrics: volume, conversion, efficiency, duration",
+      "dataset_roles": ["channel_summary", "monthly", "user_summary"],
+      "script": "kpi_script.py"
+    },
+    {
+      "id": "chart_data_all",
+      "type": "chart_data_bundle",
+      "name": "All Chart Data",
+      "description": "Chart data JSONs for frontend interactive charts",
+      "dataset_roles": ["channel_summary", "monthly", "output_type", "input_type", "channel_platform"],
+      "script": "chart_data_script.py"
+    }
+  ]
+}
