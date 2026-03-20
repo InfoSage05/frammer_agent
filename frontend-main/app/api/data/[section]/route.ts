@@ -1,0 +1,45 @@
+import { NextResponse } from "next/server";
+
+const SECTION_TO_BACKEND_PATH: Record<string, string> = {
+  executive: "overview",
+  trends: "trends",
+  multidim: "multidim",
+  funnel: "funnel",
+  explorer: "explorer",
+  client: "client",
+};
+
+const BACKEND_BASE = process.env.BACKEND_API_BASE ?? "http://localhost:8000";
+
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ section: string }> },
+) {
+  const { section } = await params;
+  const mapped = SECTION_TO_BACKEND_PATH[section];
+
+  if (!mapped) {
+    return NextResponse.json({ error: "Unknown section" }, { status: 404 });
+  }
+
+  try {
+    const upstream = await fetch(`${BACKEND_BASE}/data/${mapped}`, {
+      cache: "no-store",
+    });
+
+    if (!upstream.ok) {
+      return NextResponse.json(
+        { error: `Backend returned ${upstream.status}` },
+        { status: upstream.status },
+      );
+    }
+
+    const payload = await upstream.json();
+    return NextResponse.json(payload);
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to reach backend data service" },
+      { status: 502 },
+    );
+  }
+}
