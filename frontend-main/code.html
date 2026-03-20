@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Frammer AI - Video Registry</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff4756",
+                        "background-dark": "#0e0f11",
+                        "panel": "#191a1d",
+                        "surface": "#000000",
+                        "border-accent": "#6f252d",
+                        "text-main": "#f6f6f6",
+                        "text-body": "#cdcdce",
+                        "text-meta": "#535455"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0e0f11;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .red-accent-border {
+            border: 1px solid #6f252d;
+        }
+        .logo-text {
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .logo-highlight {
+            color: #ff4756;
+            text-shadow: 1px 1px 0px #6f252d;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0f11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #191a1d;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #535455;
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-text-body font-display selection:bg-primary/30">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 border-r border-text-meta/10 bg-surface flex flex-col flex-shrink-0 transition-all duration-300">
+<div class="p-8 flex items-center gap-3">
+<div class="flex items-center gap-2">
+<span class="text-2xl logo-text text-text-main"><span class="logo-highlight">FRAMMER</span> AI</span>
+</div>
+</div>
+<nav class="flex-1 w-full px-4 space-y-2 mt-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#cdcdce] hover:bg-panel hover:text-text-main group transition-all" href="#">
+<span class="material-symbols-outlined text-[#cdcdce]">dashboard</span>
+<span class="text-sm font-semibold">Executive Summary</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#cdcdce] hover:bg-panel hover:text-text-main group transition-all" href="#">
+<span class="material-symbols-outlined text-[#cdcdce]">trending_up</span>
+<span class="text-sm font-semibold">Usage Trends</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#cdcdce] hover:bg-panel hover:text-text-main group transition-all" href="#">
+<span class="material-symbols-outlined text-[#cdcdce]">groups</span>
+<span class="text-sm font-semibold">Team Activity</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#cdcdce] hover:bg-panel hover:text-text-main group transition-all" href="#">
+<span class="material-symbols-outlined text-[#cdcdce]">bar_chart</span>
+<span class="text-sm font-semibold">Publish Metric</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-text-main border border-border-accent group transition-all" href="#">
+<span class="material-symbols-outlined text-[#ff4756]">movie</span>
+<span class="text-sm font-semibold">Video Registry</span>
+</a>
+</nav>
+<div class="p-6 border-t border-text-meta/10 flex flex-col gap-4">
+<button class="flex items-center gap-3 px-4 text-text-meta hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Support Center</span>
+</button>
+<div class="flex items-center gap-3 px-4 py-2 rounded-xl bg-panel/50 border border-text-meta/10 cursor-pointer hover:border-primary transition-colors">
+<div class="size-8 rounded-full bg-panel border border-text-meta/20 overflow-hidden shrink-0">
+<img alt="User avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3u22U5tlke-BmOgcAapiFVlrED8zvvaDobV8ftX3JirNhVvaJ7k7xtBL38in7-zU6xW4Jh5lWeaNYN7U8C-F602WbSK33Q-QeLvTscxgs-rJIoVp04_z0Kv436xaFP4OIFfcicWzZQVFyb37gjAmcp69vqKMFEhjKTULD1bO_IdIKte-XmORoYh3KnsB_QVszMTt-0SYyGCNjNmZ4ekeEbboZQpVOwo3IFQ0biob8DkEnfSHbZVGOsE-7P-USH1GCt-Fjotagmx48"/>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-xs font-bold text-text-main truncate">Alex Rivera</span>
+<span class="text-[10px] text-text-meta truncate">Admin Account</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-y-auto bg-background-dark relative">
+<header class="h-16 border-b border-text-meta/10 bg-surface/80 backdrop-blur-md sticky top-0 z-10 px-8 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-8">
+<h1 class="text-text-main font-semibold">Video Registry</h1>
+<div class="flex gap-6 h-full">
+<a class="text-sm font-medium text-primary border-b-2 border-primary h-16 flex items-center" href="#">All Media</a>
+<a class="text-sm font-medium text-text-meta hover:text-text-body h-16 flex items-center" href="#">Archived</a>
+<a class="text-sm font-medium text-text-meta hover:text-text-body h-16 flex items-center" href="#">Trash</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-4 py-2 bg-panel border border-text-meta/10 rounded-lg text-text-main text-sm font-medium hover:border-primary transition-all">
+<span class="material-symbols-outlined text-lg">file_download</span>
+                        Export CSV
+                    </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-text-main rounded-lg text-sm font-bold red-accent-border shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">upload</span>
+                        New Upload
+                    </button>
+</div>
+</header>
+<div class="p-8 space-y-6">
+<div class="bg-panel p-4 rounded-xl border border-text-meta/10 flex flex-wrap items-center gap-4 shadow-lg">
+<div class="flex-1 min-w-[200px] relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-meta text-lg">search</span>
+<input class="w-full bg-background-dark border border-text-meta/10 rounded-lg pl-10 pr-4 py-2 text-sm text-text-main placeholder:text-text-meta focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Filter by headline or ID..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-text-meta uppercase tracking-wider">Source:</span>
+<select class="bg-background-dark border border-text-meta/10 rounded-lg px-3 py-1.5 text-xs text-text-body focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>All Sources</option>
+<option>S3 Bucket</option>
+<option>Direct Upload</option>
+<option>API Hook</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-text-meta uppercase tracking-wider">Type:</span>
+<select class="bg-background-dark border border-text-meta/10 rounded-lg px-3 py-1.5 text-xs text-text-body focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>All Types</option>
+<option>RAW</option>
+<option>Shortened</option>
+<option>Enhanced</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-text-meta uppercase tracking-wider">Team:</span>
+<select class="bg-background-dark border border-text-meta/10 rounded-lg px-3 py-1.5 text-xs text-text-body focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>All Teams</option>
+<option>Marketing</option>
+<option>Product</option>
+<option>Social Media</option>
+</select>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-text-meta uppercase tracking-wider">Date:</span>
+<button class="bg-background-dark border border-text-meta/10 rounded-lg px-3 py-1.5 text-xs text-text-body flex items-center gap-2 hover:border-text-body transition-all">
+                                Last 30 Days
+                                <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-surface border border-text-meta/10 rounded-xl overflow-hidden shadow-2xl">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-panel/50 border-b border-text-meta/10">
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest w-12">
+<input class="rounded border-text-meta/30 bg-background-dark text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest">Video Headline</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest">Source</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest">Type</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest text-center">Duration</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest">Team</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest">Status</th>
+<th class="px-6 py-4 text-xs font-bold text-text-meta uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-text-meta/5">
+<tr class="hover:bg-panel/30 transition-colors group">
+<td class="px-6 py-4">
+<input class="rounded border-text-meta/30 bg-background-dark text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded bg-panel border border-text-meta/10 overflow-hidden flex-shrink-0 relative group">
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-text-main text-sm">play_arrow</span>
+</div>
+<div class="w-full h-full bg-gradient-to-br from-text-meta/20 to-transparent"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-text-main leading-tight">Summer_Festival_Highlight_2024.mp4</span>
+<span class="text-[10px] text-text-meta">ID: VR-4921-X</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-text-meta">cloud</span>
+<span class="text-xs text-text-body">AWS S3</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">RAW</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-xs text-text-body font-medium tabular-nums">04:32</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-text-body">Marketing</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-primary uppercase">Published</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-text-meta hover:text-text-main">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-panel/30 transition-colors group">
+<td class="px-6 py-4">
+<input class="rounded border-text-meta/30 bg-background-dark text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded bg-panel border border-text-meta/10 overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-gradient-to-br from-text-meta/20 to-transparent"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-text-main leading-tight">Product_Demo_Final_v2.mp4</span>
+<span class="text-[10px] text-text-meta">ID: VR-3301-A</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-text-meta">upload_file</span>
+<span class="text-xs text-text-body">Direct</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 text-[10px] font-bold border border-purple-500/20">ENHANCED</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-xs text-text-body font-medium tabular-nums">12:15</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-text-body">Product</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
+<span class="text-[10px] font-bold text-yellow-500 uppercase">Processing</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-text-meta hover:text-text-main">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-panel/30 transition-colors group">
+<td class="px-6 py-4">
+<input class="rounded border-text-meta/30 bg-background-dark text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded bg-panel border border-text-meta/10 overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-gradient-to-br from-text-meta/20 to-transparent"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-text-main leading-tight">Short_TikTok_Ad_B_Roll.mov</span>
+<span class="text-[10px] text-text-meta">ID: VR-1290-C</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-text-meta">api</span>
+<span class="text-xs text-text-body">API</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold border border-emerald-500/20">SHORTENED</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-xs text-text-body font-medium tabular-nums">00:45</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-text-body">Social Media</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-text-meta"></span>
+<span class="text-[10px] font-bold text-text-meta uppercase">Draft</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-text-meta hover:text-text-main">more_vert</button>
+</td>
+</tr>
+<tr class="hover:bg-panel/30 transition-colors group">
+<td class="px-6 py-4">
+<input class="rounded border-text-meta/30 bg-background-dark text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded bg-panel border border-text-meta/10 overflow-hidden flex-shrink-0">
+<div class="w-full h-full bg-gradient-to-br from-text-meta/20 to-transparent"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-text-main leading-tight">Interview_Founder_Full.mp4</span>
+<span class="text-[10px] text-text-meta">ID: VR-8822-M</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-text-meta">cloud</span>
+<span class="text-xs text-text-body">AWS S3</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">RAW</span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-xs text-text-body font-medium tabular-nums">45:10</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-xs text-text-body">Marketing</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold text-primary uppercase">Published</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="material-symbols-outlined text-text-meta hover:text-text-main">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-6 py-4 bg-panel/30 border-t border-text-meta/10 flex items-center justify-between">
+<span class="text-xs text-text-meta">Showing 1 to 10 of 254 entries</span>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-panel text-text-meta transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<div class="flex items-center gap-1">
+<button class="size-8 rounded bg-primary text-text-main text-xs font-bold">1</button>
+<button class="size-8 rounded hover:bg-panel text-text-meta text-xs transition-colors">2</button>
+<button class="size-8 rounded hover:bg-panel text-text-meta text-xs transition-colors">3</button>
+<span class="text-text-meta px-1">...</span>
+<button class="size-8 rounded hover:bg-panel text-text-meta text-xs transition-colors">26</button>
+</div>
+<button class="p-1 rounded hover:bg-panel text-text-meta transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="fixed bottom-8 right-8 flex items-center group cursor-pointer z-[100]">
+<div class="mr-3 bg-panel border border-text-meta/20 px-4 py-2 rounded-full shadow-2xl opacity-100 translate-x-0 transition-all duration-300 flex items-center">
+<span class="text-[#f6f6f6] text-sm font-semibold whitespace-nowrap">AI Assistant</span>
+</div>
+<div class="w-14 h-14 bg-[#ff4756] border border-[#6f252d] rounded-full flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-110 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-white text-2xl">auto_awesome</span>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
