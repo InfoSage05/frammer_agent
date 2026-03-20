@@ -175,62 +175,107 @@ function ViewsTab({ dash }: any) {
 
 function CopilotTab({ dash, attachedData, onRemoveData }: any) {
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: 'I can help you explore the dashboard data. What would you like to know?' },
+    {
+      role: 'assistant',
+      text: "Hi! I'm your AI Data Analyst. I can help explore your data, answer questions, and generate chart or table insights.",
+    },
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [ragMode, setRagMode] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
   const sel = dash?.selectedCtx || {};
   const hasContext = sel.channel || sel.month || sel.language || sel.user;
   const sources = Array.isArray(attachedData) ? attachedData : [];
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    const userMsg = input.trim();
+  const QUICK_PROMPTS = [
+    'What is the overall publish rate?',
+    'Which channels have the highest volume?',
+    'Show me monthly trends',
+  ];
+
+  const resetMessages = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        text: "Chat cleared. Ask me anything about the dashboard data.",
+      },
+    ]);
+    setSessionId(null);
+  };
+
+  const handleSend = async (txt?: string) => {
+    const userMsg = (txt ?? input).trim();
+    if (!userMsg || loading) return;
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setInput('');
+    setLoading(true);
 
-    // Build context from attached graph data
-    let graphContext = '';
-    if (sources.length > 0) {
-      graphContext = sources.map(s =>
-        `\n[Source: ${s.name}] ${JSON.stringify(s.data).substring(0, 600)}`
-      ).join('');
-    }
+    const attachedSources = sources.map((s: any) => ({
+      name: s.name,
+      data: s.data,
+    }));
 
-    // Simple response matching — uses attached data context when available
-    let response = "I'll analyze the data for you. The platform processed 15,119 AI outputs from 4,453 uploads with a 2.5% publish rate.";
-    const q = userMsg.toLowerCase();
-
-    if (sources.length > 0) {
-      const sourceNames = sources.map(s => s.name).join(', ');
-      // Context-aware responses based on attached graphs
-      if (q.includes('publish') || q.includes('rate')) {
-        response = `Based on the attached data (${sourceNames}): The publish rate is ${M.publishRate}%. Only ${M.published} of ${M.created.toLocaleString()} created items were published — a ${M.unpubRate}% gap.`;
-      } else if (q.includes('channel')) {
-        response = `Based on the attached data (${sourceNames}): ${M.activeChannels} channels are active. Ch-${M.topCh} leads with ${M.topChPub} publishes (${M.topChRate}% rate). 12 of 18 channels have zero published output.`;
-      } else if (q.includes('quality') || q.includes('team')) {
-        response = `Based on the attached data (${sourceNames}): 99.3% of records have unknown team attribution. 68% of published items have NULL platform data. ~15.5% of created outputs appear to be QA/test artifacts.`;
-      } else if (q.includes('trend') || q.includes('spike') || q.includes('month')) {
-        response = `Based on the attached data (${sourceNames}): ${M.peakMonth} saw an anomalous spike of ${M.peakCreated.toLocaleString()} outputs. ${M.zeroPubMonths} months had zero publishes (Mar, Jul, Sep 2025).`;
+    try {
+      if (ragMode) {
+        const ragRes = await fetch('http://localhost:8000/ask-ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question: userMsg,
+            session_id: sessionId,
+            use_thinking_model: false,
+          }),
+        });
+        if (!ragRes.ok) throw new Error('RAG request failed');
+        const ragData = await ragRes.json();
+        setSessionId(ragData.session_id);
+        const datasets = Array.isArray(ragData.datasets_referenced)
+          ? ragData.datasets_referenced.join(', ')
+          : 'None';
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: `RAG response (context: ${ragData.context_size ?? 0}, datasets: ${datasets})\n\n${ragData.answer || ''}`,
+          },
+        ]);
       } else {
-        response = `I'm analyzing the attached data from: ${sourceNames}. The dataset shows ${M.uploaded.toLocaleString()} uploads producing ${M.created.toLocaleString()} AI outputs with only ${M.published} published (${M.publishRate}% rate).`;
+        const chatRes = await fetch('http://localhost:8000/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: userMsg,
+            session_id: sessionId,
+            attached_sources: attachedSources,
+            context: hasContext ? sel : undefined,
+          }),
+        });
+        if (!chatRes.ok) throw new Error('Chat request failed');
+        const chatData = await chatRes.json();
+        setSessionId(chatData.session_id);
+        setMessages(prev => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: chatData.response || 'No response returned.',
+            artifacts: chatData.artifacts || [],
+          },
+        ]);
       }
-    } else {
-      if (q.includes('publish') || q.includes('rate')) {
-        response = `The publish rate is ${M.publishRate}%. Only ${M.published} of ${M.created.toLocaleString()} created items were published.`;
-      } else if (q.includes('channel')) {
-        response = `There are ${M.activeChannels} active channels. Ch-${M.topCh} leads with ${M.topChPub} publishes (${M.topChRate}% rate).`;
-      } else if (q.includes('quality') || q.includes('team')) {
-        response = '99.3% of records have unknown team attribution. 68% of published items have NULL platform data.';
-      } else if (q.includes('trend') || q.includes('spike')) {
-        response = `${M.peakMonth} saw an anomalous spike: ${M.peakCreated.toLocaleString()} outputs created. ${M.zeroPubMonths} months had zero publishes.`;
-      }
+    } catch (e: any) {
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: `Sorry, I couldn't process your request. ${e?.message ? `Error: ${e.message}` : 'Please make sure the backend server is running on port 8000.'}`,
+        },
+      ]);
+    } finally {
+      setLoading(false);
     }
-
-    setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'assistant', text: response }]);
-    }, 400);
   };
 
   useEffect(() => {
@@ -254,15 +299,37 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
         {messages.map((msg, i) => (
           <div key={i} className={`chat-msg ${msg.role === 'user' ? 'user' : ''}`}>
             {msg.role === 'assistant' && <div className="chat-mav">F</div>}
-            <div className="chat-bbl">{msg.text}</div>
+            <div className="chat-bbl">
+              {msg.text}
+              {Array.isArray(msg.artifacts) && msg.artifacts.length > 0 && (
+                <div style={{ marginTop: 8, fontSize: 10, opacity: 0.8 }}>
+                  {msg.artifacts.map((a: any, idx: number) => (
+                    <div key={idx} style={{ marginTop: 4 }}>
+                      • {a.type || 'artifact'} {a.title ? `- ${a.title}` : ''}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ))}
 
-        {messages.length <= 1 && (
+        {loading && (
+          <div className="chat-msg">
+            <div className="chat-mav">F</div>
+            <div className="chat-bbl" style={{ opacity: 0.8 }}>
+              Analyzing...
+            </div>
+          </div>
+        )}
+
+        {messages.length <= 1 && !loading && (
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 8 }}>
-            <button className="chat-qp" onClick={() => { setInput('What is the publish rate?'); }}>Publish rate?</button>
-            <button className="chat-qp" onClick={() => { setInput('Show channel breakdown'); }}>Channel breakdown</button>
-            <button className="chat-qp" onClick={() => { setInput('What are the data quality issues?'); }}>Data quality</button>
+            {QUICK_PROMPTS.map((p) => (
+              <button key={p} className="chat-qp" onClick={() => handleSend(p)}>
+                {p}
+              </button>
+            ))}
           </div>
         )}
       </div>
@@ -311,6 +378,22 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
       )}
 
       <div className="rp-chat-foot">
+        <button
+          className="chat-qp"
+          style={{ marginRight: 6 }}
+          onClick={() => setRagMode(v => !v)}
+          title="Toggle RAG mode"
+        >
+          {ragMode ? 'RAG ON' : 'RAG OFF'}
+        </button>
+        <button
+          className="chat-qp"
+          style={{ marginRight: 6 }}
+          onClick={resetMessages}
+          title="Clear chat"
+        >
+          Clear
+        </button>
         <input
           className="chat-inp"
           placeholder={sources.length > 0 ? `Ask about ${sources[sources.length - 1].name}...` : "Ask about the data..."}
@@ -318,7 +401,7 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSend()}
         />
-        <button className="chat-send" onClick={handleSend}>↑</button>
+        <button className="chat-send" onClick={() => handleSend()} disabled={loading}>↑</button>
       </div>
     </div>
   );

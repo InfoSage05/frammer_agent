@@ -1,11 +1,222 @@
 {
-  "generated_at": "2026-03-19T19:34:02.723432",
+  "generated_at": "2026-03-21T03:27:20.915223",
   "from_cache": false,
   "change_type": "schema_change",
   "metrics": [],
   "by_category": {},
   "count": 0,
   "chart_data": {
+    "platform_distribution": [
+      {
+        "name": "Youtube",
+        "value": 35
+      },
+      {
+        "name": "Reels",
+        "value": 33
+      },
+      {
+        "name": "Shorts",
+        "value": 23
+      },
+      {
+        "name": "Instagram",
+        "value": 11
+      },
+      {
+        "name": "Facebook",
+        "value": 9
+      }
+    ],
+    "monthly_trends": [
+      {
+        "month": "",
+        "uploaded": 533,
+        "created": 1656,
+        "published": 44,
+        "publishRate": 2.66
+      },
+      {
+        "month": "",
+        "uploaded": 256,
+        "created": 699,
+        "published": 7,
+        "publishRate": 1.0
+      },
+      {
+        "month": "",
+        "uploaded": 194,
+        "created": 644,
+        "published": 7,
+        "publishRate": 1.09
+      },
+      {
+        "month": "",
+        "uploaded": 676,
+        "created": 2756,
+        "published": 14,
+        "publishRate": 0.51
+      },
+      {
+        "month": "",
+        "uploaded": 492,
+        "created": 1492,
+        "published": 20,
+        "publishRate": 1.34
+      },
+      {
+        "month": "",
+        "uploaded": 284,
+        "created": 892,
+        "published": 0,
+        "publishRate": 0.0
+      },
+      {
+        "month": "",
+        "uploaded": 239,
+        "created": 907,
+        "published": 3,
+        "publishRate": 0.33
+      },
+      {
+        "month": "",
+        "uploaded": 639,
+        "created": 2555,
+        "published": 0,
+        "publishRate": 0.0
+      },
+      {
+        "month": "",
+        "uploaded": 217,
+        "created": 642,
+        "published": 4,
+        "publishRate": 0.62
+      },
+      {
+        "month": "",
+        "uploaded": 353,
+        "created": 943,
+        "published": 2,
+        "publishRate": 0.21
+      },
+      {
+        "month": "",
+        "uploaded": 343,
+        "created": 1046,
+        "published": 10,
+        "publishRate": 0.96
+      },
+      {
+        "month": "",
+        "uploaded": 227,
+        "created": 684,
+        "published": 0,
+        "publishRate": 0.0
+      }
+    ],
+    "input_type_mix": [
+      {
+        "name": "interview",
+        "value": 0,
+        "color": "#4F46E5"
+      },
+      {
+        "name": "news bulletin",
+        "value": 0,
+        "color": "#06B6D4"
+      },
+      {
+        "name": "special reports",
+        "value": 0,
+        "color": "#10B981"
+      },
+      {
+        "name": "speech",
+        "value": 0,
+        "color": "#F59E0B"
+      },
+      {
+        "name": "debate",
+        "value": 0,
+        "color": "#EF4444"
+      },
+      {
+        "name": "press conference",
+        "value": 0,
+        "color": "#8B5CF6"
+      },
+      {
+        "name": "discussion-show",
+        "value": 0,
+        "color": "#EC4899"
+      },
+      {
+        "name": "sports show",
+        "value": 0,
+        "color": "#14B8A6"
+      },
+      {
+        "name": "Unknown",
+        "value": 0,
+        "color": "#F97316"
+      },
+      {
+        "name": "podcast",
+        "value": 0,
+        "color": "#6366F1"
+      },
+      {
+        "name": "drama",
+        "value": 0,
+        "color": "#D946EF"
+      },
+      {
+        "name": "in-brief",
+        "value": 0,
+        "color": "#84CC16"
+      }
+    ],
+    "funnel_data": [
+      {
+        "stage": "Uploaded",
+        "value": 3483
+      },
+      {
+        "stage": "Processed",
+        "value": 14914
+      },
+      {
+        "stage": "Published",
+        "value": 48
+      }
+    ],
+    "output_type_mix": [
+      {
+        "name": "Summary",
+        "value": 8400,
+        "color": "#EF4444"
+      },
+      {
+        "name": "Key moments",
+        "value": 6377,
+        "color": "#06B6D4"
+      },
+      {
+        "name": "Full package",
+        "value": 4453,
+        "color": "#4F46E5"
+      },
+      {
+        "name": "Chapters",
+        "value": 2007,
+        "color": "#10B981"
+      },
+      {
+        "name": "My Key moments",
+        "value": 1237,
+        "color": "#F59E0B"
+      }
+    ],
     "channel_performance": [
       {
         "name": "Channel B",
@@ -150,217 +361,6 @@
         "published": 0,
         "rate": 0.0,
         "amp": 2.33
-      }
-    ],
-    "output_type_mix": [
-      {
-        "name": "Summary",
-        "value": 8400,
-        "color": "#EF4444"
-      },
-      {
-        "name": "Key moments",
-        "value": 6377,
-        "color": "#06B6D4"
-      },
-      {
-        "name": "Full package",
-        "value": 4453,
-        "color": "#4F46E5"
-      },
-      {
-        "name": "Chapters",
-        "value": 2007,
-        "color": "#10B981"
-      },
-      {
-        "name": "My Key moments",
-        "value": 1237,
-        "color": "#F59E0B"
-      }
-    ],
-    "monthly_trends": [
-      {
-        "month": "",
-        "uploaded": 533,
-        "created": 1656,
-        "published": 44,
-        "publishRate": 2.66
-      },
-      {
-        "month": "",
-        "uploaded": 256,
-        "created": 699,
-        "published": 7,
-        "publishRate": 1.0
-      },
-      {
-        "month": "",
-        "uploaded": 194,
-        "created": 644,
-        "published": 7,
-        "publishRate": 1.09
-      },
-      {
-        "month": "",
-        "uploaded": 676,
-        "created": 2756,
-        "published": 14,
-        "publishRate": 0.51
-      },
-      {
-        "month": "",
-        "uploaded": 492,
-        "created": 1492,
-        "published": 20,
-        "publishRate": 1.34
-      },
-      {
-        "month": "",
-        "uploaded": 284,
-        "created": 892,
-        "published": 0,
-        "publishRate": 0.0
-      },
-      {
-        "month": "",
-        "uploaded": 239,
-        "created": 907,
-        "published": 3,
-        "publishRate": 0.33
-      },
-      {
-        "month": "",
-        "uploaded": 639,
-        "created": 2555,
-        "published": 0,
-        "publishRate": 0.0
-      },
-      {
-        "month": "",
-        "uploaded": 217,
-        "created": 642,
-        "published": 4,
-        "publishRate": 0.62
-      },
-      {
-        "month": "",
-        "uploaded": 353,
-        "created": 943,
-        "published": 2,
-        "publishRate": 0.21
-      },
-      {
-        "month": "",
-        "uploaded": 343,
-        "created": 1046,
-        "published": 10,
-        "publishRate": 0.96
-      },
-      {
-        "month": "",
-        "uploaded": 227,
-        "created": 684,
-        "published": 0,
-        "publishRate": 0.0
-      }
-    ],
-    "funnel_data": [
-      {
-        "stage": "Uploaded",
-        "value": 3483
-      },
-      {
-        "stage": "Processed",
-        "value": 14914
-      },
-      {
-        "stage": "Published",
-        "value": 48
-      }
-    ],
-    "input_type_mix": [
-      {
-        "name": "interview",
-        "value": 0,
-        "color": "#4F46E5"
-      },
-      {
-        "name": "news bulletin",
-        "value": 0,
-        "color": "#06B6D4"
-      },
-      {
-        "name": "special reports",
-        "value": 0,
-        "color": "#10B981"
-      },
-      {
-        "name": "speech",
-        "value": 0,
-        "color": "#F59E0B"
-      },
-      {
-        "name": "debate",
-        "value": 0,
-        "color": "#EF4444"
-      },
-      {
-        "name": "press conference",
-        "value": 0,
-        "color": "#8B5CF6"
-      },
-      {
-        "name": "discussion-show",
-        "value": 0,
-        "color": "#EC4899"
-      },
-      {
-        "name": "sports show",
-        "value": 0,
-        "color": "#14B8A6"
-      },
-      {
-        "name": "Unknown",
-        "value": 0,
-        "color": "#F97316"
-      },
-      {
-        "name": "podcast",
-        "value": 0,
-        "color": "#6366F1"
-      },
-      {
-        "name": "drama",
-        "value": 0,
-        "color": "#D946EF"
-      },
-      {
-        "name": "in-brief",
-        "value": 0,
-        "color": "#84CC16"
-      }
-    ],
-    "platform_distribution": [
-      {
-        "name": "Youtube",
-        "value": 35
-      },
-      {
-        "name": "Reels",
-        "value": 33
-      },
-      {
-        "name": "Shorts",
-        "value": 23
-      },
-      {
-        "name": "Instagram",
-        "value": 11
-      },
-      {
-        "name": "Facebook",
-        "value": 9
       }
     ]
   },
