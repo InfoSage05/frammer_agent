@@ -383,12 +383,6 @@ function SectionMultiDim({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      {/* signal line */}
-      <div className="sig-block">
-        <p className="sig-line">Video drives <span className="sig-val">61%</span> of uploads — publish rate varies from <span className="sig-warn">0%</span> to <span className="sig-pos">8.4%</span> across content types.</p>
-        <p className="sig-line">Short-form leads with highest conversion; docs and podcasts at <span className="sig-warn">near-zero</span> distribution.</p>
-      </div>
-
       {/* ── filter bar ── */}
       <div className="filter-panel">
         <div className="filter-group">

@@ -47,7 +47,6 @@ function SectionExplorer({ theme, onAskAI }) {
     }, {}),
   }));
   const dataQualityRows = data?.dataQualityRows || [];
-
   const TICK_OPT = {
     color: theme === "light" ? "#000000" : "#ffffff",
     font: { size: 10, family: "var(--font-mono)" },
@@ -173,10 +172,6 @@ function SectionExplorer({ theme, onAskAI }) {
       a: <><span className="sig-val">18</span> channels tracked across <span className="sig-val">4</span> platforms — heatmap reveals <span className="sig-warn">3 underperforming</span> channels with low coverage.</>,
       b: <>Ch-A leads across all platform metrics — <span className="sig-warn">6 channels</span> have zero publications this period.</>,
     },
-    quality: {
-      a: <>Data completeness at <span className="sig-pos">94.2%</span> across all tracked fields — <span className="sig-warn">3 fields</span> with gaps identified in the last 30 days.</>,
-      b: <>Thumbnail and duration metadata are the most common <span className="sig-warn">missing fields</span> — affects 12 channels.</>,
-    },
     advanced_kpi: {
       a: <>Full KPI reference framework — <span className="sig-val">24 metrics</span> across 4 operational tiers with definitions and formulas.</>,
       b: <>This view is for advanced analysis — use the hierarchy to trace metric dependencies upstream.</>,
@@ -187,11 +182,6 @@ function SectionExplorer({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sig-block">
-        <p className="sig-line">{sig.a}</p>
-        <p className="sig-line">{sig.b}</p>
-      </div>
-
       <div className="sub-tabs">
         {data.subTabs.map(([k, l]) => (
           <div
@@ -640,174 +630,6 @@ function SectionExplorer({ theme, onAskAI }) {
                 />
               }
               back={<GraphInsights title="Platform × Channel Heatmap" />}
-            />
-          </div>
-        </div>
-      )}
-
-      {subView === "quality" && (
-        <div className="stack">
-          <div className="card" style={{ padding: "24px 28px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
-              <div>
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--pri)", marginBottom: 4 }}>
-                  DATA QUALITY LAYER
-                </div>
-                <div style={{ fontSize: 11, color: "var(--ink3)" }}>
-                  Monitoring coverage, integrity, and validity across 4,453 records
-                </div>
-              </div>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.dataCompleteness}
-                onToggleInsights={() => toggleInsights("dataCompleteness")}
-                onAskAI={() => onAskAI && onAskAI("Data Quality Layer", { rings: data.completenessRings, rows: dataQualityRows })}
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.dataCompleteness}
-              minHeight={400}
-              front={<>
-                {/* Rings row */}
-                <div style={{ display: "flex", alignItems: "center", gap: 40, padding: "16px 24px", background: "var(--bg3)", borderRadius: "var(--radius)", marginBottom: 24 }}>
-                  {data.completenessRings.map((ring) => (
-                    <Ring key={ring.label} pct={ring.pct} color={ring.color} label={ring.label} size={ring.size} />
-                  ))}
-                  <div style={{ marginLeft: "auto", display: "flex", gap: 20 }}>
-                    {[
-                      { l: "Critical Issues", v: dataQualityRows.filter(r => r.severity === "critical").length, c: "var(--red-lt)" },
-                      { l: "Warnings", v: dataQualityRows.filter(r => r.severity === "warning").length, c: "var(--amber-lt)" },
-                      { l: "Total Checks", v: dataQualityRows.length, c: "var(--ink3)" },
-                    ].map(s => (
-                      <div key={s.l} style={{ textAlign: "center" }}>
-                        <div style={{ fontFamily: "var(--font-serif)", fontSize: 22, color: s.c, lineHeight: 1 }}>{s.v}</div>
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "var(--ink4)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 4 }}>{s.l}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Metric cards in 2-column grid */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                  {dataQualityRows.map((row) => (
-                    <div key={row.l} style={{
-                      padding: "16px 18px",
-                      border: "1px solid var(--line-lt)",
-                      borderRadius: "var(--radius)",
-                      background: "var(--bg3)",
-                      borderLeft: `3px solid ${row.c}`,
-                    }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                          <span style={{ fontSize: 13, fontFamily: "var(--font-mono)", color: "var(--ink)", fontWeight: 600 }}>{row.l}</span>
-                          {row.severity && (
-                            <span style={{
-                              fontSize: 7.5, fontFamily: "var(--font-mono)", letterSpacing: "0.1em", padding: "2px 7px", borderRadius: 3,
-                              background: row.severity === "critical" ? "rgba(255,71,87,0.1)" : "rgba(224,168,56,0.1)",
-                              color: row.severity === "critical" ? "var(--red-lt)" : "var(--amber-lt)",
-                              border: `1px solid ${row.severity === "critical" ? "rgba(255,71,87,0.22)" : "rgba(224,168,56,0.22)"}`,
-                              textTransform: "uppercase",
-                            }}>
-                              {row.severity === "critical" ? "⚑ CRITICAL" : "⚠ WARNING"}
-                            </span>
-                          )}
-                        </div>
-                        <span style={{ fontFamily: "var(--font-serif)", fontSize: 20, color: row.c, fontWeight: 400, flexShrink: 0, marginLeft: 12 }}>{row.v}</span>
-                      </div>
-                      {row.pct != null && (
-                        <div style={{ height: 5, background: "var(--line)", borderRadius: 3, overflow: "hidden", marginBottom: 10 }}>
-                          <div style={{ width: `${Math.min(row.pct, 100)}%`, height: "100%", background: row.c, borderRadius: 3, transition: "width 0.5s cubic-bezier(.4,0,.2,1)" }} />
-                        </div>
-                      )}
-                      {row.detail && (
-                        <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--ink4)", lineHeight: 1.6 }}>{row.detail}</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </>}
-              back={<GraphInsights title="Data Quality Layer" />}
-            />
-          </div>
-        </div>
-      )}
-
-      {subView === "kpi_tree" && data.kpiTree?.children && (
-        <div className="stack">
-          <div className="card" style={{ padding: "16px 18px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <div>
-                <div style={{ fontSize: 8, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 4 }}>
-                  KPI FRAMEWORK — INTERACTIVE TREE
-                </div>
-                <div style={{ fontSize: 11, color: "var(--ink3)" }}>
-                  Click category nodes to expand/collapse. Drag nodes to rearrange.
-                </div>
-              </div>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.kpiTree}
-                onToggleInsights={() => toggleInsights("kpiTree")}
-                onAskAI={() => onAskAI && onAskAI("KPI Framework Tree", { tree: data.kpiTree })}
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.kpiTree}
-              minHeight={400}
-              front={<KPITree data={data.kpiTree} />}
-              back={<GraphInsights title="KPI Framework Tree" />}
-            />
-          </div>
-        </div>
-      )}
-
-      {subView === "d3tree" && (
-        <div className="stack">
-          <div className="card" style={{ padding: "16px 18px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <div>
-                <div style={{ fontSize: 8, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 4 }}>
-                  HIERARCHY EXPLORER
-                </div>
-                <div style={{ fontSize: 11, color: "var(--ink3)" }}>
-                  Explore channel, user, and content relationships
-                </div>
-              </div>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.d3tree}
-                onToggleInsights={() => toggleInsights("d3tree")}
-                onAskAI={() => onAskAI && onAskAI("Hierarchy Tree", { root: treeRoot, child: treeChild, metric: treeMetric })}
-              />
-            </div>
-            <div className="filter-panel" style={{ marginBottom: 12 }}>
-              <div className="filter-group">
-                <div className="filter-group-label">Root</div>
-                <div className="dim-row">
-                  {(data.hierarchyOptions?.root || []).map(([k, l]) => (
-                    <button key={k} className={`dim-opt${treeRoot === k ? " active" : ""}`} onClick={() => setTreeRoot(k)}>{l}</button>
-                  ))}
-                </div>
-              </div>
-              <div className="filter-group">
-                <div className="filter-group-label">Child</div>
-                <div className="dim-row">
-                  {(data.hierarchyOptions?.child || []).map(([k, l]) => (
-                    <button key={k} className={`dim-opt${treeChild === k ? " active" : ""}`} onClick={() => setTreeChild(k)}>{l}</button>
-                  ))}
-                </div>
-              </div>
-              <div className="filter-group">
-                <div className="filter-group-label">Metric</div>
-                <div className="dim-row">
-                  {(data.hierarchyOptions?.metric || []).map(([k, l]) => (
-                    <button key={k} className={`dim-opt${treeMetric === k ? " active" : ""}`} onClick={() => setTreeMetric(k)}>{l}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.d3tree}
-              minHeight={400}
-              front={<D3CollapsibleTree rootDim={treeRoot} childDim={treeChild} metric={treeMetric} theme={theme} data={data} />}
-              back={<GraphInsights title="Hierarchy Tree" />}
             />
           </div>
         </div>

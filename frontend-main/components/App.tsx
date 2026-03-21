@@ -500,28 +500,16 @@ export default function App(props: any) {
               </div>
 
               <div className="nav-grp">SECTIONS</div>
-              {ALL_SECTIONS.map((s) => {
-                const isClient = s.k === "client";
-                return (
-                  <div
-                    key={s.k}
-                    className={`nav-item${activeSection === s.k ? " active" : ""}`}
-                    onClick={() => scrollToSection(s.k)}
-                    data-client-nav={isClient ? "true" : undefined}
-                    title={isClient ? "Explicit access only — not in scroll flow" : undefined}
-                  >
-                    <span className="nav-icon">{s.icon}</span>
-                    <span className="nav-label">
-                      {pageTitles[s.k] || s.label}
-                      {isClient && (
-                        <span style={{ marginLeft: 5, fontSize: 9, fontFamily: "var(--font-mono)", color: "var(--ink4)", letterSpacing: "0.08em" }}>
-                          PRIVATE
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                );
-              })}
+              {ALL_SECTIONS.filter(s => s.k !== "client").map((s) => (
+                <div
+                  key={s.k}
+                  className={`nav-item${activeSection === s.k ? " active" : ""}`}
+                  onClick={() => scrollToSection(s.k)}
+                >
+                  <span className="nav-icon">{s.icon}</span>
+                  <span className="nav-label">{pageTitles[s.k] || s.label}</span>
+                </div>
+              ))}
 
               <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">TOOLS</div>
@@ -537,26 +525,9 @@ export default function App(props: any) {
 
               <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">WORKSPACE</div>
-                <div className={`nav-item${panelOpen && panelTab === 'explain' ? ' active' : ''}`} onClick={() => openPanel('explain')}>
-                  <span className="nav-icon">◈</span>
-                  <span className="nav-label">Explain</span>
-                </div>
-                <div className={`nav-item${panelOpen && panelTab === 'compare' ? ' active' : ''}`} onClick={() => openPanel('compare')}>
-                  <span className="nav-icon">⇔</span>
-                  <span className="nav-label">Compare</span>
-                </div>
                 <div className={`nav-item${panelOpen && panelTab === 'copilot' ? ' active' : ''}`} onClick={() => openPanel('copilot')}>
                   <span className="nav-icon">⊹</span>
                   <span className="nav-label">Copilot</span>
-                </div>
-              </div>
-
-              <div style={{ margin: "4px 0 0" }}>
-                <div className="nav-grp">{shellData?.sidebar?.period?.label || "Period"}</div>
-                <div className="sb-period">
-                  {shellData?.sidebar?.period?.value}
-                  <br />
-                  <span className="pr">{shellData?.sidebar?.period?.sub}</span>
                 </div>
               </div>
               <div className="sb-stats">
@@ -579,9 +550,27 @@ export default function App(props: any) {
             <div className="main" style={{ marginRight: panelOpen ? 'var(--panel-w)' : 0, transition: 'margin-right 0.24s var(--ease-out)' }}>
               {/* Topbar */}
               <div className="topbar">
+                {/* Left — period chip */}
                 <div className="topbar-left">
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "5px 12px",
+                    background: "rgba(255,255,255,0.03)",
+                    border: "0.5px solid rgba(255,255,255,0.08)",
+                    borderRadius: 5,
+                    flexShrink: 0,
+                  }}>
+                    <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(48,209,88,0.7)", flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontFamily: "var(--font-sans)", fontWeight: 500, color: "rgba(255,255,255,0.60)", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+                      {shellData?.sidebar?.period?.value || "Mar 2025 → Feb 2026"}
+                    </span>
+                    <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.10)", flexShrink: 0 }} />
+                    <span style={{ fontSize: 11, fontFamily: "var(--font-sans)", color: "rgba(255,255,255,0.28)", whiteSpace: "nowrap" }}>
+                      {shellData?.sidebar?.period?.sub || "12 months"}
+                    </span>
+                  </div>
                   {breadcrumb.length > 1 && (
-                    <div className="breadcrumb">
+                    <div className="breadcrumb" style={{ marginLeft: 4 }}>
                       {breadcrumb.map((item, i) => (
                         <span key={i}>
                           {i > 0 && <span className="breadcrumb-sep">›</span>}
@@ -592,44 +581,88 @@ export default function App(props: any) {
                   )}
                 </div>
 
-                {/* Centered section name */}
-                <div className="topbar-center">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" className="topbar-section-grid">
-                    <rect x="0" y="0" width="6" height="6" rx="1.5"/>
-                    <rect x="8" y="0" width="6" height="6" rx="1.5"/>
-                    <rect x="0" y="8" width="6" height="6" rx="1.5"/>
-                    <rect x="8" y="8" width="6" height="6" rx="1.5"/>
-                  </svg>
-                  <span className="topbar-section-name">
-                    {clientOpen ? 'Client' : (pageTitles[activeSection] || 'Overview')}
-                  </span>
-                </div>
-
+                {/* Right — actions */}
                 <div className="topbar-right">
-                  {clientOpen && (
-                    <button className="ctrl-btn" onClick={backFromClient} style={{ fontSize: 9.5 }}>
-                      ← Back to Explorer
+                  {clientOpen ? (
+                    <button className="ctrl-btn" onClick={backFromClient} style={{ fontSize: 11 }}>← Back</button>
+                  ) : (
+                    <button
+                      onClick={goToClient}
+                      style={{
+                        background: "rgba(255,255,255,0.04)",
+                        border: "0.5px solid rgba(255,255,255,0.10)",
+                        borderRadius: 5,
+                        padding: "5px 13px",
+                        fontSize: 11,
+                        fontFamily: "var(--font-sans)",
+                        fontWeight: 500,
+                        letterSpacing: "0.05em",
+                        color: "rgba(255,255,255,0.45)",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        flexShrink: 0,
+                        transition: "all 0.15s",
+                        textTransform: "uppercase",
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(232,67,45,0.40)"; e.currentTarget.style.color = "rgba(232,100,80,1)"; e.currentTarget.style.background = "rgba(232,67,45,0.08)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)"; e.currentTarget.style.color = "rgba(255,255,255,0.45)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+                    >
+                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(232,100,80,0.70)", flexShrink: 0 }} />
+                      Client
                     </button>
                   )}
+
+                  {/* Divider */}
+                  <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
+
                   <div className="cmd-trigger" onClick={() => setCmdOpen(true)}>
                     <span className="cmd-trigger-icon">⌕</span>
                     <span className="cmd-trigger-text">Search</span>
                     <span className="cmd-trigger-kbd">⌘K</span>
                   </div>
+
+                  <button
+                    onClick={() => openPanel('copilot')}
+                    title="Open AI Copilot"
+                    style={{
+                      background: panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.10)" : "rgba(255,255,255,0.03)",
+                      border: `0.5px solid ${panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.35)" : "rgba(255,255,255,0.09)"}`,
+                      borderRadius: 5,
+                      padding: "5px 12px",
+                      fontSize: 11,
+                      fontFamily: "var(--font-sans)",
+                      fontWeight: 500,
+                      color: panelOpen && panelTab === 'copilot' ? "rgba(232,100,80,1)" : "rgba(255,255,255,0.40)",
+                      cursor: "pointer",
+                      display: "flex", alignItems: "center", gap: 5,
+                      flexShrink: 0,
+                      transition: "all 0.15s",
+                      letterSpacing: "0.04em",
+                    }}
+                    onMouseEnter={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)"; e.currentTarget.style.color = "rgba(255,255,255,0.70)"; } }}
+                    onMouseLeave={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "rgba(255,255,255,0.40)"; } }}
+                  >
+                    <span style={{ fontSize: 12 }}>⊹</span>
+                    Copilot
+                  </button>
+
                   <button
                     onClick={() => setHowToUseOpen(true)}
-                    title="How to use this dashboard"
+                    title="How to use"
                     style={{
-                      background: "var(--bg3)", border: "1px solid var(--line)", borderRadius: "50%",
-                      width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: "pointer", color: "var(--ink3)", fontSize: 11, fontFamily: "var(--font-mono)",
-                      flexShrink: 0, transition: "all 0.15s",
+                      background: "rgba(255,255,255,0.03)", border: "0.5px solid rgba(255,255,255,0.09)", borderRadius: 5,
+                      width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                      cursor: "pointer", color: "rgba(255,255,255,0.35)", fontSize: 13,
+                      flexShrink: 0, transition: "all 0.15s", fontFamily: "var(--font-sans)",
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--pri)"; e.currentTarget.style.color = "var(--pri)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--line)"; e.currentTarget.style.color = "var(--ink3)"; }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)"; e.currentTarget.style.color = "rgba(255,255,255,0.70)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "rgba(255,255,255,0.35)"; }}
                   >
                     ?
                   </button>
+
                   <div
                     className={`theme-toggle${theme === "light" ? " light" : ""}`}
                     onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
@@ -637,9 +670,6 @@ export default function App(props: any) {
                   />
                 </div>
               </div>
-
-              {/* Context Bar */}
-              <ContextBar />
 
               {/* Insight Chips */}
               <InsightChips />
@@ -704,7 +734,7 @@ export default function App(props: any) {
               {clientOpen && (
                 <div className="content" style={{ flex: 1, overflowY: "auto" }}>
                   <div className="section-block fade-up" style={{ paddingBottom: 80 }}>
-                    <SectionClient onClose={backFromClient} />
+                    <SectionClient onClose={backFromClient} onAskAI={handleAskAI} />
                   </div>
                 </div>
               )}

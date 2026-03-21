@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "generated_at": "2026-03-21T21:27:59.504656",
-=======
-  "generated_at": "2026-03-21T21:11:20.721500",
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
+  "generated_at": "2026-03-21T22:29:18.637811",
   "from_cache": false,
   "change_type": "schema_change",
   "metrics": [
@@ -465,13 +461,8 @@
     {
       "id": "null_platform_rate",
       "name": "Platform NULL Rate",
-<<<<<<< HEAD
-      "value": 136.0,
-      "formatted": "136.00%",
-=======
-      "value": 0.0,
-      "formatted": "0.00%",
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
+      "value": 68.0,
+      "formatted": "68.00%",
       "category": "data_quality",
       "description": "Percentage of published videos missing platform info",
       "unit": "percent",
@@ -483,13 +474,8 @@
     {
       "id": "data_quality_score",
       "name": "Data Quality Score",
-<<<<<<< HEAD
-      "value": 30.2,
-      "formatted": "30.2%",
-=======
-      "value": 0.5,
-      "formatted": "0.5%",
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
+      "value": 30.3,
+      "formatted": "30.3%",
       "category": "data_quality",
       "description": "Weighted average completeness score across key fields",
       "unit": "percent",
@@ -973,13 +959,8 @@
       {
         "id": "null_platform_rate",
         "name": "Platform NULL Rate",
-<<<<<<< HEAD
-        "value": 136.0,
-        "formatted": "136.00%",
-=======
-        "value": 0.0,
-        "formatted": "0.00%",
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
+        "value": 68.0,
+        "formatted": "68.00%",
         "category": "data_quality",
         "description": "Percentage of published videos missing platform info",
         "unit": "percent",
@@ -991,13 +972,8 @@
       {
         "id": "data_quality_score",
         "name": "Data Quality Score",
-<<<<<<< HEAD
-        "value": 30.2,
-        "formatted": "30.2%",
-=======
-        "value": 0.5,
-        "formatted": "0.5%",
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
+        "value": 30.3,
+        "formatted": "30.3%",
         "category": "data_quality",
         "description": "Weighted average completeness score across key fields",
         "unit": "percent",
@@ -3760,118 +3736,7 @@
       }
     ]
   },
-  "charts": {
-    "Funnel Analysis": [
-      {
-        "filename": "funnel_by_channel.png",
-        "url": "/charts/funnel_by_channel.png"
-      }
-    ],
-    "Monthly Trends": [
-      {
-        "filename": "monthly_trends.png",
-        "url": "/charts/monthly_trends.png"
-      },
-      {
-        "filename": "monthly_publish_rate.png",
-        "url": "/charts/monthly_publish_rate.png"
-      },
-      {
-        "filename": "mom_growth.png",
-        "url": "/charts/mom_growth.png"
-      }
-    ],
-    "Channel Analysis": [
-      {
-        "filename": "channel_duration.png",
-        "url": "/charts/channel_duration.png"
-      },
-      {
-        "filename": "channel_performance_score.png",
-        "url": "/charts/channel_performance_score.png"
-      },
-      {
-        "filename": "channel_platform_counts.png",
-        "url": "/charts/channel_platform_counts.png"
-      },
-      {
-        "filename": "channel_quadrant.png",
-        "url": "/charts/channel_quadrant.png"
-      },
-      {
-        "filename": "channel_efficiency.png",
-        "url": "/charts/channel_efficiency.png"
-      }
-    ],
-    "User Analysis": [
-      {
-        "filename": "user_analysis.png",
-        "url": "/charts/user_analysis.png"
-      },
-      {
-        "filename": "user_scatter.png",
-        "url": "/charts/user_scatter.png"
-      },
-      {
-        "filename": "heatmap_channel_user.png",
-        "url": "/charts/heatmap_channel_user.png"
-      },
-      {
-        "filename": "heatmap_channel_user_pr.png",
-        "url": "/charts/heatmap_channel_user_pr.png"
-      }
-    ],
-    "Output & Input Mix": [
-      {
-        "filename": "output_type_mix.png",
-        "url": "/charts/output_type_mix.png"
-      },
-      {
-        "filename": "input_type_mix.png",
-        "url": "/charts/input_type_mix.png"
-      }
-    ],
-    "Language & Platform": [
-      {
-        "filename": "language_analysis.png",
-        "url": "/charts/language_analysis.png"
-      },
-      {
-        "filename": "platform_distribution.png",
-        "url": "/charts/platform_distribution.png"
-      }
-    ],
-    "Duration Analytics": [
-      {
-        "filename": "duration_analytics.png",
-        "url": "/charts/duration_analytics.png"
-      },
-      {
-        "filename": "h1_vs_h2.png",
-        "url": "/charts/h1_vs_h2.png"
-      }
-    ],
-    "Data Quality": [
-      {
-        "filename": "data_quality_dashboard.png",
-        "url": "/charts/data_quality_dashboard.png"
-      },
-      {
-        "filename": "dq_audit.png",
-        "url": "/charts/dq_audit.png"
-      },
-      {
-        "filename": "correlation_anomaly.png",
-        "url": "/charts/correlation_anomaly.png"
-      }
-    ],
-    "KPI Summary": [
-      {
-        "filename": "kpi_summary.png",
-        "url": "/charts/kpi_summary.png"
-      }
-    ]
-  },
+  "charts": {},
   "dataset_sources": {
     "channel_platform": {
       "filename": "channel_platform.csv",
@@ -3880,21 +3745,10 @@
     "channel_summary": {
       "filename": "channel_summary.csv",
       "display_name": "channel_summary"
-<<<<<<< HEAD
     },
-    "channel_user": {
-      "filename": "channel_user.csv",
-      "display_name": "channel_user"
-    },
-    "input_type": {
-      "filename": "input_type.csv",
-      "display_name": "input_type"
-=======
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
-    },
-    "language": {
-      "filename": "language.csv",
-      "display_name": "language"
+    "monthly": {
+      "filename": "monthly.csv",
+      "display_name": "monthly"
     },
     "output_type": {
       "filename": "output_type.csv",
@@ -3916,19 +3770,9 @@
       "filename": "user_summary.csv",
       "display_name": "user_summary"
     },
-<<<<<<< HEAD
-    "monthly": {
-      "filename": "monthly.csv",
-      "display_name": "monthly"
-    },
-    "video_list": {
-      "filename": "video_list.csv",
-      "display_name": "video_list"
-=======
     "input_type": {
       "filename": "input_type.csv",
       "display_name": "input_type"
->>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
     }
   }
 }

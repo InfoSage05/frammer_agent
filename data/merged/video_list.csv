@@ -1,4 +1,4 @@
-﻿Headline,Source,published_count,team_name,output_type_name,user_name,Video ID,platform,Published URL
+﻿Headline,Source,published_flag,team_name,video_type,uploaded_by,Video ID,platform,Published URL
 Headline_3a11c61b3c1b,https://obfuscated.source.example/a4f0f8276af76065,No,Unknown,news bulletin,Neha,1545932260,,
 Headline_415212ea682f,https://obfuscated.source.example/d2945450bf84af0f,No,Unknown,news bulletin,Neha,461901618,,
 Headline_2d82a32f7307,https://obfuscated.source.example/b0d41c47d3147049,No,Unknown,news bulletin,Neha,774414982,,

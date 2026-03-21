@@ -124,11 +124,6 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sig-block">
-        <p className="sig-line">{sig.a}</p>
-        <p className="sig-line">{sig.b}</p>
-      </div>
-
       <div className="sub-tabs">
         {SUB_TABS.map(([k, l]) => (
           <div key={k} className={`sub-tab${subView === k ? " active" : ""}`} onClick={() => setSubView(k)}>{l}</div>
@@ -138,12 +133,12 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── SUMMARY ── */}
       {subView === "summary" && (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }} className="stagger">
             {FLASHCARDS.map((card) => (
               <div
                 key={card.id}
                 className={`card ${card.accent} fade-up`}
-                style={{ padding: '20px 22px 18px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+                style={{ padding: '24px 26px 22px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
@@ -172,7 +167,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             style={{
               display: "flex",
               gap: 0,
-              marginBottom: 20,
+              marginBottom: 28,
               border: "1px solid var(--line)",
               borderRadius: "var(--radius)",
               overflow: "hidden",
@@ -184,7 +179,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 key={i}
                 style={{
                   flex: 1,
-                  padding: "14px 20px",
+                  padding: "18px 24px",
                   borderRight: i < 4 ? "1px solid var(--line-lt)" : "none",
                 }}
               >
@@ -240,7 +235,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             <button className="action-chip" onClick={() => dash?.openCompare?.('channel', 'A', 'channel', 'D')}>⇔ Compare Ch-A vs Ch-D</button>
             <button className="action-chip" onClick={() => dash?.openCompare?.('period', 'H1', 'period', 'H2')}>⇔ H1 vs H2 comparison</button>
           </div>
-          <div className="card" style={{ padding: "16px 18px" }}>
+          <div className="card" style={{ padding: "20px 24px" }}>
             <div
               style={{
                 fontSize: 11,
@@ -283,7 +278,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── CHANNELS ── */}
       {subView === "channels" && (
         <>
-          <div className="card card-gold" style={{ padding: "16px 18px", marginBottom: 16 }}>
+          <div className="card card-gold" style={{ padding: "20px 24px", marginBottom: 16 }}>
             <div
               style={{
                 display: "flex",
@@ -409,7 +404,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── CONTENT MIX ── */}
       {subView === "content_mix" && (
         <div className="g2">
-          <div className="card" style={{ padding: "14px 16px" }}>
+          <div className="card" style={{ padding: "20px 24px" }}>
             <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 10, fontWeight: 400 }}>
               Content Status Split
             </div>
@@ -442,7 +437,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               back={<GraphInsights title="Content Status Split" />}
             />
           </div>
-          <div className="card" style={{ padding: "14px 16px" }}>
+          <div className="card" style={{ padding: "20px 24px" }}>
             <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 6, fontWeight: 400 }}>
               Input Type Radar
             </div>
