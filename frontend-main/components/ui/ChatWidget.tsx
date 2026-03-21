@@ -1,13 +1,214 @@
 // @ts-nocheck
-import { useCallback, useState, useRef, useEffect } from "react";
+import { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import useJsonData from "@/hooks/useJsonData";
+import { sendChatMessage } from "@/lib/api";
+import useChartJs from "../charts/ChartJSWrapper";
+
+const STORAGE_KEY = "frammer_chat";
+
+// Load persisted chat from localStorage
+function loadPersistedChat() {
+  try {
+    const raw = typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        msgs: parsed.msgs || null,
+        sessionId: parsed.sessionId || null,
+      };
+    }
+  } catch {}
+  return { msgs: null, sessionId: null };
+}
+
+function persistChat(msgs, sessionId) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ msgs, sessionId }));
+  } catch {}
+}
+
+function coerceNumber(value) {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  const n = Number(String(value).replace(/,/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function inferYKeys(data, xKey, yKeys) {
+  if (Array.isArray(yKeys) && yKeys.length) return yKeys;
+  const first = Array.isArray(data) && data.length ? data[0] : null;
+  if (!first) return [];
+  return Object.keys(first).filter((k) => k !== xKey);
+}
+
+function ChartArtifact({ artifact, id, theme = "dark" }) {
+  const palette = [
+    "#ff4757",
+    "#3EC98A",
+    "#7C83FF",
+    "#F7B731",
+    "#32A1FF",
+    "#FF8A5B",
+  ];
+
+  const config = useMemo(() => {
+    const data = Array.isArray(artifact?.data) ? artifact.data : [];
+    const xKey = artifact?.xKey || "name";
+    const keys = inferYKeys(data, xKey, artifact?.yKeys);
+    const labels = data.map((d, i) => {
+      const label = d?.[xKey];
+      return label === undefined || label === null ? String(i + 1) : String(label);
+    });
+    const rawType = String(artifact?.chartType || "bar").toLowerCase();
+    const normalizedType =
+      rawType === "stacked_bar" || rawType === "stacked" || rawType === "column"
+        ? "bar"
+        : rawType;
+    const chartType = ["bar", "line", "area", "pie", "donut"].includes(normalizedType)
+      ? normalizedType
+      : "bar";
+    const isPie = chartType === "pie" || chartType === "donut";
+    const primaryKey = keys[0] || "value";
+    const datasets = isPie
+      ? [
+          {
+            label: primaryKey,
+            data: data.map((d) => coerceNumber(d?.[primaryKey])),
+            backgroundColor: labels.map((_, i) => palette[i % palette.length]),
+            borderColor: "rgba(0,0,0,0.15)",
+            borderWidth: 1,
+          },
+        ]
+      : keys.map((k, i) => ({
+          label: k,
+          data: data.map((d) => coerceNumber(d?.[k])),
+          borderColor: palette[i % palette.length],
+          backgroundColor: chartType === "bar" ? `${palette[i % palette.length]}B3` : `${palette[i % palette.length]}55`,
+          borderWidth: 2,
+          tension: 0.3,
+          fill: chartType === "area",
+        }));
+
+    return {
+      type: isPie ? "pie" : chartType === "area" ? "line" : chartType,
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              color: theme === "light" ? "#111" : "rgba(245,245,247,0.7)",
+              font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" },
+            },
+          },
+          tooltip: {
+            backgroundColor: theme === "light" ? "rgba(255,255,255,0.97)" : "rgba(14,15,17,0.95)",
+            titleColor: theme === "light" ? "#111" : "#f5f5f7",
+            bodyColor: theme === "light" ? "#555" : "rgba(245,245,247,0.65)",
+          },
+        },
+        scales: isPie
+          ? undefined
+          : {
+              x: {
+                ticks: {
+                  color: theme === "light" ? "#111" : "rgba(245,245,247,0.65)",
+                  font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" },
+                  maxRotation: 45,
+                },
+                grid: { color: theme === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)" },
+                border: { display: false },
+              },
+              y: {
+                ticks: {
+                  color: theme === "light" ? "#111" : "rgba(245,245,247,0.65)",
+                  font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" },
+                  callback: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v),
+                },
+                grid: { color: theme === "light" ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)" },
+                border: { display: false },
+                beginAtZero: true,
+              },
+            },
+      },
+    };
+  }, [artifact, theme]);
+
+  const canvasRef = useChartJs(id, config, [id, config]);
+
+  return (
+    <div style={{ position: "relative", width: "100%", height: 210 }}>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+}
+
+function TableArtifact({ artifact }) {
+  const rows = Array.isArray(artifact?.data) ? artifact.data : [];
+  const columns = Array.isArray(artifact?.columns) && artifact.columns.length
+    ? artifact.columns
+    : rows.length
+      ? Object.keys(rows[0])
+      : [];
+
+  if (!rows.length || !columns.length) return null;
+
+  return (
+    <div style={{ overflowX: "auto", border: "1px solid var(--line)", borderRadius: 6 }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th
+                key={col}
+                style={{
+                  textAlign: "left",
+                  padding: "6px 8px",
+                  borderBottom: "1px solid var(--line)",
+                  color: "var(--ink2)",
+                  fontFamily: "var(--font-mono)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {col}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i}>
+              {columns.map((col) => (
+                <td
+                  key={col}
+                  style={{
+                    padding: "6px 8px",
+                    borderBottom: "1px solid var(--line)",
+                    color: "var(--ink)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {row?.[col] ?? ""}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 // Persistent chat state stored outside component so it survives open/close
+const persisted = loadPersistedChat();
 const chatState = {
-  msgs: null,
+  msgs: persisted.msgs,
   input: "",
   pos: null,
   width: 345,
+  sessionId: persisted.sessionId,
 };
 
 // Answer → section mapping for "Show on dashboard"
@@ -67,7 +268,7 @@ function detectTarget(text) {
   return null;
 }
 
-function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }) {
+function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData, sessionId: externalSessionId, onSessionId }) {
   const { data } = useJsonData("chat-widget");
   const CHAT_W = 345,
     CHAT_H = 490;
@@ -93,13 +294,29 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
   const [pos, setPosRaw] = useState(initPos);
   const [width, setWidthRaw] = useState(chatState.width || CHAT_W);
   const [dragging, setDragging] = useState(false);
+  const [sessionId, setSessionIdLocal] = useState(externalSessionId || chatState.sessionId);
   const bodyRef = useRef(null);
 
-  // Sync state to persistent store
+  // Restore sessionId from persistence on mount
+  useEffect(() => {
+    if (chatState.sessionId && !sessionId && onSessionId) {
+      onSessionId(chatState.sessionId);
+    }
+  }, []);
+
+  const setSessionId = (id) => {
+    chatState.sessionId = id;
+    setSessionIdLocal(id);
+    if (onSessionId) onSessionId(id);
+    persistChat(chatState.msgs, id);
+  };
+
+  // Sync state to persistent store + localStorage
   const setMsgs = (v) => {
     const next = typeof v === "function" ? v(msgs) : v;
     chatState.msgs = next;
     setMsgsRaw(next);
+    persistChat(next, chatState.sessionId);
   };
   const setInput = (v) => {
     chatState.input = v;
@@ -177,7 +394,7 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
 
   const sendMsg = async (txt) => {
     const q = txt || input.trim();
-    if (!q) return;
+    if (!q || loading) return;
     setInput("");
     const t = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -185,53 +402,45 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
     });
     setMsgs((m) => [...m, { role: "user", text: q, time: t }]);
     setLoading(true);
-    let promptContext = data?.aiContext || "";
+
+    // Build message with attached context
+    let fullMessage = q;
     const attachedSources = Array.isArray(attachedData)
       ? attachedData
       : attachedData
         ? [attachedData]
         : [];
     if (attachedSources.length) {
-      promptContext += attachedSources
-        .map(
-          (source) =>
-            `\n\nAttached Data Context (${source.name}):\n${JSON.stringify(source.data).substring(0, 1000)}`,
-        )
-        .join("");
+      const ctx = attachedSources
+        .map((source) => `[Attached: ${source.name}] ${JSON.stringify(source.data).substring(0, 800)}`)
+        .join("\n");
+      fullMessage = `${ctx}\n\nQuestion: ${q}`;
     }
+
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 220,
-          messages: [{ role: "user", content: `${promptContext}\n\nQ: ${q}` }],
-        }),
-      });
-      const d = await res.json();
-      const rawText =
-        d.content?.map((c) => c.text || "").join("") || "No response.";
-      const displayText = rawText
-        .replace(/\s*\{"target":"[^"]+"\}/g, "")
-        .trim();
-      const target = detectTarget(rawText);
+      const res = await sendChatMessage(fullMessage, sessionId);
+      if (res.session_id) {
+        setSessionId(res.session_id);
+      }
+      const target = detectTarget(res.response);
       setMsgs((m) => [
         ...m,
         {
           role: "ai",
-          text: displayText,
+          text: res.response,
           time: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           }),
           target,
+          suggestions: res.suggestions,
+          artifacts: res.artifacts,
         },
       ]);
     } catch (e) {
       const fb = data?.fallbacks || {};
       const key = Object.keys(fb).find((k) => q.toLowerCase().includes(k));
-      const resp = fb[key] || fb.default || { text: "No response.", target: null };
+      const resp = fb[key] || fb.default || { text: "Backend unavailable. Make sure the server is running on localhost:8000.", target: null };
       setMsgs((m) => [
         ...m,
         {
@@ -250,8 +459,11 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
 
   const resetChat = () => {
     chatState.msgs = initialMessages;
+    chatState.sessionId = null;
     setMsgsRaw(initialMessages);
     setInput("");
+    persistChat(initialMessages, null);
+    if (onSessionId) onSessionId(null);
   };
 
   const lastAiMsg = [...msgs]
@@ -301,6 +513,49 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="chat-bbl">{m.text}</div>
               <div className="chat-time">{m.time}</div>
+              {m.role === "ai" && Array.isArray(m.artifacts) && m.artifacts.length > 0 && (
+                <div
+                  style={{
+                    marginTop: 8,
+                    display: "grid",
+                    gap: 10,
+                  }}
+                >
+                  {m.artifacts.map((artifact, ai) => (
+                    <div
+                      key={`${i}-${ai}`}
+                      style={{
+                        border: "1px solid var(--line)",
+                        borderRadius: 8,
+                        background: "var(--bg2)",
+                        padding: "10px 10px 8px",
+                      }}
+                    >
+                      {artifact?.title && (
+                        <div
+                          style={{
+                            fontSize: 11,
+                            color: "var(--ink3)",
+                            marginBottom: 6,
+                            fontFamily: "var(--font-mono)",
+                          }}
+                        >
+                          {artifact.title}
+                        </div>
+                      )}
+                      {artifact?.type === "chart" && (
+                        <ChartArtifact
+                          artifact={artifact}
+                          id={`chat-chart-${i}-${ai}`}
+                        />
+                      )}
+                      {artifact?.type === "table" && (
+                        <TableArtifact artifact={artifact} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
               {m.role === "ai" && m.target && (
                 <button
                   onClick={() => {

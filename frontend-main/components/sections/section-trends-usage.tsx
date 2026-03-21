@@ -1,6 +1,7 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 
 import { useState } from "react";
 import HeatCalendar from "../charts/HeatCalendar";
@@ -14,9 +15,14 @@ import { M } from '@/lib/constants';
 
 function SectionTrends({ theme, onAskAI }) {
   const dash = useDash();
+<<<<<<< HEAD
   const { data } = useJsonData("trends");
   const { data: funnelData } = useJsonData("funnel");
   const INPUT_TYPES = funnelData?.inputTypes || [];
+=======
+  const { data: staticData } = useJsonData("trends");
+  const data = useLiveSectionData("trends", dash?.liveDashboard, staticData);
+>>>>>>> 14bfa16c17e83b1b710fca18d74273eb5d85c220
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     metricOptions: [],
