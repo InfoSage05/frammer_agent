@@ -2,7 +2,7 @@
 import { useCallback, useState, useRef } from "react";
 
 function ResizableSidebar({ collapsed, setCollapsed, children }) {
-  const [width, setWidth] = useState(210);
+  const [width, setWidth] = useState(224);
   const [dragging, setDragging] = useState(false);
   const sideRef = useRef(null);
   const startResize = useCallback(

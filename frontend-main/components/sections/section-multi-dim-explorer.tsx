@@ -80,7 +80,7 @@ function PremiumBarPanel({
           }}>
             {fmt(heroVal)}
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.28)', marginTop: 6, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>
+          <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', marginTop: 6, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>
             {heroSub}
           </div>
         </div>
@@ -138,18 +138,19 @@ function PremiumBarPanel({
 
       {/* panel title */}
       <div style={{
-        fontSize: 9,
+        fontSize: 11,
         fontFamily: 'var(--font-mono)',
-        letterSpacing: '0.12em',
+        letterSpacing: '0.10em',
         textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.20)',
+        color: 'rgba(255,255,255,0.52)',
         marginBottom: 12,
+        fontWeight: 600,
       }}>
         {title}
       </div>
 
       {/* proportional strip label */}
-      <div style={{ fontSize: 9, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.12)', textTransform: 'uppercase', marginBottom: 5 }}>
+      <div style={{ fontSize: 10, letterSpacing: '0.10em', color: 'rgba(255,255,255,0.42)', textTransform: 'uppercase', marginBottom: 5, fontWeight: 500 }}>
         proportional split
       </div>
 
@@ -190,10 +191,10 @@ function PremiumBarPanel({
           const color = colors[i] || colors[colors.length - 1];
           const isHov = hoveredIdx === i;
           const nameColor = i === 0
-            ? 'rgba(255,255,255,0.82)'
+            ? 'rgba(255,255,255,0.92)'
             : i === 1
-              ? 'rgba(255,255,255,0.70)'
-              : 'rgba(255,255,255,0.45)';
+              ? 'rgba(255,255,255,0.80)'
+              : 'rgba(255,255,255,0.62)';
           const bgAlpha = isHov ? 0.10 : 0.055;
 
           return (
@@ -217,7 +218,7 @@ function PremiumBarPanel({
               }}
             >
               {/* rank */}
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', fontVariantNumeric: 'tabular-nums', textAlign: 'right', userSelect: 'none' }}>
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.38)', fontVariantNumeric: 'tabular-nums', textAlign: 'right', userSelect: 'none' }}>
                 {i + 1}
               </span>
 
@@ -235,7 +236,7 @@ function PremiumBarPanel({
               </span>
 
               {/* mini bar */}
-              <div style={{ height: 2, background: 'rgba(255,255,255,0.05)', borderRadius: 1, overflow: 'hidden' }}>
+              <div style={{ height: 3, background: 'rgba(255,255,255,0.07)', borderRadius: 2, overflow: 'hidden' }}>
                 <div style={{
                   width: `${barW}%`,
                   height: '100%',
@@ -251,7 +252,7 @@ function PremiumBarPanel({
               </span>
 
               {/* pct */}
-              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.26)', fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.52)', fontVariantNumeric: 'tabular-nums', textAlign: 'right', fontWeight: 500 }}>
                 {pct.toFixed(1)}%
               </span>
             </div>
@@ -270,23 +271,23 @@ function PremiumBarPanel({
         gap: '0 12px',
       }}>
         <div>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Dominant</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{items[0]?.name ?? '—'}</div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>
+          <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.50)', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 6, fontWeight: 600 }}>Dominant</div>
+          <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.88)', fontWeight: 600, letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{items[0]?.name ?? '—'}</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.52)', marginTop: 4, fontVariantNumeric: 'tabular-nums' }}>
             {total > 0 ? (items[0]?.value / total * 100).toFixed(1) : 0}% of total
           </div>
         </div>
         <div>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Top 3 Coverage</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{top3pct}%</div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.50)', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 6, fontWeight: 600 }}>Top 3 Coverage</div>
+          <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.88)', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{top3pct}%</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.52)', marginTop: 4, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {items.slice(0, 3).map(i => i.name).join(', ')}
           </div>
         </div>
         <div>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Long Tail</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{tailCnt} items</div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{tailPct}% of total</div>
+          <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.50)', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 6, fontWeight: 600 }}>Long Tail</div>
+          <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.88)', fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{tailCnt} items</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.52)', marginTop: 4, fontVariantNumeric: 'tabular-nums' }}>{tailPct}% of total</div>
         </div>
       </div>
 

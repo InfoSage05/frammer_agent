@@ -207,7 +207,7 @@ function ByChannelTab({ channels }) {
 
           {/* Card 1 — Identity */}
           <div className="bch-glass" style={{ padding: "22px 20px" }}>
-            <div style={{ fontFamily: F, fontSize: 9, color: "#555", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>
+            <div style={{ fontFamily: F, fontSize: 11, color: "rgba(255,255,255,0.55)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 10, fontWeight: 600 }}>
               CHANNEL IDENTIFIER
             </div>
             <div style={{
@@ -233,7 +233,7 @@ function ByChannelTab({ channels }) {
 
           {/* Card 2 — Radial Gauge */}
           <div className="bch-glass" style={{ padding: "22px 20px", textAlign: "center" }}>
-            <div style={{ fontFamily: F, fontSize: 9, color: "#555", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
+            <div style={{ fontFamily: F, fontSize: 11, color: "rgba(255,255,255,0.55)", letterSpacing: "0.10em", textTransform: "uppercase", marginBottom: 16, fontWeight: 600 }}>
               PUBLISH RATE
             </div>
             <svg width="120" height="120" viewBox="0 0 120 120" style={{ display: "block", margin: "0 auto", overflow: "visible" }}>
@@ -247,7 +247,7 @@ function ByChannelTab({ channels }) {
                 {pubRate.toFixed(1)}%
               </text>
               <text x="60" y="72" textAnchor="middle" dominantBaseline="middle"
-                fontFamily={M} fontSize="8" fill="#555" letterSpacing="0.08em">
+                fontFamily={M} fontSize="8" fill="rgba(255,255,255,0.58)" letterSpacing="0.08em">
                 PUB RATE
               </text>
             </svg>
@@ -265,7 +265,7 @@ function ByChannelTab({ channels }) {
                 padding: "13px 0",
                 borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,.05)" : "none",
               }}>
-                <span style={{ fontFamily: F, fontSize: 11, color: "#555" }}>{row.label}</span>
+                <span style={{ fontFamily: F, fontSize: 12.5, color: "rgba(255,255,255,0.62)" }}>{row.label}</span>
                 <span style={{ fontFamily: M, fontSize: 13, fontWeight: 700, color: row.color }}>{row.value}</span>
               </div>
             ))}
@@ -278,7 +278,7 @@ function ByChannelTab({ channels }) {
           {/* Row 1 — Metrics */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
             <div className="bch-metric">
-              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>AI Expansion</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: "rgba(255,255,255,0.60)", marginBottom: 10, fontWeight: 500 }}>AI Expansion</div>
               <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#F0F0F0", lineHeight: 1, marginBottom: 10 }}>
                 +{aiExpPct}%
               </div>
@@ -291,7 +291,7 @@ function ByChannelTab({ channels }) {
             </div>
 
             <div className="bch-metric">
-              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>Pub Drop</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: "rgba(255,255,255,0.60)", marginBottom: 10, fontWeight: 500 }}>Pub Drop</div>
               <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#D93B20", lineHeight: 1, marginBottom: 10 }}>
                 -{pubDropPct.toFixed(1)}%
               </div>
@@ -304,7 +304,7 @@ function ByChannelTab({ channels }) {
             </div>
 
             <div className="bch-metric">
-              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>Pub Rate</div>
+              <div style={{ fontFamily: F, fontSize: 12, color: "rgba(255,255,255,0.60)", marginBottom: 10, fontWeight: 500 }}>Pub Rate</div>
               <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: TC, lineHeight: 1, marginBottom: 10 }}>
                 {pubRate.toFixed(1)}%
               </div>
@@ -324,7 +324,7 @@ function ByChannelTab({ channels }) {
               <div style={{ fontFamily: F, fontSize: 14, fontWeight: 700, color: "#F0F0F0", marginBottom: 3 }}>
                 Content Pipeline Flow
               </div>
-              <div style={{ fontFamily: F, fontSize: 11, color: "#555" }}>
+              <div style={{ fontFamily: F, fontSize: 12.5, color: "rgba(255,255,255,0.60)" }}>
                 Upload → Create → Publish — hover each stage
               </div>
             </div>
@@ -386,19 +386,19 @@ function ByChannelTab({ channels }) {
                 {/* Values below */}
                 <text x="79" y={CY+upH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
                   fill="rgba(255,255,255,.85)">{ch.uploaded.toLocaleString()}</text>
-                <text x="79" y={CY+upH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">raw files</text>
+                <text x="79" y={CY+upH/2+36} textAnchor="middle" fontFamily={F} fontSize="11.5" fill="rgba(255,255,255,0.60)">raw files</text>
 
                 <text x="313" y={CY+crH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
                   fill="rgba(255,255,255,.85)">{ch.created.toLocaleString()}</text>
-                <text x="313" y={CY+crH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">+{aiExpPct}% expanded</text>
+                <text x="313" y={CY+crH/2+36} textAnchor="middle" fontFamily={F} fontSize="11.5" fill="rgba(255,255,255,0.60)">+{aiExpPct}% expanded</text>
 
                 <text x="564" y={CY+puH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
                   fill="rgba(255,255,255,.85)">{ch.published.toLocaleString()}</text>
-                <text x="564" y={CY+puH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">{pubRate.toFixed(1)}% pub rate</text>
+                <text x="564" y={CY+puH/2+36} textAnchor="middle" fontFamily={F} fontSize="11.5" fill="rgba(255,255,255,0.60)">{pubRate.toFixed(1)}% pub rate</text>
 
                 {/* Transition ratio labels */}
-                <text x="188" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="9.5" fill="rgba(255,255,255,.38)">×{aiMult.toFixed(1)}</text>
-                <text x="438" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="9.5" fill="rgba(255,255,255,.38)">{pubRate.toFixed(1)}%</text>
+                <text x="188" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="11" fill="rgba(255,255,255,0.62)">×{aiMult.toFixed(1)}</text>
+                <text x="438" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="11" fill="rgba(255,255,255,0.62)">{pubRate.toFixed(1)}%</text>
 
                 {/* Hit zones */}
                 <rect x="0" y="0" width="218" height="210" fill="transparent" style={{ cursor: "pointer" }}
@@ -449,27 +449,27 @@ function ByChannelTab({ channels }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
             <div className="bch-conv">
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,.15)", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
-              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Create</div>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Create</div>
               <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#F0F0F0", marginBottom: 4 }}>
                 {Math.round((ch.created / ch.uploaded) * 100)}%
               </div>
-              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>AI expansion rate</div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "rgba(255,255,255,0.55)" }}>AI expansion rate</div>
             </div>
             <div className="bch-conv">
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: TC, filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
-              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Create → Publish</div>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", marginBottom: 8 }}>Create → Publish</div>
               <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: TC, marginBottom: 4 }}>
                 {pubRate.toFixed(1)}%
               </div>
-              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>Content pub rate</div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "rgba(255,255,255,0.55)" }}>Content pub rate</div>
             </div>
             <div className="bch-conv">
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "#FF6040", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
-              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Publish</div>
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Publish</div>
               <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#FF6040", marginBottom: 4 }}>
                 {((ch.published / ch.uploaded) * 100).toFixed(1)}%
               </div>
-              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>End-to-end rate</div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "rgba(255,255,255,0.55)" }}>End-to-end rate</div>
             </div>
           </div>
 
@@ -620,11 +620,12 @@ function SectionFunnel({ theme, onAskAI }) {
               <div>
                 <div
                   style={{
-                    fontSize: 8,
+                    fontSize: 11,
                     fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.12em",
+                    letterSpacing: "0.10em",
                     textTransform: "uppercase",
-                    color: "var(--ink3)",
+                    color: "var(--ink2)",
+                    fontWeight: 600,
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
@@ -641,10 +642,10 @@ function SectionFunnel({ theme, onAskAI }) {
                 </div>
                 <div
                   style={{
-                    fontSize: 9.5,
-                    color: "var(--ink4)",
+                    fontSize: 11.5,
+                    color: "var(--ink3)",
                     fontFamily: "var(--font-mono)",
-                    marginTop: 2,
+                    marginTop: 4,
                   }}
                 >
                   D3 Sankey · hover nodes and links for details
@@ -692,11 +693,12 @@ function SectionFunnel({ theme, onAskAI }) {
             <div className="card" style={{ padding: "16px 18px" }}>
               <div
                 style={{
-                  fontSize: 8,
+                  fontSize: 11,
                   fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.12em",
+                  letterSpacing: "0.10em",
                   textTransform: "uppercase",
-                  color: "var(--ink3)",
+                  color: "var(--ink2)",
+                  fontWeight: 600,
                   marginBottom: 12,
                   display: "flex",
                   alignItems: "center",
@@ -865,7 +867,7 @@ function SectionFunnel({ theme, onAskAI }) {
                   {/* ── header ── */}
                   <div style={{ padding: '20px 26px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400, marginBottom: 7 }}>
+                      <div style={{ fontSize: 11, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', fontWeight: 600, marginBottom: 7 }}>
                         Language Pipeline
                       </div>
                       <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.48)', fontWeight: 400, lineHeight: 1.55 }}>
@@ -880,7 +882,7 @@ function SectionFunnel({ theme, onAskAI }) {
                         { l: 'Pub rate',   v: globalPubRate + '%' },
                       ].map((b, i, arr) => (
                         <div key={b.l} style={{ padding: '8px 16px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
-                          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>{b.l}</div>
+                          <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.52)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, fontWeight: 600 }}>{b.l}</div>
                           <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{b.v}</div>
                         </div>
                       ))}
@@ -897,10 +899,10 @@ function SectionFunnel({ theme, onAskAI }) {
                     ].map(col => (
                       <div key={col.l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <div style={{ width: 3, height: 12, background: col.pip, borderRadius: 1, flexShrink: 0 }} />
-                        <span style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>{col.l}</span>
+                        <span style={{ fontSize: 10.5, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', fontWeight: 600 }}>{col.l}</span>
                       </div>
                     ))}
-                    <div style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400, textAlign: 'right' }}>Rate</div>
+                    <div style={{ fontSize: 10.5, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', fontWeight: 600, textAlign: 'right' }}>Rate</div>
                   </div>
 
                   {/* ── rows via GraphFlip ── */}
@@ -925,7 +927,7 @@ function SectionFunnel({ theme, onAskAI }) {
                                 <div style={{ fontSize: 13, color: nameColor, fontWeight: 500 }}>{l.lang}</div>
                                 <div>
                                   <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.52)', fontVariantNumeric: 'tabular-nums' }}>{l.uploaded.toLocaleString()}</div>
-                                  <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.18)', marginTop: 3 }}>source files</div>
+                                  <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.50)', marginTop: 3 }}>source files</div>
                                 </div>
                                 <div>
                                   <div style={{ fontSize: 15, color: '#c8a04a', fontVariantNumeric: 'tabular-nums' }}>{l.created.toLocaleString()}</div>
@@ -989,7 +991,7 @@ function SectionFunnel({ theme, onAskAI }) {
                       { l: 'Lost',      v: totalLost,      c: '#e06050' },
                     ].map((s, i, arr) => (
                       <div key={s.l} style={{ padding: '14px 26px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.05)' : 'none' }}>
-                        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5 }}>{s.l}</div>
+                        <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.52)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontWeight: 600 }}>{s.l}</div>
                         <div style={{ fontSize: 18, color: s.c, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.v.toLocaleString()}</div>
                       </div>
                     ))}
