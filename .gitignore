@@ -39,11 +39,3 @@ logs/
 .cache/
 .pytest_cache/
 __pycache__
-
-# Runtime-generated data (written by the running app / Docker volumes)
-data/registry.db
-data/analytics_dashboard.json
-data/saved_analytics/
-data/merged/
-data/chroma/
-data/models/

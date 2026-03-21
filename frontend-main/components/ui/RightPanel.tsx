@@ -209,7 +209,18 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
     setLoading(true);
     const attachedSources = sources.map((s: any) => ({ name: s.name, data: s.data }));
     try {
-      const chatData = await sendChatMessage(userMsg, sessionId, chatMode);
+      const chatRes = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMsg, session_id: sessionId,
+          attached_sources: attachedSources,
+          context: hasContext ? sel : undefined,
+          mode: chatMode,
+        }),
+      });
+      if (!chatRes.ok) throw new Error('Chat request failed');
+      const chatData = await chatRes.json();
       setSessionId(chatData.session_id);
       setMessages(prev => [...prev, {
         role: 'assistant',
