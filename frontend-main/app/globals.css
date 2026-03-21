@@ -705,22 +705,33 @@ html, body {
 
 /* ── CARD SYSTEM ── */
 .card {
-  background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius);
-  position: relative; transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  background: rgba(9,9,9,0.97);
+  border: 0.5px solid rgba(255,255,255,0.07);
+  border-radius: 13px;
+  position: relative;
+  transition: border-color 0.20s ease, box-shadow 0.20s ease;
 }
-.card:hover { border-color: rgba(var(--pri-rgb),0.20); box-shadow: 0 4px 24px rgba(0,0,0,0.16); }
-.card-gold { border-top: 2px solid var(--gold); }
-.card-amber { border-top: 2px solid var(--amber); }
-.card-red { border-top: 2px solid var(--red); }
-.card-green { border-top: 2px solid var(--green); }
-.card-blue { border-top: 2px solid var(--blue); }
+.card:hover { border-color: rgba(255,255,255,0.13); box-shadow: 0 6px 32px rgba(0,0,0,0.22); }
+.card-gold { border-top: 1.5px solid rgba(200,160,74,0.55); }
+.card-amber { border-top: 1.5px solid rgba(255,179,64,0.50); }
+.card-red { border-top: 1.5px solid rgba(232,67,45,0.55); }
+.card-green { border-top: 1.5px solid rgba(48,209,88,0.45); }
+.card-blue { border-top: 1.5px solid rgba(100,180,255,0.45); }
 .card-head {
-  padding: 14px 20px; border-bottom: 1px solid var(--line-lt);
+  padding: 16px 22px; border-bottom: 0.5px solid rgba(255,255,255,0.06);
   display: flex; align-items: center; justify-content: space-between;
   overflow: hidden; border-radius: var(--radius) var(--radius) 0 0;
 }
 /* T3 — card label */
-.card-lbl { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.30); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-lbl { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.32); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Card stat footer — 3-col summary strip at card bottom */
+.card-stat-footer { background: rgba(255,255,255,0.025); border: 0.5px solid rgba(255,255,255,0.05); border-radius: 9px; padding: 12px 16px; display: grid; gap: 0 12px; }
+.card-stat-footer .csf-lbl { font-size: 9px; color: rgba(255,255,255,0.22); text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 5px; }
+.card-stat-footer .csf-val { font-size: 13px; color: rgba(255,255,255,0.78); font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.card-stat-footer .csf-sub { font-size: 11px; color: rgba(255,255,255,0.30); margin-top: 3px; font-variant-numeric: tabular-nums; }
+/* Proportional strip */
+.pstrip { display: flex; height: 5px; width: 100%; gap: 1px; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.pstrip-seg { height: 100%; flex-shrink: 0; }
 .card-hero {
   background: var(--bg3); border: 1px solid var(--line);
   border-radius: var(--radius); position: relative; overflow: hidden;
@@ -795,9 +806,9 @@ html, body {
 [data-theme="light"] .card { background: #ffffff; }
 
 /* Dark mode: clear glass cards */
-[data-theme="dark"] .section-shell { background: rgba(255,255,255,0.032); }
-[data-theme="dark"] .kpi-card { background: rgba(255,255,255,0.035); }
-[data-theme="dark"] .card { background: rgba(255,255,255,0.032); }
+[data-theme="dark"] .section-shell { background: rgba(255,255,255,0.025); }
+[data-theme="dark"] .kpi-card { background: rgba(255,255,255,0.030); }
+[data-theme="dark"] .card { background: rgba(9,9,9,0.97); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1400px) { .hero-grid { grid-template-columns: 1fr 1fr 1fr; } .hero-grid > :first-child { grid-column: 1/-1; } .kpi-grid-tier1 { grid-template-columns: 1fr 1fr; } }
@@ -1333,7 +1344,7 @@ html { scroll-behavior: smooth; }
 [data-theme="dark"] .content { background: #0c0b0a; }
 
 /* ── CARD HEAD POLISH ── */
-.card-head { padding: 14px 22px; }
+.card-head { padding: 16px 22px; }
 
 /* ── PRODUCTION TYPOGRAPHY SYSTEM ── */
 /* No fractional pixels, no overrides needed — enforced at token level */
