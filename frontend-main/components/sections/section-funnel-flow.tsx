@@ -1,7 +1,6 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
-import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState, useRef, useEffect } from "react";
 import D3SankeyChart from "../charts/D3SankeyChart";
 import PublishFunnel from "../charts/Funnel";
