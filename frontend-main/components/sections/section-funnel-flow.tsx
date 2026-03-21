@@ -789,38 +789,63 @@ function SectionFunnel({ theme, onAskAI }) {
 
       {subView === "sankey" && (
         <div className="stack">
-          <div className="card card-gold" style={{ padding: "18px 20px" }}>
+          <div className="card card-gold" style={{ padding: "24px 26px" }}>
+
             {/* ── Header ── */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18, flexWrap: "wrap", gap: 10 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div>
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink2)", fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
-                  <span style={{ color: "rgba(255,255,255,0.25)" }}>→</span>
-                  <span style={{ color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
-                  <span style={{ color: "rgba(255,255,255,0.25)" }}>· SANKEY FLOW</span>
-                  <GraphActionButtons
-                    insightsOpen={!!insightsOpen.contentFlow}
-                    onToggleInsights={() => toggleInsights("contentFlow")}
-                    onAskAI={() => onAskAI && onAskAI("Content Flow", { dimA, dimB })}
-                  />
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", marginBottom: 7 }}>
+                  SANKEY FLOW · {activeDimACfg?.label} → {activeDimBCfg?.label}
                 </div>
-                <div style={{ fontSize: 11.5, color: "var(--ink3)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
-                  D3 Sankey · hover nodes and links for highlighted path details
+                <div style={{ fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif", fontSize: 22, fontWeight: 600, color: "rgba(255,255,255,0.90)", letterSpacing: "-0.025em", lineHeight: 1.15, marginBottom: 5 }}>
+                  {activeDimACfg?.label}
+                  <span style={{ color: "rgba(255,255,255,0.18)", fontWeight: 300, margin: "0 12px" }}>→</span>
+                  {activeDimBCfg?.label}
+                  <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.30)", marginLeft: 12, letterSpacing: "-0.01em" }}>flow analysis</span>
+                </div>
+                <div style={{ fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif", fontSize: 12.5, color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>
+                  Hover any node or link to highlight its path through the flow
                 </div>
               </div>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.contentFlow}
+                onToggleInsights={() => toggleInsights("contentFlow")}
+                onAskAI={() => onAskAI && onAskAI("Content Flow", { dimA, dimB })}
+              />
             </div>
 
             {/* ── 2D Dimension Picker ── */}
-            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "16px 18px", marginBottom: 18 }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)", marginBottom: 12 }}>
-                2D DIMENSION FILTER — SELECT SOURCE &amp; TARGET
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "0.5px solid rgba(255,255,255,0.08)",
+              borderRadius: 14,
+              overflow: "hidden",
+              marginBottom: 20,
+            }}>
+              {/* Picker top bar */}
+              <div style={{
+                padding: "11px 18px",
+                borderBottom: "0.5px solid rgba(255,255,255,0.06)",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "rgba(255,255,255,0.01)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.18)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)" }}>DIMENSION FILTER</span>
+                </div>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.16)", letterSpacing: "0.12em", textTransform: "uppercase" }}>SELECT SOURCE &amp; TARGET</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, alignItems: "start" }}>
 
-                {/* Source column */}
+              {/* Picker columns */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 48px 1fr", alignItems: "start", padding: "16px 16px 0" }}>
+
+                {/* SOURCE column */}
                 <div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>SOURCE</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 9, borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
+                    <div style={{ width: 2.5, height: 13, borderRadius: 2, background: "rgba(232,67,45,0.65)" }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.36)" }}>SOURCE</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {DIMS_CONFIG.filter(d => (COMPAT[d.k] || []).length > 0).map(dim => {
                       const active = dimA === dim.k;
                       return (
@@ -828,60 +853,96 @@ function SectionFunnel({ theme, onAskAI }) {
                           setDimA(dim.k);
                           if (!COMPAT[dim.k]?.includes(dimB)) setDimB(COMPAT[dim.k]?.[0] || "status");
                         }} style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
-                          cursor: "pointer", textAlign: "left",
-                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
-                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
-                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
-                          transition: "all .16s ease",
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "11px 13px", borderRadius: 9, border: "0.5px solid",
+                          cursor: "pointer", textAlign: "left", width: "100%",
+                          background: active ? "rgba(232,67,45,0.08)" : "transparent",
+                          borderColor: active ? "rgba(232,67,45,0.28)" : "rgba(255,255,255,0.05)",
+                          transition: "all .15s ease",
                         }}>
-                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
-                          <div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          <div style={{
+                            width: 3, height: 32, borderRadius: 3, flexShrink: 0,
+                            background: active ? "rgba(232,67,45,0.85)" : "rgba(255,255,255,0.09)",
+                            transition: "background .15s ease",
+                          }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                              fontSize: 14, fontWeight: active ? 600 : 400,
+                              color: active ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.50)",
+                              lineHeight: 1.2, letterSpacing: "-0.015em",
+                              transition: "color .15s ease",
+                            }}>{dim.label}</div>
+                            <div style={{
+                              fontFamily: "var(--font-mono)", fontSize: 10,
+                              color: active ? "rgba(255,255,255,0.38)" : "rgba(255,255,255,0.20)",
+                              marginTop: 3, letterSpacing: "0.01em",
+                              transition: "color .15s ease",
+                            }}>{dim.desc}</div>
                           </div>
-                          {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                          {active && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(232,67,45,0.90)", flexShrink: 0 }} />}
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Arrow */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 28, gap: 6 }}>
-                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 18, color: "rgba(255,255,255,0.20)", lineHeight: 1 }}>→</div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)", letterSpacing: "0.08em", textTransform: "uppercase" }}>flows</div>
-                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
+                {/* Arrow connector */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 46, gap: 5 }}>
+                  <div style={{ width: 1, height: 20, background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.10))" }} />
+                  <div style={{
+                    width: 26, height: 26, borderRadius: "50%",
+                    border: "0.5px solid rgba(255,255,255,0.09)",
+                    background: "rgba(255,255,255,0.025)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "rgba(255,255,255,0.22)", fontSize: 13,
+                  }}>→</div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 7.5, color: "rgba(255,255,255,0.16)", letterSpacing: "0.12em", textTransform: "uppercase" }}>flows</div>
+                  <div style={{ width: 1, height: 20, background: "linear-gradient(to top, transparent, rgba(255,255,255,0.10))" }} />
                 </div>
 
-                {/* Target column */}
+                {/* TARGET column */}
                 <div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>TARGET</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 9, borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
+                    <div style={{ width: 2.5, height: 13, borderRadius: 2, background: "rgba(232,67,45,0.65)" }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.36)" }}>TARGET</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {DIMS_CONFIG.filter(d => new Set(Object.values(COMPAT).flat()).has(d.k)).map(dim => {
                       const isValid = validTargets.includes(dim.k);
                       const active = dimB === dim.k;
                       return (
                         <button key={dim.k} onClick={() => isValid && setDimB(dim.k)} disabled={!isValid} style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
-                          cursor: isValid ? "pointer" : "not-allowed", textAlign: "left",
-                          opacity: isValid ? 1 : 0.28,
-                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
-                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
-                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
-                          transition: "all .16s ease",
-                          filter: isValid ? "none" : "grayscale(0.4)",
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "11px 13px", borderRadius: 9, border: "0.5px solid",
+                          cursor: isValid ? "pointer" : "not-allowed", textAlign: "left", width: "100%",
+                          opacity: isValid ? 1 : 0.18,
+                          background: active ? "rgba(232,67,45,0.08)" : "transparent",
+                          borderColor: active ? "rgba(232,67,45,0.28)" : "rgba(255,255,255,0.05)",
+                          transition: "all .15s ease",
+                          filter: isValid ? "none" : "saturate(0)",
                         }}>
-                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
-                          <div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          <div style={{
+                            width: 3, height: 32, borderRadius: 3, flexShrink: 0,
+                            background: active ? "rgba(232,67,45,0.85)" : "rgba(255,255,255,0.09)",
+                            transition: "background .15s ease",
+                          }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                              fontSize: 14, fontWeight: active ? 600 : 400,
+                              color: active ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.50)",
+                              lineHeight: 1.2, letterSpacing: "-0.015em",
+                              transition: "color .15s ease",
+                            }}>{dim.label}</div>
+                            <div style={{
+                              fontFamily: "var(--font-mono)", fontSize: 10,
+                              color: active ? "rgba(255,255,255,0.38)" : "rgba(255,255,255,0.20)",
+                              marginTop: 3, letterSpacing: "0.01em",
+                              transition: "color .15s ease",
+                            }}>{dim.desc}</div>
                           </div>
-                          {!isValid && <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)" }}>N/A</span>}
-                          {active && isValid && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                          {active && isValid && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(232,67,45,0.90)", flexShrink: 0 }} />}
                         </button>
                       );
                     })}
@@ -890,12 +951,32 @@ function SectionFunnel({ theme, onAskAI }) {
 
               </div>
 
-              {/* Active pair badge */}
-              <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, color: "rgba(255,255,255,0.28)", letterSpacing: "0.12em", textTransform: "uppercase" }}>ACTIVE VIEW</span>
-                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimACfg?.color}18`, border: `1px solid ${activeDimACfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
-                <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>→</span>
-                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimBCfg?.color}18`, border: `1px solid ${activeDimBCfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
+              {/* Active footer */}
+              <div style={{
+                margin: "16px 16px 0",
+                borderTop: "0.5px solid rgba(255,255,255,0.05)",
+                padding: "11px 0",
+                display: "flex", alignItems: "center", gap: 10,
+              }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.20)" }}>ACTIVE</span>
+                <span style={{
+                  padding: "4px 12px", borderRadius: 6,
+                  background: "rgba(232,67,45,0.10)", border: "0.5px solid rgba(232,67,45,0.25)",
+                  fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                  fontSize: 12, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.82)",
+                }}>{activeDimACfg?.label}</span>
+                <svg width="16" height="8" viewBox="0 0 16 8" fill="none" style={{ flexShrink: 0 }}>
+                  <path d="M1 4h12M10 1.5l3 2.5-3 2.5" stroke="rgba(255,255,255,0.22)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span style={{
+                  padding: "4px 12px", borderRadius: 6,
+                  background: "rgba(232,67,45,0.10)", border: "0.5px solid rgba(232,67,45,0.25)",
+                  fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                  fontSize: 12, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.82)",
+                }}>{activeDimBCfg?.label}</span>
+                <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.06em" }}>
+                  {computeSankeyData(dimA, dimB).links?.length || 0} links
+                </span>
               </div>
             </div>
 
