@@ -10,7 +10,7 @@ import pandas as pd
 from pathlib import Path
 from typing import Dict, List, Optional
 import json
-
+# base_dir = Path(__file__).resolve().parent
 _backend_dir = Path(__file__).resolve().parent
 _agent_dir = _backend_dir.parent if _backend_dir.name == "backend" else _backend_dir
 
@@ -25,7 +25,8 @@ def _find_merged_dir() -> Path:
             return candidate
     return _agent_dir / "data" / "merged"
 
-
+def hello():
+    print("Hello from dataset_registry.py!")
 class DatasetRegistry:
     def __init__(self, data_dir: str = ""):
         self.data_dir = Path(data_dir) if data_dir else DATASETS_DIR
