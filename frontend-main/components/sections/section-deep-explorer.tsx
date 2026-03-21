@@ -16,6 +16,318 @@ import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
+/* ─────────────────────────────────────────────────────────────
+   Advanced KPI — Platform Efficiency Score & Geo Value Index
+───────────────────────────────────────────────────────────── */
+function AdvancedKPITab({ onAskAI }) {
+  const [kpiTab, setKpiTab] = useState("pes");
+  const [pesCpw, setPesCpw] = useState(3.15);
+  const [pesAvg, setPesAvg] = useState(3.15);
+  const [gviCpw, setGviCpw] = useState(2.0);
+  const [gviBudget, setGviBudget] = useState(1000);
+
+  const MARKET_AVG = 3.15;
+  const GEO_AVG = 2.0;
+  const MONO = "var(--font-mono)";
+  const SERIF = "var(--font-serif)";
+  const SANS = "var(--font-sans)";
+
+  // PES
+  const pes = pesAvg / pesCpw;
+  const pesWph = 1 / pesCpw;
+  const pesSave = Math.max(0, (pesAvg - pesCpw) * 100 / pesAvg);
+  const pesC = pes >= 1.5 ? "var(--green-lt)" : pes < 0.8 ? "var(--pri)" : "var(--amber-lt)";
+  const pesVerd = pes >= 2
+    ? { k: "good", t: `Excellent — PES ${pes.toFixed(2)}. Buying at ${((1/pes)*100).toFixed(0)}% of market rate. Strong ROI.` }
+    : pes >= 1.2
+    ? { k: "good", t: `Good — PES ${pes.toFixed(2)}. Slightly below market rate. Solid efficiency.` }
+    : pes >= 0.85
+    ? { k: "mid", t: `Average — PES ${pes.toFixed(2)}. Near market average. No significant advantage.` }
+    : { k: "bad", t: `Premium — PES ${pes.toFixed(2)}. Paying ${((1/pes - 1)*100).toFixed(0)}% above market. Justify with audience quality.` };
+
+  // GVI
+  const gvi = (GEO_AVG / gviCpw) * 100;
+  const gviHours = gviBudget / gviCpw;
+  const gviImpr = (gviBudget / gviCpw) * 60 * 3 / 1000;
+  const gviC = gvi >= 200 ? "var(--green-lt)" : gvi < 70 ? "var(--pri)" : "var(--amber-lt)";
+  const gviVerd = gvi >= 300
+    ? { k: "good", t: `High-reach — GVI ${Math.round(gvi)}. Your $${gviBudget.toLocaleString()} buys ${Math.round(gviHours).toLocaleString()} watch hours, ${(gvi/100).toFixed(1)}× the global average.` }
+    : gvi >= 150
+    ? { k: "good", t: `Good value — GVI ${Math.round(gvi)}. Above-average reach for your budget.` }
+    : gvi >= 70
+    ? { k: "mid",  t: `Near global average — GVI ${Math.round(gvi)}. Typical cost for this market.` }
+    : { k: "bad",  t: `Premium market — GVI ${Math.round(gvi)}. Low reach per dollar. Audience quality must justify the spend.` };
+
+  const VC = {
+    good: { bg: "rgba(62,201,138,.10)", border: "rgba(62,201,138,.25)", color: "var(--green-lt)" },
+    mid:  { bg: "rgba(255,179,64,.10)", border: "rgba(255,179,64,.25)", color: "var(--amber-lt)" },
+    bad:  { bg: "rgba(255,71,87,.10)",  border: "rgba(255,71,87,.25)",  color: "var(--pri)" },
+  };
+
+  const pesPlatforms = [
+    {p:"YouTube Shorts",cpw:5.0},{p:"Instagram Reels",cpw:6.0},
+    {p:"Facebook Reels",cpw:6.0},{p:"X / Twitter",cpw:7.0},
+    {p:"Threads",cpw:6.0},{p:"LinkedIn",cpw:12.0},
+  ].sort((a,b)=>a.cpw-b.cpw);
+
+  const gviConts = [
+    {c:"North America",cpw:6.72},{c:"Europe",cpw:4.8},
+    {c:"Oceania",cpw:7.68},{c:"East Asia",cpw:3.84},
+    {c:"Middle East",cpw:2.4},{c:"Latin America",cpw:1.2},
+    {c:"South Asia",cpw:0.58},{c:"Africa",cpw:1.2},
+  ].sort((a,b)=>b.cpw-a.cpw);
+
+  const FormulaBox = ({ label, text }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", background: "rgba(255,255,255,.03)", border: "0.5px solid var(--line-lt)", borderRadius: 8, padding: "12px 16px", marginBottom: 8 }}>
+      <span style={{ fontFamily: MONO, fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--ink4)", minWidth: 60 }}>{label}</span>
+      <span style={{ fontFamily: MONO, fontSize: 12, color: "var(--ink2)", fontWeight: 500 }}>{text}</span>
+    </div>
+  );
+
+  const ExCard = ({ title, body, result, note }) => (
+    <div style={{ background: "rgba(255,255,255,.04)", border: "0.5px solid var(--line-lt)", borderRadius: 10, padding: 18 }}>
+      <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--ink3)", marginBottom: 10 }}>{title}</div>
+      <div style={{ fontFamily: SANS, fontSize: 12, color: "var(--ink3)", lineHeight: 1.7, marginBottom: 10 }} dangerouslySetInnerHTML={{ __html: body }} />
+      <div style={{ fontFamily: SERIF, fontSize: 20, marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: result }} />
+      <div style={{ fontFamily: SANS, fontSize: 11, color: "var(--ink4)" }}>{note}</div>
+    </div>
+  );
+
+  const GaugeRow = ({ items }) => (
+    <div style={{ display: "flex", gap: 14, marginTop: 16, flexWrap: "wrap" }}>
+      {items.map((g, i) => (
+        <div key={i} style={{ flex: 1, minWidth: 100, textAlign: "center" }}>
+          <div style={{ fontFamily: SERIF, fontSize: 30, lineHeight: 1, marginBottom: 4, color: g.color, transition: "color .3s" }}>{g.val}</div>
+          <div style={{ height: 4, background: "var(--line-lt)", borderRadius: 2, margin: "6px 4px", overflow: "hidden" }}>
+            <div style={{ height: 4, borderRadius: 2, background: g.color, width: Math.min(100, g.barW) + "%", transition: "width .35s ease, background .3s" }} />
+          </div>
+          <div style={{ fontFamily: MONO, fontSize: 9, color: "var(--ink4)", lineHeight: 1.4 }}>{g.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const SimSlider = ({ label, min, max, step, val, set, fmt, accent }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+      <label style={{ fontFamily: SANS, fontSize: 12, color: "var(--ink3)", minWidth: 150 }}>{label}</label>
+      <input type="range" min={min} max={max} step={step} value={val}
+        onChange={e => set(+e.target.value)}
+        style={{ flex: 1, height: 4, accentColor: accent, cursor: "pointer" }} />
+      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 500, color: "var(--ink2)", minWidth: 60, textAlign: "right" }}>{fmt(val)}</span>
+    </div>
+  );
+
+  const TH = { fontFamily: MONO, fontSize: 9, fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 8px", color: "var(--ink4)", borderBottom: "0.5px solid var(--line)", textAlign: "left" };
+  const TD = { padding: "7px 8px", borderBottom: "0.5px solid var(--line-lt)" };
+
+  return (
+    <div className="stack">
+      {/* Sub-tab strip */}
+      <div style={{ display: "flex", gap: 8 }}>
+        {[["pes","Platform Efficiency Score"],["gvi","Geo Value Index"]].map(([k, label]) => (
+          <button key={k} onClick={() => setKpiTab(k)} style={{
+            padding: "7px 18px",
+            fontFamily: MONO, fontSize: 10, fontWeight: 600,
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            borderRadius: 6, border: "1px solid",
+            cursor: "pointer",
+            background: kpiTab === k ? (k === "pes" ? "rgba(59,139,212,.12)" : "rgba(255,71,87,.12)") : "transparent",
+            borderColor: kpiTab === k ? (k === "pes" ? "rgba(59,139,212,.45)" : "rgba(255,71,87,.4)") : "var(--line)",
+            color: kpiTab === k ? (k === "pes" ? "#3B8BD4" : "var(--pri)") : "var(--ink3)",
+            transition: "all 0.18s ease",
+          }}>{label}</button>
+        ))}
+      </div>
+
+      {/* ── PES Tab ── */}
+      {kpiTab === "pes" && (
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ height: 3, background: "linear-gradient(90deg,#3B8BD4,#1D9E75)" }} />
+          <div style={{ padding: "24px 28px" }}>
+
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontFamily: MONO, fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "#3B8BD4", marginBottom: 6 }}>
+                  Dataset 1 · Platform × Topic Ad Cost
+                </div>
+                <div style={{ fontFamily: SERIF, fontSize: 26, color: "var(--ink)", marginBottom: 6 }}>
+                  Platform Efficiency Score
+                </div>
+                <div style={{ fontFamily: SANS, fontSize: 13, color: "var(--ink3)", lineHeight: 1.6, maxWidth: 560 }}>
+                  How much watch-time bang do you get per dollar, relative to the market average? A score above 1.0 means you're buying cheaper than the norm.
+                </div>
+              </div>
+              <GraphActionButtons insightsOpen={false} onToggleInsights={() => {}} onAskAI={() => onAskAI && onAskAI("Platform Efficiency Score", {})} />
+            </div>
+
+            <FormulaBox label="Formula" text="PES = Avg CPW (all platforms) ÷ CPW (chosen platform & topic)" />
+            <FormulaBox label="Interpret" text="PES > 1.0 → cheaper than average  |  PES = 1.0 → at par  |  PES < 1.0 → paying a premium" />
+
+            {/* Examples */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 20, marginBottom: 24 }}>
+              <ExCard
+                title="Example A — Budget campaign"
+                body="Running a <strong>Vlogging</strong> ad on <strong>YouTube Shorts</strong>.<br/>CPW = $0.80 &nbsp;·&nbsp; Market avg = $3.15"
+                result={`<span style="color:var(--green-lt)">PES = 3.15 ÷ 0.80 = <span style="font-size:26px">3.94</span></span>`}
+                note="Nearly 4× more efficient than average. Every $1 buys 4 hours of watch time vs 1 hour elsewhere."
+              />
+              <ExCard
+                title="Example B — Premium campaign"
+                body="Running a <strong>Finance</strong> ad on <strong>LinkedIn</strong>.<br/>CPW = $12.00 &nbsp;·&nbsp; Market avg = $3.15"
+                result={`<span style="color:var(--pri)">PES = 3.15 ÷ 12.00 = <span style="font-size:26px">0.26</span></span>`}
+                note="Only 26% as efficient as average. You're paying 4× more per watch hour than the norm."
+              />
+            </div>
+
+            {/* Simulator */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 14 }}>
+                Try it — PES Simulator
+              </div>
+              <SimSlider label="Your CPW ($)" min={0.8} max={12} step={0.1} val={pesCpw} set={setPesCpw} fmt={v => "$"+v.toFixed(2)} accent="#3B8BD4" />
+              <SimSlider label="Market avg CPW ($)" min={1} max={6} step={0.05} val={pesAvg} set={setPesAvg} fmt={v => "$"+v.toFixed(2)} accent="#3B8BD4" />
+              <GaugeRow items={[
+                { label: "Platform Efficiency Score", val: pes.toFixed(2), color: pesC, barW: pes/5*100 },
+                { label: "Watch hours per $1 spent",  val: pesWph.toFixed(1)+"h", color: "#1D9E75", barW: pesWph/4*100 },
+                { label: "Savings per $100 vs avg",   val: "$"+pesSave.toFixed(0), color: "var(--amber-lt)", barW: pesSave },
+              ]} />
+              <div style={{ marginTop: 14, borderRadius: 8, padding: "10px 16px", fontFamily: SANS, fontSize: 12, lineHeight: 1.6, background: VC[pesVerd.k].bg, color: VC[pesVerd.k].color, border: `0.5px solid ${VC[pesVerd.k].border}`, transition: "background .3s, color .3s" }}>
+                {pesVerd.t}
+              </div>
+            </div>
+
+            {/* PES ranking table */}
+            <div>
+              <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 12 }}>
+                PES Ranking — all platforms, Finance topic
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                <thead>
+                  <tr>{["Platform","CPW","PES","Efficiency"].map((h,i) => <th key={h} style={{ ...TH, width: i===3?120:"auto" }}>{h}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {pesPlatforms.map(r => {
+                    const p = (MARKET_AVG / r.cpw).toFixed(2);
+                    const c = +p >= 1 ? "var(--green-lt)" : "var(--pri)";
+                    return (
+                      <tr key={r.p}>
+                        <td style={{ ...TD, fontFamily: SANS, color: "var(--ink2)" }}>{r.p}</td>
+                        <td style={{ ...TD, fontFamily: MONO, color: "var(--ink3)" }}>${r.cpw.toFixed(2)}</td>
+                        <td style={{ ...TD, fontFamily: MONO, fontWeight: 600, color: c }}>{p}</td>
+                        <td style={TD}>
+                          <div style={{ background: "var(--line-lt)", borderRadius: 3, height: 6, overflow: "hidden" }}>
+                            <div style={{ height: 6, borderRadius: 3, background: c, width: Math.min(100,(+p/5)*100)+"%" }} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── GVI Tab ── */}
+      {kpiTab === "gvi" && (
+        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+          <div style={{ height: 3, background: "linear-gradient(90deg,#EF9F27,#E24B4A)" }} />
+          <div style={{ padding: "24px 28px" }}>
+
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontFamily: MONO, fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--amber-lt)", marginBottom: 6 }}>
+                  Dataset 2 · YouTube Continent × Topic Ad Cost
+                </div>
+                <div style={{ fontFamily: SERIF, fontSize: 26, color: "var(--ink)", marginBottom: 6 }}>
+                  Geo Value Index
+                </div>
+                <div style={{ fontFamily: SANS, fontSize: 13, color: "var(--ink3)", lineHeight: 1.6, maxWidth: 560 }}>
+                  Not all cheap markets are equal — this index scores each region by dividing reach per dollar by its market cost tier, revealing where you get high volume <em>and</em> value.
+                </div>
+              </div>
+              <GraphActionButtons insightsOpen={false} onToggleInsights={() => {}} onAskAI={() => onAskAI && onAskAI("Geo Value Index", {})} />
+            </div>
+
+            <FormulaBox label="Formula" text="GVI = (Global avg CPW ÷ Local CPW) × 100" />
+            <FormulaBox label="Interpret" text="GVI 100 = at global avg  |  GVI > 100 → above-average reach per $  |  GVI < 100 → premium market" />
+
+            {/* Examples */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginTop: 20, marginBottom: 24 }}>
+              <ExCard
+                title="Example A — Reach campaign"
+                body="Running a <strong>Tech_AI</strong> ad in <strong>South Asia</strong>.<br/>Local CPW = $0.36 &nbsp;·&nbsp; Global avg = $2.00"
+                result={`<span style="color:var(--green-lt)">GVI = (2.00 ÷ 0.36) × 100 = <span style="font-size:26px">556</span></span>`}
+                note="$100 buys 278 hours of Tech AI watch time here vs just 50 hours globally. Massive reach multiplier."
+              />
+              <ExCard
+                title="Example B — Quality campaign"
+                body="Running a <strong>Finance</strong> ad in <strong>Oceania</strong>.<br/>Local CPW = $7.68 &nbsp;·&nbsp; Global avg = $2.00"
+                result={`<span style="color:var(--pri)">GVI = (2.00 ÷ 7.68) × 100 = <span style="font-size:26px">26</span></span>`}
+                note="$100 buys only 13 watch hours vs 50 globally. You're paying for audience quality, not volume."
+              />
+            </div>
+
+            {/* Simulator */}
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 14 }}>
+                Try it — GVI Simulator
+              </div>
+              <SimSlider label="Local CPW ($)" min={0.12} max={7.68} step={0.01} val={gviCpw} set={setGviCpw} fmt={v => "$"+v.toFixed(2)} accent="#EF9F27" />
+              <SimSlider label="Budget ($)" min={100} max={10000} step={100} val={gviBudget} set={setGviBudget} fmt={v => "$"+v.toLocaleString()} accent="#EF9F27" />
+              <GaugeRow items={[
+                { label: "Geo Value Index",          val: Math.round(gvi),  color: gviC, barW: gvi/8 },
+                { label: "Watch hours bought",       val: gviHours >= 1000 ? (gviHours/1000).toFixed(1)+"K" : Math.round(gviHours)+"h", color: "#3B8BD4", barW: gviHours/gviBudget*10 },
+                { label: "Est. impressions",         val: gviImpr >= 1000 ? (gviImpr/1000).toFixed(1)+"M" : Math.round(gviImpr)+"K", color: "#1D9E75", barW: gviImpr/1000*20 },
+              ]} />
+              <div style={{ marginTop: 14, borderRadius: 8, padding: "10px 16px", fontFamily: SANS, fontSize: 12, lineHeight: 1.6, background: VC[gviVerd.k].bg, color: VC[gviVerd.k].color, border: `0.5px solid ${VC[gviVerd.k].border}`, transition: "background .3s, color .3s" }}>
+                {gviVerd.t}
+              </div>
+            </div>
+
+            {/* GVI ranking table */}
+            <div>
+              <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 12 }}>
+                GVI Ranking — all continents, Finance topic
+              </div>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                <thead>
+                  <tr>{["Continent","CPW","GVI","Watch hrs per $100"].map((h,i) => <th key={h} style={{ ...TH, width: i===3?170:"auto" }}>{h}</th>)}</tr>
+                </thead>
+                <tbody>
+                  {gviConts.map(r => {
+                    const gviR = Math.round((GEO_AVG / r.cpw) * 100);
+                    const hrs = (100 / r.cpw).toFixed(1);
+                    const c = gviR >= 100 ? "var(--green-lt)" : "var(--pri)";
+                    return (
+                      <tr key={r.c}>
+                        <td style={{ ...TD, fontFamily: SANS, color: "var(--ink2)" }}>{r.c}</td>
+                        <td style={{ ...TD, fontFamily: MONO, color: "var(--ink3)" }}>${r.cpw.toFixed(2)}</td>
+                        <td style={{ ...TD, fontFamily: MONO, fontWeight: 600, color: c }}>{gviR}</td>
+                        <td style={TD}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ flex: 1, background: "var(--line-lt)", borderRadius: 3, height: 6, overflow: "hidden" }}>
+                              <div style={{ height: 6, borderRadius: 3, background: c, width: Math.min(100, gviR/8)+"%" }} />
+                            </div>
+                            <span style={{ fontFamily: MONO, fontSize: 11, minWidth: 36, color: "var(--ink3)" }}>{hrs}h</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SectionExplorer({ theme, onAskAI }) {
   const dash = useDash();
   const { data } = useJsonData("explorer");
@@ -633,119 +945,7 @@ function SectionExplorer({ theme, onAskAI }) {
         </div>
       )}
 
-      {subView === "advanced_kpi" && (
-        <div className="stack">
-          {/* KPI Framework Document */}
-          <div className="card card-gold" style={{ padding: "20px 24px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
-              <div>
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--pri)", marginBottom: 6 }}>
-                  KPI FRAMEWORK DOCUMENT
-                </div>
-                <div style={{ fontFamily: "var(--font-serif)", fontSize: 22, color: "var(--ink)", marginBottom: 4 }}>
-                  Frammer AI — Performance KPI Reference
-                </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--ink4)" }}>
-                  Mar 2025 – Feb 2026 · Derived from KPI Framework PDF
-                </div>
-              </div>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.kpiDoc}
-                onToggleInsights={() => toggleInsights("kpiDoc")}
-                onAskAI={() => onAskAI && onAskAI("KPI Framework", {})}
-              />
-            </div>
-
-            {[
-              {
-                section: "[A] Usage & Adoption",
-                color: "var(--amber-lt)",
-                kpis: [
-                  { name: "Total Platform Volume", formula: "SUM(Uploaded)", value: "4,453", avail: "direct", critical: false, desc: "Total videos uploaded across all channels in the period." },
-                  { name: "Total AI Outputs Created", formula: "SUM(Created)", value: "15,119", avail: "direct", critical: false, desc: "Total AI-generated video assets produced from uploads." },
-                  { name: "Total Published", formula: "SUM(Published)", value: "111", avail: "direct", critical: true, desc: "Content that reached end audiences on distribution platforms." },
-                  { name: "AI Creation Multiplier", formula: "Created / Uploaded", value: "3.35×", avail: "derived", critical: false, desc: "How many AI outputs are generated per uploaded source video." },
-                  { name: "Active Channels", formula: "COUNT(channels with Uploaded > 0)", value: "18 / 18", avail: "direct", critical: false, desc: "Channels with at least one upload in the period." },
-                  { name: "Monthly Upload Volume", formula: "SUM(Uploaded) per month", value: "194–676/mo", avail: "direct", critical: false, desc: "Range of monthly upload activity across the 12-month period." },
-                  { name: "Active Users", formula: "COUNT(users with Uploaded > 0)", value: "44 / 45", avail: "direct", critical: false, desc: "Users who contributed at least one upload." },
-                ],
-              },
-              {
-                section: "[B] Output Quality & Publish",
-                color: "var(--pri)",
-                kpis: [
-                  { name: "Platform Publish Rate", formula: "Published / Uploaded × 100", value: "2.5%", avail: "derived", critical: true, desc: "End-to-end conversion from source upload to live distribution. Benchmark: ≥10%." },
-                  { name: "AI-to-Publish Rate", formula: "Published / Created × 100", value: "0.73%", avail: "derived", critical: true, desc: "Share of AI-generated content that reaches audiences. Benchmark: ≥5%." },
-                  { name: "Distribution Bottleneck", formula: "1 − (Published / Created)", value: "97.5%", avail: "derived", critical: true, desc: "Percentage of AI output stuck between creation and distribution." },
-                  { name: "Top Channel Pub Rate", formula: "Published_ChD / Uploaded_ChD", value: "17.5% (Ch-D)", avail: "derived", critical: false, desc: "Best-performing channel by publish rate. Benchmarks other channels." },
-                  { name: "Zero-Publish Months", formula: "COUNT(months with Published = 0)", value: "3 / 12", avail: "direct", critical: true, desc: "Mar, Jul, Sep 2025 had zero published output — operational gap months." },
-                ],
-              },
-              {
-                section: "[C] Efficiency & Concentration",
-                color: "var(--green-lt)",
-                kpis: [
-                  { name: "User Productivity Index", formula: "Total Created / Active Users", value: "344/user", avail: "derived", critical: false, desc: "Average AI outputs per contributing user in the period." },
-                  { name: "Top-5 User Concentration", formula: "Top5 Created / Total Created", value: "~50%", avail: "derived", critical: false, desc: "Output skew — top 5 users account for half of all AI-generated content." },
-                  { name: "Top-3 Channel Concentration", formula: "Top3 Created / Total Created", value: "~60%", avail: "derived", critical: false, desc: "Production dependency on a small number of channels." },
-                  { name: "Content Gap (Unlocked Asset Pool)", formula: "Created − Published", value: "15,008", avail: "derived", critical: true, desc: "AI-generated content never distributed — represents untapped asset value." },
-                  { name: "Platform Utilisation Score", formula: "MIN(PubRate × 5, 100)", value: "12.5 / 100", avail: "derived", critical: true, desc: "Composite score; full marks at ≥20% publish rate. Currently critically low." },
-                ],
-              },
-            ].map(({ section, color, kpis }) => (
-              <div key={section} style={{ marginBottom: 24 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, paddingBottom: 8, borderBottom: `2px solid color-mix(in srgb, ${color} 35%, transparent)` }}>
-                  <div style={{ width: 4, height: 20, background: color, borderRadius: 2 }} />
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color, fontWeight: 700 }}>{section}</span>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                  {kpis.map((kpi, idx) => (
-                    <div key={kpi.name} style={{ display: "grid", gridTemplateColumns: "260px 200px 90px 60px 1fr", gap: 12, alignItems: "start", padding: "10px 0", borderBottom: "1px solid var(--line-lt)" }}>
-                      <div>
-                        <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--ink2)", fontWeight: 600, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
-                          {kpi.critical && <span style={{ color: "var(--pri)", fontSize: 10 }}>⚑</span>}
-                          {kpi.name}
-                        </div>
-                        <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, color: "var(--ink4)", lineHeight: 1.4 }}>{kpi.desc}</div>
-                      </div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--ink4)" }}>
-                        <span style={{ color: "var(--ink3)", fontSize: 10 }}>Formula: </span>{kpi.formula}
-                      </div>
-                      <div style={{ fontFamily: "var(--font-serif)", fontSize: 16, color: kpi.critical ? "var(--pri)" : color, fontWeight: 400, lineHeight: 1.2 }}>
-                        {kpi.value}
-                      </div>
-                      <div>
-                        <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, padding: "2px 6px", borderRadius: 3, background: kpi.avail === "direct" ? "rgba(62,201,138,0.12)" : "rgba(255,71,87,0.1)", color: kpi.avail === "direct" ? "var(--green-lt)" : "var(--amber-lt)", border: `1px solid ${kpi.avail === "direct" ? "rgba(62,201,138,0.2)" : "rgba(255,71,87,0.2)"}` }}>
-                          {kpi.avail}
-                        </span>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        {kpi.critical && (
-                          <div style={{ padding: "3px 8px", background: "rgba(255,71,87,0.08)", border: "1px solid rgba(255,71,87,0.2)", borderRadius: 3 }}>
-                            <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--pri)" }}>⚑ CRITICAL ALERT</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            <div style={{ marginTop: 8, padding: "12px 16px", background: "var(--bg3)", borderRadius: "var(--radius)", border: "1px solid var(--line-lt)" }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink4)", marginBottom: 6 }}>LEGEND</div>
-              <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                {[["direct", "var(--green-lt)", "rgba(62,201,138,0.12)", "rgba(62,201,138,0.2)", "Directly available from raw data"], ["derived", "var(--amber-lt)", "rgba(255,71,87,0.1)", "rgba(255,71,87,0.2)", "Calculated from raw data"], ["⚑", "var(--pri)", "rgba(255,71,87,0.08)", "rgba(255,71,87,0.2)", "Critical KPI — needs immediate attention"]].map(([label, c, bg, border, desc]) => (
-                  <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9, padding: "2px 6px", borderRadius: 3, background: bg, color: c, border: `1px solid ${border}` }}>{label}</span>
-                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink4)" }}>{desc}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {subView === "advanced_kpi" && <AdvancedKPITab onAskAI={onAskAI} />}
     </div>
   );
 }

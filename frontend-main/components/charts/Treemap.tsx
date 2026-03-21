@@ -17,6 +17,7 @@ const PALETTE = [
 
 function Treemap({ data, height = 340, onSelect }) {
   const [hoveredIdx, setHoveredIdx] = useState(null);
+  const [tipPos, setTipPos] = useState(null);
   const ref = useRef(null);
   const [dims, setDims] = useState({ w: 800, h: height });
 
@@ -28,62 +29,76 @@ function Treemap({ data, height = 340, onSelect }) {
     return () => ob.disconnect();
   }, [height]);
 
-  /* Squarified layout */
+  /* Only positive-value items enter the layout.
+     Zero/negative items cause blank gaps because they consume
+     0 pixels while still advancing the loop cursor. */
+  const activeData = data.filter((d) => d.value > 0);
   const total = data.reduce((a, b) => a + b.value, 0);
+
+  /* Squarified treemap layout.
+     KEY FIX: strip proportions are computed against `remTotal`
+     (the rolling sum of *remaining* items) not the global total.
+     This guarantees the layout always fills 100% of the rect. */
   function layout(items, x, y, w, h) {
-    if (!items.length) return [];
+    if (!items.length || w < 1 || h < 1) return [];
     const sorted = [...items]
-      .map((d, origIdx) => ({ ...d, origIdx }))
+      .map((d, i) => ({ ...d, origIdx: i }))
       .sort((a, b) => b.value - a.value);
+
     const result = [];
     let rem = [...sorted];
     let rx = x, ry = y, rw = w, rh = h;
+
     while (rem.length > 0) {
-      const isH = rw > rh;
+      const remTotal = rem.reduce((s, d) => s + d.value, 0);
+      if (remTotal <= 0 || rw < 1 || rh < 1) break;
+
+      const isH = rw >= rh;
       let best = 1;
+
       for (let n = 1; n <= rem.length; n++) {
         const sl = rem.slice(0, n);
-        const sT = sl.reduce((a, b) => a + b.value, 0);
-        const sP = sT / total;
+        const sT = sl.reduce((s, d) => s + d.value, 0);
+        const sP = sT / remTotal;           // ← fraction of REMAINING area
         const dim = isH ? rw * sP : rh * sP;
         let mAR = 0;
         sl.forEach((it) => {
           const p = it.value / sT;
-          const cw = isH ? dim : rw * p;
+          const cw = isH ? dim   : rw * p;
           const ch = isH ? rh * p : dim;
-          mAR = Math.max(mAR, Math.max(cw / ch, ch / cw));
+          if (cw > 0 && ch > 0)
+            mAR = Math.max(mAR, Math.max(cw / ch, ch / cw));
         });
         if (n === 1 || mAR < 3) best = n;
         else break;
       }
+
       const sl = rem.slice(0, best);
-      const sT = sl.reduce((a, b) => a + b.value, 0);
-      const sP = sT / total;
+      const sT = sl.reduce((s, d) => s + d.value, 0);
+      const sP = sT / remTotal;
       const sD = isH ? rw * sP : rh * sP;
+
       let cx2 = rx, cy2 = ry;
       sl.forEach((it) => {
         const p = it.value / sT;
-        const cw = isH ? sD : rw * p;
+        const cw = isH ? sD   : rw * p;
         const ch = isH ? rh * p : sD;
         result.push({ ...it, x: cx2, y: cy2, w: cw, h: ch });
-        if (isH) cy2 += ch;
-        else cx2 += cw;
+        if (isH) cy2 += ch; else cx2 += cw;
       });
+
       if (isH) { rx += sD; rw -= sD; }
-      else { ry += sD; rh -= sD; }
+      else     { ry += sD; rh -= sD; }
       rem = rem.slice(best);
     }
     return result;
   }
 
   const GAP = 3;
-  /* Sort data by value descending to assign rank colours */
-  const ranked = [...data].sort((a, b) => b.value - a.value);
+  /* Rank colours use the full dataset ordering (including zero-value entries) */
+  const ranked  = [...data].sort((a, b) => b.value - a.value);
   const rankMap = new Map(ranked.map((d, i) => [d.label, i]));
-  const cells = layout(data, 0, 0, dims.w, height);
-
-  /* Tooltip inline (avoids portal z-index issues) */
-  const [tipPos, setTipPos] = useState(null);
+  const cells   = layout(activeData, 0, 0, dims.w, height);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -91,9 +106,9 @@ function Treemap({ data, height = 340, onSelect }) {
       {/* ── Treemap canvas ── */}
       <div ref={ref} style={{ height, width: "100%", position: "relative" }}>
         {cells.map((c, i) => {
-          const rank = rankMap.get(c.label) ?? i;
+          const rank  = rankMap.get(c.label) ?? i;
           const color = PALETTE[Math.min(rank, PALETTE.length - 1)];
-          const pct = total > 0 ? (c.value / total * 100) : 0;
+          const pct   = total > 0 ? (c.value / total) * 100 : 0;
           const isHov = hoveredIdx === i;
           const isDim = hoveredIdx !== null && !isHov;
           const cw = Math.max(0, c.w - GAP * 2);
@@ -107,10 +122,8 @@ function Treemap({ data, height = 340, onSelect }) {
               key={i}
               style={{
                 position: "absolute",
-                left: c.x + GAP,
-                top:  c.y + GAP,
-                width:  cw,
-                height: ch,
+                left: c.x + GAP, top: c.y + GAP,
+                width: cw, height: ch,
                 background: color,
                 cursor: "pointer",
                 borderRadius: 7,
@@ -129,17 +142,22 @@ function Treemap({ data, height = 340, onSelect }) {
                   : "inset 0 0 0 0.5px rgba(255,255,255,0.08), 0 2px 8px rgba(0,0,0,0.25)",
               }}
               onClick={() => onSelect && onSelect(c)}
-              onMouseEnter={(e) => { setHoveredIdx(i); setTipPos({ x: e.clientX, y: e.clientY, c, pct }); }}
-              onMouseMove={(e) => setTipPos(t => t ? { ...t, x: e.clientX, y: e.clientY } : t)}
+              onMouseEnter={(e) => {
+                setHoveredIdx(i);
+                setTipPos({ x: e.clientX, y: e.clientY, c, pct });
+              }}
+              onMouseMove={(e) =>
+                setTipPos((t) => (t ? { ...t, x: e.clientX, y: e.clientY } : t))
+              }
               onMouseLeave={() => { setHoveredIdx(null); setTipPos(null); }}
             >
-              {/* Gradient overlay — top-to-bottom dark vignette */}
+              {/* Gradient vignette */}
               <div style={{
                 position: "absolute", inset: 0, pointerEvents: "none",
                 background: "linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.28) 100%)",
               }} />
 
-              {/* Rank badge — top-left corner */}
+              {/* Rank badge */}
               {showLabel && (
                 <div style={{
                   position: "absolute", top: 9, left: 11,
@@ -210,11 +228,13 @@ function Treemap({ data, height = 340, onSelect }) {
           );
         })}
 
-        {/* Inline floating tooltip */}
+        {/* Floating tooltip */}
         {tipPos && typeof window !== "undefined" && (() => {
           const TW = 185, TH = 70;
           const tx = Math.min(tipPos.x + 16, window.innerWidth - TW - 8);
-          const ty = tipPos.y + 16 + TH > window.innerHeight ? tipPos.y - TH - 12 : tipPos.y + 16;
+          const ty = tipPos.y + 16 + TH > window.innerHeight
+            ? tipPos.y - TH - 12
+            : tipPos.y + 16;
           return (
             <div style={{
               position: "fixed", left: tx, top: ty,
@@ -257,10 +277,10 @@ function Treemap({ data, height = 340, onSelect }) {
         gap: "8px 24px",
       }}>
         {ranked.map((d, rank) => {
-          const pct = total > 0 ? (d.value / total * 100).toFixed(1) : "0";
-          const color = PALETTE[Math.min(rank, PALETTE.length - 1)];
-          const cellIdx = cells.findIndex(c => c.label === d.label);
-          const isHov = hoveredIdx === cellIdx;
+          const pct     = total > 0 ? (d.value / total * 100).toFixed(1) : "0";
+          const color   = PALETTE[Math.min(rank, PALETTE.length - 1)];
+          const cellIdx = cells.findIndex((c) => c.label === d.label);
+          const isHov   = hoveredIdx === cellIdx;
           return (
             <div
               key={d.label}
@@ -268,19 +288,20 @@ function Treemap({ data, height = 340, onSelect }) {
                 display: "flex", alignItems: "center", gap: 8,
                 opacity: hoveredIdx === null || isHov ? 1 : 0.30,
                 transition: "opacity 0.20s ease",
-                cursor: "default",
+                cursor: cellIdx >= 0 ? "default" : "default",
               }}
-              onMouseEnter={() => setHoveredIdx(cellIdx)}
+              onMouseEnter={() => cellIdx >= 0 && setHoveredIdx(cellIdx)}
               onMouseLeave={() => setHoveredIdx(null)}
             >
-              <div style={{ width: 8, height: 8, borderRadius: 2, background: color, flexShrink: 0 }} />
+              <div style={{ width: 8, height: 8, borderRadius: 2, background: color, flexShrink: 0,
+                opacity: d.value <= 0 ? 0.35 : 1 }} />
               <span style={{ fontSize: 11, color: "rgba(255,255,255,0.38)", fontFamily: "-apple-system,'SF Pro Text',sans-serif", letterSpacing: "0.01em" }}>
                 #{rank + 1}
               </span>
               <span style={{ fontSize: 12, color: "rgba(255,255,255,0.60)", fontFamily: "-apple-system,'SF Pro Text',sans-serif" }}>
                 {d.label}
               </span>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.82)", fontWeight: 500, fontFamily: "-apple-system,'SF Pro Text',sans-serif", fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 12, color: d.value > 0 ? "rgba(255,255,255,0.82)" : "rgba(255,255,255,0.32)", fontWeight: 500, fontFamily: "-apple-system,'SF Pro Text',sans-serif", fontVariantNumeric: "tabular-nums" }}>
                 {d.value.toLocaleString()}
               </span>
               <span style={{ fontSize: 10.5, color: "rgba(255,255,255,0.28)", fontFamily: "-apple-system,'SF Pro Text',sans-serif" }}>

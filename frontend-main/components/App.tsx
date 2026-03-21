@@ -26,13 +26,57 @@ import HowToUseModal from "./ui/HowToUseModal";
 import { DashContext, AppUICtx } from '@/lib/contexts';
 import { M, ANOMALIES, STORY_PRESETS, SAVED_VIEWS, pageTitles } from '@/lib/constants';
 
+/* ── Professional SVG icon map by section key ── */
+const NAV_ICONS: Record<string, JSX.Element> = {
+  executive: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
+      <rect x="8.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
+      <rect x="1.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
+      <rect x="8.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
+    </svg>
+  ),
+  trends: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="1.5,11.5 5,7.5 8.5,9.5 13.5,3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      <polyline points="10.5,3.5 13.5,3.5 13.5,6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  multidim: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="5.5" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M1 13.5C1 11 3 9 5.5 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+      <circle cx="11" cy="4.5" r="2" stroke="currentColor" strokeWidth="1.2"/>
+      <path d="M8.5 13.5C8.5 11.2 9.5 9.5 11.5 9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  ),
+  funnel: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1.5 2.5H13.5L9.5 7.5V12.5L5.5 11V7.5L1.5 2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+    </svg>
+  ),
+  explorer: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
+      <line x1="10" y1="10" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  ),
+  copilot: (
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7.5 1.5L8.9 5.5H13L9.8 7.9L11.1 11.9L7.5 9.4L3.9 11.9L5.2 7.9L2 5.5H6.1L7.5 1.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+    </svg>
+  ),
+};
+
 export default function App(props: any) {
   const { data: shellData } = useJsonData("app-shell");
   const { initialSection } = props || {};
   const pagedMode = typeof initialSection === 'string' && initialSection.length > 0;
   const pagedSection = pagedMode ? initialSection : null;
 
-  const [theme, setTheme] = useState("dark");
+  const theme = "dark";
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const setTheme = (_: any) => {};
   const [toasts, addToast, removeToast] = useToasts();
   const [sideCollapsed, setSideCollapsed] = useState(false);
   const contentRef = useRef(null);
@@ -107,8 +151,8 @@ export default function App(props: any) {
   }, [pagedMode, activeSection, clientOpen]);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute("data-theme", "dark");
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -419,7 +463,6 @@ export default function App(props: any) {
       case 'investigate': startInvestigation(action.id); openPanel('evidence'); break;
       case 'compare': openCompare(action.typeA, action.a, action.typeB, action.b); break;
       case 'clear': clearAllFilters(); break;
-      case 'theme': setTheme(t => t === 'dark' ? 'light' : 'dark'); break;
       case 'insights': setInsightMode(v => !v); break;
     }
   }, [scrollToSection, openPanel, startInvestigation, openCompare, clearAllFilters]);
@@ -470,23 +513,27 @@ export default function App(props: any) {
               </div>
 
               <div className="nav-grp">SECTIONS</div>
-              {ALL_SECTIONS.filter(s => s.k !== "client").map((s) => (
-                <div
-                  key={s.k}
-                  className={`nav-item${activeSection === s.k ? " active" : ""}`}
-                  onClick={() => scrollToSection(s.k)}
-                >
-                  <span className="nav-icon">{s.icon}</span>
-                  <span className="nav-label">{pageTitles[s.k] || s.label}</span>
-                </div>
-              ))}
+              <nav className="nav-list">
+                {ALL_SECTIONS.filter(s => s.k !== "client").map((s) => (
+                  <div
+                    key={s.k}
+                    className={`nav-item${activeSection === s.k ? " active" : ""}`}
+                    onClick={() => scrollToSection(s.k)}
+                  >
+                    <span className="nav-icon">{NAV_ICONS[s.k] || s.icon}</span>
+                    <span className="nav-label">{pageTitles[s.k] || s.label}</span>
+                  </div>
+                ))}
+              </nav>
 
               <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">WORKSPACE</div>
-                <div className={`nav-item${panelOpen && panelTab === 'copilot' ? ' active' : ''}`} onClick={() => openPanel('copilot')}>
-                  <span className="nav-icon">⊹</span>
-                  <span className="nav-label">Copilot</span>
-                </div>
+                <nav className="nav-list">
+                  <div className={`nav-item${panelOpen && panelTab === 'copilot' ? ' active' : ''}`} onClick={() => openPanel('copilot')}>
+                    <span className="nav-icon">{NAV_ICONS.copilot}</span>
+                    <span className="nav-label">Copilot</span>
+                  </div>
+                </nav>
               </div>
               <div className="sb-stats">
                 <div className="nav-grp" style={{ paddingTop: 12 }}>
@@ -539,47 +586,67 @@ export default function App(props: any) {
                   )}
                 </div>
 
+                {/* Center — elongated search */}
+                <div style={{
+                  position: "absolute", left: "50%", transform: "translateX(-50%)",
+                  display: "flex", alignItems: "center", pointerEvents: "all", zIndex: 5,
+                }}>
+                  <div
+                    className="cmd-trigger"
+                    onClick={() => setCmdOpen(true)}
+                    style={{ width: 360, justifyContent: "flex-start" }}
+                  >
+                    <span style={{ fontSize: 15, opacity: 0.45, flexShrink: 0, lineHeight: 1 }}>⌕</span>
+                    <span className="cmd-trigger-text" style={{ flex: 1, textAlign: "left" }}>Search anything…</span>
+                    <span className="cmd-trigger-kbd">⌘K</span>
+                  </div>
+                </div>
+
                 {/* Right — actions */}
                 <div className="topbar-right">
-                  {clientOpen ? (
-                    <button className="ctrl-btn" onClick={backFromClient} style={{ fontSize: 11 }}>← Back</button>
-                  ) : (
-                    <button
-                      onClick={goToClient}
-                      style={{
-                        background: "rgba(255,255,255,0.04)",
-                        border: "0.5px solid rgba(255,255,255,0.10)",
-                        borderRadius: 5,
-                        padding: "5px 13px",
-                        fontSize: 11,
-                        fontFamily: "var(--font-sans)",
-                        fontWeight: 500,
-                        letterSpacing: "0.05em",
-                        color: "rgba(255,255,255,0.45)",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        flexShrink: 0,
-                        transition: "all 0.15s",
-                        textTransform: "uppercase",
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(232,67,45,0.40)"; e.currentTarget.style.color = "rgba(232,100,80,1)"; e.currentTarget.style.background = "rgba(232,67,45,0.08)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)"; e.currentTarget.style.color = "rgba(255,255,255,0.45)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
-                    >
-                      <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(232,100,80,0.70)", flexShrink: 0 }} />
-                      Client
-                    </button>
-                  )}
+                  {/* Upload CSV */}
+                  <button
+                    onClick={() => {}}
+                    title="Upload CSV data"
+                    style={{
+                      display: "flex", alignItems: "center", gap: 7,
+                      padding: "0 14px", height: 32,
+                      background: "rgba(24,167,104,0.12)",
+                      border: "1px solid rgba(24,167,104,0.40)",
+                      borderRadius: 8,
+                      fontSize: 12,
+                      fontFamily: "var(--font-ui)",
+                      fontWeight: 600,
+                      letterSpacing: "0.03em",
+                      color: "#3EC98A",
+                      cursor: "pointer",
+                      flexShrink: 0,
+                      transition: "all 0.15s",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = "rgba(24,167,104,0.22)";
+                      e.currentTarget.style.borderColor = "rgba(62,201,138,0.65)";
+                      e.currentTarget.style.boxShadow = "0 0 14px rgba(24,167,104,0.25)";
+                      e.currentTarget.style.color = "#5DDDAA";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "rgba(24,167,104,0.12)";
+                      e.currentTarget.style.borderColor = "rgba(24,167,104,0.40)";
+                      e.currentTarget.style.boxShadow = "none";
+                      e.currentTarget.style.color = "#3EC98A";
+                    }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                      <circle cx="6.5" cy="6.5" r="6" stroke="currentColor" strokeWidth="1.2"/>
+                      <line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                      <line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                    </svg>
+                    Upload CSV
+                  </button>
 
                   {/* Divider */}
                   <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
-
-                  <div className="cmd-trigger" onClick={() => setCmdOpen(true)}>
-                    <span className="cmd-trigger-icon">⌕</span>
-                    <span className="cmd-trigger-text">Search</span>
-                    <span className="cmd-trigger-kbd">⌘K</span>
-                  </div>
 
                   <button
                     onClick={() => openPanel('copilot')}
@@ -621,11 +688,63 @@ export default function App(props: any) {
                     ?
                   </button>
 
-                  <div
-                    className={`theme-toggle${theme === "light" ? " light" : ""}`}
-                    onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
-                    title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-                  />
+                  {/* Divider */}
+                  <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
+
+                  {/* Client — rightmost, premium */}
+                  {clientOpen ? (
+                    <button
+                      className="ctrl-btn"
+                      onClick={backFromClient}
+                      style={{ fontSize: 11, display: "flex", alignItems: "center", gap: 6 }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+                        <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Back
+                    </button>
+                  ) : (
+                    <button
+                      onClick={goToClient}
+                      title="Client view"
+                      style={{
+                        display: "flex", alignItems: "center", gap: 8,
+                        padding: "0 16px", height: 34,
+                        background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)",
+                        border: "1px solid rgba(255,255,255,0.14)",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        fontFamily: "var(--font-ui)",
+                        fontWeight: 600,
+                        letterSpacing: "0.04em",
+                        color: "rgba(255,255,255,0.70)",
+                        cursor: "pointer",
+                        flexShrink: 0,
+                        transition: "all 0.18s",
+                        textTransform: "uppercase",
+                        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.07) 100%)";
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)";
+                        e.currentTarget.style.color = "#ffffff";
+                        e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 16px rgba(0,0,0,0.25)";
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.background = "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)";
+                        e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
+                        e.currentTarget.style.color = "rgba(255,255,255,0.70)";
+                        e.currentTarget.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.08)";
+                      }}
+                    >
+                      {/* Premium person/user icon */}
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
+                        <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
+                        <path d="M1.5 12.5C1.5 10.015 4.015 8 7 8C9.985 8 12.5 10.015 12.5 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                      </svg>
+                      Client
+                    </button>
+                  )}
                 </div>
               </div>
 
