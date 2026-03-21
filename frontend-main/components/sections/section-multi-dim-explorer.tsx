@@ -1,95 +1,413 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
-import { useState } from "react";
-import BarRow from "../charts/BarRow";
+import { useState, useCallback } from "react";
 import Treemap from "../charts/Treemap";
-import GraphActionButtons from "../ui/GraphActionButtons";
-import GraphFlip from "../ui/GraphFlip";
-import GraphInsights from "../ui/GraphInsights";
-import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
-import { M } from '@/lib/constants';
 
+/* ── colour ramp helper ─────────────────────────────────────── */
+function ramp(baseRgb: string, count: number, a0: number, a1: number): string[] {
+  return Array.from({ length: count }, (_, i) => {
+    const t = count > 1 ? i / (count - 1) : 0;
+    const a = +(a0 - t * (a0 - a1)).toFixed(3);
+    return `rgba(${baseRgb},${a})`;
+  });
+}
+
+/* ── PremiumBarPanel ─────────────────────────────────────────── */
+function PremiumBarPanel({
+  title,
+  items,      // Array<{ name: string, value: number }>
+  baseRgb,   // "232,67,45"  or  "255,255,255"
+  kpiSuffix, // "" | "%"
+  aiInsights,
+}: {
+  title: string;
+  items: { name: string; value: number }[];
+  baseRgb: string;
+  kpiSuffix: string;
+  aiInsights: string[];
+}) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
+
+  const total = items.reduce((s, i) => s + i.value, 0);
+  const max = items.length ? Math.max(...items.map(i => i.value)) : 1;
+
+  /* derived stats */
+  const top2sum  = items.slice(0, 2).reduce((s, i) => s + i.value, 0);
+  const top2pct  = total ? +(top2sum  / total * 100).toFixed(0) : 0;
+  const bot2sum  = items.slice(-2).reduce((s, i) => s + i.value, 0);
+  const bot2pct  = total ? +(bot2sum  / total * 100).toFixed(0) : 0;
+  const top3sum  = items.slice(0, 3).reduce((s, i) => s + i.value, 0);
+  const top3pct  = total ? +(top3sum  / total * 100).toFixed(0) : 0;
+  const tailCnt  = Math.max(0, items.length - 3);
+  const tailPct  = total ? +((total - top3sum) / total * 100).toFixed(0) : 0;
+
+  const heroVal  = hoveredIdx !== null ? items[hoveredIdx]?.value ?? total : total;
+  const heroSub  = hoveredIdx !== null
+    ? items[hoveredIdx]?.name ?? ''
+    : `total items · ${items.length} type${items.length !== 1 ? 's' : ''}`;
+
+  const fmt = (v: number) =>
+    kpiSuffix === '%' ? v.toFixed(1) + '%' : v.toLocaleString();
+
+  /* colour ramp */
+  const colors = ramp(baseRgb, Math.max(items.length, 1), baseRgb === '232,67,45' ? 0.85 : 0.55, 0.18);
+
+  return (
+    <div style={{
+      background: '#090909',
+      border: '0.5px solid rgba(255,255,255,0.07)',
+      borderRadius: 14,
+      padding: '20px 22px',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      {/* ── header: hero + chips ── */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
+        {/* hero number */}
+        <div>
+          <div style={{
+            fontFamily: '-apple-system,"SF Pro Display",system-ui,sans-serif',
+            fontSize: 40,
+            fontWeight: 500,
+            color: 'rgba(255,255,255,0.90)',
+            lineHeight: 1,
+            letterSpacing: '-0.03em',
+            fontVariantNumeric: 'tabular-nums',
+            transition: 'color 0.15s',
+          }}>
+            {fmt(heroVal)}
+          </div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.28)', marginTop: 6, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>
+            {heroSub}
+          </div>
+        </div>
+
+        {/* chips + ask ai */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, paddingTop: 2 }}>
+          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {top2pct > 0 && (
+              <span style={{
+                fontSize: 10.5,
+                background: 'rgba(232,67,45,0.08)',
+                border: '0.5px solid rgba(232,67,45,0.15)',
+                borderRadius: 6,
+                padding: '4px 10px',
+                color: 'rgba(232,120,100,0.90)',
+                whiteSpace: 'nowrap',
+                letterSpacing: '-0.01em',
+              }}>
+                Top 2 hold {top2pct}%
+              </span>
+            )}
+            {bot2pct > 0 && (
+              <span style={{
+                fontSize: 10.5,
+                background: 'rgba(232,67,45,0.08)',
+                border: '0.5px solid rgba(232,67,45,0.15)',
+                borderRadius: 6,
+                padding: '4px 10px',
+                color: 'rgba(232,120,100,0.90)',
+                whiteSpace: 'nowrap',
+                letterSpacing: '-0.01em',
+              }}>
+                Long tail: bottom 2 = {bot2pct}%
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => setAiOpen(v => !v)}
+            style={{
+              fontSize: 11,
+              color: aiOpen ? 'rgba(232,120,100,0.85)' : 'rgba(255,255,255,0.38)',
+              background: aiOpen ? 'rgba(232,67,45,0.08)' : 'transparent',
+              border: `0.5px solid ${aiOpen ? 'rgba(232,67,45,0.30)' : 'rgba(255,255,255,0.10)'}`,
+              borderRadius: 6,
+              padding: '4px 10px',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+              letterSpacing: '-0.01em',
+            }}
+          >
+            {aiOpen ? '✕ Close AI' : '✦ Ask AI'}
+          </button>
+        </div>
+      </div>
+
+      {/* panel title */}
+      <div style={{
+        fontSize: 9,
+        fontFamily: 'var(--font-mono)',
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.20)',
+        marginBottom: 12,
+      }}>
+        {title}
+      </div>
+
+      {/* proportional strip label */}
+      <div style={{ fontSize: 9, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.12)', textTransform: 'uppercase', marginBottom: 5 }}>
+        proportional split
+      </div>
+
+      {/* proportional strip */}
+      <div style={{
+        display: 'flex',
+        height: 6,
+        width: '100%',
+        gap: 1,
+        marginBottom: 18,
+        borderRadius: 3,
+        overflow: 'hidden',
+        flexShrink: 0,
+      }}>
+        {items.map((item, i) => {
+          const w = total > 0 ? (item.value / total * 100) : 0;
+          return (
+            <div
+              key={item.name}
+              title={`${item.name}: ${fmt(item.value)}`}
+              style={{
+                width: `${w}%`,
+                height: '100%',
+                background: colors[i] || colors[colors.length - 1],
+                flexShrink: 0,
+                minWidth: w > 0.5 ? 1 : 0,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* rows */}
+      <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 16 }}>
+        {items.map((item, i) => {
+          const pct   = total > 0 ? (item.value / total * 100) : 0;
+          const barW  = max > 0 ? (item.value / max * 100) : 0;
+          const color = colors[i] || colors[colors.length - 1];
+          const isHov = hoveredIdx === i;
+          const nameColor = i === 0
+            ? 'rgba(255,255,255,0.82)'
+            : i === 1
+              ? 'rgba(255,255,255,0.70)'
+              : 'rgba(255,255,255,0.45)';
+          const bgAlpha = isHov ? 0.10 : 0.055;
+
+          return (
+            <div
+              key={item.name}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '22px 1fr 72px 54px 40px',
+                alignItems: 'center',
+                columnGap: 8,
+                height: 52,
+                borderTop: i > 0 ? '0.5px solid rgba(255,255,255,0.03)' : 'none',
+                /* proportional bg fill */
+                background: `linear-gradient(to right, rgba(${baseRgb},${bgAlpha}) ${barW}%, rgba(${baseRgb},${isHov ? 0.04 : 0}) ${barW}%)`,
+                padding: '0 4px',
+                borderRadius: 5,
+                cursor: 'default',
+                transition: 'background 0.18s ease',
+              }}
+            >
+              {/* rank */}
+              <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.18)', fontVariantNumeric: 'tabular-nums', textAlign: 'right', userSelect: 'none' }}>
+                {i + 1}
+              </span>
+
+              {/* name */}
+              <span style={{
+                fontSize: 13,
+                color: nameColor,
+                fontWeight: i < 2 ? 500 : 400,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                letterSpacing: '-0.01em',
+              }}>
+                {item.name}
+              </span>
+
+              {/* mini bar */}
+              <div style={{ height: 2, background: 'rgba(255,255,255,0.05)', borderRadius: 1, overflow: 'hidden' }}>
+                <div style={{
+                  width: `${barW}%`,
+                  height: '100%',
+                  background: color,
+                  borderRadius: 1,
+                  transition: 'width 0.45s cubic-bezier(.4,0,.2,1)',
+                }} />
+              </div>
+
+              {/* count */}
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.78)', fontVariantNumeric: 'tabular-nums', textAlign: 'right', fontWeight: 500, letterSpacing: '-0.01em' }}>
+                {fmt(item.value)}
+              </span>
+
+              {/* pct */}
+              <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.26)', fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>
+                {pct.toFixed(1)}%
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* bottom stat bar */}
+      <div style={{
+        background: 'rgba(255,255,255,0.025)',
+        border: '0.5px solid rgba(255,255,255,0.05)',
+        borderRadius: 8,
+        padding: '12px 14px',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gap: '0 12px',
+      }}>
+        <div>
+          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Dominant</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, letterSpacing: '-0.01em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{items[0]?.name ?? '—'}</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>
+            {total > 0 ? (items[0]?.value / total * 100).toFixed(1) : 0}% of total
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Top 3 Coverage</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{top3pct}%</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {items.slice(0, 3).map(i => i.name).join(', ')}
+          </div>
+        </div>
+        <div>
+          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 5 }}>Long Tail</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{tailCnt} items</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.32)', marginTop: 3, fontVariantNumeric: 'tabular-nums' }}>{tailPct}% of total</div>
+        </div>
+      </div>
+
+      {/* AI inline panel */}
+      {aiOpen && (
+        <div style={{
+          marginTop: 14,
+          background: 'rgba(255,255,255,0.025)',
+          border: '0.5px solid rgba(255,255,255,0.07)',
+          borderRadius: 8,
+          padding: '14px 16px',
+          animation: 'fade-in 0.18s ease',
+        }}>
+          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 12 }}>AI Insights</div>
+          {aiInsights.map((insight, i) => (
+            <p key={i} style={{
+              fontSize: 13,
+              color: 'rgba(255,255,255,0.55)',
+              margin: i > 0 ? '10px 0 0' : '0',
+              lineHeight: 1.65,
+              letterSpacing: '-0.01em',
+            }}>
+              <span style={{ color: 'rgba(232,120,100,0.70)', marginRight: 6 }}>›</span>
+              {insight}
+            </p>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── main section ────────────────────────────────────────────── */
 function SectionMultiDim({ theme, onAskAI }) {
   const dash = useDash();
   const { data } = useJsonData("multidim");
   const [kpi, setKpi] = useState("uploaded");
   const [view, setView] = useState("bar");
-  const [insightsOpen, setInsightsOpen] = useState({});
+
   const INPUT_TYPES = data?.inputTypes || [];
-  const LANGUAGES = data?.languages || [];
-  const kpiOpts = data?.kpiOptions || [];
+  const LANGUAGES   = data?.languages  || [];
+  const kpiOpts     = data?.kpiOptions || [];
+
+  /* value extractor */
+  const getVal = (row: any, k: string): number => {
+    if (k === 'pub_rate') return row.uploaded > 0 ? +(row.published / row.uploaded * 100).toFixed(2) : 0;
+    return row[k] ?? 0;
+  };
+
+  /* build panel items */
+  const inputItems = INPUT_TYPES.slice(0, 10).map(t => ({ name: t.type, value: getVal(t, kpi) }));
+  const langItems  = LANGUAGES.map(l => ({ name: l.lang, value: getVal(l, kpi) }));
+  const kpiLabel   = kpiOpts.find(o => o.k === kpi)?.l ?? kpi;
+  const kpiSuffix  = kpi === 'pub_rate' ? '%' : '';
+
+  /* treemap data */
   const treemapData = INPUT_TYPES.map((t, i) => ({
     label: t.type.substring(0, 12),
-    value: t.uploaded,
-    note: `Pub rate: ${((t.published / t.uploaded) * 100).toFixed(1)}%`,
-      color: (data?.treemapColors || [])[i % 10],
-    }));
-  const getKpiVal = (t, k) =>
-    k === "pub_rate"
-      ? parseFloat(((t.published / t.uploaded) * 100).toFixed(1))
-      : t[
-          k === "created"
-            ? "created"
-            : k === "published"
-              ? "published"
-              : "uploaded"
-        ];
-  const getKpiMax = (arr, k) =>
-    k === "pub_rate"
-      ? Math.max(...arr.map((t) => getKpiVal(t, k))) * 1.1
-      : Math.max(
-          ...arr.map(
-            (t) =>
-              t[
-                k === "created"
-                  ? "created"
-                  : k === "published"
-                    ? "published"
-                    : "uploaded"
-              ],
-          ),
-        );
-  const inputTypeData = INPUT_TYPES.slice(0, 8).map((t) => ({
-    type: t.type,
-    value: getKpiVal(t, kpi),
+    value: getVal(t, kpi),
+    note: `Pub rate: ${t.uploaded > 0 ? (t.published / t.uploaded * 100).toFixed(1) : 0}%`,
+    color: (data?.treemapColors || [])[i % 10],
   }));
-  const languageData = LANGUAGES.map((l) => ({
-    lang: l.lang,
-    value:
-      kpi === "pub_rate"
-        ? parseFloat(((l.published / l.uploaded) * 100).toFixed(1))
-        : l[
-            kpi === "created"
-              ? "created"
-              : kpi === "published"
-                ? "published"
-                : "uploaded"
-          ],
-  }));
-  const toggleInsights = (key) =>
-    setInsightsOpen((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  /* ai insights (auto-generated from numbers) */
+  const inputAI = (() => {
+    if (!inputItems.length) return [];
+    const total = inputItems.reduce((s, i) => s + i.value, 0);
+    const top = inputItems[0];
+    const top2pct = total ? +(inputItems.slice(0, 2).reduce((s, i) => s + i.value, 0) / total * 100).toFixed(1) : 0;
+    const bottom = inputItems[inputItems.length - 1];
+    const botPct = total ? +(bottom.value / total * 100).toFixed(1) : 0;
+    return [
+      `"${top.name}" is the dominant input type with ${top.value.toLocaleString()} ${kpiLabel.toLowerCase()} items — representing ${total ? (top.value / total * 100).toFixed(1) : 0}% of the total distribution.`,
+      `The top 2 types together account for ${top2pct}% of all ${kpiLabel.toLowerCase()} volume, indicating a highly concentrated workload.`,
+      `"${bottom.name}" sits at the far end of the long tail with only ${botPct}% share (${bottom.value.toLocaleString()} items) — a potential area for growth or deprioritisation.`,
+    ];
+  })();
+
+  const langAI = (() => {
+    if (!langItems.length) return [];
+    const total = langItems.reduce((s, i) => s + i.value, 0);
+    const top = langItems[0];
+    const top2pct = total ? +(langItems.slice(0, 2).reduce((s, i) => s + i.value, 0) / total * 100).toFixed(1) : 0;
+    const tailCnt = langItems.slice(2).length;
+    return [
+      `"${top.name}" leads with ${top.value.toLocaleString()} ${kpiLabel.toLowerCase()} items — ${total ? (top.value / total * 100).toFixed(1) : 0}% of total language distribution.`,
+      `Top 2 languages cover ${top2pct}% of all ${kpiLabel.toLowerCase()} volume — the operation is heavily bilingual.`,
+      `${tailCnt} additional language${tailCnt !== 1 ? 's' : ''} exist in the long tail with minimal volume — monitor for emerging content expansion.`,
+    ];
+  })();
 
   if (!data) return null;
 
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{data.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
+      {/* signal line */}
+      <div className="sig-block">
+        <p className="sig-line">Video drives <span className="sig-val">61%</span> of uploads — publish rate varies from <span className="sig-warn">0%</span> to <span className="sig-pos">8.4%</span> across content types.</p>
+        <p className="sig-line">Short-form leads with highest conversion; docs and podcasts at <span className="sig-warn">near-zero</span> distribution.</p>
       </div>
+
+      {/* ── filter bar ── */}
       <div className="filter-panel">
         <div className="filter-group">
-          <div className="filter-group-label">KPI Metric</div>
+          <div className="filter-group-label">KPI METRIC</div>
           <div className="dim-row">
             {kpiOpts.map((o) => (
               <button
                 key={o.k}
-                className={`dim-opt${kpi === o.k ? " active" : ""}`}
                 onClick={() => setKpi(o.k)}
+                style={{
+                  fontSize: 13,
+                  padding: '5px 14px',
+                  borderRadius: 7,
+                  cursor: 'pointer',
+                  border: `0.5px solid ${kpi === o.k ? 'rgba(232,67,45,0.40)' : 'rgba(255,255,255,0.08)'}`,
+                  background: kpi === o.k ? 'rgba(232,67,45,0.15)' : 'transparent',
+                  color: kpi === o.k ? 'rgba(232,120,100,1)' : 'rgba(255,255,255,0.45)',
+                  transition: 'all 0.14s ease',
+                  fontFamily: '-apple-system,"SF Pro Display",system-ui,sans-serif',
+                  letterSpacing: '-0.01em',
+                }}
               >
                 {o.l}
               </button>
@@ -97,13 +415,24 @@ function SectionMultiDim({ theme, onAskAI }) {
           </div>
         </div>
         <div className="filter-group">
-          <div className="filter-group-label">Visualisation</div>
+          <div className="filter-group-label">VISUALISATION</div>
           <div className="dim-row">
-            {data.viewOptions.map(([k, l]) => (
+            {(data.viewOptions || []).map(([k, l]) => (
               <button
                 key={k}
-                className={`dim-opt${view === k ? " active" : ""}`}
                 onClick={() => setView(k)}
+                style={{
+                  fontSize: 13,
+                  padding: '5px 14px',
+                  borderRadius: 7,
+                  cursor: 'pointer',
+                  border: `0.5px solid ${view === k ? 'rgba(232,67,45,0.40)' : 'rgba(255,255,255,0.08)'}`,
+                  background: view === k ? 'rgba(232,67,45,0.15)' : 'transparent',
+                  color: view === k ? 'rgba(232,120,100,1)' : 'rgba(255,255,255,0.45)',
+                  transition: 'all 0.14s ease',
+                  fontFamily: '-apple-system,"SF Pro Display",system-ui,sans-serif',
+                  letterSpacing: '-0.01em',
+                }}
               >
                 {l}
               </button>
@@ -112,163 +441,45 @@ function SectionMultiDim({ theme, onAskAI }) {
         </div>
       </div>
 
-      {view === "bar" && (
-        <div className="g2">
-          <div className="card" style={{ padding: "14px 16px" }}>
-            <div
-              style={{
-                fontSize: 8,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink3)",
-                marginBottom: 12,
-              }}
-            >
-              BY INPUT TYPE —{" "}
-              {kpiOpts.find((o) => o.k === kpi)?.l.toUpperCase()}
-            </div>
-            <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.inputType}
-                onToggleInsights={() => toggleInsights("inputType")}
-                onAskAI={() =>
-                  onAskAI &&
-                  onAskAI("Input Type Breakdown", {
-                    metric: kpi,
-                    data: inputTypeData,
-                  })
-                }
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.inputType}
-              minHeight={260}
-              front={
-                <>
-                  {INPUT_TYPES.slice(0, 8).map((t) => (
-                    <BarRow
-                      key={t.type}
-                      label={t.type}
-                      value={getKpiVal(t, kpi)}
-                      max={getKpiMax(INPUT_TYPES, kpi)}
-                      fillClass={kpi === "pub_rate" ? "bf-amber" : "bf-gold"}
-                      extra={kpi === "pub_rate" ? "%" : null}
-                    />
-                  ))}
-                </>
-              }
-              back={<GraphInsights title="Input Type Breakdown" />}
-            />
-          </div>
-          <div className="card" style={{ padding: "14px 16px" }}>
-            <div
-              style={{
-                fontSize: 8,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink3)",
-                marginBottom: 12,
-              }}
-            >
-              BY LANGUAGE — {kpiOpts.find((o) => o.k === kpi)?.l.toUpperCase()}
-            </div>
-            <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.language}
-                onToggleInsights={() => toggleInsights("language")}
-                onAskAI={() =>
-                  onAskAI &&
-                  onAskAI("Language Breakdown", {
-                    metric: kpi,
-                    data: languageData,
-                  })
-                }
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.language}
-              minHeight={260}
-              front={
-                <>
-                  {LANGUAGES.map((l) => {
-                    const v =
-                      kpi === "pub_rate"
-                        ? parseFloat(((l.published / l.uploaded) * 100).toFixed(1))
-                        : l[
-                            kpi === "created"
-                              ? "created"
-                              : kpi === "published"
-                                ? "published"
-                                : "uploaded"
-                          ];
-                    return (
-                      <BarRow
-                        key={l.lang}
-                        label={l.lang}
-                        value={v}
-                        max={
-                          kpi === "pub_rate"
-                            ? 10
-                            : Math.max(
-                                ...LANGUAGES.map(
-                                  (x) =>
-                                    x[
-                                      kpi === "created"
-                                        ? "created"
-                                        : kpi === "published"
-                                          ? "published"
-                                          : "uploaded"
-                                    ],
-                                ),
-                              )
-                        }
-                        fillClass={kpi === "pub_rate" ? "bf-amber" : "bf-ink"}
-                        extra={kpi === "pub_rate" ? "%" : null}
-                      />
-                    );
-                  })}
-                </>
-              }
-              back={<GraphInsights title="Language Breakdown" />}
-            />
-          </div>
+      {/* ── bar chart view ── */}
+      {view === 'bar' && (
+        <div className="g2" style={{ alignItems: 'stretch' }}>
+          <PremiumBarPanel
+            title={`By Input Type — ${kpiLabel}`}
+            items={inputItems}
+            baseRgb="232,67,45"
+            kpiSuffix={kpiSuffix}
+            aiInsights={inputAI}
+          />
+          <PremiumBarPanel
+            title={`By Language — ${kpiLabel}`}
+            items={langItems}
+            baseRgb="255,255,255"
+            kpiSuffix={kpiSuffix}
+            aiInsights={langAI}
+          />
         </div>
       )}
 
-      {view === "treemap" && (
-        <div className="card" style={{ padding: "14px 16px" }}>
-          <div
-            style={{
-              fontSize: 8,
-              fontFamily: "var(--font-mono)",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--ink3)",
-              marginBottom: 10,
-            }}
-          >
-            INPUT TYPE — UPLOAD VOLUME TREEMAP
+      {/* ── treemap view ── */}
+      {view === 'treemap' && (
+        <div style={{
+          background: '#090909',
+          border: '0.5px solid rgba(255,255,255,0.07)',
+          borderRadius: 14,
+          padding: '20px 22px',
+        }}>
+          <div style={{
+            fontSize: 9,
+            fontFamily: 'var(--font-mono)',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.20)',
+            marginBottom: 14,
+          }}>
+            Input Type — {kpiLabel} Volume · Treemap
           </div>
-          <div style={{ marginBottom: 10, display: "flex", justifyContent: "flex-end" }}>
-            <GraphActionButtons
-              insightsOpen={!!insightsOpen.treemap}
-              onToggleInsights={() => toggleInsights("treemap")}
-              onAskAI={() =>
-                onAskAI &&
-                onAskAI("Input Type Upload Volume Treemap", {
-                  data: treemapData,
-                })
-              }
-            />
-          </div>
-          <GraphFlip
-            flipped={!!insightsOpen.treemap}
-            minHeight={280}
-            front={<Treemap data={treemapData} height={280} />}
-            back={<GraphInsights title="Input Type Upload Volume Treemap" />}
-          />
+          <Treemap data={treemapData} height={320} />
         </div>
       )}
     </div>

@@ -34,22 +34,24 @@ function ResizableSidebar({ collapsed, setCollapsed, children }) {
     <aside
       ref={sideRef}
       className={`sidebar${collapsed ? " collapsed" : ""}`}
-      style={{ width: collapsed ? 50 : width }}
+      style={{ width: collapsed ? 56 : width }}
     >
       {children}
       {!collapsed && (
-        <div
-          className={`sb-resize-handle${dragging ? " dragging" : ""}`}
-          onMouseDown={startResize}
-        />
+        <>
+          <div
+            className={`sb-resize-handle${dragging ? " dragging" : ""}`}
+            onMouseDown={startResize}
+          />
+          <div
+            className="sb-collapse-btn"
+            onClick={() => setCollapsed(true)}
+            title="Collapse sidebar"
+          >
+            ←
+          </div>
+        </>
       )}
-      <div
-        className="sb-collapse-btn"
-        onClick={() => setCollapsed((c) => !c)}
-        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-      >
-        {collapsed ? "›" : "‹"}
-      </div>
     </aside>
   );
 }

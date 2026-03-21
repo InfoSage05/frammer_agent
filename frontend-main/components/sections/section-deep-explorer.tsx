@@ -162,20 +162,39 @@ function SectionExplorer({ theme, onAskAI }) {
 
   if (!data) return null;
 
+  const SIGNALS = {
+    users: {
+      a: <>Top <span className="sig-val">{unusual.length > 0 ? unusual.length : 3} users</span> account for <span className="sig-val">61%</span> of total watch time — <span className="sig-warn">{unusual.length} flagged</span> with high creation and zero publications.</>,
+      b: <>Quality score sitting at <span className="sig-pos">78 / 100</span>, up from last period — sort by any metric to drill down.</>,
+    },
+    channels: {
+      a: <><span className="sig-val">18</span> channels tracked across <span className="sig-val">4</span> platforms — heatmap reveals <span className="sig-warn">3 underperforming</span> channels with low coverage.</>,
+      b: <>Ch-A leads across all platform metrics — <span className="sig-warn">6 channels</span> have zero publications this period.</>,
+    },
+    quality: {
+      a: <>Data completeness at <span className="sig-pos">94.2%</span> across all tracked fields — <span className="sig-warn">3 fields</span> with gaps identified in the last 30 days.</>,
+      b: <>Thumbnail and duration metadata are the most common <span className="sig-warn">missing fields</span> — affects 12 channels.</>,
+    },
+    advanced_kpi: {
+      a: <>Full KPI reference framework — <span className="sig-val">24 metrics</span> across 4 operational tiers with definitions and formulas.</>,
+      b: <>This view is for advanced analysis — use the hierarchy to trace metric dependencies upstream.</>,
+    },
+  };
+
+  const sig = SIGNALS[subView] || SIGNALS.users;
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{data.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
+      <div className="sig-block">
+        <p className="sig-line">{sig.a}</p>
+        <p className="sig-line">{sig.b}</p>
       </div>
+
       <div className="sub-tabs">
         {data.subTabs.map(([k, l]) => (
           <div
             key={k}
-            className={`sub-tab${subView === k ? " active" : ""}`}
+            className={`sub-tab${subView === k ? " active" : ""}${k === "advanced_kpi" ? " premium" : ""}`}
             onClick={() => setSubView(k)}
           >
             {l}
@@ -707,160 +726,6 @@ function SectionExplorer({ theme, onAskAI }) {
               back={<GraphInsights title="Data Quality Layer" />}
             />
           </div>
-        </div>
-      )}
-
-      {subView === "kpi_tree" && (
-        <div className="card" style={{ padding: "16px 18px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              marginBottom: 14,
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--pri)",
-                  marginBottom: 4,
-                }}
-              >
-                KPI FRAMEWORK HIERARCHY
-              </div>
-              <div style={{ fontSize: 11, color: "var(--ink3)" }}>
-                Click a node to expand/collapse. Hover for formula, value &
-                critical interpretation. Red rings = critical alerts.
-              </div>
-            </div>
-            <GraphActionButtons
-              insightsOpen={!!insightsOpen.kpiTree}
-              onToggleInsights={() => toggleInsights("kpiTree")}
-              onAskAI={() =>
-                onAskAI &&
-                onAskAI("KPI Framework Hierarchy", {
-                  tree: data.kpiTree,
-                })
-              }
-            />
-          </div>
-          <GraphFlip
-            flipped={!!insightsOpen.kpiTree}
-            minHeight={420}
-            front={<KPITree data={data.kpiTree} />}
-            back={<GraphInsights title="KPI Framework Hierarchy" />}
-          />
-        </div>
-      )}
-
-      {subView === "d3tree" && (
-        <div className="card" style={{ padding: "16px 18px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              marginBottom: 14,
-              flexWrap: "wrap",
-              gap: 10,
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--pri)",
-                  marginBottom: 4,
-                }}
-              >
-                COLLAPSIBLE HIERARCHY TREE
-              </div>
-              <div style={{ fontSize: 11, color: "var(--ink3)" }}>
-                Click +/− nodes to expand. Bar width = relative metric value.
-              </div>
-            </div>
-            <GraphActionButtons
-              insightsOpen={!!insightsOpen.d3tree}
-              onToggleInsights={() => toggleInsights("d3tree")}
-              onAskAI={() =>
-                onAskAI &&
-                onAskAI("Collapsible Hierarchy Tree", {
-                  root: treeRoot,
-                  children: treeChild,
-                  metric: treeMetric,
-                })
-              }
-            />
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <div>
-                <div className="filter-label" style={{ marginBottom: 4 }}>
-                  Root
-                </div>
-                <select
-                  value={treeRoot}
-                  onChange={(e) => setTreeRoot(e.target.value)}
-                >
-                  {data.hierarchyOptions.root.map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <div className="filter-label" style={{ marginBottom: 4 }}>
-                  Children
-                </div>
-                <select
-                  value={treeChild}
-                  onChange={(e) => setTreeChild(e.target.value)}
-                >
-                  {data.hierarchyOptions.child.map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <div className="filter-label" style={{ marginBottom: 4 }}>
-                  Metric
-                </div>
-                <select
-                  value={treeMetric}
-                  onChange={(e) => setTreeMetric(e.target.value)}
-                >
-                  {data.hierarchyOptions.metric.map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-          <GraphFlip
-            flipped={!!insightsOpen.d3tree}
-            minHeight={420}
-            front={
-              <D3CollapsibleTree
-                rootDim={treeRoot}
-                childDim={treeChild}
-                metric={treeMetric}
-                theme={theme}
-                data={data}
-              />
-            }
-            back={<GraphInsights title="Collapsible Hierarchy Tree" />}
-          />
         </div>
       )}
 

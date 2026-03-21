@@ -1,6 +1,5 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
-import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
@@ -13,78 +12,15 @@ function SectionClient({ onClose }) {
 
   return (
     <div className="stack fade-up">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          marginBottom: 6,
-        }}
-      >
-        <div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 9,
-              marginBottom: 5,
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 7.5,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--pri)",
-              }}
-            >
-              {data.meta.tag}
-            </div>
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 7,
-                color: "var(--warn)",
-                background: "rgba(224,112,56,0.12)",
-                border: "1px solid rgba(224,112,56,0.22)",
-                padding: "2px 7px",
-                borderRadius: 3,
-                letterSpacing: "0.1em",
-              }}
-            >
-              {data.meta.badge}
-            </span>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              flexWrap: "wrap",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "var(--font-serif)",
-                fontSize: 22,
-                color: "var(--ink)",
-                lineHeight: 1.2,
-              }}
-            >
-              {data.meta.title}
-            </div>
-            <SectionInfoHint text={data.meta.sub} />
-          </div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }}>
+        <div className="sig-block" style={{ marginBottom: 0 }}>
+          <p className="sig-line"><span className="sig-val">{CHANNELS.length}</span> channels configured — reporting period <span className="sig-val">Mar 2025 – Feb 2026</span>, all data anonymized.</p>
+          <p className="sig-line">Use the cards below to explore per-channel performance and <span className="sig-warn">identify coverage gaps</span>.</p>
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0, marginLeft: 16 }}>
           <span className="badge badge-muted">Anonymized</span>
           {onClose && (
-            <button
-              className="ctrl-btn"
-              onClick={onClose}
-              style={{ marginLeft: 4 }}
-            >
+            <button className="ctrl-btn" onClick={onClose} style={{ marginLeft: 4 }}>
               ← Back to Explorer
             </button>
           )}

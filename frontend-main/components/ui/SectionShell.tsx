@@ -20,11 +20,13 @@ export default function SectionShell({ id, title, icon, summary, badge, defaultE
         onClick={() => setExpandedByUser(v => !v)}
         aria-expanded={expanded}
       >
-        <span className="section-shell-icon">{icon}</span>
-        <div className="section-shell-meta">
+        {/* icon + title + summary removed — section name shown in topbar center */}
+        {/* <span className="section-shell-icon">{icon}</span> */}
+        {/* <div className="section-shell-meta">
           <span className="section-shell-title">{title}</span>
           {!expanded && <span className="section-shell-summary">{summary}</span>}
-        </div>
+        </div> */}
+        <div style={{ flex: 1 }} />
         {badge && <span className="section-shell-badge">{badge}</span>}
         <span className="section-shell-chevron">{expanded ? '⌃' : '⌄'}</span>
       </button>
