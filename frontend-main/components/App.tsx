@@ -452,11 +452,21 @@ export default function App(props: any) {
             {/* ── SIDEBAR ── */}
             <ResizableSidebar collapsed={sideCollapsed} setCollapsed={setSideCollapsed}>
               <div className="sidebar-logo">
-                <div className="logo-lockup">
-                  <div className="logo-mark">{shellData?.sidebar?.brand?.mark}</div>
-                  <div className="logo-sub">Operations Intelligence · v19</div>
-                  <div className="logo-live-dot" />
-                </div>
+                {sideCollapsed ? (
+                  <button
+                    className="logo-f-btn"
+                    onClick={() => setSideCollapsed(false)}
+                    title="Expand sidebar"
+                    aria-label="Expand sidebar"
+                  >
+                    F
+                  </button>
+                ) : (
+                  <div className="logo-lockup">
+                    <span className="logo-wordmark">FRAMMER <em>AI</em></span>
+                    <div className="logo-live-dot" />
+                  </div>
+                )}
               </div>
 
               <div className="nav-grp">SECTIONS</div>
@@ -541,7 +551,6 @@ export default function App(props: any) {
                       ))}
                     </div>
                   )}
-                  <span className="period-badge">MAR 2025 – FEB 2026</span>
                 </div>
                 <div className="topbar-right">
                   {clientOpen && (
@@ -554,14 +563,6 @@ export default function App(props: any) {
                     <span className="cmd-trigger-text">Search</span>
                     <span className="cmd-trigger-kbd">⌘K</span>
                   </div>
-                  <div className="topbar-kpi-strip">
-                    <span><span className="kv">{M.uploaded.toLocaleString()}</span> <span style={{ opacity: 0.6 }}>up</span></span>
-                    <span className="sep">·</span>
-                    <span><span className="kv" style={{ color: 'var(--pri-lt)' }}>{M.created.toLocaleString()}</span> <span style={{ opacity: 0.6 }}>cr</span></span>
-                    <span className="sep">·</span>
-                    <span><span className="kv" style={{ color: 'var(--suc-lt)' }}>{M.published}</span> <span style={{ opacity: 0.6 }}>pub</span></span>
-                  </div>
-                  <RoleSwitcher role={role} setRole={setRole} />
                   <button
                     onClick={() => setHowToUseOpen(true)}
                     title="How to use this dashboard"
