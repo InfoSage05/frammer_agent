@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-21T23:01:39.046922",
+  "generated_at": "2026-03-21T21:27:59.504656",
   "from_cache": false,
-  "change_type": "none",
+  "change_type": "schema_change",
   "metrics": [
     {
       "id": "total_uploaded",

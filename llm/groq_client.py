@@ -1,23 +1,17 @@
-"""
-Groq LLM Client - All LLM calls route through this module.
-Swap-ready: change provider/models by editing only this file.
+"""Groq LLM Client - all calls route through this module.
 
-Now using Modal-hosted vLLM server instead of Groq API.
-
-Now using Modal-hosted vLLM server instead of Groq API.
+Currently targets a Modal-hosted vLLM server via the OpenAI-compatible API.
 """
-import os
-import asyncio
-import aiohttp
-import asyncio
-import aiohttp
-from typing import AsyncGenerator, List, Dict, Optional
-from openai import OpenAI
+from typing import AsyncGenerator, Dict, List, Optional
+
 from openai import OpenAI
 
 # ─── Modal vLLM Server Configuration ─────────────────────────────────────────
 BASE_URL = "https://ajsalali2005--llama-8b-vllm-server-serve.modal.run"
 MODEL = "llama"
+# Align fast/think to same model for now
+FAST_MODEL = MODEL
+THINK_MODEL = MODEL
 
 # OpenAI-compatible client for sync calls
 _sync_client: Optional[OpenAI] = None
@@ -25,11 +19,8 @@ _sync_client: Optional[OpenAI] = None
 
 def _get_sync_client() -> OpenAI:
     """Get or create synchronous OpenAI-compatible client for Modal vLLM."""
-def _get_sync_client() -> OpenAI:
-    """Get or create synchronous OpenAI-compatible client for Modal vLLM."""
     global _sync_client
     if _sync_client is None:
-        _sync_client = OpenAI(base_url=f"{BASE_URL}/v1", api_key="not-needed")
         _sync_client = OpenAI(base_url=f"{BASE_URL}/v1", api_key="not-needed")
     return _sync_client
 
@@ -40,28 +31,21 @@ def fast_complete(
     messages: List[Dict[str, str]],
     system_prompt: str = "",
     temperature: float = 0.5,
-    max_tokens: int = 4096
-    temperature: float = 0.5,
-    max_tokens: int = 4096
+    max_tokens: int = 4096,
 ) -> str:
-    """
-    Fast completion using Modal-hosted vLLM.
-    Fast completion using Modal-hosted vLLM.
-    Used for: code generation, routing, quick narration.
-    """
+    """Fast completion for quick tasks like routing and narration."""
     client = _get_sync_client()
-    
-    full_messages = []
+
+    full_messages: List[Dict[str, str]] = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
-    
+
     response = client.chat.completions.create(
-        model=MODEL,
         model=MODEL,
         messages=full_messages,
         temperature=temperature,
-        max_tokens=max_tokens
+        max_tokens=max_tokens,
     )
     return response.choices[0].message.content or ""
 
@@ -70,24 +54,21 @@ def think_complete(
     messages: List[Dict[str, str]],
     system_prompt: str = "",
     temperature: float = 0.5,
-    max_tokens: int = 4096
+    max_tokens: int = 4096,
 ) -> str:
-    """
-    Deep thinking completion using Modal-hosted vLLM.
-    Used for: planning, reflection, complex insights.
-    """
+    """Deeper completion for planning, reflection, and analysis."""
     client = _get_sync_client()
-    
-    full_messages = []
+
+    full_messages: List[Dict[str, str]] = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
-    
+
     response = client.chat.completions.create(
         model=MODEL,
         messages=full_messages,
         temperature=temperature,
-        max_tokens=max_tokens
+        max_tokens=max_tokens,
     )
     return response.choices[0].message.content or ""
 
@@ -96,32 +77,24 @@ def think_complete(
 
 async def stream_fast(
     messages: List[Dict[str, str]],
-    system_prompt: str = ""
+    system_prompt: str = "",
 ) -> AsyncGenerator[str, None]:
-    """
-    Stream tokens from Modal-hosted vLLM.
-    Stream tokens from Modal-hosted vLLM.
-    Used for: real-time chat responses.
-    """
+    """Stream tokens for real-time chat responses."""
     client = _get_sync_client()
-    client = _get_sync_client()
-    
-    full_messages = []
+
+    full_messages: List[Dict[str, str]] = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
-    
-    stream = client.chat.completions.create(
-        model=MODEL,
+
     stream = client.chat.completions.create(
         model=MODEL,
         messages=full_messages,
         temperature=0.7,
-        max_tokens=2048,
-        stream=True
+        max_tokens=4096,
+        stream=True,
     )
-    
-    for chunk in stream:
+
     for chunk in stream:
         if chunk.choices[0].delta.content:
             yield chunk.choices[0].delta.content
@@ -129,27 +102,24 @@ async def stream_fast(
 
 async def stream_think(
     messages: List[Dict[str, str]],
-    system_prompt: str = ""
+    system_prompt: str = "",
 ) -> AsyncGenerator[str, None]:
-    """
-    Stream tokens from Modal-hosted vLLM.
-    Used for: detailed explanations, complex analysis.
-    """
+    """Stream tokens for more detailed, analytical responses."""
     client = _get_sync_client()
-    
-    full_messages = []
+
+    full_messages: List[Dict[str, str]] = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
-    
+
     stream = client.chat.completions.create(
         model=MODEL,
         messages=full_messages,
         temperature=0.5,
         max_tokens=4096,
-        stream=True
+        stream=True,
     )
-    
+
     for chunk in stream:
         if chunk.choices[0].delta.content:
             yield chunk.choices[0].delta.content
@@ -158,7 +128,7 @@ async def stream_think(
 # ─── Utility Functions ───────────────────────────────────────────────────────
 
 def format_messages(history: List[Dict]) -> List[Dict[str, str]]:
-    """Convert conversation history to message format."""
+    """Convert conversation history to OpenAI-compatible message format."""
     return [
         {"role": msg.get("role", "user"), "content": msg.get("content", "")}
         for msg in history

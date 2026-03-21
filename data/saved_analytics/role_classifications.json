@@ -190,5 +190,11 @@
     "method": "pattern",
     "filename": "test_user_summary.csv",
     "classified_at": "2026-03-21T21:34:30.721226"
+  },
+  "73eb65d68f39ba2e082d92fa2388617dee697d565fa3da5bd61dd788009de54a": {
+    "role": "channel_platform",
+    "method": "llm",
+    "filename": "channel-wise-publishing duration.csv",
+    "classified_at": "2026-03-21T21:27:22.182392"
   }
 }

@@ -1,11 +1,7 @@
 {
-<<<<<<< HEAD
-  "generated_at": "2026-03-21T23:01:39.046922",
-=======
-  "generated_at": "2026-03-21T19:38:52.514021",
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
+  "generated_at": "2026-03-21T21:27:59.504656",
   "from_cache": false,
-  "change_type": "none",
+  "change_type": "schema_change",
   "metrics": [
     {
       "id": "total_uploaded",
@@ -465,13 +461,8 @@
     {
       "id": "null_platform_rate",
       "name": "Platform NULL Rate",
-<<<<<<< HEAD
       "value": 136.0,
       "formatted": "136.00%",
-=======
-      "value": 68.0,
-      "formatted": "68.00%",
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
       "category": "data_quality",
       "description": "Percentage of published videos missing platform info",
       "unit": "percent",
@@ -483,13 +474,8 @@
     {
       "id": "data_quality_score",
       "name": "Data Quality Score",
-<<<<<<< HEAD
       "value": 30.2,
       "formatted": "30.2%",
-=======
-      "value": 30.3,
-      "formatted": "30.3%",
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
       "category": "data_quality",
       "description": "Weighted average completeness score across key fields",
       "unit": "percent",
@@ -973,13 +959,8 @@
       {
         "id": "null_platform_rate",
         "name": "Platform NULL Rate",
-<<<<<<< HEAD
         "value": 136.0,
         "formatted": "136.00%",
-=======
-        "value": 68.0,
-        "formatted": "68.00%",
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
         "category": "data_quality",
         "description": "Percentage of published videos missing platform info",
         "unit": "percent",
@@ -991,13 +972,8 @@
       {
         "id": "data_quality_score",
         "name": "Data Quality Score",
-<<<<<<< HEAD
         "value": 30.2,
         "formatted": "30.2%",
-=======
-        "value": 30.3,
-        "formatted": "30.3%",
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
         "category": "data_quality",
         "description": "Weighted average completeness score across key fields",
         "unit": "percent",
@@ -3760,7 +3736,6 @@
       }
     ]
   },
-<<<<<<< HEAD
   "charts": {
     "Funnel Analysis": [
       {
@@ -3885,31 +3860,14 @@
     "channel_user": {
       "filename": "channel_user.csv",
       "display_name": "channel_user"
-=======
-  "charts": {},
-  "dataset_sources": {
-    "video_list": {
-      "filename": "video_list.csv",
-      "display_name": "video_list"
-    },
-    "language": {
-      "filename": "language.csv",
-      "display_name": "language"
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
     },
     "input_type": {
       "filename": "input_type.csv",
       "display_name": "input_type"
     },
-<<<<<<< HEAD
     "language": {
       "filename": "language.csv",
       "display_name": "language"
-=======
-    "monthly": {
-      "filename": "monthly.csv",
-      "display_name": "monthly"
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
     },
     "output_type": {
       "filename": "output_type.csv",
@@ -3919,7 +3877,6 @@
       "filename": "user_summary.csv",
       "display_name": "user_summary"
     },
-<<<<<<< HEAD
     "monthly": {
       "filename": "monthly.csv",
       "display_name": "monthly"
@@ -3927,19 +3884,6 @@
     "video_list": {
       "filename": "video_list.csv",
       "display_name": "video_list"
-=======
-    "channel_summary": {
-      "filename": "channel_summary.csv",
-      "display_name": "channel_summary"
-    },
-    "channel_platform": {
-      "filename": "channel_platform.csv",
-      "display_name": "channel_platform"
-    },
-    "channel_user": {
-      "filename": "channel_user.csv",
-      "display_name": "channel_user"
->>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
     }
   }
 }

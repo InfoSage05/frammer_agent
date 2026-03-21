@@ -17,7 +17,7 @@ import plotly.express as px
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from gc26.config import DATA_DIR, CHART_CATEGORIES, API_PORT
+from frammer_agent.config import DATA_DIR, CHART_CATEGORIES, API_PORT
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
