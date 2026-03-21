@@ -6,7 +6,8 @@
       "Bash(npm run:*)",
       "Bash(cmd /c \"npm run build 2>&1\")",
       "Bash(powershell -Command \"cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30\")",
-      "Bash(powershell -Command \"& { \\\\$env:Path += ';C:\\\\Program Files\\\\nodejs'; cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30 }\")"
+      "Bash(powershell -Command \"& { \\\\$env:Path += ';C:\\\\Program Files\\\\nodejs'; cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30 }\")",
+      "WebFetch(domain:www.frammer.com)"
     ]
   }
 }

@@ -389,12 +389,9 @@ function SectionTrends({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{sectionData.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{sectionData.meta.title}</div>
-          <SectionInfoHint text={sectionData.meta.sub} />
-        </div>
+      <div className="sig-block">
+        <p className="sig-line">Feb '26 peaked at <span className="sig-pos">2,756 outputs (+194% MoM)</span> — H2 outperformed H1 by <span className="sig-val">3.2×</span> across all content types.</p>
+        <p className="sig-line">Upload volume was steady across 12 months, while publish rate declined in <span className="sig-warn">Q4 2025</span>.</p>
       </div>
       <div className="filter-panel">
         <div className="filter-group">
@@ -458,15 +455,15 @@ function SectionTrends({ theme, onAskAI }) {
         >
           <div
             style={{
-              fontSize: 8,
-              fontFamily: "var(--font-mono)",
-              letterSpacing: "0.12em",
+              fontSize: 11,
+              fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+              letterSpacing: "0.06em",
               textTransform: "uppercase",
-              color: "var(--ink3)",
+              color: "rgba(255,255,255,0.22)",
+              fontWeight: 400,
             }}
           >
-            12-MONTH {metric === "count" ? "VIDEO COUNT" : "DURATION (HRS)"}{" "}
-            TRAJECTORY
+            12-Month {metric === "count" ? "Video Count" : "Duration (hrs)"} Trajectory
           </div>
           <GraphActionButtons
             insightsOpen={!!insightsOpen.trajectory}
@@ -498,7 +495,7 @@ function SectionTrends({ theme, onAskAI }) {
                       borderRadius: 2,
                     }}
                   />
-                  <span style={{ fontSize: 10 }}>{l}</span>
+                  <span>{l}</span>
                 </div>
               );
             })}
@@ -519,8 +516,8 @@ function SectionTrends({ theme, onAskAI }) {
 
       <div className="g2 mb12">
         <div className="card" style={{ padding: "16px 18px" }}>
-          <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 12 }}>
-            DURATION TREND — HOURS (UPLOAD · CREATED · PUBLISHED)
+          <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 12, fontWeight: 400 }}>
+            Duration Trend — Hours
           </div>
           <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
             <GraphActionButtons
@@ -548,8 +545,8 @@ function SectionTrends({ theme, onAskAI }) {
                 {/* Forecast inline below duration chart */}
                 {showForecast && (
                   <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--line-lt)" }}>
-                    <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--pri)", marginBottom: 10 }}>
-                      ⬡ 3-MONTH LINEAR REGRESSION FORECAST — Mar–May 2026
+                    <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(232,100,80,0.75)", marginBottom: 10, fontWeight: 400 }}>
+                      ⬡ 3-Month Forecast — Mar–May 2026
                     </div>
                     <div className="cjs-wrap" style={{ height: 180 }}>
                       <canvas ref={forecastRef} />
@@ -557,13 +554,13 @@ function SectionTrends({ theme, onAskAI }) {
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginTop: 12 }}>
                       {FORECAST_MONTHS.map((month, i) => (
                         <div key={month} style={{ padding: "10px 12px", border: "1px solid var(--line)", borderRadius: "var(--radius-sm)", background: "var(--bg3)" }}>
-                          <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--pri)", marginBottom: 8 }}>
+                          <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(232,100,80,0.75)", marginBottom: 8, fontWeight: 400 }}>
                             {month}
                           </div>
                           {[["↑ Uploaded", uploadForecast[i], colors[0]], ["⊹ Created", createdForecast[i], "#ff4757"], ["✓ Published", publishedForecast[i], "#30b060"]].map(([lbl, val, c]) => (
-                            <div key={lbl} style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--font-mono)", fontSize: 11, marginBottom: 3 }}>
-                              <span style={{ color: "var(--ink4)" }}>{lbl}</span>
-                              <span style={{ color: c, fontWeight: 600 }}>{val.toLocaleString()}</span>
+                            <div key={lbl} style={{ display: "flex", justifyContent: "space-between", fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 13, marginBottom: 3 }}>
+                              <span style={{ color: "rgba(255,255,255,0.45)" }}>{lbl}</span>
+                              <span style={{ color: c, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{val.toLocaleString()}</span>
                             </div>
                           ))}
                         </div>
@@ -579,15 +576,16 @@ function SectionTrends({ theme, onAskAI }) {
         <div className="card" style={{ padding: "16px 18px" }}>
           <div
             style={{
-              fontSize: 8,
-              fontFamily: "var(--font-mono)",
-              letterSpacing: "0.12em",
+              fontSize: 11,
+              fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+              letterSpacing: "0.06em",
               textTransform: "uppercase",
-              color: "var(--ink3)",
+              color: "rgba(255,255,255,0.22)",
               marginBottom: 12,
+              fontWeight: 400,
             }}
           >
-            MONTHLY CREATION HEAT CALENDAR
+            Monthly Creation Heat Calendar
           </div>
           <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
             <GraphActionButtons
@@ -633,10 +631,11 @@ function SectionTrends({ theme, onAskAI }) {
                   ))}
                   <span
                     style={{
-                      fontSize: 8,
-                      fontFamily: "var(--font-mono)",
-                      color: "var(--ink4)",
+                      fontSize: 11.5,
+                      fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                      color: "rgba(255,255,255,0.25)",
                       marginLeft: 4,
+                      letterSpacing: '0.01em',
                     }}
                   >
                     {sectionData.heatLegend.label}
@@ -645,17 +644,18 @@ function SectionTrends({ theme, onAskAI }) {
                 <div style={{ marginTop: 18 }}>
                   <div
                     style={{
-                      fontSize: 7,
-                      fontFamily: "var(--font-mono)",
-                      letterSpacing: "0.18em",
+                      fontSize: 11,
+                      fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                      letterSpacing: "0.06em",
                       textTransform: "uppercase",
-                      color: "var(--ink3)",
+                      color: "rgba(255,255,255,0.22)",
                       marginBottom: 10,
                       paddingTop: 6,
                       borderTop: "1px solid var(--line-lt)",
+                      fontWeight: 400,
                     }}
                   >
-                    MONTHLY UPLOAD VOLUME
+                    Monthly Upload Volume
                   </div>
                   {monthlyUploadVolume.map((m) => (
                     <BarRow
@@ -678,11 +678,11 @@ function SectionTrends({ theme, onAskAI }) {
         <div className="card" style={{ padding: "18px 20px", marginTop: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
             <div>
-              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--amber-lt)", marginBottom: 3 }}>
-                ⇔ H1 vs H2 — HALF-YEAR OVERLAY COMPARISON
+              <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,179,64,0.80)", marginBottom: 3, fontWeight: 400 }}>
+                ⇔ H1 vs H2 — Half-Year Overlay
               </div>
-              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--ink4)" }}>
-                H1: Mar–Aug 2025 &nbsp;·&nbsp; H2: Sep 2025–Feb 2026 &nbsp;·&nbsp; Metric: {metric === "count" ? "Video Count" : "Duration (hrs)"}
+              <div style={{ fontSize: 11.5, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', color: "rgba(255,255,255,0.25)", letterSpacing: '0.01em' }}>
+                H1: Mar–Aug 2025 · H2: Sep 2025–Feb 2026 · {metric === "count" ? "Video Count" : "Duration (hrs)"}
               </div>
             </div>
             <GraphActionButtons
@@ -701,18 +701,18 @@ function SectionTrends({ theme, onAskAI }) {
                   const borderColor = isH2 ? "var(--amber-lt)" : "var(--blue-lt)";
                   return (
                     <div key={title} style={{ border: `1px solid color-mix(in srgb, ${borderColor} 30%, transparent)`, borderRadius: "var(--radius)", padding: "14px 16px", background: `color-mix(in srgb, ${borderColor} 4%, transparent)` }}>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.10em", textTransform: "uppercase", color: borderColor, marginBottom: 12 }}>
+                      <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: borderColor, marginBottom: 12, fontWeight: 400 }}>
                         {title}
                       </div>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 14 }}>
                         {[
-                          ["Uploaded", sum(hdata, keys[0]), "var(--ink2)"],
-                          ["Created", sum(hdata, keys[1]), "var(--pri)"],
-                          ["Published", sum(hdata, keys[2]), "var(--green-lt)"],
+                          ["Uploaded", sum(hdata, keys[0]), "rgba(255,255,255,0.78)"],
+                          ["Created", sum(hdata, keys[1]), "rgba(232,100,80,0.85)"],
+                          ["Published", sum(hdata, keys[2]), "rgba(48,209,88,0.80)"],
                         ].map(([l, v, c]) => (
                           <div key={l} style={{ padding: "8px 10px", border: "1px solid var(--line-lt)", borderRadius: "var(--radius-sm)", background: "var(--bg3)" }}>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink4)", marginBottom: 4 }}>{l}</div>
-                            <div style={{ fontFamily: "var(--font-serif)", fontSize: 20, color: c, lineHeight: 1 }}>{v.toLocaleString()}</div>
+                            <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 11, letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 4, fontWeight: 400 }}>{l}</div>
+                            <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 20, color: c, lineHeight: 1, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{v.toLocaleString()}</div>
                           </div>
                         ))}
                       </div>
@@ -722,11 +722,11 @@ function SectionTrends({ theme, onAskAI }) {
                           const maxVal = Math.max(...[...h1, ...h2].map(x => x[keys[0]] || 0), 1);
                           return (
                             <div key={m.month} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink4)", width: 50, flexShrink: 0 }}>{m.month}</span>
+                              <span style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 11.5, color: "rgba(255,255,255,0.28)", width: 50, flexShrink: 0 }}>{m.month}</span>
                               <div style={{ flex: 1, height: 6, background: "var(--line)", borderRadius: 3, overflow: "hidden" }}>
                                 <div style={{ width: `${(val / maxVal) * 100}%`, height: "100%", background: isH2 ? "var(--amber-lt)" : "var(--blue-lt)", borderRadius: 3, transition: "width 0.3s" }} />
                               </div>
-                              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--ink3)", width: 40, textAlign: "right" }}>{val.toLocaleString()}</span>
+                              <span style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 13, color: "rgba(255,255,255,0.55)", width: 40, textAlign: "right", fontVariantNumeric: 'tabular-nums' }}>{val.toLocaleString()}</span>
                             </div>
                           );
                         })}

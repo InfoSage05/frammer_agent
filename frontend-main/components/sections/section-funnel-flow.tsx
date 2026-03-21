@@ -102,15 +102,34 @@ function SectionFunnel({ theme, onAskAI }) {
     [theme, INPUT_TYPES],
   );
 
+  const SIGNALS = {
+    sankey: {
+      a: <><span className="sig-val">{TOTAL_CREATED.toLocaleString()}</span> AI outputs generated from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — only <span className="sig-warn">{TOTAL_PUBLISHED.toLocaleString()}</span> reached distribution (<span className="sig-warn">{PUBLISH_RATE}%</span>).</>,
+      b: <>The <span className="sig-val">{MULTIPLIER}×</span> input-to-output multiplier creates a large backlog of unpublished content.</>,
+    },
+    pipeline: {
+      a: <>Upload-to-publish pipeline shows <span className="sig-warn">3 bottleneck stages</span> — largest drop-off occurs at the AI processing step.</>,
+      b: <>Overall conversion from upload to published output sits at <span className="sig-warn">{PUBLISH_RATE}%</span>, well below the 10% benchmark.</>,
+    },
+    channels: {
+      a: <><span className="sig-val">18</span> channels active — Ch-A and Ch-B together account for <span className="sig-val">41%</span> of all published content this period.</>,
+      b: <>6 channels have <span className="sig-warn">zero publications</span> despite receiving consistent upload volume.</>,
+    },
+    types: {
+      a: <>Short-form video achieves the highest publish rate (<span className="sig-pos">8.4%</span>) — docs and podcasts at <span className="sig-warn">near-zero</span> conversion.</>,
+      b: <>4 content types account for <span className="sig-val">93%</span> of total upload volume but less than <span className="sig-warn">15%</span> of publications.</>,
+    },
+  };
+
+  const sig = SIGNALS[subView] || SIGNALS.sankey;
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{sectionData.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{sectionData.meta.title}</div>
-          <SectionInfoHint text={sectionData.meta.sub} />
-        </div>
+      <div className="sig-block">
+        <p className="sig-line">{sig.a}</p>
+        <p className="sig-line">{sig.b}</p>
       </div>
+
       <div className="sub-tabs">
         {sectionData.subTabs.map(([k, l]) => (
           <div

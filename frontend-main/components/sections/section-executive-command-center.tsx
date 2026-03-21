@@ -27,12 +27,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
   const MONTHLY_DATA = data?.monthlyData || [];
   const INPUT_TYPES = data?.inputTypes || [];
   const CHANNELS = data?.channels || [];
-  const TOTAL_CREATED = data?.totals?.totalCreated || 0;
-  const MULTIPLIER = data?.totals?.multiplier || 0;
   const TOTAL_UPLOADED = data?.totals?.totalUploaded || 0;
   const TOTAL_PUBLISHED = data?.totals?.totalPublished || 0;
   const PUBLISH_RATE = data?.totals?.publishRate || 0;
-  const zp = MONTHLY_DATA.filter((m) => m.published === 0).length;
   const toggleInsights = (key) =>
     setInsightsOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -59,63 +56,39 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
 
   // Derive flashcard data
   const ACTIVE_USERS = 44;
-  const ZERO_PUB_MONTHS = 3;
-  const TOP_CHANNEL = 'Ch-A';
   const PEAK_MONTH = "Feb '26";
   const PEAK_COUNT = 2756;
-  const CONTENT_GAP = TOTAL_CREATED - TOTAL_PUBLISHED;
-  const PROCESS_RATE = Math.round((TOTAL_CREATED / TOTAL_UPLOADED) * 100);
 
   const FLASHCARDS = [
     {
-      id: 'ai_outputs', label: 'AI OUTPUTS CREATED', value: TOTAL_CREATED.toLocaleString(),
-      sub: `${MULTIPLIER}× input-to-output ratio`, color: 'var(--amber-lt)',
-      spark: MONTHLY_DATA.map(m => m.created), accent: 'card-amber', icon: '⊹',
-    },
-    {
       id: 'uploaded', label: 'TOTAL UPLOADED', value: TOTAL_UPLOADED.toLocaleString(),
-      sub: '807 hrs source footage', color: 'var(--ink2)',
+      sub: '807 hrs source footage', color: 'var(--ink)',
       spark: MONTHLY_DATA.map(m => m.uploaded), accent: '', icon: '↑',
     },
     {
       id: 'published', label: 'PUBLISHED', value: TOTAL_PUBLISHED.toLocaleString(),
-      sub: 'distributed to platforms', color: 'var(--green-lt)',
+      sub: 'distributed to platforms', color: 'var(--suc-lt)',
       spark: MONTHLY_DATA.map(m => m.published), accent: 'card-green', icon: '✓',
     },
     {
       id: 'pub_rate', label: 'PUBLISH RATE', value: `${PUBLISH_RATE}%`,
-      sub: '⚠ below 10% benchmark', color: 'var(--red-lt)',
+      sub: '⚠ below 10% benchmark', color: 'var(--dan-lt)',
       spark: null, accent: 'card-red', icon: '⚑',
     },
     {
-      id: 'process_rate', label: 'PROCESS RATE', value: `${PROCESS_RATE}%`,
-      sub: 'uploads → AI outputs', color: 'var(--amber-lt)',
-      spark: null, accent: 'card-amber', icon: '⚙',
-    },
-    {
-      id: 'content_gap', label: 'CONTENT GAP', value: CONTENT_GAP.toLocaleString(),
-      sub: 'AI outputs never distributed', color: 'var(--red-lt)',
-      spark: null, accent: 'card-red', icon: '△',
-    },
-    {
       id: 'active_channels', label: 'ACTIVE CHANNELS', value: '18 / 18',
-      sub: '100% channel coverage', color: 'var(--green-lt)',
+      sub: '100% channel coverage', color: 'var(--suc-lt)',
       spark: null, accent: 'card-green', icon: '◈',
     },
     {
       id: 'active_users', label: 'ACTIVE USERS', value: `${ACTIVE_USERS} / 45`,
-      sub: '1 zero-upload user (Sumit)', color: 'var(--ink2)',
+      sub: '1 zero-upload user (Sumit)', color: 'var(--ink)',
       spark: null, accent: '', icon: '⊞',
     },
     {
       id: 'peak_month', label: 'PEAK MONTH', value: PEAK_MONTH,
       sub: `${PEAK_COUNT.toLocaleString()} outputs · +194% MoM`, color: 'var(--amber-lt)',
       spark: null, accent: 'card-amber', icon: '⬆',
-    },
-    {
-      id: 'zero_pub_months', label: 'ZERO-PUB MONTHS', value: `${ZERO_PUB_MONTHS} / 12`,
-      sub: 'Mar, Jul, Sep 2025 gaps', color: 'var(--red-lt)',
-      spark: null, accent: 'card-red', icon: '⊘',
     },
   ];
 
@@ -126,19 +99,34 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
     ["content_mix", "Content Mix"],
   ];
 
+  const SIGNALS = {
+    summary: {
+      a: <><span className="sig-val">{TOTAL_PUBLISHED.toLocaleString()}</span> videos published from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — publish rate at <span className="sig-warn">{PUBLISH_RATE}%</span>, below the 10% benchmark.</>,
+      b: <><span className="sig-val">{ACTIVE_USERS} / 45</span> users active, peak month <span className="sig-pos">Feb '26</span> with <span className="sig-val">{PEAK_COUNT.toLocaleString()}</span> outputs.</>,
+    },
+    signals: {
+      a: <>3 <span className="sig-warn">critical operational gaps</span> detected this period — zero-publish months in <span className="sig-warn">Mar, Jul, Sep 2025</span>.</>,
+      b: <>Publish rate trending down in Q4 — <span className="sig-warn">1 user</span> with 400+ creations and zero publications flagged.</>,
+    },
+    channels: {
+      a: <><span className="sig-val">18 / 18</span> channels active with 100% coverage — <span className="sig-val">Ch-A</span> leads with highest output volume this period.</>,
+      b: <>4 channels show below-average publish rates — heatmap reveals uneven platform distribution.</>,
+    },
+    content_mix: {
+      a: <>Short-form dominates at <span className="sig-val">68%</span> of created output — long-form at <span className="sig-warn">3%</span> publish rate, the lowest tier.</>,
+      b: <>Docs and podcast formats account for <span className="sig-warn">near-zero</span> publications despite consistent upload volume.</>,
+    },
+  };
+
+  const sig = SIGNALS[subView] || SIGNALS.summary;
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">
-          {data.meta.tag}
-        </div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
+      <div className="sig-block">
+        <p className="sig-line">{sig.a}</p>
+        <p className="sig-line">{sig.b}</p>
       </div>
 
-      {/* Sub-tabs */}
       <div className="sub-tabs">
         {SUB_TABS.map(([k, l]) => (
           <div key={k} className={`sub-tab${subView === k ? " active" : ""}`} onClick={() => setSubView(k)}>{l}</div>
@@ -148,29 +136,29 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── SUMMARY ── */}
       {subView === "summary" && (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
-            {FLASHCARDS.map((card, idx) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
+            {FLASHCARDS.map((card) => (
               <div
                 key={card.id}
                 className={`card ${card.accent} fade-up`}
-                style={{ padding: '18px 18px 16px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+                style={{ padding: '20px 22px 18px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink4)', fontWeight: 600 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>
                     {card.label}
                   </div>
-                  <span style={{ fontSize: 11, opacity: 0.35 }}>{card.icon}</span>
+                  <span style={{ fontSize: 13, opacity: 0.25 }}>{card.icon}</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 24, color: card.color, lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 700 }}>
+                <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 36, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 7, lineHeight: 1.4 }}>
+                <div style={{ fontSize: 11.5, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', color: 'rgba(255,255,255,0.25)', marginTop: 10, lineHeight: 1.45, letterSpacing: '0.01em' }}>
                   {card.sub}
                 </div>
                 {card.spark && (
-                  <div style={{ marginTop: 10 }}>
-                    <Sparkline data={card.spark} max={Math.max(...card.spark)} color={card.color} h={20} />
+                  <div style={{ marginTop: 14 }}>
+                    <Sparkline data={card.spark} max={Math.max(...card.spark)} color={card.color} h={24} />
                   </div>
                 )}
               </div>
@@ -200,36 +188,38 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               >
                 <div
                   style={{
-                    fontSize: 9,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.14em",
+                    fontSize: 11,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: "var(--ink4)",
-                    marginBottom: 7,
-                    fontWeight: 600,
+                    color: "rgba(255,255,255,0.22)",
+                    marginBottom: 8,
+                    fontWeight: 400,
                   }}
                 >
                   {s.label}
                 </div>
                 <div
                   style={{
-                    fontFamily: "var(--font-sans)",
-                    fontSize: 18,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    fontSize: 20,
                     color: "var(--ink)",
                     lineHeight: 1,
-                    fontWeight: 600,
-                    letterSpacing: '-0.01em',
+                    fontWeight: 500,
+                    letterSpacing: '-0.02em',
+                    fontVariantNumeric: 'tabular-nums',
                   }}
                 >
                   {s.v}
                 </div>
                 <div
                   style={{
-                    fontSize: 10,
-                    fontFamily: "var(--font-mono)",
-                    color: "var(--ink4)",
-                    marginTop: 5,
+                    fontSize: 11.5,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    color: "rgba(255,255,255,0.25)",
+                    marginTop: 6,
                     lineHeight: 1.4,
+                    letterSpacing: '0.01em',
                   }}
                 >
                   {s.sub}
@@ -251,11 +241,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
           <div className="card" style={{ padding: "16px 18px" }}>
             <div
               style={{
-                fontSize: 7,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.2em",
+                fontSize: 11,
+                fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
-                color: "var(--pri)",
+                color: "rgba(232,100,80,0.80)",
                 marginBottom: 12,
                 display: "flex",
                 alignItems: "center",
@@ -303,17 +293,17 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               <div>
                 <div
                   style={{
-                    fontSize: 8,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.12em",
+                    fontSize: 11,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: "var(--ink3)",
+                    color: "rgba(255,255,255,0.22)",
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
                   }}
                 >
-                  MONTHLY UPLOAD vs CREATION VOLUME
+                  Monthly Upload vs Creation Volume
                   <GraphActionButtons
                     insightsOpen={!!insightsOpen.monthly}
                     onToggleInsights={() => toggleInsights("monthly")}
@@ -325,10 +315,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 </div>
                 <div
                   style={{
-                    fontSize: 9.5,
-                    color: "var(--ink4)",
-                    fontFamily: "var(--font-mono)",
+                    fontSize: 11.5,
+                    color: "rgba(255,255,255,0.25)",
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
                     marginTop: 2,
+                    letterSpacing: '0.01em',
                   }}
                 >
                   Mar 2025 – Feb 2026 · hover bars for details
@@ -336,13 +327,14 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               </div>
               <span
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 9,
-                  color: "var(--green)",
-                  background: "rgba(48,176,96,0.1)",
-                  padding: "2px 7px",
-                  borderRadius: 3,
-                  border: "1px solid rgba(48,176,96,0.2)",
+                  fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                  fontSize: 11,
+                  color: "rgba(48,209,88,0.80)",
+                  background: "rgba(48,176,96,0.08)",
+                  padding: "3px 8px",
+                  borderRadius: 4,
+                  border: "0.5px solid rgba(48,176,96,0.18)",
+                  fontWeight: 400,
                 }}
               >
                 {data.monthlyChart.badge}
@@ -358,7 +350,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                     {data.monthlyChart.legend.map(([l, c]) => (
                       <div key={l} className="leg-item">
                         <div className="leg-dot" style={{ background: c, width: 10, height: 10, borderRadius: 2 }} />
-                        <span style={{ fontSize: 12 }}>{l}</span>
+                        <span>{l}</span>
                       </div>
                     ))}
                   </div>
@@ -383,10 +375,10 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               />
               <span
                 style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--ink4)",
-                  letterSpacing: "0.06em",
+                  fontSize: 11.5,
+                  fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                  color: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.01em",
                 }}
               >
                 Click row for deep-dive →
@@ -416,8 +408,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {subView === "content_mix" && (
         <div className="g2">
           <div className="card" style={{ padding: "14px 16px" }}>
-            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 10 }}>
-              CONTENT STATUS SPLIT
+            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 10, fontWeight: 400 }}>
+              Content Status Split
             </div>
             <div style={{ marginBottom: 10, display: "flex", justifyContent: "flex-end" }}>
               <GraphActionButtons
@@ -438,8 +430,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                     {statusDonut.map((s) => (
                       <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <div style={{ width: 10, height: 10, background: s.color, borderRadius: 2, flexShrink: 0 }} />
-                        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--ink2)", flex: 1, minWidth: 0 }}>{s.label}</span>
-                        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--ink3)", fontWeight: 600 }}>{s.value.toLocaleString()}</span>
+                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", flex: 1, minWidth: 0 }}>{s.label}</span>
+                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.78)", fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.value.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -449,8 +441,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             />
           </div>
           <div className="card" style={{ padding: "14px 16px" }}>
-            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 6 }}>
-              INPUT TYPE RADAR (UPLOADS)
+            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 6, fontWeight: 400 }}>
+              Input Type Radar
             </div>
             <div style={{ marginBottom: 6, display: "flex", justifyContent: "flex-end" }}>
               <GraphActionButtons
