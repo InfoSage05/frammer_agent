@@ -806,6 +806,177 @@ async def upload_and_analyze(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ─── Standalone Analyze (Isolated - Does NOT affect main dashboard) ──────────
+
+@app.post("/standalone-analyze")
+async def standalone_analyze(
+    files: List[UploadFile] = File(...),
+):
+    """Upload and analyze files in isolation - does NOT affect main dashboard.
+    
+    Returns analytics results directly without saving to active_mode or modifying
+    the main dashboard state. Perfect for ad-hoc analysis.
+    """
+    import tempfile
+    import shutil
+    
+    # Validate all files first
+    for f in files:
+        ext = Path(f.filename or "").suffix.lower()
+        if ext not in ALLOWED_UPLOAD_EXTENSIONS:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported file type '{ext}' for '{f.filename}'. Allowed: {', '.join(ALLOWED_UPLOAD_EXTENSIONS)}",
+            )
+
+    # Create temp directory for this analysis session
+    temp_dir = Path(tempfile.mkdtemp(prefix="frammer_analyze_"))
+    
+    try:
+        sys.path.insert(0, str(_backend_dir))
+        sys.path.insert(0, str(_agent_dir))
+
+        from analytics.role_classifier import classify_dataset_role as llm_classify, load_cached_classifications, save_cached_classifications
+        from analytics.analytics_engine import _load_registry_config
+        import pandas as pd
+
+        registry_config = _load_registry_config()
+        registry_datasets = registry_config.get("datasets", {})
+
+        cache = load_cached_classifications()
+        file_results = []
+        classified_files = {}
+        uploaded_filenames = []
+
+        for f in files:
+            content = await f.read()
+            uploaded_filenames.append(f.filename)
+            
+            # Convert xlsx/xls to csv
+            ext = Path(f.filename).suffix.lower()
+            if ext in (".xlsx", ".xls"):
+                try:
+                    from io import BytesIO
+                    df_conv = pd.read_excel(BytesIO(content))
+                    csv_name = Path(f.filename).stem + ".csv"
+                    dest_path = temp_dir / csv_name
+                    df_conv.to_csv(dest_path, index=False, encoding="utf-8-sig")
+                    logger.info(f"Converted {f.filename} → {csv_name}")
+                except Exception as e:
+                    file_results.append({
+                        "filename": f.filename,
+                        "status": "error",
+                        "error": f"Failed to convert Excel file: {e}",
+                    })
+                    continue
+            else:
+                dest_path = temp_dir / f.filename
+                dest_path.write_bytes(content)
+
+            # Classify
+            classified_role = llm_classify(dest_path, registry_datasets, cache)
+
+            if not classified_role:
+                try:
+                    df_peek = pd.read_csv(dest_path, encoding="utf-8-sig", nrows=3)
+                    columns = list(df_peek.columns)
+                except Exception:
+                    columns = []
+                file_results.append({
+                    "filename": f.filename,
+                    "status": "unclassified",
+                    "columns": columns,
+                    "error": "Could not classify into any known role",
+                })
+                continue
+
+            classified_files[classified_role] = str(dest_path)
+            file_results.append({
+                "filename": f.filename,
+                "status": "classified",
+                "classified_role": classified_role,
+            })
+
+        save_cached_classifications(cache)
+
+        if not classified_files:
+            # Clean up temp dir
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            return {
+                "success": False,
+                "error": "None of the uploaded files could be classified",
+                "files": file_results,
+                "available_roles": list(registry_datasets.keys()),
+                "metrics": [],
+                "chart_data": {},
+            }
+
+        # Run analytics on classified files
+        from analytics.column_mapper import run_column_mapper, load_persisted_mappings
+        from analytics.kpi_executor import compute_kpis_from_registry, compute_charts_from_registry
+
+        role_dfs = {}
+        for role, path in classified_files.items():
+            try:
+                role_dfs[role] = pd.read_csv(path, encoding="utf-8-sig")
+            except Exception as e:
+                logger.warning(f"Failed to read {path}: {e}")
+
+        existing_mappings = load_persisted_mappings()
+        column_mappings = run_column_mapper(
+            role_to_df=role_dfs,
+            registry_datasets=registry_datasets,
+            existing_mappings=existing_mappings,
+            changed_roles=list(classified_files.keys()),
+        )
+
+        metrics = compute_kpis_from_registry(column_mappings, classified_files)
+        chart_data = compute_charts_from_registry(column_mappings, classified_files)
+
+        # Build dataset info
+        dataset_info = {}
+        for role, path in classified_files.items():
+            try:
+                df = pd.read_csv(path, encoding="utf-8-sig")
+                dataset_info[role] = {
+                    "filename": Path(path).name,
+                    "rows": len(df),
+                    "columns": list(df.columns),
+                }
+            except Exception:
+                dataset_info[role] = {"filename": Path(path).name, "rows": 0, "columns": []}
+
+        # Group metrics by category
+        by_category = {}
+        for m in metrics:
+            cat = m.get("category", "other")
+            by_category.setdefault(cat, []).append(m)
+
+        # Clean up temp dir
+        shutil.rmtree(temp_dir, ignore_errors=True)
+
+        logger.info(f"Standalone analyze completed: {len(metrics)} metrics, {len(chart_data)} charts")
+
+        return {
+            "success": True,
+            "files": file_results,
+            "metrics": metrics,
+            "by_category": by_category,
+            "chart_data": chart_data,
+            "dataset_info": dataset_info,
+            "uploaded_filenames": uploaded_filenames,
+            "classified_roles": list(classified_files.keys()),
+        }
+
+    except HTTPException:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        raise
+    except Exception as e:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+        logger.error(f"Standalone analyze failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ─── Metrics Endpoints ───────────────────────────────────────────────────────
 
 @app.get("/metrics")

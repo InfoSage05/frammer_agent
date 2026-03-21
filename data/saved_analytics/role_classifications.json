@@ -34,5 +34,113 @@
     "method": "llm",
     "filename": "month-wise-duration.csv",
     "classified_at": "2026-03-21T19:07:47.030820"
+  },
+  "5a27b822f874b068b67bd4e9e03aab3ffe736a18e9a349591b580454015a2e29": {
+    "role": "channel_platform",
+    "method": "pattern",
+    "filename": "channel-wise-publishing.csv",
+    "classified_at": "2026-03-21T20:38:59.895062"
+  },
+  "f2bedb31e4f9fb90d758ffa4743ad25f23e111b9a18282a4e1f3ed00c7017564": {
+    "role": "channel_summary",
+    "method": "pattern",
+    "filename": "CLIENT 1 combined_data(2025-3-1-2026-2-28).csv",
+    "classified_at": "2026-03-21T20:38:59.895062"
+  },
+  "e48e530ab3cbaf1856eab51c71cf9f30cccb3a3f41058c10b60f61e0c8fd8702": {
+    "role": "channel_user",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by channel and user.csv",
+    "classified_at": "2026-03-21T20:38:59.915981"
+  },
+  "eb9b02eda89c6eddcc44ccfdbcf542de4185347588867debcf8788b0e033c9e5": {
+    "role": "input_type",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by input type.csv",
+    "classified_at": "2026-03-21T20:38:59.915981"
+  },
+  "6acaa4fd5a88f6a7191dd029289e5a94864c52d94a4dc04f164aacd46b2eb530": {
+    "role": "language",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by language.csv",
+    "classified_at": "2026-03-21T20:38:59.915981"
+  },
+  "8bb5198faf421462f3232449b9c3a562bb29491cd7197b5926b310ce03e36f34": {
+    "role": "output_type",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by output type.csv",
+    "classified_at": "2026-03-21T20:38:59.915981"
+  },
+  "319a701cc66eac87714686dbc0ab03c14d6534919597d7314bc75204bb24902f": {
+    "role": "user_summary",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by user.csv",
+    "classified_at": "2026-03-21T20:38:59.922868"
+  },
+  "6f037a42ad93003094d567822b99e5a9af90be5cddf993dd3c82eb7324d018e5": {
+    "role": "monthly",
+    "method": "pattern",
+    "filename": "monthly-chart.csv",
+    "classified_at": "2026-03-21T20:38:59.922868"
+  },
+  "a66c8b5cfd63763fcaef6408844f66c25103309bd81fa5a13516170fedc21c41": {
+    "role": "video_list",
+    "method": "pattern",
+    "filename": "video_list_data_obfuscated.csv",
+    "classified_at": "2026-03-21T20:38:59.952725"
+  },
+  "ef3f6856b1d7ef769123d8478040dd5b8d96a4acfecfa43e8cac07cad6f56b49": {
+    "role": "channel_platform",
+    "method": "pattern",
+    "filename": "channel-wise-publishing.csv",
+    "classified_at": "2026-03-21T20:48:37.786538"
+  },
+  "496b02db820508461ba58ba911274123e1b4796addeef25ccb3bef0305e1c735": {
+    "role": "channel_summary",
+    "method": "pattern",
+    "filename": "CLIENT 1 combined_data(2025-3-1-2026-2-28).csv",
+    "classified_at": "2026-03-21T20:48:37.789056"
+  },
+  "e36ff1bb91b206649ef7e8d29641b89de5e74dff8e07e302384687ba2fc9cc59": {
+    "role": "channel_user",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by channel and user.csv",
+    "classified_at": "2026-03-21T20:48:37.805881"
+  },
+  "443eb5926748891278d3cd5ad915be5fd487e8dd914181c8a1d4d0c32c38ce26": {
+    "role": "input_type",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by input type.csv",
+    "classified_at": "2026-03-21T20:48:37.805881"
+  },
+  "ebbaf35d4c55648d8106b3526f04a7d0c7e7369186f5df71185238fa48a5c845": {
+    "role": "language",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by language.csv",
+    "classified_at": "2026-03-21T20:48:37.809874"
+  },
+  "876cbd3642d0603c11a7ad9b6d833123737fec19f9e0b74f6c6e3a1fb25fce1b": {
+    "role": "output_type",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by output type.csv",
+    "classified_at": "2026-03-21T20:48:37.823809"
+  },
+  "fda2df18e83d6dd9d45e21a69305f9d802e743b846f8ce2714adc6bfe42f3df3": {
+    "role": "user_summary",
+    "method": "pattern",
+    "filename": "combined_data(2025-3-1-2026-2-28) by user.csv",
+    "classified_at": "2026-03-21T20:48:37.823809"
+  },
+  "a24ee86e12dfe2dac17523c9c36546e78adbbc82f1e02cc9d019f7ed60071647": {
+    "role": "monthly",
+    "method": "pattern",
+    "filename": "monthly-chart.csv",
+    "classified_at": "2026-03-21T20:48:37.844600"
+  },
+  "67e718a7c37793f9b5f27fc13f6831f5b70314bff4cacef82aca2665eae29b8d": {
+    "role": "video_list",
+    "method": "pattern",
+    "filename": "video_list_data_obfuscated.csv",
+    "classified_at": "2026-03-21T20:48:37.872286"
   }
 }

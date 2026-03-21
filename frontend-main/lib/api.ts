@@ -252,3 +252,39 @@ export async function restoreMainDashboard(): Promise<boolean> {
     return false;
   }
 }
+
+// ── Standalone Analyze (Isolated Tool) ──
+
+export interface StandaloneAnalyzeResult {
+  success: boolean;
+  error?: string;
+  files: { filename: string; status: string; classified_role?: string; error?: string; columns?: string[] }[];
+  metrics: MetricData[];
+  by_category: Record<string, MetricData[]>;
+  chart_data: Record<string, any>;
+  dataset_info: Record<string, { filename: string; rows: number; columns: string[] }>;
+  uploaded_filenames: string[];
+  classified_roles: string[];
+  available_roles?: string[];
+}
+
+/**
+ * Upload and analyze files in isolation - does NOT affect main dashboard.
+ * Returns analytics results directly for display in the Analyze Tool tab.
+ */
+export async function standaloneAnalyze(files: File[]): Promise<StandaloneAnalyzeResult> {
+  const formData = new FormData();
+  files.forEach((f) => formData.append("files", f));
+
+  const res = await fetch(`${BACKEND_URL}/standalone-analyze`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: "Analysis failed" }));
+    throw new Error(err.detail || "Analysis failed");
+  }
+
+  return await res.json();
+}

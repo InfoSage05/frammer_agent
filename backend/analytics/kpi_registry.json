@@ -1025,6 +1025,15 @@
       "output_keys": ["name", "value"],
       "type": "pie",
       "colors": ["#4F46E5", "#06B6D4", "#10B981", "#F59E0B", "#EF4444"]
+    },
+    {
+      "id": "channel_platform_heatmap",
+      "name": "Channel Platform Heatmap",
+      "description": "Per-channel publishing counts by platform for heatmap",
+      "dataset": "channel_platform",
+      "columns": ["channel_name", "facebook_count", "instagram_count", "linkedin_count", "youtube_count", "x_count", "shorts_count", "reels_count", "threads_count"],
+      "output_keys": ["channel", "facebook", "instagram", "linkedin", "youtube", "x", "shorts", "reels", "threads"],
+      "type": "table"
     }
   ]
 }

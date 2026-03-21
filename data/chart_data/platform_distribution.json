@@ -1,34 +1,22 @@
 [
   {
-    "name": "youtube_count",
-    "value": 640
+    "name": "Youtube",
+    "value": 35
   },
   {
-    "name": "shorts_count",
-    "value": 350
+    "name": "Reels",
+    "value": 33
   },
   {
-    "name": "reels_count",
-    "value": 231
+    "name": "Shorts",
+    "value": 23
   },
   {
-    "name": "facebook_count",
-    "value": 174
+    "name": "Instagram",
+    "value": 11
   },
   {
-    "name": "instagram_count",
-    "value": 173
-  },
-  {
-    "name": "threads_count",
-    "value": 110
-  },
-  {
-    "name": "linkedin_count",
-    "value": 89
-  },
-  {
-    "name": "x_count",
-    "value": 80
+    "name": "Facebook",
+    "value": 9
   }
 ]
