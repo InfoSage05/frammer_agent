@@ -276,7 +276,7 @@ export default function SectionClient({ onClose, onAskAI }) {
             <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '20px 22px' }}>
               <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 14 }}>KEY SIGNALS</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {data.keySignals.map(s => <SignalCard key={s.tag} signal={s} />)}
+                {(data.keySignals || []).map(s => <SignalCard key={s.tag} signal={s} />)}
               </div>
             </div>
           </div>
