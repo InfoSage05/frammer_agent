@@ -28,7 +28,7 @@ else:
     load_dotenv(_project_dir / ".env", override=True)
 
 # Import config to set up logging
-from frammer_agent.config import setup_logging, LOG_FILE
+from frammer_agent.gc26.config import setup_logging, LOG_FILE
 
 # Set up logger
 logger = logging.getLogger("frammer.api")
@@ -37,7 +37,14 @@ logger.info(f"Logging to: {LOG_FILE}")
 from fastapi import FastAPI, HTTPException, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+
+# Lift model imports
+from analytics.lift_service import (
+    score_video,
+    load_lift_artifacts,
+)
 
 # Lift model imports
 from analytics.lift_service import (
@@ -99,6 +106,58 @@ def _import_modules():
 async def lifespan(app: FastAPI):
     """Startup and shutdown logic."""
     _import_modules()
+
+    # ── Clean up session artifacts that don't survive across machines ────
+    import shutil
+
+    # Remove uploaded datasets from previous session and recreate empty dir
+    uploads_dir = _agent_dir / "data" / "datasets" / "uploads"
+    if uploads_dir.exists():
+        shutil.rmtree(uploads_dir, ignore_errors=True)
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+
+    # Remove merged output from previous session (rebuilt by merger each run)
+    merged_dir = _agent_dir / "data" / "merged"
+    if merged_dir.exists():
+        shutil.rmtree(merged_dir, ignore_errors=True)
+    merged_dir.mkdir(parents=True, exist_ok=True)
+
+    # Reset standalone mode and clean up standalone reports
+    active_mode_path = _agent_dir / "data" / "saved_analytics" / "active_mode.json"
+    if active_mode_path.exists():
+        active_mode_path.unlink(missing_ok=True)
+    standalone_reports_dir = _agent_dir / "data" / "saved_analytics" / "standalone_reports"
+    if standalone_reports_dir.exists():
+        shutil.rmtree(standalone_reports_dir, ignore_errors=True)
+
+    # Remove SQLite DBs (contain stale metadata, rebuilt by bootstrap)
+    for db_file in [
+        _agent_dir / "data" / "registry.db",
+        _agent_dir / "merger.db",
+        _backend_dir / "merger.db",
+    ]:
+        if db_file.exists():
+            db_file.unlink(missing_ok=True)
+
+    # Remove legacy generated scripts (embed absolute paths from other machines)
+    for script in [
+        _agent_dir / "data" / "saved_analytics" / "kpi_script.py",
+        _agent_dir / "data" / "saved_analytics" / "chart_data_script.py",
+        _agent_dir / "data" / "saved_analytics" / "script_manifest.json",
+        _agent_dir / "data" / "session_context.json",
+    ]:
+        if script.exists():
+            script.unlink(missing_ok=True)
+
+    # Keep these — they ARE the caching system:
+    #   dataset_hashes.json       → hash-based change detection (cache vs recompute)
+    #   analytics_dashboard.json  → cached dashboard (served when hashes match)
+    #   dataset_paths.json        → role→path map (rebuilt if hashes change)
+    #   column_mappings.json      → LLM column mappings (content-hash-keyed)
+    #   role_classifications.json → LLM role classifications (content-hash-keyed)
+
+    print("🧹 Cleared stale session artifacts (DBs, legacy scripts)")
+
 
     # ── Clean up session artifacts that don't survive across machines ────
     import shutil
@@ -216,6 +275,7 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
+    mode: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -261,11 +321,11 @@ async def health_check():
     return {"status": "healthy", "service": "frammer-agent"}
 
 
-# ─── Chat Endpoint (planner-based, from main_simple.py @ 220daa1) ───────────
+# ─── Chat Endpoint (planner or explanation routing) ─────────────────────────
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    """Main chat endpoint — uses planner + conversation memory."""
+    """Main chat endpoint — routes to planner or explanation agent with memory."""
     session_id = request.session_id or str(uuid.uuid4())
     logger.info(f"Chat request: {request.message[:100]}... (session: {session_id[:8]})")
 
@@ -276,9 +336,17 @@ async def chat(request: ChatRequest):
         # Get conversation context for the planner
         conversation_context = session_memory.get_context_for_llm(include_last_n=5)
 
-        # Run planner with context
-        from planner import run_planner
-        result = run_planner(request.message, conversation_context=conversation_context)
+        # Route to explanation, recommendation, KPI, or analytics using LangGraph
+        from orchestrator.langgraph_orchestrator import run_chat_graph
+
+        forced_mode = (request.mode or "").lower().strip()
+        graph_output = run_chat_graph(
+            request.message,
+            conversation_context=conversation_context,
+            forced_route=forced_mode,
+        )
+        result = graph_output.get("result", {})
+        route = graph_output.get("route", "analyze")
 
         # Extract key findings from result
         key_findings = []
@@ -305,7 +373,7 @@ async def chat(request: ChatRequest):
 
         # Generate smart follow-up suggestions based on context
         suggestions = result.get("suggestions", [])
-        if not suggestions:
+        if route != "explain" and not suggestions:
             suggestions = _generate_followup_suggestions(
                 query=request.message,
                 datasets_used=datasets_used,

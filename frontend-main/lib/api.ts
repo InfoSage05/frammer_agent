@@ -147,6 +147,7 @@ export async function checkBackendHealth(): Promise<boolean> {
 export interface ChatRequest {
   message: string;
   session_id?: string | null;
+  mode?: string | null;
 }
 
 export interface ChatArtifact {
@@ -165,11 +166,15 @@ export interface ChatResponse {
 /**
  * Send a message to the backend chat/copilot endpoint
  */
-export async function sendChatMessage(message: string, sessionId?: string | null): Promise<ChatResponse> {
+export async function sendChatMessage(
+  message: string,
+  sessionId?: string | null,
+  mode?: string | null,
+): Promise<ChatResponse> {
   const res = await fetch(`${BACKEND_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, session_id: sessionId || null }),
+    body: JSON.stringify({ message, session_id: sessionId || null, mode: mode || null }),
   });
   if (!res.ok) {
     const err = await res.text().catch(() => "Chat request failed");

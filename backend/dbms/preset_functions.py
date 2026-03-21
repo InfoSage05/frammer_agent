@@ -24,6 +24,28 @@ sys.path.insert(0, str(_backend_dir.parent))
 from dataset_registry import get_registry
 
 
+def _resolve_dataset_name(dataset_name: str, available: List[str]) -> Optional[str]:
+    if dataset_name in available:
+        return dataset_name
+
+    if dataset_name.endswith("-chart"):
+        alt = dataset_name.removesuffix("-chart")
+        if alt in available:
+            return alt
+
+    alt = dataset_name.replace("-", "_")
+    if alt in available:
+        return alt
+
+    # Simple token match fallback
+    tokens = [t for t in dataset_name.replace("-", " ").split() if t]
+    for name in available:
+        if all(t.lower() in name.lower() for t in tokens):
+            return name
+
+    return None
+
+
 def list_datasets() -> List[Dict[str, Any]]:
     """
     List all available datasets with metadata.
@@ -56,7 +78,8 @@ def get_schema(dataset_name: str) -> List[Dict[str, Any]]:
         List of column info: [{col_name, dtype, sample_values, null_pct}]
     """
     registry = get_registry()
-    meta = registry.datasets.get(dataset_name)
+    resolved = _resolve_dataset_name(dataset_name, list(registry.datasets.keys()))
+    meta = registry.datasets.get(resolved) if resolved else None
     
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
@@ -95,7 +118,8 @@ def get_first_rows(dataset_name: str, n: int = 5) -> pd.DataFrame:
         DataFrame with first n rows
     """
     registry = get_registry()
-    meta = registry.datasets.get(dataset_name)
+    resolved = _resolve_dataset_name(dataset_name, list(registry.datasets.keys()))
+    meta = registry.datasets.get(resolved) if resolved else None
     
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
@@ -116,7 +140,8 @@ def get_stats(dataset_name: str, column: str) -> Dict[str, Any]:
         Dict with stats: {min, max, mean, std, nulls, unique_count, dtype}
     """
     registry = get_registry()
-    meta = registry.datasets.get(dataset_name)
+    resolved = _resolve_dataset_name(dataset_name, list(registry.datasets.keys()))
+    meta = registry.datasets.get(resolved) if resolved else None
     
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
@@ -161,7 +186,8 @@ def get_full_dataset(dataset_name: str) -> pd.DataFrame:
         Full DataFrame
     """
     registry = get_registry()
-    meta = registry.datasets.get(dataset_name)
+    resolved = _resolve_dataset_name(dataset_name, list(registry.datasets.keys()))
+    meta = registry.datasets.get(resolved) if resolved else None
     
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
@@ -180,7 +206,8 @@ def get_dataset_path(dataset_name: str) -> str:
         Absolute file path
     """
     registry = get_registry()
-    meta = registry.datasets.get(dataset_name)
+    resolved = _resolve_dataset_name(dataset_name, list(registry.datasets.keys()))
+    meta = registry.datasets.get(resolved) if resolved else None
     
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")

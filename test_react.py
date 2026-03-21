@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import asyncio
-from frammer_agent.backend.orchestrator.graph_new import run_agent
+from gc26.backend.orchestrator.graph_new import run_agent
 
 async def test():
     print("Testing ReAct orchestrator...")

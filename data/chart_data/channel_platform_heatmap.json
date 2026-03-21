@@ -1,6 +1,7 @@
 [
   {
     "channel": "A",
+<<<<<<< HEAD
     "facebook": 15,
     "instagram": 7,
     "linkedin": 0,
@@ -196,5 +197,202 @@
     "shorts": 35,
     "reels": 21,
     "threads": 9
+=======
+    "facebook": "03:24:17",
+    "instagram": "01:50:43",
+    "linkedin": "04:58:00",
+    "youtube": "03:08:42",
+    "x": "03:09:12",
+    "shorts": "05:06:03",
+    "reels": "01:14:04",
+    "threads": "04:13:45"
+  },
+  {
+    "channel": "B",
+    "facebook": "05:44:35",
+    "instagram": "03:38:04",
+    "linkedin": "04:20:31",
+    "youtube": "05:19:29",
+    "x": "02:13:03",
+    "shorts": "03:46:21",
+    "reels": "02:01:37",
+    "threads": "02:13:43"
+  },
+  {
+    "channel": "C",
+    "facebook": "01:43:20",
+    "instagram": "03:24:38",
+    "linkedin": "00:07:59",
+    "youtube": "02:59:48",
+    "x": "04:47:34",
+    "shorts": "00:15:12",
+    "reels": "04:14:37",
+    "threads": "05:54:16"
+  },
+  {
+    "channel": "D",
+    "facebook": "00:14:52",
+    "instagram": "03:33:16",
+    "linkedin": "02:56:53",
+    "youtube": "00:00:29",
+    "x": "00:47:20",
+    "shorts": "01:34:28",
+    "reels": "01:00:04",
+    "threads": "04:31:16"
+  },
+  {
+    "channel": "E",
+    "facebook": "00:51:20",
+    "instagram": "04:55:00",
+    "linkedin": "02:15:03",
+    "youtube": "04:36:06",
+    "x": "00:03:37",
+    "shorts": "01:27:11",
+    "reels": "05:40:03",
+    "threads": "00:05:40"
+  },
+  {
+    "channel": "F",
+    "facebook": "03:17:04",
+    "instagram": "05:46:07",
+    "linkedin": "01:56:36",
+    "youtube": "00:34:13",
+    "x": "03:32:58",
+    "shorts": "02:29:15",
+    "reels": "01:04:57",
+    "threads": "03:53:17"
+  },
+  {
+    "channel": "G",
+    "facebook": "01:58:36",
+    "instagram": "05:56:34",
+    "linkedin": "00:05:46",
+    "youtube": "04:16:08",
+    "x": "04:10:03",
+    "shorts": "00:28:51",
+    "reels": "00:55:21",
+    "threads": "00:00:21"
+  },
+  {
+    "channel": "H",
+    "facebook": "05:20:13",
+    "instagram": "02:49:41",
+    "linkedin": "03:52:04",
+    "youtube": "02:56:04",
+    "x": "04:05:54",
+    "shorts": "04:06:03",
+    "reels": "00:32:15",
+    "threads": "01:40:16"
+  },
+  {
+    "channel": "I",
+    "facebook": "05:31:25",
+    "instagram": "02:07:18",
+    "linkedin": "04:49:08",
+    "youtube": "01:23:18",
+    "x": "01:04:38",
+    "shorts": "05:34:53",
+    "reels": "02:42:31",
+    "threads": "01:47:28"
+  },
+  {
+    "channel": "J",
+    "facebook": "05:29:09",
+    "instagram": "03:10:29",
+    "linkedin": "01:42:30",
+    "youtube": "01:28:53",
+    "x": "00:43:55",
+    "shorts": "00:05:59",
+    "reels": "01:34:08",
+    "threads": "04:45:27"
+  },
+  {
+    "channel": "K",
+    "facebook": "02:08:15",
+    "instagram": "00:46:56",
+    "linkedin": "04:10:16",
+    "youtube": "04:45:19",
+    "x": "01:25:07",
+    "shorts": "01:10:26",
+    "reels": "05:59:56",
+    "threads": "04:00:07"
+  },
+  {
+    "channel": "L",
+    "facebook": "05:35:34",
+    "instagram": "05:16:32",
+    "linkedin": "04:55:38",
+    "youtube": "04:51:41",
+    "x": "04:15:37",
+    "shorts": "03:30:13",
+    "reels": "04:36:30",
+    "threads": "00:56:44"
+  },
+  {
+    "channel": "M",
+    "facebook": "02:47:37",
+    "instagram": "01:32:58",
+    "linkedin": "03:13:59",
+    "youtube": "04:00:42",
+    "x": "04:02:39",
+    "shorts": "03:57:03",
+    "reels": "01:50:30",
+    "threads": "01:34:02"
+  },
+  {
+    "channel": "N",
+    "facebook": "03:57:37",
+    "instagram": "00:55:40",
+    "linkedin": "04:48:46",
+    "youtube": "04:19:59",
+    "x": "00:26:42",
+    "shorts": "01:24:00",
+    "reels": "03:12:06",
+    "threads": "02:37:35"
+  },
+  {
+    "channel": "O",
+    "facebook": "03:23:14",
+    "instagram": "02:53:40",
+    "linkedin": "05:12:45",
+    "youtube": "05:06:56",
+    "x": "04:36:33",
+    "shorts": "03:16:59",
+    "reels": "00:42:27",
+    "threads": "01:27:08"
+  },
+  {
+    "channel": "P",
+    "facebook": "01:32:31",
+    "instagram": "04:38:12",
+    "linkedin": "02:25:42",
+    "youtube": "01:16:07",
+    "x": "02:59:16",
+    "shorts": "03:18:27",
+    "reels": "02:27:26",
+    "threads": "00:19:23"
+  },
+  {
+    "channel": "Q",
+    "facebook": "00:48:03",
+    "instagram": "01:23:48",
+    "linkedin": "05:23:28",
+    "youtube": "00:47:35",
+    "x": "01:42:45",
+    "shorts": "05:46:50",
+    "reels": "03:55:46",
+    "threads": "00:57:22"
+  },
+  {
+    "channel": "R",
+    "facebook": "00:09:40",
+    "instagram": "01:34:49",
+    "linkedin": "04:28:07",
+    "youtube": "01:17:18",
+    "x": "02:15:16",
+    "shorts": "04:42:45",
+    "reels": "00:43:41",
+    "threads": "01:43:15"
+>>>>>>> 54e72df2112dd73dd914fdc3094f662a31771fe8
   }
 ]
