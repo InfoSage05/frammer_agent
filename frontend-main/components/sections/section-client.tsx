@@ -32,7 +32,7 @@ function SectionClient({ onClose }) {
       </div>
 
       <div className="g4 stagger">
-        {data.summaryCards.map((m) => (
+        {(data.summaryCards || []).map((m) => (
           <div
             key={m.l}
             className="card card-gold fade-up"
@@ -84,7 +84,7 @@ function SectionClient({ onClose }) {
           >
             PIPELINE SUMMARY
           </div>
-          {data.pipelineSummary.map((r) => (
+          {(data.pipelineSummary || []).map((r) => (
             <div
               key={r.l}
               style={{
@@ -151,7 +151,7 @@ function SectionClient({ onClose }) {
           >
             KEY SIGNALS
           </div>
-          {data.keySignals.map((signal) => (
+          {(data.keySignals || []).map((signal) => (
             <div
               key={signal.tag}
               className={`callout callout-${signal.type}`}

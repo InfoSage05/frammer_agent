@@ -58,10 +58,10 @@
   },
   "input_type": {
     "input_type_name": "Input Type",
-    "uploaded_count": "Uploaded video count",
+    "uploaded_count": "Uploaded Count",
     "created_count": "Created Count",
     "published_count": "Published Count",
-    "uploaded_duration": "Uploaded Duration",
+    "uploaded_duration": "Uploaded Duration (hh:mm:ss)",
     "created_duration": "Created Duration (hh:mm:ss)",
     "published_duration": "Published Duration (hh:mm:ss)"
   },
@@ -75,17 +75,15 @@
     "published_duration": "Total Published Duration"
   },
   "_meta": {
-    "generated_at": "2026-03-21T20:49:05.684336",
+    "generated_at": "2026-03-21T21:34:43.059570",
     "roles_mapped": [
-      "channel_platform",
       "channel_summary",
-      "channel_user",
+      "channel_platform",
       "input_type",
       "language",
-      "output_type",
-      "user_summary",
       "monthly",
-      "video_list"
+      "output_type",
+      "user_summary"
     ]
   },
   "video_list": {

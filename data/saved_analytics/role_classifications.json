@@ -142,5 +142,53 @@
     "method": "pattern",
     "filename": "video_list_data_obfuscated.csv",
     "classified_at": "2026-03-21T20:48:37.872286"
+  },
+  "2b95c3786729d6af1ed49bd67689a485ba37bb2f83922be2c97e8c27e7506819": {
+    "role": "channel_summary",
+    "method": "llm",
+    "filename": "Q1_2026_team_performance.csv",
+    "classified_at": "2026-03-21T21:34:30.630875"
+  },
+  "f0fc7984aa0e54a62c964c7186df221d176049e4bb32e9af0dd7fa6681aa952d": {
+    "role": "channel_platform",
+    "method": "pattern",
+    "filename": "test_channel_platform.csv",
+    "classified_at": "2026-03-21T21:34:30.662229"
+  },
+  "ff53ccedccaba234833509970959ee2ae63f0267a0ace0278f8b850bc7f7d912": {
+    "role": "channel_summary",
+    "method": "pattern",
+    "filename": "test_channel_summary.csv",
+    "classified_at": "2026-03-21T21:34:30.666099"
+  },
+  "c9a2626de4adcb08dddaea2384c8f6dfecebc6c3590cf708edba99fa39464d8e": {
+    "role": "input_type",
+    "method": "pattern",
+    "filename": "test_input_type.csv",
+    "classified_at": "2026-03-21T21:34:30.684252"
+  },
+  "01708fa1bc0960e5cdb7934aef67c6583271e6f39ad7fd12caec16801b928d89": {
+    "role": "language",
+    "method": "pattern",
+    "filename": "test_language.csv",
+    "classified_at": "2026-03-21T21:34:30.697369"
+  },
+  "77734f9b782e4f6675232e7970bb2a678bf6e17eed61ab264f486bd254f004a3": {
+    "role": "monthly",
+    "method": "pattern",
+    "filename": "test_monthly.csv",
+    "classified_at": "2026-03-21T21:34:30.705140"
+  },
+  "9c7a6c267e0e7914b105f97d232ede75c29637c00eb6e08bd7bc4c24ace5db0f": {
+    "role": "output_type",
+    "method": "pattern",
+    "filename": "test_output_type.csv",
+    "classified_at": "2026-03-21T21:34:30.709169"
+  },
+  "4c4d2a8f1ea13c8411dfe05e62ed006d2f82d958a6dde7703a72fe44e506d387": {
+    "role": "user_summary",
+    "method": "pattern",
+    "filename": "test_user_summary.csv",
+    "classified_at": "2026-03-21T21:34:30.721226"
   }
 }

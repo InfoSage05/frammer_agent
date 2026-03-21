@@ -1,44 +1,44 @@
 [
   {
-    "lang": "en",
-    "uploaded": 2647,
-    "created": 8861,
-    "published": 91,
-    "publishRate": 1.03
+    "lang": "English",
+    "uploaded": 580,
+    "created": 2800,
+    "published": 72,
+    "publishRate": 2.57
   },
   {
-    "lang": "hi",
-    "uploaded": 1792,
-    "created": 6021,
-    "published": 20,
-    "publishRate": 0.33
+    "lang": "Spanish",
+    "uploaded": 210,
+    "created": 920,
+    "published": 22,
+    "publishRate": 2.39
   },
   {
-    "lang": "mix",
-    "uploaded": 11,
-    "created": 29,
-    "published": 0,
-    "publishRate": 0.0
+    "lang": "French",
+    "uploaded": 150,
+    "created": 620,
+    "published": 12,
+    "publishRate": 1.94
   },
   {
-    "lang": "es",
-    "uploaded": 1,
-    "created": 1,
-    "published": 0,
-    "publishRate": 0.0
+    "lang": "German",
+    "uploaded": 95,
+    "created": 380,
+    "published": 8,
+    "publishRate": 2.11
   },
   {
-    "lang": "ar",
-    "uploaded": 1,
-    "created": 1,
-    "published": 0,
-    "publishRate": 0.0
+    "lang": "Hindi",
+    "uploaded": 88,
+    "created": 340,
+    "published": 6,
+    "publishRate": 1.76
   },
   {
-    "lang": "mr",
-    "uploaded": 1,
-    "created": 1,
-    "published": 0,
-    "publishRate": 0.0
+    "lang": "Arabic",
+    "uploaded": 60,
+    "created": 240,
+    "published": 4,
+    "publishRate": 1.67
   }
 ]

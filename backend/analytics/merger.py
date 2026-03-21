@@ -161,18 +161,31 @@ def resolve_dataset_role(filename, registry_datasets):
     best_role = None
     best_score = -1
 
-    # 1. Try analytics_registry pattern matching
+    # 1. Try analytics_registry pattern matching (supports filename_patterns_any OR groups)
     for role, cfg in registry_datasets.items():
-        patterns = cfg.get("filename_patterns", [])
         excludes = cfg.get("filename_excludes", [])
-        if not all(p.lower() in filename_lower for p in patterns):
-            continue
         if any(e.lower() in filename_lower for e in excludes):
             continue
-        score = sum(len(p) for p in patterns)
-        if score > best_score:
-            best_score = score
-            best_role = role
+
+        patterns_any = cfg.get("filename_patterns_any", [])
+        patterns = cfg.get("filename_patterns", [])
+
+        matched_patterns = None
+        if patterns_any:
+            for group in patterns_any:
+                if all(p.lower() in filename_lower for p in group):
+                    score = sum(len(p) for p in group)
+                    if matched_patterns is None or score > sum(len(p) for p in matched_patterns):
+                        matched_patterns = group
+        elif patterns:
+            if all(p.lower() in filename_lower for p in patterns):
+                matched_patterns = patterns
+
+        if matched_patterns is not None:
+            score = sum(len(p) for p in matched_patterns)
+            if score > best_score:
+                best_score = score
+                best_role = role
 
     if best_role:
         return best_role
