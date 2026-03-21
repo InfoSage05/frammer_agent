@@ -223,6 +223,18 @@ Provide a brief, factual description of what this data contains."""
         except Exception as e:
             return f"Dataset with {len(df.columns)} columns and {len(df)} rows"
     
+    def clear_all_datasets(self) -> None:
+        """Remove all rows from datasets and columns tables.
+        Used when switching between standalone/main mode so the chat agent
+        only sees datasets that match the active dashboard."""
+        conn = self._get_conn()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM columns")
+        cursor.execute("DELETE FROM datasets")
+        cursor.execute("DELETE FROM metrics")
+        conn.commit()
+        conn.close()
+
     # ─── Query Operations ────────────────────────────────────────────────────
     
     def list_datasets(self) -> List[Dict[str, Any]]:

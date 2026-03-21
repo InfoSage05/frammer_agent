@@ -5,6 +5,7 @@ const INTRO_KEY = 'frammer-intro-seen-v19';
 import useScrollSpy from '@/hooks/useScrollSpy';
 import HighlightEscListener from '@/hooks/useHighlightEscListener';
 import useJsonData from '@/hooks/useJsonData';
+import useLiveMetrics from '@/hooks/useLiveMetrics';
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import ResizableSidebar from "./ui/ResizableSidebar";
@@ -53,6 +54,18 @@ export default function App(props: any) {
   const [activeGraphData, setActiveGraphData] = useState([]);
   const [role, setRole] = useState('analyst');
   const [howToUseOpen, setHowToUseOpen] = useState(false);
+
+  // Live metrics from backend (includes raw dashboard with chart_data for sections)
+  const { metrics: liveM, isLive, dashboard: liveDashboard } = useLiveMetrics();
+
+  // Chat session (shared between RightPanel copilot and ChatWidget, persisted)
+  const [chatSessionId, setChatSessionId] = useState(() => {
+    try {
+      const stored = typeof window !== "undefined" && localStorage.getItem("frammer_chat");
+      if (stored) { const p = JSON.parse(stored); return p.sessionId || null; }
+    } catch {}
+    return null;
+  });
 
   // Highlight mode
   const [highlightSection, setHighlightSection] = useState(null);
@@ -297,7 +310,7 @@ export default function App(props: any) {
           id="executive"
           title="Executive Overview"
           icon="◈"
-          summary={`${M.created.toLocaleString()} AI frames · ${M.publishRate}% pub rate · ${M.activeChannels} channels`}
+          summary={`${(isLive ? liveM.created : M.created).toLocaleString()} AI frames · ${isLive ? liveM.publishRate : M.publishRate}% pub rate · ${isLive ? liveM.activeChannels : M.activeChannels} channels`}
           defaultExpanded={true}
         >
           <SectionExecutive addToast={addToast} theme={theme} onAskAI={handleAskAI} />
@@ -398,12 +411,14 @@ export default function App(props: any) {
     activeChips, removeChip, clearAllFilters, exitStory, startStory,
     insightMode, setInsightMode, showBenchmark, setShowBenchmark,
     pinnedFindings, scrollToSection, addToast,
+    liveDashboard, isLive,
   }), [
     selectCtx, selectedCtx, startInvestigation, exitInvestigation,
     openCompare, closeCompare, filteredData, pinFinding, unpinFinding,
     openPanel, investigationMode, storyMode, compareState,
     activeChips, removeChip, clearAllFilters, exitStory, startStory,
     insightMode, showBenchmark, pinnedFindings, scrollToSection, addToast,
+    liveDashboard, isLive,
   ]);
 
   const appUICtx = useMemo(() => ({
@@ -611,7 +626,7 @@ export default function App(props: any) {
                     <>
                       <SectionShell
                         id="executive" title="Executive Overview" icon="◈"
-                        summary={`${M.created.toLocaleString()} AI frames · ${M.publishRate}% pub rate · ${M.activeChannels} channels`}
+                        summary={`${(isLive ? liveM.created : M.created).toLocaleString()} AI frames · ${isLive ? liveM.publishRate : M.publishRate}% pub rate · ${isLive ? liveM.activeChannels : M.activeChannels} channels`}
                         defaultExpanded={true}
                       >
                         <SectionExecutive addToast={addToast} theme={theme} onAskAI={handleAskAI} />
@@ -668,6 +683,8 @@ export default function App(props: any) {
               onClose={() => setPanelOpen(false)}
               attachedData={activeGraphData}
               onRemoveData={removeGraphData}
+              chatSessionId={chatSessionId}
+              onChatSessionId={setChatSessionId}
             />
 
             <ToastZone toasts={toasts} remove={removeToast} />

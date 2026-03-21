@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDash } from '@/lib/contexts';
 import { ANOMALIES, SAVED_VIEWS, STORY_PRESETS, M } from '@/lib/constants';
+import { sendChatMessage } from '@/lib/api';
 
 const TABS = [
   { id: 'explain', icon: '◈', label: 'Explain' },
@@ -11,7 +12,7 @@ const TABS = [
   { id: 'copilot', icon: '⊹', label: 'Copilot' },
 ];
 
-export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData }: any) {
+export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData, chatSessionId, onChatSessionId }: any) {
   const dash = useDash();
 
   return (
@@ -33,7 +34,7 @@ export default function RightPanel({ open, activeTab, setActiveTab, onClose, att
       <div className="rp-body">
         {activeTab === 'explain' && <ExplainTab dash={dash} />}
         {activeTab === 'compare' && <CompareTab dash={dash} />}
-        {activeTab === 'copilot' && <CopilotTab dash={dash} attachedData={attachedData} onRemoveData={onRemoveData} />}
+        {activeTab === 'copilot' && <CopilotTab dash={dash} attachedData={attachedData} onRemoveData={onRemoveData} sessionId={chatSessionId} onSessionId={onChatSessionId} />}
       </div>
     </div>
   );
@@ -173,7 +174,7 @@ function ViewsTab({ dash }: any) {
   );
 }
 
-function CopilotTab({ dash, attachedData, onRemoveData }: any) {
+function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessionId, onSessionId }: any) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -182,9 +183,21 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionId, setSessionIdLocal] = useState<string | null>(externalSessionId || null);
   const [ragMode, setRagMode] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
+
+  // Sync external session ID
+  useEffect(() => {
+    if (externalSessionId && externalSessionId !== sessionId) {
+      setSessionIdLocal(externalSessionId);
+    }
+  }, [externalSessionId]);
+
+  const setSessionId = (id: string | null) => {
+    setSessionIdLocal(id);
+    if (onSessionId) onSessionId(id);
+  };
 
   const sel = dash?.selectedCtx || {};
   const hasContext = sel.channel || sel.month || sel.language || sel.user;
@@ -213,10 +226,12 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
     setInput('');
     setLoading(true);
 
-    const attachedSources = sources.map((s: any) => ({
-      name: s.name,
-      data: s.data,
-    }));
+    // Build context message with attached sources
+    let fullMessage = userMsg;
+    if (sources.length > 0) {
+      const ctx = sources.map((s: any) => `[Attached: ${s.name}] ${JSON.stringify(s.data).substring(0, 800)}`).join('\n');
+      fullMessage = `${ctx}\n\nQuestion: ${userMsg}`;
+    }
 
     try {
       if (ragMode) {
@@ -243,18 +258,8 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
           },
         ]);
       } else {
-        const chatRes = await fetch('http://localhost:8000/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: userMsg,
-            session_id: sessionId,
-            attached_sources: attachedSources,
-            context: hasContext ? sel : undefined,
-          }),
-        });
-        if (!chatRes.ok) throw new Error('Chat request failed');
-        const chatData = await chatRes.json();
+        // Use the API function for chat
+        const chatData = await sendChatMessage(fullMessage, sessionId);
         setSessionId(chatData.session_id);
         setMessages(prev => [
           ...prev,

@@ -1,0 +1,38 @@
+{
+  "79bbabb0a7c5bf2ddb08ae868756261353f6a8d09540b7789b417891a37da528": {
+    "role": null,
+    "method": "unclassified",
+    "filename": "channel-wise-publishing duration.csv",
+    "classified_at": "2026-03-21T18:19:15.542659"
+  },
+  "d907a2a9b8e5800769a360e2691a63e8b42ca0d2cfcab48ad0aa7bb66fe47dcb": {
+    "role": null,
+    "method": "unclassified",
+    "filename": "month-wise-duration.csv",
+    "classified_at": "2026-03-21T18:19:15.542659"
+  },
+  "db75099b4ca42d043cc0f74b676dfe545fd55f29b7d05e4743b116b3b79c9dee": {
+    "role": null,
+    "method": "unclassified",
+    "filename": "flagged_channels.csv",
+    "classified_at": "2026-03-21T18:54:16.197990"
+  },
+  "561e09ace2d981bdbcc163d7a764dbccf0c21e1ddad49b439fa24eb6caa891e5": {
+    "role": null,
+    "method": "unclassified",
+    "filename": "month-wise-duration.csv",
+    "classified_at": "2026-03-21T18:54:16.213589"
+  },
+  "20db68f3b4b15a50b41ff689c3189bd60a1631144e1532ec3fd45dda71ebd87e": {
+    "role": "channel_platform",
+    "method": "llm",
+    "filename": "channel-wise-publishing duration.csv",
+    "classified_at": "2026-03-21T19:07:46.081001"
+  },
+  "8114bb4d3e016eda12d44e2ec229d5578e065f70d8283263d06b3e3f2d195aab": {
+    "role": "monthly",
+    "method": "llm",
+    "filename": "month-wise-duration.csv",
+    "classified_at": "2026-03-21T19:07:47.030820"
+  }
+}

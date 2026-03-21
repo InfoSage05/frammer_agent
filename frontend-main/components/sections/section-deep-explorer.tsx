@@ -1,6 +1,7 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState } from "react";
 import ScatterChart from "../charts/ScatterChart";
 import ChannelPlatformHeatmap from "../charts/ChannelHeatmap";
@@ -18,7 +19,8 @@ import { M } from '@/lib/constants';
 
 function SectionExplorer({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("explorer");
+  const { data: staticData } = useJsonData("explorer");
+  const data = useLiveSectionData("explorer", dash?.liveDashboard, staticData);
   const [subView, setSubView] = useState("users");
   const [userSort, setUserSort] = useState("created");
   const [treeRoot, setTreeRoot] = useState("channel");

@@ -27,8 +27,13 @@ logger = logging.getLogger("analytics.engine")
 HASHES_PATH = AGENT_DIR / "data" / "saved_analytics" / "dataset_hashes.json"
 DASHBOARD_PATH = AGENT_DIR / "data" / "analytics_dashboard.json"
 FRONTEND_DASHBOARD_PATH = AGENT_DIR / "frontend" / "public" / "data" / "analytics_dashboard.json"
+NEW_FRONTEND_DASHBOARD_PATH = AGENT_DIR / "data_open_frontend" / "public" / "data" / "analytics_dashboard.json"
 REGISTRY_PATH = Path(__file__).parent / "analytics_registry.json"
+KPI_REGISTRY_PATH = Path(__file__).parent / "kpi_registry.json"
 CHART_DATA_DIR = AGENT_DIR / "data" / "chart_data"
+
+# Flag to use new modular KPI system vs legacy script-based system
+USE_MODULAR_KPI_SYSTEM = True
 
 
 # ─── Dataset Role Resolution ────────────────────────────────────────────────
@@ -135,7 +140,7 @@ def detect_changes(data_dir: Path, registry_datasets: Dict) -> Dict[str, Any]:
         role = resolve_dataset_role(csv_path.name, registry_datasets)
 
         if role is None:
-            continue  # Unrecognized dataset, skip
+            continue  # Unrecognized by pattern matching, skip for change detection
 
         # Compute current hashes
         data_hash = compute_file_hash(csv_path)
@@ -186,12 +191,30 @@ def detect_changes(data_dir: Path, registry_datasets: Dict) -> Dict[str, Any]:
 # ─── Dataset Loading ────────────────────────────────────────────────────────
 
 def get_dataset_paths(data_dir: Path, registry_datasets: Dict) -> Dict[str, str]:
-    """Resolve each dataset role to its file path."""
+    """Resolve each dataset role to its file path.
+
+    Two-tier: pattern matching (fast, no LLM) then LLM classification for unmatched files.
+    """
+    from analytics.role_classifier import classify_dataset_role as llm_classify, load_cached_classifications, save_cached_classifications
+
     paths = {}
+    unmatched_files = []
+    cache = load_cached_classifications()
+
     for csv_path in data_dir.glob("*.csv"):
         role = resolve_dataset_role(csv_path.name, registry_datasets)
         if role and role not in paths:
             paths[role] = str(csv_path)
+        elif not role:
+            unmatched_files.append(csv_path)
+
+    # LLM classification for unmatched files
+    for csv_path in unmatched_files:
+        role = llm_classify(csv_path, registry_datasets, cache)
+        if role and role not in paths:
+            paths[role] = str(csv_path)
+
+    save_cached_classifications(cache)
     return paths
 
 
@@ -210,7 +233,10 @@ def load_datasets_for_roles(roles: List[str], dataset_paths: Dict[str, str]) -> 
 
 # ─── Dashboard Assembly ─────────────────────────────────────────────────────
 
-def assemble_dashboard(metrics: list, chart_data: dict, change_info: dict) -> Dict[str, Any]:
+def assemble_dashboard(
+    metrics: list, chart_data: dict, change_info: dict,
+    dataset_paths: Optional[Dict[str, str]] = None,
+) -> Dict[str, Any]:
     """Assemble the complete analytics_dashboard.json."""
     # Group metrics by category
     by_category = {}
@@ -230,6 +256,15 @@ def assemble_dashboard(metrics: list, chart_data: dict, change_info: dict) -> Di
         if chart_list:
             charts_by_category[category] = chart_list
 
+    # Dataset attribution: which files are powering the dashboard
+    dataset_sources = {}
+    if dataset_paths:
+        for role, path in dataset_paths.items():
+            dataset_sources[role] = {
+                "filename": Path(path).name,
+                "display_name": Path(path).stem,
+            }
+
     dashboard = {
         "generated_at": datetime.now().isoformat(),
         "from_cache": False,
@@ -238,7 +273,8 @@ def assemble_dashboard(metrics: list, chart_data: dict, change_info: dict) -> Di
         "by_category": by_category,
         "count": len(metrics),
         "chart_data": chart_data,
-        "charts": charts_by_category
+        "charts": charts_by_category,
+        "dataset_sources": dataset_sources,
     }
 
     # Save to disk (backend data dir)
@@ -246,13 +282,14 @@ def assemble_dashboard(metrics: list, chart_data: dict, change_info: dict) -> Di
     dashboard_json = json.dumps(dashboard, indent=2, default=str)
     DASHBOARD_PATH.write_text(dashboard_json, encoding="utf-8")
 
-    # Also save to frontend public/ dir so page.tsx can read it without backend
-    try:
-        FRONTEND_DASHBOARD_PATH.parent.mkdir(parents=True, exist_ok=True)
-        FRONTEND_DASHBOARD_PATH.write_text(dashboard_json, encoding="utf-8")
-        logger.info(f"Saved frontend dashboard to {FRONTEND_DASHBOARD_PATH}")
-    except Exception as e:
-        logger.warning(f"Could not write frontend dashboard: {e}")
+    # Also save to frontend public/ dirs so pages can read without backend
+    for fe_path in (FRONTEND_DASHBOARD_PATH, NEW_FRONTEND_DASHBOARD_PATH):
+        try:
+            fe_path.parent.mkdir(parents=True, exist_ok=True)
+            fe_path.write_text(dashboard_json, encoding="utf-8")
+            logger.info(f"Saved frontend dashboard to {fe_path}")
+        except Exception as e:
+            logger.warning(f"Could not write frontend dashboard to {fe_path}: {e}")
 
     logger.info(f"Saved analytics dashboard: {len(metrics)} metrics, {len(chart_data)} chart datasets")
 
@@ -337,12 +374,10 @@ class AnalyticsEngine:
         registry_datasets: Dict,
         force: bool = False
     ) -> Dict[str, Any]:
-        """Full pipeline: column mapper -> script generation -> execution."""
-        logger.info("SCHEMA CHANGE PATH: Running column mapper + script generation")
+        """Full pipeline: column mapper -> dataset merger -> KPI computation."""
+        logger.info("SCHEMA CHANGE PATH: Running column mapper + merger + KPI computation")
 
         from analytics.column_mapper import run_column_mapper, load_persisted_mappings
-        from analytics.script_generator import generate_all_scripts
-        from analytics.script_executor import execute_kpi_script, execute_chart_data_script
 
         schema_roles = change_info.get("schema_changed_roles", [])
         if force:
@@ -360,63 +395,112 @@ class AnalyticsEngine:
             changed_roles=schema_roles
         )
 
-        # Generate scripts with baked-in column names
-        generate_all_scripts(column_mappings, dataset_paths, trigger="schema_change")
+        # ── Run dataset merger (after column mapping) ─────────────────────
+        # Merges multi-file roles (e.g. channel_platform1.csv + channel_platform2.csv)
+        # and updates dataset_paths to point to the merged output files.
+        # Also updates column_mappings to identity (semantic names) after normalization.
+        dataset_paths, column_mappings = self._run_merger(registry_datasets, column_mappings, dataset_paths)
 
-        # Execute scripts
-        metrics = execute_kpi_script() or []
-        execute_chart_data_script()
-        chart_data = self._load_chart_data()
+        # Compute KPIs and chart data using modular system or legacy scripts
+        if USE_MODULAR_KPI_SYSTEM:
+            from analytics.kpi_executor import compute_kpis_from_registry, compute_charts_from_registry
+            metrics = compute_kpis_from_registry(column_mappings, dataset_paths)
+            chart_data = compute_charts_from_registry(column_mappings, dataset_paths)
+        else:
+            # Legacy: generate and execute scripts
+            from analytics.script_generator import generate_all_scripts
+            from analytics.script_executor import execute_kpi_script, execute_chart_data_script
+            generate_all_scripts(column_mappings, dataset_paths, trigger="schema_change")
+            metrics = execute_kpi_script() or []
+            execute_chart_data_script()
+            chart_data = self._load_chart_data()
 
         # Save metrics to SQLite registry
         self._save_metrics_to_registry(metrics)
+
+        # Register/update datasets in registry.db
+        self._register_datasets_in_db(dataset_paths)
 
         # Save hashes
         save_hashes(change_info["new_hashes"])
 
         # Assemble dashboard
-        dashboard = assemble_dashboard(metrics, chart_data, change_info)
+        dashboard = assemble_dashboard(metrics, chart_data, change_info, dataset_paths=dataset_paths)
         dashboard["kpis_recomputed"] = [m.get("id", m.get("name")) for m in metrics]
         dashboard["change_type"] = "schema_change"
 
         return dashboard
+
+    def _run_merger(
+        self,
+        registry_datasets: Dict,
+        column_mappings: Dict,
+        dataset_paths: Dict[str, str]
+    ) -> tuple:
+        """Run the dataset merger to combine multi-file roles.
+        Called after column mapping in both schema_change and data_append paths.
+        
+        Returns:
+            (updated_dataset_paths, updated_column_mappings) tuple
+        """
+        try:
+            from analytics.merger import merge_datasets_for_pipeline
+            updated_paths, updated_mappings = merge_datasets_for_pipeline(
+                registry_datasets=registry_datasets,
+                column_mappings=column_mappings,
+                dataset_paths=dataset_paths,
+            )
+            return updated_paths, updated_mappings
+        except Exception as e:
+            logger.warning(f"Dataset merger failed (non-fatal): {e}")
+            return dataset_paths, column_mappings
 
     def _data_append_path(
         self,
         change_info: Dict,
         dataset_paths: Dict[str, str]
     ) -> Dict[str, Any]:
-        """Re-run saved scripts only. No LLM, no remapping."""
-        logger.info("DATA APPEND PATH: Re-running saved scripts")
+        """Re-run computation with existing column mappings. No LLM needed."""
+        logger.info("DATA APPEND PATH: Re-computing with existing mappings")
 
-        from analytics.script_executor import execute_kpi_script, execute_chart_data_script, scripts_exist
-        from analytics.script_generator import generate_all_scripts
         from analytics.column_mapper import load_persisted_mappings
-
-        if not scripts_exist():
-            # Fallback: treat as schema change (first run after scripts deleted)
-            logger.warning("Saved scripts not found, escalating to schema change path")
-            registry_datasets = self._config.get("datasets", {})
-            change_info["schema_changed_roles"] = list(dataset_paths.keys())
-            return self._schema_change_path(change_info, dataset_paths, registry_datasets)
-
-        # Update dataset paths in saved scripts (paths might have changed)
         mappings = load_persisted_mappings()
-        generate_all_scripts(mappings, dataset_paths, trigger="data_append")
 
-        # Execute saved scripts
-        metrics = execute_kpi_script() or []
-        execute_chart_data_script()
-        chart_data = self._load_chart_data()
+        # ── Run dataset merger (reuse existing mappings) ──────────────────
+        registry_datasets = self._config.get("datasets", {})
+        dataset_paths, mappings = self._run_merger(registry_datasets, mappings, dataset_paths)
+
+        if USE_MODULAR_KPI_SYSTEM:
+            from analytics.kpi_executor import compute_kpis_from_registry, compute_charts_from_registry
+            metrics = compute_kpis_from_registry(mappings, dataset_paths)
+            chart_data = compute_charts_from_registry(mappings, dataset_paths)
+        else:
+            # Legacy: check scripts exist, regenerate paths, execute
+            from analytics.script_executor import execute_kpi_script, execute_chart_data_script, scripts_exist
+            from analytics.script_generator import generate_all_scripts
+            
+            if not scripts_exist():
+                logger.warning("Saved scripts not found, escalating to schema change path")
+                registry_datasets = self._config.get("datasets", {})
+                change_info["schema_changed_roles"] = list(dataset_paths.keys())
+                return self._schema_change_path(change_info, dataset_paths, registry_datasets)
+            
+            generate_all_scripts(mappings, dataset_paths, trigger="data_append")
+            metrics = execute_kpi_script() or []
+            execute_chart_data_script()
+            chart_data = self._load_chart_data()
 
         # Save metrics to SQLite registry
         self._save_metrics_to_registry(metrics)
+
+        # Register/update datasets in registry.db
+        self._register_datasets_in_db(dataset_paths)
 
         # Save hashes
         save_hashes(change_info["new_hashes"])
 
         # Assemble dashboard
-        dashboard = assemble_dashboard(metrics, chart_data, change_info)
+        dashboard = assemble_dashboard(metrics, chart_data, change_info, dataset_paths=dataset_paths)
         dashboard["kpis_recomputed"] = [m.get("id", m.get("name")) for m in metrics]
         dashboard["change_type"] = "data_append"
 
@@ -447,8 +531,34 @@ class AnalyticsEngine:
                     category=m.get("category", ""),
                     description=m.get("description", "")
                 )
+            logger.info(f"Saved {len(metrics)} metrics to registry.db")
         except Exception as e:
             logger.warning(f"Failed to save metrics to registry: {e}")
+
+    def _register_datasets_in_db(self, dataset_paths: Dict[str, str]) -> None:
+        """Register/update all active datasets in registry.db.
+        Called every pipeline run to keep the DB in sync with current datasets.
+        This populates the datasets + columns tables alongside the metrics table."""
+        try:
+            from context_manager import get_registry
+            registry = get_registry()
+            # Wipe stale entries so only current pipeline datasets are visible
+            registry.clear_all_datasets()
+            registered = 0
+            for role, path in dataset_paths.items():
+                try:
+                    dataset_id = registry.register_dataset(
+                        file_path=path,
+                        name=role,
+                        domain_tags=[role]
+                    )
+                    registered += 1
+                    logger.debug(f"Registered dataset '{role}' (id={dataset_id}) in registry.db")
+                except Exception as e:
+                    logger.warning(f"Failed to register dataset '{role}': {e}")
+            logger.info(f"Registered {registered}/{len(dataset_paths)} datasets in registry.db")
+        except Exception as e:
+            logger.warning(f"Failed to register datasets in registry: {e}")
 
     def get_dashboard(self) -> Dict[str, Any]:
         """Get the analytics dashboard. Checks for dataset changes on every call.
