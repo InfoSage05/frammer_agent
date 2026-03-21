@@ -720,7 +720,7 @@ html, body {
   overflow: hidden; border-radius: var(--radius) var(--radius) 0 0;
 }
 /* T3 — card label */
-.card-lbl { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.22); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-lbl { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.30); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-hero {
   background: var(--bg3); border: 1px solid var(--line);
   border-radius: var(--radius); position: relative; overflow: hidden;
@@ -900,8 +900,8 @@ html, body {
 .action-chip-icon { font-size: var(--text-sm); opacity: 0.75; }
 .smart-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line-lt); }
 
-/* ── TOOLTIP ── */
-.tip { position: fixed; background: var(--bg2); color: var(--ink); padding: 8px 12px; font-size: var(--text-xs); pointer-events: none; z-index: 9990; border: 1px solid var(--pri); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); font-family: var(--font-mono); max-width: 240px; line-height: 1.55; white-space: pre-wrap; }
+/* ── TOOLTIP — now handled via inline styles in Tooltip.tsx ── */
+.tip { display: none; }
 
 /* ── SPARKLINE ── */
 .sparkline { display: inline-flex; align-items: flex-end; gap: 2px; }

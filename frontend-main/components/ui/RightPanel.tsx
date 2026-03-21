@@ -7,12 +7,6 @@ import { ANOMALIES, SAVED_VIEWS, STORY_PRESETS, M } from '@/lib/constants';
 import { sendChatMessage } from '@/lib/api';
 import useChartJs from '../charts/ChartJSWrapper';
 
-const TABS = [
-  { id: 'explain', icon: '◈', label: 'Explain' },
-  { id: 'compare', icon: '⇔', label: 'Compare' },
-  { id: 'copilot', icon: '⊹', label: 'Copilot' },
-];
-
 function coerceNumber(value: any) {
   if (value === null || value === undefined) return 0;
   if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
@@ -187,29 +181,21 @@ function TableArtifact({ artifact }: any) {
   );
 }
 
-export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData, chatSessionId, onChatSessionId }: any) {
+export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData }: any) {
   const dash = useDash();
 
   return (
     <div className={`rp-shell${open ? ' open' : ''}`}>
-      <div className="rp-tabs">
-        {TABS.map(t => (
-          <div
-            key={t.id}
-            className={`rp-tab${activeTab === t.id ? ' active' : ''}`}
-            onClick={() => setActiveTab(t.id)}
-          >
-            <span className="rp-tab-icon">{t.icon}</span>
-            <span className="rp-tab-label">{t.label}</span>
-          </div>
-        ))}
+      <div className="rp-tabs" style={{ justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 4px' }}>
+          <span style={{ fontSize: 13 }}>⊹</span>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.82)', fontFamily: 'var(--font-sans)', letterSpacing: '-0.01em' }}>Copilot</span>
+        </div>
         <button className="rp-close" onClick={onClose}>✕</button>
       </div>
 
       <div className="rp-body">
-        {activeTab === 'explain' && <ExplainTab dash={dash} />}
-        {activeTab === 'compare' && <CompareTab dash={dash} />}
-        {activeTab === 'copilot' && <CopilotTab dash={dash} attachedData={attachedData} onRemoveData={onRemoveData} sessionId={chatSessionId} onSessionId={onChatSessionId} />}
+        <CopilotTab dash={dash} attachedData={attachedData} onRemoveData={onRemoveData} />
       </div>
     </div>
   );

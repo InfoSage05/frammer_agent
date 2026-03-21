@@ -232,8 +232,6 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
         <>
           <div className="smart-actions" style={{ marginBottom: 20 }}>
             <button className="action-chip danger" onClick={() => dash?.startInvestigation?.('pub_gap')}>⚑ Investigate publish gap</button>
-            <button className="action-chip" onClick={() => dash?.openCompare?.('channel', 'A', 'channel', 'D')}>⇔ Compare Ch-A vs Ch-D</button>
-            <button className="action-chip" onClick={() => dash?.openCompare?.('period', 'H1', 'period', 'H2')}>⇔ H1 vs H2 comparison</button>
           </div>
           <div className="card" style={{ padding: "20px 24px" }}>
             <div
@@ -404,11 +402,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── CONTENT MIX ── */}
       {subView === "content_mix" && (
         <div className="g2">
-          <div className="card" style={{ padding: "20px 24px" }}>
-            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 10, fontWeight: 400 }}>
-              Content Status Split
-            </div>
-            <div style={{ marginBottom: 10, display: "flex", justifyContent: "flex-end" }}>
+          <div className="card" style={{ padding: 0 }}>
+            <div className="card-head">
+              <span className="card-lbl">Content Status Split</span>
               <GraphActionButtons
                 insightsOpen={!!insightsOpen.status}
                 onToggleInsights={() => toggleInsights("status")}
@@ -417,18 +413,18 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             </div>
             <GraphFlip
               flipped={!!insightsOpen.status}
-              minHeight={220}
+              minHeight={320}
               front={
-                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 20, padding: "24px 24px 20px" }}>
                   <div style={{ display: "flex", justifyContent: "center" }}>
-                    <DonutChart segments={statusDonut} size={130} label="111" sub="published" />
+                    <DonutChart segments={statusDonut} size={190} label="111" sub="published" />
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {statusDonut.map((s) => (
                       <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{ width: 10, height: 10, background: s.color, borderRadius: 2, flexShrink: 0 }} />
-                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", flex: 1, minWidth: 0 }}>{s.label}</span>
-                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.78)", fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.value.toLocaleString()}</span>
+                        <div style={{ width: 8, height: 8, background: s.color, borderRadius: "50%", flexShrink: 0 }} />
+                        <span style={{ fontSize: 13, fontFamily: "var(--font-sans)", color: "rgba(255,255,255,0.50)", flex: 1 }}>{s.label}</span>
+                        <span style={{ fontSize: 14, fontFamily: "var(--font-sans)", color: "rgba(255,255,255,0.82)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>{s.value.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -437,11 +433,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               back={<GraphInsights title="Content Status Split" />}
             />
           </div>
-          <div className="card" style={{ padding: "20px 24px" }}>
-            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 6, fontWeight: 400 }}>
-              Input Type Radar
-            </div>
-            <div style={{ marginBottom: 6, display: "flex", justifyContent: "flex-end" }}>
+          <div className="card" style={{ padding: 0 }}>
+            <div className="card-head">
+              <span className="card-lbl">Input Type Radar</span>
               <GraphActionButtons
                 insightsOpen={!!insightsOpen.radar}
                 onToggleInsights={() => toggleInsights("radar")}
@@ -450,8 +444,12 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             </div>
             <GraphFlip
               flipped={!!insightsOpen.radar}
-              minHeight={280}
-              front={<RadarChart data={inputRadarData} size={240} />}
+              minHeight={320}
+              front={
+                <div style={{ padding: "20px 16px 16px", display: "flex", justifyContent: "center" }}>
+                  <RadarChart data={inputRadarData} size={300} />
+                </div>
+              }
               back={<GraphInsights title="Input Type Radar" />}
             />
           </div>
