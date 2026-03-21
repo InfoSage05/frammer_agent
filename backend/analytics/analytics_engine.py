@@ -46,6 +46,7 @@ def _load_registry_config() -> Dict:
 def resolve_dataset_role(filename: str, registry_datasets: Dict) -> Optional[str]:
     """
     Map a CSV filename to its logical role using registry patterns.
+    Supports both 'filename_patterns' (AND) and 'filename_patterns_any' (OR groups).
     Most specific match (longest combined pattern) wins.
     """
     filename_lower = filename.lower()
@@ -53,19 +54,33 @@ def resolve_dataset_role(filename: str, registry_datasets: Dict) -> Optional[str
     best_score = -1
 
     for role, cfg in registry_datasets.items():
-        patterns = cfg.get("filename_patterns", [])
         excludes = cfg.get("filename_excludes", [])
-
-        # Check all patterns match
-        if not all(p.lower() in filename_lower for p in patterns):
-            continue
 
         # Check no excludes match
         if any(e.lower() in filename_lower for e in excludes):
             continue
 
+        # Support filename_patterns_any: list of pattern groups, ANY group can match
+        patterns_any = cfg.get("filename_patterns_any", [])
+        patterns = cfg.get("filename_patterns", [])
+
+        matched_patterns = None
+        if patterns_any:
+            for group in patterns_any:
+                if all(p.lower() in filename_lower for p in group):
+                    # Use the best (longest) matching group
+                    score = sum(len(p) for p in group)
+                    if matched_patterns is None or score > sum(len(p) for p in matched_patterns):
+                        matched_patterns = group
+        elif patterns:
+            if all(p.lower() in filename_lower for p in patterns):
+                matched_patterns = patterns
+
+        if matched_patterns is None:
+            continue
+
         # Score by total pattern length (more specific = better)
-        score = sum(len(p) for p in patterns)
+        score = sum(len(p) for p in matched_patterns)
         if score > best_score:
             best_score = score
             best_role = role

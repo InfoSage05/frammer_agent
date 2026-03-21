@@ -3,8 +3,9 @@
   "datasets": {
     "channel_summary": {
       "description": "Per-channel upload/process/publish counts and durations",
-      "filename_patterns": ["client", "combined"],
-      "filename_excludes": ["by ", "user"],
+      "filename_patterns_any": [["client", "combined"], ["channel_summary"], ["channel summary"]],
+      "filename_excludes": ["by ", "user", "platform", "wise"],
+      "identity_columns": ["channel", "channel_name", "channel name"],
       "semantic_columns": {
         "channel_name":       {"description": "Channel identifier (letter or short name)", "dtype_hint": "categorical"},
         "uploaded_count":     {"description": "Count of source videos uploaded by users", "dtype_hint": "integer"},
@@ -46,8 +47,9 @@
     },
     "user_summary": {
       "description": "Per-user aggregated metrics",
-      "filename_patterns": ["by user"],
+      "filename_patterns_any": [["by user"], ["user_summary"], ["user summary"]],
       "filename_excludes": ["channel"],
+      "identity_columns": ["user", "user_name", "user name", "operator"],
       "semantic_columns": {
         "user_name":          {"description": "User or operator name", "dtype_hint": "categorical"},
         "uploaded_count":     {"description": "Count of uploads", "dtype_hint": "integer"},
@@ -60,7 +62,7 @@
     },
     "output_type": {
       "description": "Metrics broken down by output type (Key Moments, Summary, Shorts, etc.)",
-      "filename_patterns": ["by output type"],
+      "filename_patterns_any": [["by output type"], ["output_type"]],
       "filename_excludes": [],
       "semantic_columns": {
         "output_type_name":   {"description": "Type of output clip", "dtype_hint": "categorical"},
@@ -74,7 +76,7 @@
     },
     "input_type": {
       "description": "Metrics broken down by input type (interview, press conference, etc.)",
-      "filename_patterns": ["by input type"],
+      "filename_patterns_any": [["by input type"], ["input_type"]],
       "filename_excludes": [],
       "semantic_columns": {
         "input_type_name":    {"description": "Type of input source", "dtype_hint": "categorical"},
@@ -88,8 +90,8 @@
     },
     "language": {
       "description": "Metrics broken down by language",
-      "filename_patterns": ["by language"],
-      "filename_excludes": [],
+      "filename_patterns_any": [["by language"], ["language"]],
+      "filename_excludes": ["programming"],
       "semantic_columns": {
         "language_name":      {"description": "Language code or name", "dtype_hint": "categorical"},
         "uploaded_count":     {"description": "Count of uploads", "dtype_hint": "integer"},
@@ -102,7 +104,7 @@
     },
     "channel_platform": {
       "description": "Publishing counts per channel per social platform",
-      "filename_patterns": ["channel-wise-publishing"],
+      "filename_patterns_any": [["channel-wise-publishing"], ["channel_platform"]],
       "filename_excludes": ["duration"],
       "semantic_columns": {
         "channel_name":     {"description": "Channel identifier", "dtype_hint": "categorical"},

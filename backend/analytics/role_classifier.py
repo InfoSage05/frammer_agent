@@ -103,14 +103,38 @@ You MUST respond with ONLY this JSON (no other text):
 
 def _validate_role_columns(columns: List[str], role: str, registry_datasets: Dict[str, Dict]) -> bool:
     """Check that a CSV's columns have reasonable overlap with a role's semantic columns.
-    Prevents misclassification of supplementary files (e.g. flagged_channels → channel_summary)."""
+    Prevents misclassification of supplementary files (e.g. flagged_channels → channel_summary).
+    Also checks identity_columns for disambiguation between similar roles."""
     role_cfg = registry_datasets.get(role, {})
     sem_cols = role_cfg.get("semantic_columns", {})
     if not sem_cols:
         return True  # No semantic columns defined, can't validate
 
-    # Count how many semantic column descriptions loosely match actual columns
     cols_lower = [c.strip().lower() for c in columns]
+
+    # Identity column check: if the role defines identity_columns, at least one must be present
+    identity_cols = role_cfg.get("identity_columns", [])
+    if identity_cols:
+        has_identity = any(ic.lower() in cols_lower for ic in identity_cols)
+        if not has_identity:
+            logger.debug(f"Identity column check failed for '{role}': need one of {identity_cols}, got {columns[:3]}")
+            return False
+
+    # Also reject if a DIFFERENT role's identity columns are present (cross-check)
+    for other_role, other_cfg in registry_datasets.items():
+        if other_role == role:
+            continue
+        other_identity = other_cfg.get("identity_columns", [])
+        if not other_identity:
+            continue
+        # If the CSV has another role's identity column but NOT this role's, reject
+        other_match = any(ic.lower() in cols_lower for ic in other_identity)
+        this_match = any(ic.lower() in cols_lower for ic in identity_cols) if identity_cols else True
+        if other_match and identity_cols and not this_match:
+            logger.debug(f"Cross-role identity check: CSV has '{other_role}' identity columns, rejecting '{role}'")
+            return False
+
+    # Count how many semantic column descriptions loosely match actual columns
     expected_count = len(sem_cols)
     matched = 0
     for sem_name, sem_info in sem_cols.items():

@@ -206,9 +206,9 @@ export function useLiveSectionData(
       const sankeyFunnel = (() => {
         const nodes: string[] = ["Uploads", "AI Created", "Published", "Unpublished"];
         const links: any[] = [
-          { source: "Uploads", target: "AI Created", value: totalCreated },
+          { source: "Uploads", target: "AI Created", value: totalUploaded },
           { source: "AI Created", target: "Published", value: totalPublished },
-          { source: "AI Created", target: "Unpublished", value: totalCreated - totalPublished },
+          { source: "AI Created", target: "Unpublished", value: Math.max(totalCreated - totalPublished, 0) },
         ];
         // Published → Languages
         for (const l of topLangs) {

@@ -1,86 +1,44 @@
 [
   {
-    "month": "Apr, 2025",
-    "uploaded": 533,
-    "created": 1656,
-    "published": 44,
-    "publishRate": 2.66
+    "month": "Mar, 2026",
+    "uploaded": 210,
+    "created": 890,
+    "published": 18,
+    "publishRate": 2.02
   },
   {
-    "month": "Aug, 2025",
-    "uploaded": 256,
-    "created": 699,
-    "published": 7,
-    "publishRate": 1.0
+    "month": "Apr, 2026",
+    "uploaded": 245,
+    "created": 1020,
+    "published": 25,
+    "publishRate": 2.45
   },
   {
-    "month": "Dec, 2025",
-    "uploaded": 194,
-    "created": 644,
-    "published": 7,
-    "publishRate": 1.09
+    "month": "May, 2026",
+    "uploaded": 180,
+    "created": 760,
+    "published": 12,
+    "publishRate": 1.58
   },
   {
-    "month": "Feb, 2026",
-    "uploaded": 676,
-    "created": 2756,
+    "month": "Jun, 2026",
+    "uploaded": 310,
+    "created": 1350,
+    "published": 38,
+    "publishRate": 2.81
+  },
+  {
+    "month": "Jul, 2026",
+    "uploaded": 275,
+    "created": 1180,
+    "published": 30,
+    "publishRate": 2.54
+  },
+  {
+    "month": "Aug, 2026",
+    "uploaded": 195,
+    "created": 820,
     "published": 14,
-    "publishRate": 0.51
-  },
-  {
-    "month": "Jan, 2026",
-    "uploaded": 492,
-    "created": 1492,
-    "published": 20,
-    "publishRate": 1.34
-  },
-  {
-    "month": "Jul, 2025",
-    "uploaded": 284,
-    "created": 892,
-    "published": 0,
-    "publishRate": 0.0
-  },
-  {
-    "month": "Jun, 2025",
-    "uploaded": 239,
-    "created": 907,
-    "published": 3,
-    "publishRate": 0.33
-  },
-  {
-    "month": "Mar, 2025",
-    "uploaded": 639,
-    "created": 2555,
-    "published": 0,
-    "publishRate": 0.0
-  },
-  {
-    "month": "May, 2025",
-    "uploaded": 217,
-    "created": 642,
-    "published": 4,
-    "publishRate": 0.62
-  },
-  {
-    "month": "Nov, 2025",
-    "uploaded": 353,
-    "created": 943,
-    "published": 2,
-    "publishRate": 0.21
-  },
-  {
-    "month": "Oct, 2025",
-    "uploaded": 343,
-    "created": 1046,
-    "published": 10,
-    "publishRate": 0.96
-  },
-  {
-    "month": "Sep, 2025",
-    "uploaded": 227,
-    "created": 684,
-    "published": 0,
-    "publishRate": 0.0
+    "publishRate": 1.71
   }
 ]
