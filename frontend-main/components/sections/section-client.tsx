@@ -111,7 +111,7 @@ function SectionClient({ onClose, onAskAI }) {
                 }}>
                   Key Signals
                 </div>
-                {data.keySignals.map((signal) => (
+                {(data.keySignals || []).map((signal) => (
                   <div key={signal.tag} className={`callout callout-${signal.type}`} style={{ marginBottom: 10 }}>
                     <div className="c-tag">{signal.tag}</div>
                     <div className="c-text">{signal.text}</div>

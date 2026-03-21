@@ -182,6 +182,30 @@ def build_executive_view(dashboard: Dict) -> Dict:
     }
 
 
+def _build_client_signals(total_uploaded, total_created, total_published, publish_rate, multiplier, active_channels):
+    """Generate key signals for the client overview."""
+    content_gap = total_created - total_published
+    signals = []
+    if publish_rate < 10:
+        signals.append({
+            "type": "crit",
+            "tag": "⚠ CRITICAL — PUBLISH GAP",
+            "text": f"{100 - publish_rate:.1f}% of processed content never published. {content_gap:,} items sitting idle.",
+        })
+    else:
+        signals.append({
+            "type": "ok",
+            "tag": "✓ PUBLISH RATE",
+            "text": f"{publish_rate:.1f}% publish rate across {active_channels} channels.",
+        })
+    signals.append({
+        "type": "info",
+        "tag": "◈ AI MULTIPLIER",
+        "text": f"{multiplier:.1f}× amplification — {total_uploaded:,} uploads produced {total_created:,} AI outputs.",
+    })
+    return signals
+
+
 def build_client_view(dashboard: Dict) -> Dict:
     """Build client profile data."""
     metrics = dashboard.get("metrics", [])
@@ -230,6 +254,7 @@ def build_client_view(dashboard: Dict) -> Dict:
             {"l": "AI Multiplier", "v": f"{multiplier:.1f}×", "pct": min(multiplier * 25, 100), "color": "var(--gold-lt)"},
         ],
         "channels": channels,
+        "keySignals": _build_client_signals(total_uploaded, total_created, total_published, publish_rate, multiplier, active_channels),
     }
 
 

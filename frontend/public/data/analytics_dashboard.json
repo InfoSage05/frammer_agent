@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-21T21:27:59.504656",
+  "generated_at": "2026-03-22T02:08:20.918508",
   "from_cache": false,
-  "change_type": "schema_change",
+  "change_type": "none",
   "metrics": [
     {
       "id": "total_uploaded",
@@ -3736,118 +3736,7 @@
       }
     ]
   },
-  "charts": {
-    "Funnel Analysis": [
-      {
-        "filename": "funnel_by_channel.png",
-        "url": "/charts/funnel_by_channel.png"
-      }
-    ],
-    "Monthly Trends": [
-      {
-        "filename": "monthly_trends.png",
-        "url": "/charts/monthly_trends.png"
-      },
-      {
-        "filename": "monthly_publish_rate.png",
-        "url": "/charts/monthly_publish_rate.png"
-      },
-      {
-        "filename": "mom_growth.png",
-        "url": "/charts/mom_growth.png"
-      }
-    ],
-    "Channel Analysis": [
-      {
-        "filename": "channel_duration.png",
-        "url": "/charts/channel_duration.png"
-      },
-      {
-        "filename": "channel_performance_score.png",
-        "url": "/charts/channel_performance_score.png"
-      },
-      {
-        "filename": "channel_platform_counts.png",
-        "url": "/charts/channel_platform_counts.png"
-      },
-      {
-        "filename": "channel_quadrant.png",
-        "url": "/charts/channel_quadrant.png"
-      },
-      {
-        "filename": "channel_efficiency.png",
-        "url": "/charts/channel_efficiency.png"
-      }
-    ],
-    "User Analysis": [
-      {
-        "filename": "user_analysis.png",
-        "url": "/charts/user_analysis.png"
-      },
-      {
-        "filename": "user_scatter.png",
-        "url": "/charts/user_scatter.png"
-      },
-      {
-        "filename": "heatmap_channel_user.png",
-        "url": "/charts/heatmap_channel_user.png"
-      },
-      {
-        "filename": "heatmap_channel_user_pr.png",
-        "url": "/charts/heatmap_channel_user_pr.png"
-      }
-    ],
-    "Output & Input Mix": [
-      {
-        "filename": "output_type_mix.png",
-        "url": "/charts/output_type_mix.png"
-      },
-      {
-        "filename": "input_type_mix.png",
-        "url": "/charts/input_type_mix.png"
-      }
-    ],
-    "Language & Platform": [
-      {
-        "filename": "language_analysis.png",
-        "url": "/charts/language_analysis.png"
-      },
-      {
-        "filename": "platform_distribution.png",
-        "url": "/charts/platform_distribution.png"
-      }
-    ],
-    "Duration Analytics": [
-      {
-        "filename": "duration_analytics.png",
-        "url": "/charts/duration_analytics.png"
-      },
-      {
-        "filename": "h1_vs_h2.png",
-        "url": "/charts/h1_vs_h2.png"
-      }
-    ],
-    "Data Quality": [
-      {
-        "filename": "data_quality_dashboard.png",
-        "url": "/charts/data_quality_dashboard.png"
-      },
-      {
-        "filename": "dq_audit.png",
-        "url": "/charts/dq_audit.png"
-      },
-      {
-        "filename": "correlation_anomaly.png",
-        "url": "/charts/correlation_anomaly.png"
-      }
-    ],
-    "KPI Summary": [
-      {
-        "filename": "kpi_summary.png",
-        "url": "/charts/kpi_summary.png"
-      }
-    ]
-  },
+  "charts": {},
   "dataset_sources": {
     "channel_platform": {
       "filename": "channel_platform.csv",
