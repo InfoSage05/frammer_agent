@@ -166,10 +166,10 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               display: "flex",
               gap: 0,
               marginBottom: 28,
-              border: "1px solid var(--line)",
-              borderRadius: "var(--radius)",
+              border: "0.5px solid rgba(255,255,255,0.07)",
+              borderRadius: 13,
               overflow: "hidden",
-              background: "var(--bg2)",
+              background: "rgba(9,9,9,0.97)",
             }}
           >
             {data.contextStrip.map((s, i) => (
@@ -178,7 +178,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 style={{
                   flex: 1,
                   padding: "18px 24px",
-                  borderRight: i < 4 ? "1px solid var(--line-lt)" : "none",
+                  borderRight: i < 4 ? "0.5px solid rgba(255,255,255,0.06)" : "none",
                 }}
               >
                 <div
@@ -231,24 +231,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
           <div className="smart-actions" style={{ marginBottom: 20 }}>
             <button className="action-chip danger" onClick={() => dash?.startInvestigation?.('pub_gap')}>⚑ Investigate publish gap</button>
           </div>
-          <div className="card" style={{ padding: "20px 24px" }}>
-            <div
-              style={{
-                fontSize: 11,
-                fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "rgba(232,100,80,0.80)",
-                marginBottom: 12,
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                borderBottom: "1px solid var(--line-lt)",
-                paddingBottom: 9,
-              }}
-            >
-              ⚡ STRATEGIC SIGNALS
+          <div className="card" style={{ padding: 0 }}>
+            <div className="card-head">
+              <span className="card-lbl" style={{ color: "rgba(232,100,80,0.75)" }}>⚡ Strategic Signals</span>
             </div>
+            <div style={{ padding: "16px 22px" }}>
             {data.strategicSignals.map((c) => (
               <div
                 key={c.k}
@@ -267,6 +254,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 <div className="c-stat">{c.stat}</div>
               </div>
             ))}
+            </div>
           </div>
         </>
       )}
@@ -274,65 +262,24 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── CHANNELS ── */}
       {subView === "channels" && (
         <>
-          <div className="card card-gold" style={{ padding: "20px 24px", marginBottom: 16 }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                marginBottom: 14,
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.22)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  Monthly Upload vs Creation Volume
-                  <GraphActionButtons
-                    insightsOpen={!!insightsOpen.monthly}
-                    onToggleInsights={() => toggleInsights("monthly")}
-                    onAskAI={() =>
-                      onAskAI &&
-                      onAskAI("Monthly Upload vs Creation Volume", MONTHLY_DATA)
-                    }
-                  />
-                </div>
-                <div
-                  style={{
-                    fontSize: 11.5,
-                    color: "rgba(255,255,255,0.25)",
-                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                    marginTop: 2,
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  Mar 2025 – Feb 2026 · hover bars for details
-                </div>
+          <div className="card card-gold" style={{ padding: 0, marginBottom: 16 }}>
+            <div className="card-head">
+              <span className="card-lbl">Monthly Upload vs Creation Volume</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: "auto" }}>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", fontFamily: "var(--font-sans)", letterSpacing: "0.01em" }}>
+                  Mar 2025 – Feb 2026
+                </span>
+                <span style={{ fontSize: 11, color: "rgba(48,209,88,0.80)", background: "rgba(48,176,96,0.07)", padding: "3px 9px", borderRadius: 5, border: "0.5px solid rgba(48,176,96,0.18)", fontWeight: 400, fontFamily: "var(--font-sans)" }}>
+                  {data.monthlyChart.badge}
+                </span>
+                <GraphActionButtons
+                  insightsOpen={!!insightsOpen.monthly}
+                  onToggleInsights={() => toggleInsights("monthly")}
+                  onAskAI={() => onAskAI && onAskAI("Monthly Upload vs Creation Volume", MONTHLY_DATA)}
+                />
               </div>
-              <span
-                style={{
-                  fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                  fontSize: 11,
-                  color: "rgba(48,209,88,0.80)",
-                  background: "rgba(48,176,96,0.08)",
-                  padding: "3px 8px",
-                  borderRadius: 4,
-                  border: "0.5px solid rgba(48,176,96,0.18)",
-                  fontWeight: 400,
-                }}
-              >
-                {data.monthlyChart.badge}
-              </span>
             </div>
+            <div style={{ padding: "16px 22px 14px" }}>
             <GraphFlip
               flipped={!!insightsOpen.monthly}
               minHeight={280}
@@ -351,6 +298,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               }
               back={<GraphInsights title="Monthly Upload vs Creation Volume" />}
             />
+            </div>
           </div>
 
           <div className="card" style={{ padding: 0 }}>

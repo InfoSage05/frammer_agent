@@ -440,68 +440,33 @@ function SectionTrends({ theme, onAskAI }) {
         </div>
       </div>
 
-      <div className="card card-gold mb12" style={{ padding: "22px 26px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.22)",
-              fontWeight: 400,
-            }}
-          >
-            12-Month {metric === "count" ? "Video Count" : "Duration (hrs)"} Trajectory
-          </div>
-          <GraphActionButtons
-            insightsOpen={!!insightsOpen.trajectory}
-            onToggleInsights={() => toggleInsights("trajectory")}
-            onAskAI={() =>
-              onAskAI &&
-              onAskAI("12-Month Trajectory", {
-                metric,
-                monthRange,
-                series: trajectoryData,
-              })
-            }
-          />
-          <div className="legend" style={{ gap: 18 }}>
-            {labels.map((l, i) => {
-              const c = [
-                colors[0],
-                "#ff4757",
-                "#30b060",
-              ][i];
-              return (
-                <div key={l} className="leg-item">
-                  <div
-                    className="leg-dot"
-                    style={{
-                      background: c,
-                      width: 10,
-                      height: 10,
-                      borderRadius: 2,
-                    }}
-                  />
-                  <span>{l}</span>
-                </div>
-              );
-            })}
+      <div className="card card-gold mb12" style={{ padding: 0 }}>
+        <div className="card-head">
+          <span className="card-lbl">12-Month {metric === "count" ? "Video Count" : "Duration (hrs)"} Trajectory</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, marginLeft: "auto" }}>
+            <div className="legend" style={{ gap: 14 }}>
+              {labels.map((l, i) => {
+                const c = [colors[0], "#ff4757", "#30b060"][i];
+                return (
+                  <div key={l} className="leg-item">
+                    <div className="leg-dot" style={{ background: c, width: 8, height: 8, borderRadius: "50%" }} />
+                    <span style={{ fontSize: 11.5, color: "rgba(255,255,255,0.45)" }}>{l}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <GraphActionButtons
+              insightsOpen={!!insightsOpen.trajectory}
+              onToggleInsights={() => toggleInsights("trajectory")}
+              onAskAI={() => onAskAI && onAskAI("12-Month Trajectory", { metric, monthRange, series: trajectoryData })}
+            />
           </div>
         </div>
         <GraphFlip
           flipped={!!insightsOpen.trajectory}
           minHeight={260}
           front={
-            <div className="cjs-wrap" style={{ height: 260 }}>
+            <div className="cjs-wrap" style={{ height: 260, padding: "16px 20px 12px" }}>
               <canvas ref={trajRef} />
             </div>
           }
@@ -511,17 +476,16 @@ function SectionTrends({ theme, onAskAI }) {
 
 
       <div className="g2 mb12">
-        <div className="card" style={{ padding: "20px 24px" }}>
-          <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 12, fontWeight: 400 }}>
-            Duration Trend — Hours
-          </div>
-          <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
+        <div className="card" style={{ padding: 0 }}>
+          <div className="card-head">
+            <span className="card-lbl">Duration Trend — Hours</span>
             <GraphActionButtons
               insightsOpen={!!insightsOpen.duration}
               onToggleInsights={() => toggleInsights("duration")}
               onAskAI={() => onAskAI && onAskAI("Duration Trend", { series: durationTrendData })}
             />
           </div>
+          <div style={{ padding: "16px 20px 12px" }}>
           <GraphFlip
             flipped={!!insightsOpen.duration}
             minHeight={260}
@@ -568,38 +532,18 @@ function SectionTrends({ theme, onAskAI }) {
             }
             back={<GraphInsights title="Duration Trend" />}
           />
-        </div>
-        <div className="card" style={{ padding: "20px 24px" }}>
-          <div
-            style={{
-              fontSize: 11,
-              fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.22)",
-              marginBottom: 12,
-              fontWeight: 400,
-            }}
-          >
-            Monthly Creation Heat Calendar
           </div>
-          <div style={{ marginBottom: 12, display: "flex", justifyContent: "flex-end" }}>
+        </div>
+        <div className="card" style={{ padding: 0 }}>
+          <div className="card-head">
+            <span className="card-lbl">Monthly Creation Heat Calendar</span>
             <GraphActionButtons
               insightsOpen={!!insightsOpen.heat}
               onToggleInsights={() => toggleInsights("heat")}
-              onAskAI={() =>
-                onAskAI &&
-                onAskAI("Monthly Creation Heat Calendar", {
-                  monthlyData: MONTHLY_DATA.map((m) => ({
-                    month: m.month,
-                    created: m.created,
-                    uploaded: m.uploaded,
-                    published: m.published,
-                  })),
-                })
-              }
+              onAskAI={() => onAskAI && onAskAI("Monthly Creation Heat Calendar", { monthlyData: MONTHLY_DATA.map((m) => ({ month: m.month, created: m.created, uploaded: m.uploaded, published: m.published })) })}
             />
           </div>
+          <div style={{ padding: "16px 20px 12px" }}>
           <GraphFlip
             flipped={!!insightsOpen.heat}
             minHeight={430}
@@ -667,6 +611,7 @@ function SectionTrends({ theme, onAskAI }) {
             }
             back={<GraphInsights title="Monthly Creation Heat Calendar" />}
           />
+          </div>
         </div>
       </div>
 

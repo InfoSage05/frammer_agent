@@ -457,23 +457,18 @@ function SectionMultiDim({ theme, onAskAI }) {
 
       {/* ── treemap view ── */}
       {view === 'treemap' && (
-        <div style={{
-          background: '#090909',
-          border: '0.5px solid rgba(255,255,255,0.07)',
-          borderRadius: 14,
-          padding: '20px 22px',
-        }}>
-          <div style={{
-            fontSize: 9,
-            fontFamily: 'var(--font-mono)',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.20)',
-            marginBottom: 14,
-          }}>
-            Input Type — {kpiLabel} Volume · Treemap
+        <div style={{ background: '#090909', border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: 0 }}>
+          <div style={{ padding: '16px 22px', borderBottom: '0.5px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: 11, fontFamily: '-apple-system,"SF Pro Text",sans-serif', letterSpacing: '0.07em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.32)', fontWeight: 400 }}>
+              Input Type — {kpiLabel} Volume
+            </span>
+            <span style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.20)', fontFamily: '-apple-system,"SF Pro Text",sans-serif', letterSpacing: '0.04em' }}>
+              Treemap
+            </span>
           </div>
-          <Treemap data={treemapData} height={320} />
+          <div style={{ padding: '16px 22px 20px' }}>
+            <Treemap data={treemapData} height={340} />
+          </div>
         </div>
       )}
     </div>
