@@ -1,14 +1,14 @@
 {
   "channel_platform": {
     "channel_name": "Channels",
-    "facebook_count": "Facebook",
-    "instagram_count": "Instagram",
-    "linkedin_count": "Linkedin",
-    "youtube_count": "Youtube",
-    "x_count": "X",
-    "shorts_count": "Shorts",
-    "reels_count": "Reels",
-    "threads_count": "Threads"
+    "facebook_count": "Facebook Duration",
+    "instagram_count": "Instagram Duration",
+    "linkedin_count": "Linkedin Duration",
+    "youtube_count": "Youtube Duration",
+    "x_count": "X Duration",
+    "shorts_count": "Shorts Duration",
+    "reels_count": "Reels Duration",
+    "threads_count": "Threads Duration"
   },
   "user_summary": {
     "user_name": "User",
@@ -67,7 +67,7 @@
   },
   "monthly": {
     "month_label": "Month",
-    "monthly_uploaded": "Total Uploaded",
+    "monthly_uploaded": "Total Uploaded Duration",
     "monthly_created": "Total Created",
     "monthly_published": "Total Published",
     "uploaded_duration": "Total Uploaded Duration",
@@ -75,7 +75,7 @@
     "published_duration": "Total Published Duration"
   },
   "_meta": {
-    "generated_at": "2026-03-21T23:01:19.177244",
+    "generated_at": "2026-03-21T19:58:30.262442",
     "roles_mapped": [
       "channel_platform",
       "channel_summary",
@@ -93,6 +93,9 @@
     "team_name": "Team Name",
     "uploaded_by": "Uploaded By",
     "platform": "Published Platform",
-    "video_type": "Type"
+    "video_type": "Type",
+    "published_count": "Published",
+    "user_name": "Uploaded By",
+    "output_type_name": "Type"
   }
 }

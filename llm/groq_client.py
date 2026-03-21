@@ -13,6 +13,8 @@ from openai import OpenAI
 # ─── Modal vLLM Server Configuration ─────────────────────────────────────────
 BASE_URL = "https://ajsalali2005--llama-8b-vllm-server-serve.modal.run"
 MODEL = "llama"
+FAST_MODEL = MODEL
+THINK_MODEL = MODEL
 
 # OpenAI-compatible client for sync calls
 _sync_client: Optional[OpenAI] = None
@@ -54,30 +56,11 @@ def fast_complete(
     return response.choices[0].message.content or ""
 
 
-def think_complete(
-    messages: List[Dict[str, str]],
-    system_prompt: str = "",
-    temperature: float = 0.5,
-    max_tokens: int = 4096
-) -> str:
-    """
-    Deep thinking completion using Modal-hosted vLLM.
-    Used for: planning, reflection, complex insights.
-    """
-    client = _get_sync_client()
-    
-    full_messages = []
-    if system_prompt:
-        full_messages.append({"role": "system", "content": system_prompt})
-    full_messages.extend(messages)
-    
-    response = client.chat.completions.create(
-        model=MODEL,
-        messages=full_messages,
-        temperature=temperature,
-        max_tokens=max_tokens
-    )
-    return response.choices[0].message.content or ""
+think_complete = fast_complete
+"""
+Deep thinking completion using Modal-hosted vLLM.
+Used for: planning, reflection, complex insights.
+"""
 
 
 # ─── Async Streaming Functions ───────────────────────────────────────────────
@@ -110,32 +93,11 @@ async def stream_fast(
             yield chunk.choices[0].delta.content
 
 
-async def stream_think(
-    messages: List[Dict[str, str]],
-    system_prompt: str = ""
-) -> AsyncGenerator[str, None]:
-    """
-    Stream tokens from Modal-hosted vLLM.
-    Used for: detailed explanations, complex analysis.
-    """
-    client = _get_sync_client()
-    
-    full_messages = []
-    if system_prompt:
-        full_messages.append({"role": "system", "content": system_prompt})
-    full_messages.extend(messages)
-    
-    stream = client.chat.completions.create(
-        model=MODEL,
-        messages=full_messages,
-        temperature=0.5,
-        max_tokens=4096,
-        stream=True
-    )
-    
-    for chunk in stream:
-        if chunk.choices[0].delta.content:
-            yield chunk.choices[0].delta.content
+stream_think = stream_fast
+"""
+Stream tokens from Modal-hosted vLLM.
+Used for: detailed explanations, complex analysis.
+"""
 
 
 # ─── Utility Functions ───────────────────────────────────────────────────────
