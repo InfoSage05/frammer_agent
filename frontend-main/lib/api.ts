@@ -5,7 +5,7 @@
  * It supports both server-side and client-side fetching.
  */
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://34.60.183.121";
+const BACKEND_URL = "http://34.60.183.121";
 
 export interface MetricData {
   id: string;
