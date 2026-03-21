@@ -694,7 +694,8 @@ html, body {
   display: flex; align-items: center; justify-content: space-between;
   overflow: hidden; border-radius: var(--radius) var(--radius) 0 0;
 }
-.card-lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--ink4); font-weight: var(--weight-semi); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* T3 — card label */
+.card-lbl { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.22); font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-hero {
   background: var(--bg3); border: 1px solid var(--line);
   border-radius: var(--radius); position: relative; overflow: hidden;
@@ -711,13 +712,16 @@ html, body {
 .kpi-card-hero { background: var(--bg2); border-color: var(--line); padding: 24px 28px; gap: 10px; }
 .kpi-card-primary { padding: 18px 20px; }
 .kpi-card-secondary { padding: 14px 18px; }
-.kpi-label { font-size: 11px; font-weight: var(--weight-semi); color: var(--ink4); text-transform: uppercase; letter-spacing: 0.10em; font-family: var(--font-mono); margin-bottom: 8px; }
-.kpi-value { font-family: var(--font-sans); color: var(--ink); line-height: 1; letter-spacing: -0.03em; }
-.kpi-value-hero { font-size: var(--text-2xl); font-weight: var(--weight-bold); letter-spacing: -0.03em; }
-.kpi-value-primary { font-size: var(--text-xl); font-weight: var(--weight-bold); letter-spacing: -0.03em; }
-.kpi-value-secondary { font-size: 22px; font-weight: var(--weight-semi); letter-spacing: -0.02em; }
-.kpi-sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink4); letter-spacing: 0.01em; margin-top: 6px; line-height: 1.45; }
-.kpi-delta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 20px; font-family: var(--font-mono); font-size: 11px; font-weight: var(--weight-semi); margin-top: 10px; }
+/* T3 — card label / column header */
+.kpi-label { font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.22); text-transform: uppercase; letter-spacing: 0.06em; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; margin-bottom: 8px; }
+/* T1 — hero numbers */
+.kpi-value { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; color: rgba(255,255,255,0.85); line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi-value-hero    { font-size: 36px; font-weight: 500; letter-spacing: -0.03em; }
+.kpi-value-primary { font-size: 36px; font-weight: 500; letter-spacing: -0.03em; }
+.kpi-value-secondary { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
+/* T5 — subtext */
+.kpi-sub { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.25); letter-spacing: 0.01em; margin-top: 6px; line-height: 1.45; }
+.kpi-delta { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 20px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; font-weight: 500; margin-top: 10px; }
 .kpi-delta.up, .kpi-delta.positive   { background: rgba(24,167,104,0.10); color: var(--suc-lt); }
 .kpi-delta.down, .kpi-delta.negative { background: rgba(var(--pri-rgb),0.09);  color: var(--pri-lt); }
 .kpi-delta.flat { background: var(--bg4); color: var(--ink4); }
@@ -802,18 +806,22 @@ html, body {
 .callout-warn { background: rgba(var(--pri-rgb),0.05); border: 1px solid rgba(var(--pri-rgb),0.18); }
 .callout-ok   { background: rgba(42,168,110,0.05); border: 1px solid rgba(42,168,110,0.18); }
 .callout-info { background: var(--pri-dim); border: 1px solid rgba(var(--pri-rgb),0.2); }
-.c-tag { font-family: var(--font-mono); font-size: var(--text-xs); font-weight: var(--weight-medium); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
-.callout-crit .c-tag { color: var(--dan-lt); }
-.callout-warn .c-tag { color: var(--warn-lt); }
-.callout-info .c-tag { color: var(--pri-lt); }
-.callout-ok .c-tag { color: var(--suc-lt); }
-.c-text { font-size: var(--text-sm); color: var(--ink2); line-height: 1.5; margin-bottom: 4px; overflow-wrap: break-word; }
-.c-num { font-family: var(--font-serif); font-size: var(--text-lg); line-height: 1; display: inline-block; margin-right: 4px; vertical-align: baseline; }
-.callout-crit .c-num { color: var(--dan-lt); }
-.callout-warn .c-num { color: var(--warn-lt); }
-.callout-info .c-num { color: var(--pri-lt); }
-.callout-ok .c-num { color: var(--suc-lt); }
-.c-stat { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--ink4); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* T3 — tag labels */
+.c-tag { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.callout-crit .c-tag { color: rgba(232,100,80,0.85); }
+.callout-warn .c-tag { color: rgba(255,179,64,0.80); }
+.callout-info .c-tag { color: rgba(232,100,80,0.75); }
+.callout-ok .c-tag   { color: rgba(48,209,88,0.80); }
+/* T4 — body text */
+.c-text { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.55; margin-bottom: 4px; overflow-wrap: break-word; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
+/* hero number within callout */
+.c-num { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 20px; font-weight: 500; line-height: 1; display: inline-block; margin-right: 4px; vertical-align: baseline; }
+.callout-crit .c-num { color: rgba(232,100,80,0.85); }
+.callout-warn .c-num { color: rgba(255,179,64,0.80); }
+.callout-info .c-num { color: rgba(232,100,80,0.75); }
+.callout-ok .c-num   { color: rgba(48,209,88,0.80); }
+/* T5 — subtext */
+.c-stat { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11.5px; color: rgba(255,255,255,0.25); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Investigate button */
 .investigate-btn {
@@ -884,14 +892,14 @@ html, body {
 [data-theme="light"] .sub-tabs { border-bottom-color: rgba(0,0,0,0.08); }
 
 .sub-tab {
-  padding: 0 28px 12px 0; font-size: 14px; cursor: pointer;
+  padding: 0 28px 12px 0; font-size: 13px; cursor: pointer;
   color: rgba(255,255,255,0.28); border: none; background: none; border-radius: 0;
   transition: color 0.14s ease; font-weight: 400; user-select: none;
   white-space: nowrap; letter-spacing: -0.01em; font-family: var(--font-sans);
   position: relative; flex-shrink: 0;
 }
 .sub-tab:hover { color: rgba(255,255,255,0.58); }
-.sub-tab.active { color: rgba(255,255,255,0.90); font-weight: 500; }
+.sub-tab.active { color: rgba(255,255,255,0.85); font-weight: 500; }
 .sub-tab.active::after {
   content: ''; position: absolute; bottom: -1px; left: 0; right: 28px; height: 1px;
   background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.75) 20%, rgba(255,255,255,0.75) 80%, rgba(255,255,255,0) 100%);
@@ -919,20 +927,22 @@ html, body {
 [data-theme="light"] .sub-tab.premium { color: rgba(110,90,220,0.52); }
 [data-theme="light"] .sub-tab.premium.active { color: rgba(110,90,220,0.88); }
 
-/* ── SIGNAL LINE — live per-tab insight ── */
+/* ── SIGNAL LINE — T2 live per-tab insight ── */
 .sig-block {
   margin-bottom: 24px;
 }
 .sig-line {
-  font-size: 18px; color: rgba(255,255,255,0.38); font-family: var(--font-sans);
-  margin: 0 0 4px; line-height: 1.55; letter-spacing: -0.01em; font-weight: 400;
+  font-size: 15px; color: rgba(255,255,255,0.45);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  margin: 0 0 4px; line-height: 1.7; letter-spacing: -0.01em; font-weight: 400;
   display: block;
 }
 .sig-line:last-child { margin-bottom: 0; }
-.sig-val  { color: rgba(255,255,255,0.88); font-weight: 500; }
-.sig-pos  { color: rgba(48,209,88,0.85); font-weight: 500; }
-.sig-warn { color: rgba(255,179,64,0.85); font-weight: 500; }
-.sig-neg  { color: rgba(255,70,73,0.85); font-weight: 500; }
+/* semantic only — max 1 highlight per line */
+.sig-val  { color: rgba(255,255,255,0.82); font-weight: 500; }
+.sig-pos  { color: rgba(48,209,88,0.80);  font-weight: 500; }
+.sig-warn { color: rgba(255,179,64,0.80); font-weight: 500; }
+.sig-neg  { color: rgba(232,100,80,0.85); font-weight: 500; }
 [data-theme="light"] .sig-line { color: rgba(0,0,0,0.40); }
 [data-theme="light"] .sig-val  { color: rgba(0,0,0,0.78); }
 [data-theme="light"] .sig-pos  { color: rgba(22,163,74,0.88); }
@@ -943,14 +953,15 @@ html, body {
 .filter-panel { display: flex; gap: 0; flex-wrap: wrap; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg2); margin-bottom: 28px; overflow: hidden; position: relative; }
 .filter-group { display: flex; flex-direction: column; gap: 8px; padding: 10px 16px; border-right: 1px solid var(--line-lt); min-width: 0; }
 .filter-group:last-child { border-right: none; }
-.filter-group-label { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink4); font-weight: 600; }
+/* T3 — column header */
+.filter-group-label { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.22); font-weight: 400; }
 .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 8px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg3); margin-bottom: 20px; }
 .filter-label { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink4); }
 
 /* ── DIM CONTROLS ── */
-.dim-opt { padding: 0 12px; height: 26px; display: inline-flex; align-items: center; border: 1px solid var(--line); font-size: 12px; cursor: pointer; background: transparent; color: var(--ink3); font-family: var(--font-sans); transition: all var(--transition-fast); border-radius: var(--radius-sm); }
-.dim-opt:hover { border-color: var(--line); color: var(--ink2); background: var(--bg3); }
-.dim-opt.active { border-color: rgba(var(--pri-rgb),0.3); color: var(--pri-lt); background: var(--pri-dim); }
+.dim-opt { padding: 0 12px; height: 26px; display: inline-flex; align-items: center; border: 0.5px solid rgba(255,255,255,0.08); font-size: 13px; cursor: pointer; background: transparent; color: rgba(255,255,255,0.45); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; transition: all var(--transition-fast); border-radius: var(--radius-sm); letter-spacing: -0.01em; }
+.dim-opt:hover { color: rgba(255,255,255,0.70); background: rgba(255,255,255,0.04); }
+.dim-opt.active { border-color: rgba(232,67,45,0.30); color: rgba(232,100,80,1); background: rgba(232,67,45,0.12); }
 .dim-opt:active { transform: scale(0.98); }
 .dim-row { display: flex; gap: 4px; flex-wrap: wrap; }
 
@@ -1033,7 +1044,8 @@ html, body {
 
 /* ── LEGEND ── */
 .legend { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-.leg-item { display: flex; align-items: center; gap: 8px; font-size: var(--text-xs); color: var(--ink3); font-family: var(--font-mono); }
+/* T4 — legend items */
+.leg-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.55); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
 .leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 
 /* ── EMPTY STATE ── */
@@ -1169,7 +1181,8 @@ html, body {
 
 /* ── CHART CARD ── */
 .chart-card { padding: 20px; }
-.chart-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink4); margin-bottom: 16px; font-weight: var(--weight-semi); }
+/* T3 — chart title */
+.chart-title { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 16px; font-weight: 400; }
 
 /* ── GRAPH FLIP ── */
 .graph-flip { perspective: 1200px; width: 100%; position: relative; }
@@ -1322,57 +1335,51 @@ html { scroll-behavior: smooth; }
 /* Filter bar tighter */
 .filter-bar { padding: 8px 14px; margin-bottom: 18px; }
 
-/* Filter label uppercase mono */
-.filter-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.13em; }
-.filter-group-label { font-size: 10px; letter-spacing: 0.14em; }
+/* Filter label — T3 */
+.filter-label { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-size: 11px; letter-spacing: 0.06em; color: rgba(255,255,255,0.22); font-weight: 400; }
 
-/* Insight bar text */
-.insight-item-text { font-size: 12px; }
+/* Insight bar text — T4 */
+.insight-item-text { font-size: 13px; }
 
 /* Badge sizing */
 .badge { font-size: 11px; padding: 2px 8px; }
 
-/* Delta pill */
-.delta-pill { font-size: 11px; padding: 2px 8px; }
+/* Delta pill — T5 */
+.delta-pill { font-size: 11.5px; padding: 2px 8px; }
 
-/* Legend */
-.leg-item { font-size: 12px; gap: 6px; }
+/* Legend — T4 */
+.leg-item { font-size: 13px; gap: 6px; }
 
-/* Toast */
+/* Toast — T4 */
 .toast { font-size: 13px; }
-.toast-lbl { font-size: 10px; }
-
-/* Callout text */
-.c-text { font-size: 13px; line-height: 1.5; }
-.c-tag { font-size: 10px; letter-spacing: 0.10em; }
-.c-num { font-size: 22px; }
+.toast-lbl { font-size: 11px; }
 
 /* Story bar */
-.story-title { font-size: 11px; letter-spacing: 0.10em; }
+.story-title { font-size: 11px; letter-spacing: 0.06em; }
 .story-narrative { font-size: 13px; }
 
-/* Right panel */
-.rp-section-lbl { font-size: 11px; letter-spacing: 0.12em; }
-.rp-tab-label { font-size: 12px; }
+/* Right panel — T3 labels */
+.rp-section-lbl { font-size: 11px; letter-spacing: 0.06em; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-weight: 400; }
+.rp-tab-label { font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
 
 /* Cmd palette */
-.cmd-group-label { font-size: 11px; letter-spacing: 0.12em; }
-.cmd-item-label { font-size: 14px; }
-.cmd-item-desc { font-size: 12px; }
+.cmd-group-label { font-size: 11px; letter-spacing: 0.06em; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
+.cmd-item-label { font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
+.cmd-item-desc { font-size: 13px; }
 .cmd-search-input { font-size: 15px; }
 
-/* Invest banner */
-.invest-metric-lbl { font-size: 10px; letter-spacing: 0.10em; }
-.invest-metric-val { font-size: 14px; font-weight: var(--weight-semi); }
-.invest-banner-title { font-size: 14px; }
+/* Invest banner — T3 labels, T4 values */
+.invest-metric-lbl { font-size: 11px; letter-spacing: 0.06em; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; font-weight: 400; }
+.invest-metric-val { font-size: 14px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
+.invest-banner-title { font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; }
 
 /* Section shell — compact strip without title */
 .section-shell-chevron { font-size: 10px; color: var(--ink4); opacity: 0.4; }
-.section-shell-badge { font-size: 10px; }
+.section-shell-badge { font-size: 11px; }
 
-/* Bar row labels in charts */
-.bar-lbl { font-size: 13px; }
-.bar-val { font-size: 12px; }
+/* Bar row labels in charts — T4/T5 */
+.bar-lbl { font-size: 13px; color: rgba(255,255,255,0.55); }
+.bar-val { font-size: 13px; font-weight: 500; }
 
 /* Table headers */
 .data-table th { font-size: 11px; letter-spacing: 0.10em; }

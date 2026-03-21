@@ -145,15 +145,15 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink4)', fontWeight: 600 }}>
+                  <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>
                     {card.label}
                   </div>
-                  <span style={{ fontSize: 12, opacity: 0.30 }}>{card.icon}</span>
+                  <span style={{ fontSize: 13, opacity: 0.25 }}>{card.icon}</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 32, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 700 }}>
+                <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 36, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 10, lineHeight: 1.45 }}>
+                <div style={{ fontSize: 11.5, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', color: 'rgba(255,255,255,0.25)', marginTop: 10, lineHeight: 1.45, letterSpacing: '0.01em' }}>
                   {card.sub}
                 </div>
                 {card.spark && (
@@ -188,36 +188,38 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               >
                 <div
                   style={{
-                    fontSize: 10,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.12em",
+                    fontSize: 11,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: "var(--ink4)",
+                    color: "rgba(255,255,255,0.22)",
                     marginBottom: 8,
-                    fontWeight: 600,
+                    fontWeight: 400,
                   }}
                 >
                   {s.label}
                 </div>
                 <div
                   style={{
-                    fontFamily: "var(--font-sans)",
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
                     fontSize: 20,
                     color: "var(--ink)",
                     lineHeight: 1,
-                    fontWeight: 600,
+                    fontWeight: 500,
                     letterSpacing: '-0.02em',
+                    fontVariantNumeric: 'tabular-nums',
                   }}
                 >
                   {s.v}
                 </div>
                 <div
                   style={{
-                    fontSize: 12,
-                    fontFamily: "var(--font-mono)",
-                    color: "var(--ink4)",
+                    fontSize: 11.5,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    color: "rgba(255,255,255,0.25)",
                     marginTop: 6,
                     lineHeight: 1.4,
+                    letterSpacing: '0.01em',
                   }}
                 >
                   {s.sub}
@@ -239,11 +241,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
           <div className="card" style={{ padding: "16px 18px" }}>
             <div
               style={{
-                fontSize: 10,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.14em",
+                fontSize: 11,
+                fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
-                color: "var(--pri)",
+                color: "rgba(232,100,80,0.80)",
                 marginBottom: 12,
                 display: "flex",
                 alignItems: "center",
@@ -291,17 +293,17 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               <div>
                 <div
                   style={{
-                    fontSize: 8,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.12em",
+                    fontSize: 11,
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: "var(--ink3)",
+                    color: "rgba(255,255,255,0.22)",
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
                   }}
                 >
-                  MONTHLY UPLOAD vs CREATION VOLUME
+                  Monthly Upload vs Creation Volume
                   <GraphActionButtons
                     insightsOpen={!!insightsOpen.monthly}
                     onToggleInsights={() => toggleInsights("monthly")}
@@ -313,10 +315,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 </div>
                 <div
                   style={{
-                    fontSize: 9.5,
-                    color: "var(--ink4)",
-                    fontFamily: "var(--font-mono)",
+                    fontSize: 11.5,
+                    color: "rgba(255,255,255,0.25)",
+                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
                     marginTop: 2,
+                    letterSpacing: '0.01em',
                   }}
                 >
                   Mar 2025 – Feb 2026 · hover bars for details
@@ -324,13 +327,14 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               </div>
               <span
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 9,
-                  color: "var(--green)",
-                  background: "rgba(48,176,96,0.1)",
-                  padding: "2px 7px",
-                  borderRadius: 3,
-                  border: "1px solid rgba(48,176,96,0.2)",
+                  fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                  fontSize: 11,
+                  color: "rgba(48,209,88,0.80)",
+                  background: "rgba(48,176,96,0.08)",
+                  padding: "3px 8px",
+                  borderRadius: 4,
+                  border: "0.5px solid rgba(48,176,96,0.18)",
+                  fontWeight: 400,
                 }}
               >
                 {data.monthlyChart.badge}
@@ -346,7 +350,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                     {data.monthlyChart.legend.map(([l, c]) => (
                       <div key={l} className="leg-item">
                         <div className="leg-dot" style={{ background: c, width: 10, height: 10, borderRadius: 2 }} />
-                        <span style={{ fontSize: 12 }}>{l}</span>
+                        <span>{l}</span>
                       </div>
                     ))}
                   </div>
@@ -371,10 +375,10 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               />
               <span
                 style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--ink4)",
-                  letterSpacing: "0.06em",
+                  fontSize: 11.5,
+                  fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                  color: "rgba(255,255,255,0.25)",
+                  letterSpacing: "0.01em",
                 }}
               >
                 Click row for deep-dive →
@@ -404,8 +408,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {subView === "content_mix" && (
         <div className="g2">
           <div className="card" style={{ padding: "14px 16px" }}>
-            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 10 }}>
-              CONTENT STATUS SPLIT
+            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 10, fontWeight: 400 }}>
+              Content Status Split
             </div>
             <div style={{ marginBottom: 10, display: "flex", justifyContent: "flex-end" }}>
               <GraphActionButtons
@@ -426,8 +430,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                     {statusDonut.map((s) => (
                       <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <div style={{ width: 10, height: 10, background: s.color, borderRadius: 2, flexShrink: 0 }} />
-                        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--ink2)", flex: 1, minWidth: 0 }}>{s.label}</span>
-                        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--ink3)", fontWeight: 600 }}>{s.value.toLocaleString()}</span>
+                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", flex: 1, minWidth: 0 }}>{s.label}</span>
+                        <span style={{ fontSize: 13, color: "rgba(255,255,255,0.78)", fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.value.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -437,8 +441,8 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
             />
           </div>
           <div className="card" style={{ padding: "14px 16px" }}>
-            <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 6 }}>
-              INPUT TYPE RADAR (UPLOADS)
+            <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 6, fontWeight: 400 }}>
+              Input Type Radar
             </div>
             <div style={{ marginBottom: 6, display: "flex", justifyContent: "flex-end" }}>
               <GraphActionButtons
