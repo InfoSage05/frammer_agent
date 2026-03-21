@@ -537,8 +537,88 @@ function SectionFunnel({ theme, onAskAI }) {
     typeTreemapColors: [],
   };
   const [subView, setSubView] = useState("sankey");
-  const [sankeyType, setSankeyType] = useState("funnel");
   const [insightsOpen, setInsightsOpen] = useState({});
+
+  // ── 2D Sankey dimension picker ──
+  const [dimA, setDimA] = useState("channel");
+  const [dimB, setDimB] = useState("platform");
+
+  const DIMS_CONFIG = [
+    { k: "pipeline",    label: "Pipeline",  desc: "Upload→Create→Publish",  color: "#3B8BD4" },
+    { k: "channel",     label: "Channel",   desc: "Ch-A through Ch-I",      color: "#8B5CF6" },
+    { k: "contentType", label: "Content",   desc: "Interview, News…",       color: "#EF9F27" },
+    { k: "language",    label: "Language",  desc: "English, Hindi…",        color: "#3EC98A" },
+    { k: "status",      label: "Status",    desc: "Published / Unpub",      color: "#ff6b7a" },
+    { k: "platform",    label: "Platform",  desc: "YouTube, Reels…",        color: "#45aaf2" },
+  ];
+  const COMPAT: Record<string,string[]> = {
+    pipeline:    ["status"],
+    channel:     ["platform", "status"],
+    contentType: ["language", "status"],
+    language:    ["platform", "status"],
+    status:      [],
+    platform:    [],
+  };
+
+  const computeSankeyData = (a: string, b: string) => {
+    if (a === "channel" && b === "platform") return sectionData.sankey?.channel || { nodes: [], links: [] };
+    if (a === "contentType" && b === "language") return sectionData.sankey?.content || { nodes: [], links: [] };
+    if (a === "pipeline" && b === "status") return {
+      nodes: ["Uploads", "AI Created", "Published", "Unpublished"],
+      links: [
+        { source: "Uploads",    target: "AI Created",  value: TOTAL_UPLOADED },
+        { source: "AI Created", target: "Published",   value: TOTAL_PUBLISHED },
+        { source: "AI Created", target: "Unpublished", value: TOTAL_CREATED - TOTAL_PUBLISHED },
+      ],
+    };
+    if (a === "channel" && b === "status") {
+      const active = CHANNELS.filter(c => c.created > 0);
+      const links = [];
+      active.forEach(c => {
+        if (c.published > 0) links.push({ source: `Ch-${c.ch}`, target: "Published",   value: c.published });
+        const u = c.created - c.published;
+        if (u > 0)           links.push({ source: `Ch-${c.ch}`, target: "Unpublished", value: u });
+      });
+      return { nodes: [...active.map(c => `Ch-${c.ch}`), "Published", "Unpublished"], links };
+    }
+    if (a === "contentType" && b === "status") {
+      const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+      const active = INPUT_TYPES.filter(t => t.created > 0);
+      const links = [];
+      active.forEach(t => {
+        const name = cap(t.type);
+        if (t.published > 0) links.push({ source: name, target: "Published",   value: t.published });
+        const u = t.created - t.published;
+        if (u > 0)           links.push({ source: name, target: "Unpublished", value: u });
+      });
+      return { nodes: [...active.map(t => cap(t.type)), "Published", "Unpublished"], links };
+    }
+    if (a === "language" && b === "status") {
+      const active = LANGUAGES.filter(l => l.created > 0);
+      const links = [];
+      active.forEach(l => {
+        if (l.published > 0) links.push({ source: l.lang, target: "Published",   value: l.published });
+        const u = l.created - l.published;
+        if (u > 0)           links.push({ source: l.lang, target: "Unpublished", value: u });
+      });
+      return { nodes: [...active.map(l => l.lang), "Published", "Unpublished"], links };
+    }
+    if (a === "language" && b === "platform") {
+      const fd = sectionData.sankey?.funnel;
+      if (!fd) return { nodes: [], links: [] };
+      const langSet = new Set(["English", "Hindi", "Mixed"]);
+      const platSet = new Set(["YouTube", "Reels", "Shorts", "Facebook", "Instagram"]);
+      const filtLinks = (fd.links || []).filter(l => langSet.has(l.source) && platSet.has(l.target));
+      const usedLangs = [...new Set(filtLinks.map(l => l.source))];
+      const usedPlats = [...new Set(filtLinks.map(l => l.target))];
+      return { nodes: [...usedLangs, ...usedPlats], links: filtLinks };
+    }
+    return { nodes: [], links: [] };
+  };
+
+  const activeDimACfg = DIMS_CONFIG.find(d => d.k === dimA);
+  const activeDimBCfg = DIMS_CONFIG.find(d => d.k === dimB);
+  const validTargets = COMPAT[dimA] || [];
   const INPUT_TYPES = data?.inputTypes || [];
   const LANGUAGES = data?.languages || [];
   const CHANNELS = data?.channels || [];
@@ -651,237 +731,132 @@ function SectionFunnel({ theme, onAskAI }) {
       {subView === "sankey" && (
         <div className="stack">
           <div className="card card-gold" style={{ padding: "18px 20px" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                marginBottom: 16,
-                flexWrap: "wrap",
-                gap: 10,
-              }}
-            >
+            {/* ── Header ── */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18, flexWrap: "wrap", gap: 10 }}>
               <div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.10em",
-                    textTransform: "uppercase",
-                    color: "var(--ink2)",
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  CONTENT FLOW — UPLOAD → CREATE → PUBLISH
+                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink2)", fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
+                  <span style={{ color: "rgba(255,255,255,0.25)" }}>→</span>
+                  <span style={{ color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
+                  <span style={{ color: "rgba(255,255,255,0.25)" }}>· SANKEY FLOW</span>
                   <GraphActionButtons
                     insightsOpen={!!insightsOpen.contentFlow}
                     onToggleInsights={() => toggleInsights("contentFlow")}
-                    onAskAI={() =>
-                      onAskAI && onAskAI("Content Flow", { type: sankeyType })
-                    }
+                    onAskAI={() => onAskAI && onAskAI("Content Flow", { dimA, dimB })}
                   />
                 </div>
-                <div
-                  style={{
-                    fontSize: 11.5,
-                    color: "var(--ink3)",
-                    fontFamily: "var(--font-mono)",
-                    marginTop: 4,
-                  }}
-                >
-                  D3 Sankey · hover nodes and links for details
+                <div style={{ fontSize: 11.5, color: "var(--ink3)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
+                  D3 Sankey · hover nodes and links for highlighted path details
                 </div>
               </div>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {sectionData.sankeyTypeOptions.map(([k, l]) => (
-                  <button
-                    key={k}
-                    className={`dim-opt${sankeyType === k ? " active" : ""}`}
-                    onClick={() => setSankeyType(k)}
-                  >
-                    {l}
-                  </button>
-                ))}
+            </div>
+
+            {/* ── 2D Dimension Picker ── */}
+            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "16px 18px", marginBottom: 18 }}>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)", marginBottom: 12 }}>
+                2D DIMENSION FILTER — SELECT SOURCE &amp; TARGET
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, alignItems: "start" }}>
+
+                {/* Source column */}
+                <div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>SOURCE</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                    {DIMS_CONFIG.filter(d => (COMPAT[d.k] || []).length > 0).map(dim => {
+                      const active = dimA === dim.k;
+                      return (
+                        <button key={dim.k} onClick={() => {
+                          setDimA(dim.k);
+                          if (!COMPAT[dim.k]?.includes(dimB)) setDimB(COMPAT[dim.k]?.[0] || "status");
+                        }} style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
+                          cursor: "pointer", textAlign: "left",
+                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
+                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
+                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
+                          transition: "all .16s ease",
+                        }}>
+                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
+                          <div>
+                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
+                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          </div>
+                          {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Arrow */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 28, gap: 6 }}>
+                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 18, color: "rgba(255,255,255,0.20)", lineHeight: 1 }}>→</div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)", letterSpacing: "0.08em", textTransform: "uppercase" }}>flows</div>
+                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
+                </div>
+
+                {/* Target column */}
+                <div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>TARGET</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                    {DIMS_CONFIG.filter(d => ["status","platform","language"].includes(d.k)).map(dim => {
+                      const isValid = validTargets.includes(dim.k);
+                      const active = dimB === dim.k;
+                      return (
+                        <button key={dim.k} onClick={() => isValid && setDimB(dim.k)} disabled={!isValid} style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
+                          cursor: isValid ? "pointer" : "not-allowed", textAlign: "left",
+                          opacity: isValid ? 1 : 0.28,
+                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
+                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
+                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
+                          transition: "all .16s ease",
+                          filter: isValid ? "none" : "grayscale(0.4)",
+                        }}>
+                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
+                          <div>
+                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
+                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          </div>
+                          {!isValid && <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)" }}>N/A</span>}
+                          {active && isValid && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Active pair badge */}
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, color: "rgba(255,255,255,0.28)", letterSpacing: "0.12em", textTransform: "uppercase" }}>ACTIVE VIEW</span>
+                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimACfg?.color}18`, border: `1px solid ${activeDimACfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
+                <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>→</span>
+                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimBCfg?.color}18`, border: `1px solid ${activeDimBCfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
               </div>
             </div>
+
             <GraphFlip
               flipped={!!insightsOpen.contentFlow}
-              minHeight={360}
+              minHeight={380}
               front={
                 <>
-                  <D3SankeyChart type={sankeyType} theme={theme} dataMap={sectionData.sankey} />
-                  <div
-                    style={{
-                      marginTop: 14,
-                      display: "flex",
-                      gap: 16,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {sectionData.contentFlowLegend.map((it, i) => (
-                      <div key={i} className="leg-item">
-                        <div className="leg-dot" style={{ background: it.c }} />
-                        {it.l}
-                      </div>
-                    ))}
+                  <D3SankeyChart type="custom" theme={theme} dataMap={{ custom: computeSankeyData(dimA, dimB) }} />
+                  <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.28)", letterSpacing: "0.10em", textTransform: "uppercase" }}>LEGEND</span>
+                    <span style={{ padding: "2px 9px", borderRadius: 4, background: `${activeDimACfg?.color}18`, border: `1px solid ${activeDimACfg?.color}33`, fontFamily: "var(--font-mono)", fontSize: 10, color: activeDimACfg?.color }}>{activeDimACfg?.label} nodes</span>
+                    <span style={{ color: "rgba(255,255,255,0.20)", fontSize: 11 }}>→</span>
+                    <span style={{ padding: "2px 9px", borderRadius: 4, background: `${activeDimBCfg?.color}18`, border: `1px solid ${activeDimBCfg?.color}33`, fontFamily: "var(--font-mono)", fontSize: 10, color: activeDimBCfg?.color }}>{activeDimBCfg?.label} nodes</span>
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.22)", marginLeft: 6 }}>· hover any node or link to highlight path</span>
                   </div>
                 </>
               }
               back={<GraphInsights title="Content Flow" />}
             />
-          </div>
-          <div className="g2">
-            <div className="card" style={{ padding: "16px 18px" }}>
-              <div
-                style={{
-                  fontSize: 11,
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.10em",
-                  textTransform: "uppercase",
-                  color: "var(--ink2)",
-                  fontWeight: 600,
-                  marginBottom: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>PLATFORM-WIDE PIPELINE</span>
-                <GraphActionButtons
-                  insightsOpen={!!insightsOpen.platformPipeline}
-                  onToggleInsights={() => toggleInsights("platformPipeline")}
-                  onAskAI={() =>
-                    onAskAI &&
-                    onAskAI("Platform Pipeline", {
-                      TOTAL_UPLOADED,
-                      TOTAL_CREATED,
-                      TOTAL_PUBLISHED,
-                    })
-                  }
-                />
-              </div>
-              <GraphFlip
-                flipped={!!insightsOpen.platformPipeline}
-                minHeight={320}
-                front={
-                  <>
-                    <PublishFunnel
-                      uploaded={TOTAL_UPLOADED}
-                      created={TOTAL_CREATED}
-                      published={TOTAL_PUBLISHED}
-                    />
-                    <div className="divider">
-                      <div className="div-line" />
-                      <div className="div-gem" />
-                      <span className="div-lbl">Key Ratios</span>
-                      <div className="div-gem" />
-                      <div className="div-line" />
-                    </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 9,
-                      }}
-                    >
-                      {[
-                        {
-                          l: "Process Rate",
-                          v: `${Math.round((TOTAL_CREATED / TOTAL_UPLOADED) * 100)}%`,
-                          c: "var(--pri)",
-                        },
-                        {
-                          l: "Publish Rate",
-                          v: `${PUBLISH_RATE}%`,
-                          c: "var(--warn)",
-                        },
-                        {
-                          l: "AI Multiplier",
-                          v: `${MULTIPLIER}×`,
-                          c: "var(--ink)",
-                        },
-                        { l: "Gap", v: "97.5%", c: "var(--red)" },
-                      ].map((s) => (
-                        <div
-                          key={s.l}
-                          style={{
-                            padding: "10px 12px",
-                            border: "1px solid var(--line-lt)",
-                            borderRadius: "var(--radius)",
-                            background: "var(--sankey-bg)",
-                          }}
-                        >
-                          <div
-                            style={{
-                              fontSize: 8,
-                              fontFamily: "var(--font-mono)",
-                              color: "var(--ink3)",
-                              letterSpacing: "0.1em",
-                              textTransform: "uppercase",
-                              marginBottom: 5,
-                            }}
-                          >
-                            {s.l}
-                          </div>
-                          <div
-                            style={{
-                              fontFamily: "var(--font-serif)",
-                              fontSize: 24,
-                              color: s.c,
-                            }}
-                          >
-                            {s.v}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                }
-                back={<GraphInsights title="Platform-Wide Pipeline" />}
-              />
-            </div>
-            <div className="card" style={{ padding: "16px 18px" }}>
-              <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span>AI MULTIPLIER BY INPUT TYPE</span>
-                <GraphActionButtons
-                  insightsOpen={!!insightsOpen.aiMultiplier}
-                  onToggleInsights={() => toggleInsights("aiMultiplier")}
-                  onAskAI={() => onAskAI && onAskAI("AI Multiplier by Input Type", INPUT_TYPES)}
-                />
-              </div>
-              <GraphFlip
-                flipped={!!insightsOpen.aiMultiplier}
-                minHeight={260}
-                front={
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                    <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--ink4)", marginBottom: 4 }}>
-                      AI Outputs Created ÷ Videos Uploaded per content type
-                    </div>
-                    {[...INPUT_TYPES].sort((a, b) => (b.created / b.uploaded) - (a.created / a.uploaded)).map((t) => {
-                      const mult = t.uploaded > 0 ? (t.created / t.uploaded) : 0;
-                      const maxMult = Math.max(...INPUT_TYPES.map(x => x.uploaded > 0 ? x.created / x.uploaded : 0));
-                      const pct = (mult / maxMult) * 100;
-                      const isHigh = mult > 3.5;
-                      return (
-                        <div key={t.type} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--ink3)", width: 110, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.type}</span>
-                          <div style={{ flex: 1, height: 8, background: "var(--line)", borderRadius: 4, overflow: "hidden" }}>
-                            <div style={{ width: `${pct}%`, height: "100%", background: isHigh ? "var(--pri)" : "rgba(255,71,87,0.45)", borderRadius: 4, transition: "width 0.4s" }} />
-                          </div>
-                          <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: isHigh ? "var(--pri)" : "var(--ink3)", fontWeight: isHigh ? 700 : 400, width: 44, textAlign: "right" }}>
-                            {mult.toFixed(1)}×
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                }
-                back={<GraphInsights title="AI Multiplier by Input Type" />}
-              />
-            </div>
           </div>
         </div>
       )}
