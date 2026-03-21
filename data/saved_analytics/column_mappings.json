@@ -67,7 +67,7 @@
   },
   "monthly": {
     "month_label": "Month",
-    "monthly_uploaded": "Total Uploaded",
+    "monthly_uploaded": "Total Uploaded Duration",
     "monthly_created": "Total Created",
     "monthly_published": "Total Published",
     "uploaded_duration": "Total Uploaded Duration",
@@ -75,7 +75,7 @@
     "published_duration": "Total Published Duration"
   },
   "_meta": {
-    "generated_at": "2026-03-21T19:25:41.577428",
+    "generated_at": "2026-03-22T00:10:26.534828",
     "roles_mapped": [
       "channel_platform",
       "channel_summary",

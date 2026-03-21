@@ -28,7 +28,7 @@ else:
     load_dotenv(_project_dir / ".env", override=True)
 
 # Import config to set up logging
-from frammer_agent.config import setup_logging, LOG_FILE
+from gc26.config import setup_logging, LOG_FILE
 
 # Set up logger
 logger = logging.getLogger("frammer.api")
@@ -83,8 +83,8 @@ def _import_modules():
             globals()['get_registry'] = lambda: DummyRegistry()
             _registry_imported = True
     
-    # Note: chat endpoint now uses planner.py + conversation_memory.py directly
-    # instead of the orchestrator/graph_new agent. No lazy import needed.
+    # Note: chat endpoint routes to planner or explanation agent and uses
+    # conversation_memory.py directly (no orchestrator/graph_new agent).
 
 
 # ─── Lifespan ────────────────────────────────────────────────────────────────
@@ -210,6 +210,7 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
+    mode: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -242,11 +243,11 @@ async def health_check():
     return {"status": "healthy", "service": "frammer-agent"}
 
 
-# ─── Chat Endpoint (planner-based, from main_simple.py @ 220daa1) ───────────
+# ─── Chat Endpoint (planner or explanation routing) ─────────────────────────
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    """Main chat endpoint — uses planner + conversation memory."""
+    """Main chat endpoint — routes to planner or explanation agent with memory."""
     session_id = request.session_id or str(uuid.uuid4())
     logger.info(f"Chat request: {request.message[:100]}... (session: {session_id[:8]})")
 
@@ -257,9 +258,17 @@ async def chat(request: ChatRequest):
         # Get conversation context for the planner
         conversation_context = session_memory.get_context_for_llm(include_last_n=5)
 
-        # Run planner with context
-        from planner import run_planner
-        result = run_planner(request.message, conversation_context=conversation_context)
+        # Route to explanation, recommendation, KPI, or analytics using LangGraph
+        from orchestrator.langgraph_orchestrator import run_chat_graph
+
+        forced_mode = (request.mode or "").lower().strip()
+        graph_output = run_chat_graph(
+            request.message,
+            conversation_context=conversation_context,
+            forced_route=forced_mode,
+        )
+        result = graph_output.get("result", {})
+        route = graph_output.get("route", "analyze")
 
         # Extract key findings from result
         key_findings = []
@@ -286,7 +295,7 @@ async def chat(request: ChatRequest):
 
         # Generate smart follow-up suggestions based on context
         suggestions = result.get("suggestions", [])
-        if not suggestions:
+        if route != "explain" and not suggestions:
             suggestions = _generate_followup_suggestions(
                 query=request.message,
                 datasets_used=datasets_used,

@@ -14,6 +14,10 @@ from openai import OpenAI
 BASE_URL = "https://ajsalali2005--llama-8b-vllm-server-serve.modal.run"
 MODEL = "llama"
 
+# Backward-compatible aliases for callers expecting Groq-style constants
+FAST_MODEL = MODEL
+THINK_MODEL = MODEL
+
 # OpenAI-compatible client for sync calls
 _sync_client: Optional[OpenAI] = None
 
