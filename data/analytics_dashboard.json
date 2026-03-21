@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "generated_at": "2026-03-21T21:27:59.504656",
+=======
+  "generated_at": "2026-03-21T21:11:20.721500",
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
   "from_cache": false,
   "change_type": "schema_change",
   "metrics": [
@@ -461,8 +465,13 @@
     {
       "id": "null_platform_rate",
       "name": "Platform NULL Rate",
+<<<<<<< HEAD
       "value": 136.0,
       "formatted": "136.00%",
+=======
+      "value": 0.0,
+      "formatted": "0.00%",
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
       "category": "data_quality",
       "description": "Percentage of published videos missing platform info",
       "unit": "percent",
@@ -474,8 +483,13 @@
     {
       "id": "data_quality_score",
       "name": "Data Quality Score",
+<<<<<<< HEAD
       "value": 30.2,
       "formatted": "30.2%",
+=======
+      "value": 0.5,
+      "formatted": "0.5%",
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
       "category": "data_quality",
       "description": "Weighted average completeness score across key fields",
       "unit": "percent",
@@ -959,8 +973,13 @@
       {
         "id": "null_platform_rate",
         "name": "Platform NULL Rate",
+<<<<<<< HEAD
         "value": 136.0,
         "formatted": "136.00%",
+=======
+        "value": 0.0,
+        "formatted": "0.00%",
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
         "category": "data_quality",
         "description": "Percentage of published videos missing platform info",
         "unit": "percent",
@@ -972,8 +991,13 @@
       {
         "id": "data_quality_score",
         "name": "Data Quality Score",
+<<<<<<< HEAD
         "value": 30.2,
         "formatted": "30.2%",
+=======
+        "value": 0.5,
+        "formatted": "0.5%",
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
         "category": "data_quality",
         "description": "Weighted average completeness score across key fields",
         "unit": "percent",
@@ -3856,6 +3880,7 @@
     "channel_summary": {
       "filename": "channel_summary.csv",
       "display_name": "channel_summary"
+<<<<<<< HEAD
     },
     "channel_user": {
       "filename": "channel_user.csv",
@@ -3864,6 +3889,8 @@
     "input_type": {
       "filename": "input_type.csv",
       "display_name": "input_type"
+=======
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
     },
     "language": {
       "filename": "language.csv",
@@ -3873,10 +3900,23 @@
       "filename": "output_type.csv",
       "display_name": "output_type"
     },
+    "channel_user": {
+      "filename": "channel_user.csv",
+      "display_name": "channel_user"
+    },
+    "video_list": {
+      "filename": "video_list.csv",
+      "display_name": "video_list"
+    },
+    "language": {
+      "filename": "language.csv",
+      "display_name": "language"
+    },
     "user_summary": {
       "filename": "user_summary.csv",
       "display_name": "user_summary"
     },
+<<<<<<< HEAD
     "monthly": {
       "filename": "monthly.csv",
       "display_name": "monthly"
@@ -3884,6 +3924,11 @@
     "video_list": {
       "filename": "video_list.csv",
       "display_name": "video_list"
+=======
+    "input_type": {
+      "filename": "input_type.csv",
+      "display_name": "input_type"
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
     }
   }
 }
