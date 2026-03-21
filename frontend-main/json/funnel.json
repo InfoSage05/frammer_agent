@@ -16,10 +16,6 @@
     [
       "channels",
       "By Channel"
-    ],
-    [
-      "types",
-      "By Type"
     ]
   ],
   "sankeyTypeOptions": [

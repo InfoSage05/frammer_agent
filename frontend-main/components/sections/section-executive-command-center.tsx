@@ -226,38 +226,94 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       )}
 
       {/* ── SIGNALS ── */}
-      {subView === "signals" && (
-        <>
-          <div className="smart-actions" style={{ marginBottom: 20 }}>
-            <button className="action-chip danger" onClick={() => dash?.startInvestigation?.('pub_gap')}>⚑ Investigate publish gap</button>
-          </div>
-          <div className="card" style={{ padding: 0 }}>
-            <div className="card-head">
-              <span className="card-lbl" style={{ color: "rgba(232,100,80,0.75)" }}>⚡ Strategic Signals</span>
+      {subView === "signals" && (() => {
+        const SIG_COLORS = {
+          crit: { accent: "#ff4757", bg: "rgba(255,71,87,0.06)", border: "rgba(255,71,87,0.22)", glow: "rgba(255,71,87,0.18)", num: "#ff6b7a", tag: "rgba(255,107,122,0.90)" },
+          warn: { accent: "#ffb340", bg: "rgba(255,179,64,0.06)", border: "rgba(255,179,64,0.22)", glow: "rgba(255,179,64,0.18)", num: "#ffc966", tag: "rgba(255,179,64,0.90)" },
+          ok:   { accent: "#3EC98A", bg: "rgba(62,201,138,0.06)", border: "rgba(62,201,138,0.22)", glow: "rgba(62,201,138,0.18)", num: "#3EC98A", tag: "rgba(62,201,138,0.90)" },
+          info: { accent: "#5B9BF5", bg: "rgba(91,155,245,0.06)", border: "rgba(91,155,245,0.22)", glow: "rgba(91,155,245,0.18)", num: "#7fb3ff", tag: "rgba(127,179,255,0.90)" },
+        };
+        return (
+          <div style={{ padding: "4px 0" }}>
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+              <div style={{ width: 3, height: 18, borderRadius: 2, background: "linear-gradient(180deg,#ff4757,#ffb340)" }} />
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.70)" }}>
+                Strategic Signals
+              </span>
+              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "rgba(255,255,255,0.30)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "2px 9px" }}>
+                {data.strategicSignals.length} active
+              </span>
             </div>
-            <div style={{ padding: "16px 22px" }}>
-            {data.strategicSignals.map((c) => (
-              <div
-                key={c.k}
-                className={`callout callout-${c.type}`}
-                onClick={() => setExpanded(expanded === c.k ? null : c.k)}
-                style={{ marginBottom: 8 }}
-              >
-                <div className="c-tag">{c.tag}</div>
-                <div className="c-text">
-                  <span className="c-num">{c.num}</span>
-                  {c.text}
-                  {expanded === c.k && c.expand && (
-                    <span style={{ color: "var(--ink3)" }}> {c.expand}</span>
-                  )}
-                </div>
-                <div className="c-stat">{c.stat}</div>
-              </div>
-            ))}
+
+            {/* Signal cards */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {data.strategicSignals.map((c, idx) => {
+                const col = SIG_COLORS[c.type] || SIG_COLORS.info;
+                const isOpen = expanded === c.k;
+                return (
+                  <div
+                    key={c.k}
+                    onClick={() => setExpanded(isOpen ? null : c.k)}
+                    style={{
+                      position: "relative",
+                      background: col.bg,
+                      border: `1px solid ${col.border}`,
+                      borderRadius: 12,
+                      padding: "18px 20px 16px 24px",
+                      cursor: "pointer",
+                      overflow: "hidden",
+                      transition: "transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease",
+                      boxShadow: isOpen ? `0 8px 32px ${col.glow}, inset 0 0 0 1px ${col.border}` : "none",
+                      transform: isOpen ? "translateX(4px)" : "translateX(0)",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = "translateX(4px)"; e.currentTarget.style.boxShadow = `0 8px 32px ${col.glow}`; e.currentTarget.style.borderColor = col.accent; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = isOpen ? "translateX(4px)" : "translateX(0)"; e.currentTarget.style.boxShadow = isOpen ? `0 8px 32px ${col.glow}` : "none"; e.currentTarget.style.borderColor = col.border; }}
+                  >
+                    {/* Left accent bar */}
+                    <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: col.accent, borderRadius: "12px 0 0 12px", opacity: isOpen ? 1 : 0.6 }} />
+
+                    {/* Rank badge top-right */}
+                    <div style={{ position: "absolute", top: 14, right: 16, fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", color: col.tag, background: `rgba(${c.type === "ok" ? "62,201,138" : c.type === "warn" ? "255,179,64" : c.type === "info" ? "91,155,245" : "255,71,87"},0.10)`, border: `1px solid ${col.border}`, borderRadius: 20, padding: "3px 10px", textTransform: "uppercase" }}>
+                      {c.tag}
+                    </div>
+
+                    {/* Hero number + text */}
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 6, marginTop: 2, paddingRight: 120 }}>
+                      <span style={{ fontFamily: "var(--font-mono)", fontSize: 38, fontWeight: 700, lineHeight: 1, color: col.num, letterSpacing: "-0.02em" }}>
+                        {c.num}
+                      </span>
+                      <span style={{ fontFamily: "var(--font-ui)", fontSize: 15, fontWeight: 400, color: "rgba(255,255,255,0.80)", lineHeight: 1.35 }}>
+                        {c.text}
+                      </span>
+                    </div>
+
+                    {/* Stat line */}
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 11.5, color: "rgba(255,255,255,0.48)", letterSpacing: "0.01em", marginBottom: isOpen && c.expand ? 10 : 0 }}>
+                      {c.stat}
+                    </div>
+
+                    {/* Expanded detail */}
+                    {isOpen && c.expand && (
+                      <div style={{ marginTop: 10, paddingTop: 10, borderTop: `1px solid ${col.border}`, fontFamily: "var(--font-ui)", fontSize: 13, color: "rgba(255,255,255,0.62)", lineHeight: 1.6 }}>
+                        {c.expand}
+                      </div>
+                    )}
+
+                    {/* Expand hint */}
+                    <div style={{ position: "absolute", bottom: 12, right: 16, fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(255,255,255,0.22)", letterSpacing: "0.06em" }}>
+                      {isOpen ? "▲ COLLAPSE" : "▼ EXPAND"}
+                    </div>
+
+                    {/* Subtle bg glow orb */}
+                    <div style={{ position: "absolute", right: -30, bottom: -30, width: 100, height: 100, borderRadius: "50%", background: col.accent, filter: "blur(40px)", opacity: 0.06, pointerEvents: "none" }} />
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </>
-      )}
+        );
+      })()}
 
       {/* ── CHANNELS ── */}
       {subView === "channels" && (
