@@ -140,15 +140,15 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                  <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>
+                  <div style={{ fontSize: 11.5, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', fontWeight: 600 }}>
                     {card.label}
                   </div>
-                  <span style={{ fontSize: 13, opacity: 0.25 }}>{card.icon}</span>
+                  <span style={{ fontSize: 14, opacity: 0.45 }}>{card.icon}</span>
                 </div>
-                <div style={{ fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', fontSize: 36, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 36, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 11.5, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', color: 'rgba(255,255,255,0.25)', marginTop: 10, lineHeight: 1.45, letterSpacing: '0.01em' }}>
+                <div style={{ fontSize: 12.5, fontFamily: 'var(--font-ui)', color: 'rgba(255,255,255,0.52)', marginTop: 10, lineHeight: 1.45, letterSpacing: '0.01em' }}>
                   {card.sub}
                 </div>
                 {card.spark && (
@@ -183,20 +183,20 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               >
                 <div
                   style={{
-                    fontSize: 11,
-                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                    letterSpacing: "0.06em",
+                    fontSize: 11.5,
+                    fontFamily: 'var(--font-mono)',
+                    letterSpacing: "0.08em",
                     textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.22)",
+                    color: "rgba(255,255,255,0.55)",
                     marginBottom: 8,
-                    fontWeight: 400,
+                    fontWeight: 600,
                   }}
                 >
                   {s.label}
                 </div>
                 <div
                   style={{
-                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
+                    fontFamily: 'var(--font-sans)',
                     fontSize: 20,
                     color: "var(--ink)",
                     lineHeight: 1,
@@ -209,9 +209,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 </div>
                 <div
                   style={{
-                    fontSize: 11.5,
-                    fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif',
-                    color: "rgba(255,255,255,0.25)",
+                    fontSize: 12.5,
+                    fontFamily: 'var(--font-ui)',
+                    color: "rgba(255,255,255,0.52)",
                     marginTop: 6,
                     lineHeight: 1.4,
                     letterSpacing: '0.01em',

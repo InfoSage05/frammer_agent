@@ -103,7 +103,7 @@ function ChannelTable({ channels = [], onRowClick, selectedChannel }) {
                 style={compact ? { padding: '4px 12px' } : {}}
               >
                 <span
-                  style={{ fontFamily: "var(--font-serif)", fontSize: 14, color: "var(--ink)", display: "flex", alignItems: "center", gap: 5 }}
+                  style={{ fontFamily: "var(--font-ui)", fontSize: 13.5, fontWeight: 500, color: "var(--ink)", display: "flex", alignItems: "center", gap: 5 }}
                   className="ch-name"
                 >
                   <span
@@ -121,17 +121,17 @@ function ChannelTable({ channels = [], onRowClick, selectedChannel }) {
                     <div className="eff-bar" style={{ flex: 1 }}>
                       <div className="eff-fill" style={{ width: `${Math.min(rate * 5, 100)}%`, background: barColor }} />
                     </div>
-                    <span style={{ fontSize: 9.5, fontFamily: "var(--font-mono)", color: barColor, minWidth: 34 }}>
+                    <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: barColor, minWidth: 36, fontWeight: 600 }}>
                       {rate.toFixed(1)}%
                     </span>
                   </div>
                 </div>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10.5 }}>{ch.uploaded}</span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10.5 }}>{ch.created}</span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 10.5, color: ch.published === 0 ? "var(--dan-lt)" : "var(--ink)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 12.5, fontWeight: 500 }}>{ch.uploaded}</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 12.5, fontWeight: 500 }}>{ch.created}</span>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 12.5, fontWeight: 500, color: ch.published === 0 ? "var(--dan-lt)" : "var(--ink)" }}>
                   {ch.published}
                 </span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "var(--ink3)" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11.5, color: "var(--ink3)" }}>
                   {platCount || "—"}
                 </span>
               </div>
@@ -141,20 +141,20 @@ function ChannelTable({ channels = [], onRowClick, selectedChannel }) {
                 <div style={{ padding: '10px 12px 10px 48px', background: 'var(--bg3)', borderBottom: '1px solid var(--line-lt)' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8, marginBottom: 10 }}>
                     <div>
-                      <div style={{ fontSize: 7, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>AI Multiplier</div>
-                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--ink)' }}>{(ch.created / ch.uploaded).toFixed(1)}×</div>
+                      <div style={{ fontSize: 8, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>AI Multiplier</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>{(ch.created / ch.uploaded).toFixed(1)}×</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: 7, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>Pub Rate</div>
-                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: barColor }}>{rate.toFixed(1)}%</div>
+                      <div style={{ fontSize: 8, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Pub Rate</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: barColor }}>{rate.toFixed(1)}%</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: 7, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>Hours</div>
-                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--ink)' }}>—</div>
+                      <div style={{ fontSize: 8, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Hours</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>—</div>
                     </div>
                     <div>
-                      <div style={{ fontSize: 7, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 2 }}>Platforms</div>
-                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: 'var(--ink)' }}>{platCount}</div>
+                      <div style={{ fontSize: 8, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 4 }}>Platforms</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>{platCount}</div>
                     </div>
                   </div>
                   {/* Platform chips */}

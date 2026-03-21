@@ -29,7 +29,7 @@ import { M, ANOMALIES, STORY_PRESETS, SAVED_VIEWS, pageTitles } from '@/lib/cons
 /* ── Professional SVG icon map by section key ── */
 const NAV_ICONS: Record<string, JSX.Element> = {
   executive: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="1.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
       <rect x="8.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
       <rect x="1.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
@@ -37,13 +37,13 @@ const NAV_ICONS: Record<string, JSX.Element> = {
     </svg>
   ),
   trends: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <polyline points="1.5,11.5 5,7.5 8.5,9.5 13.5,3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
       <polyline points="10.5,3.5 13.5,3.5 13.5,6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
   multidim: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="5.5" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
       <path d="M1 13.5C1 11 3 9 5.5 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
       <circle cx="11" cy="4.5" r="2" stroke="currentColor" strokeWidth="1.2"/>
@@ -51,19 +51,21 @@ const NAV_ICONS: Record<string, JSX.Element> = {
     </svg>
   ),
   funnel: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M1.5 2.5H13.5L9.5 7.5V12.5L5.5 11V7.5L1.5 2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
     </svg>
   ),
   explorer: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
       <line x1="10" y1="10" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
     </svg>
   ),
   copilot: (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7.5 1.5L8.9 5.5H13L9.8 7.9L11.1 11.9L7.5 9.4L3.9 11.9L5.2 7.9L2 5.5H6.1L7.5 1.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2.5C2 1.95 2.45 1.5 3 1.5H12C12.55 1.5 13 1.95 13 2.5V9C13 9.55 12.55 10 12 10H8.5L6 12.5V10H3C2.45 10 2 9.55 2 9V2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+      <line x1="4.5" y1="4.5" x2="10.5" y2="4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+      <line x1="4.5" y1="6.75" x2="8.5" y2="6.75" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
     </svg>
   ),
 };
