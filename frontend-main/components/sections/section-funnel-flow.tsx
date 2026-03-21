@@ -102,15 +102,17 @@ function SectionFunnel({ theme, onAskAI }) {
     [theme, INPUT_TYPES],
   );
 
+  const SIGNALS = {
+    sankey: <><span className="sig-val">{TOTAL_CREATED.toLocaleString()}</span> AI outputs from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — only <span className="sig-warn">{TOTAL_PUBLISHED.toLocaleString()}</span> reached distribution (<span className="sig-warn">{PUBLISH_RATE}%</span>)</>,
+    pipeline: <>Upload-to-publish pipeline shows <span className="sig-warn">3 bottleneck stages</span> — largest drop-off at AI processing step (<span className="sig-val">{MULTIPLIER}× multiplier</span>)</>,
+    channels: <><span className="sig-val">18</span> channels active — Ch-A and Ch-B account for <span className="sig-val">41%</span> of all published content this period</>,
+    types: <>Short-form video achieves highest publish rate (<span className="sig-pos">8.4%</span>) — docs and podcasts at <span className="sig-warn">near-zero</span> conversion</>,
+  };
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{sectionData.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{sectionData.meta.title}</div>
-          <SectionInfoHint text={sectionData.meta.sub} />
-        </div>
-      </div>
+      <p className="sig-line">{SIGNALS[subView] || SIGNALS.sankey}</p>
+
       <div className="sub-tabs">
         {sectionData.subTabs.map(([k, l]) => (
           <div

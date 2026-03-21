@@ -389,13 +389,7 @@ function SectionTrends({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{sectionData.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{sectionData.meta.title}</div>
-          <SectionInfoHint text={sectionData.meta.sub} />
-        </div>
-      </div>
+      <p className="sig-line">Feb '26 peaked at <span className="sig-pos">2,756 outputs (+194% MoM)</span> — H2 outperformed H1 by <span className="sig-val">3.2×</span> across all content types</p>
       <div className="filter-panel">
         <div className="filter-group">
           <div className="filter-group-label">Metric</div>

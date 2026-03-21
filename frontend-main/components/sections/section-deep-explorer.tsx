@@ -162,20 +162,22 @@ function SectionExplorer({ theme, onAskAI }) {
 
   if (!data) return null;
 
+  const SIGNALS = {
+    users: <><span className="sig-val">{USERS.length}</span> users tracked — <span className="sig-warn">{unusual.length} flagged</span> with high creation volume and zero publications</>,
+    channels: <><span className="sig-val">18</span> channels across <span className="sig-val">4</span> platforms — heatmap shows uneven distribution with 3 underperforming channels</>,
+    quality: <>Data completeness at <span className="sig-pos">94.2%</span> — <span className="sig-warn">3 fields</span> with gaps identified in the last 30 days</>,
+    advanced_kpi: <>Full KPI reference — <span className="sig-val">24 metrics</span> across 4 operational tiers, definitions and formulas included</>,
+  };
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{data.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
-      </div>
+      <p className="sig-line">{SIGNALS[subView] || SIGNALS.users}</p>
+
       <div className="sub-tabs">
         {data.subTabs.map(([k, l]) => (
           <div
             key={k}
-            className={`sub-tab${subView === k ? " active" : ""}`}
+            className={`sub-tab${subView === k ? " active" : ""}${k === "advanced_kpi" ? " premium" : ""}`}
             onClick={() => setSubView(k)}
           >
             {l}

@@ -27,12 +27,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
   const MONTHLY_DATA = data?.monthlyData || [];
   const INPUT_TYPES = data?.inputTypes || [];
   const CHANNELS = data?.channels || [];
-  const TOTAL_CREATED = data?.totals?.totalCreated || 0;
-  const MULTIPLIER = data?.totals?.multiplier || 0;
   const TOTAL_UPLOADED = data?.totals?.totalUploaded || 0;
   const TOTAL_PUBLISHED = data?.totals?.totalPublished || 0;
   const PUBLISH_RATE = data?.totals?.publishRate || 0;
-  const zp = MONTHLY_DATA.filter((m) => m.published === 0).length;
   const toggleInsights = (key) =>
     setInsightsOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -59,63 +56,39 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
 
   // Derive flashcard data
   const ACTIVE_USERS = 44;
-  const ZERO_PUB_MONTHS = 3;
-  const TOP_CHANNEL = 'Ch-A';
   const PEAK_MONTH = "Feb '26";
   const PEAK_COUNT = 2756;
-  const CONTENT_GAP = TOTAL_CREATED - TOTAL_PUBLISHED;
-  const PROCESS_RATE = Math.round((TOTAL_CREATED / TOTAL_UPLOADED) * 100);
 
   const FLASHCARDS = [
     {
-      id: 'ai_outputs', label: 'AI OUTPUTS CREATED', value: TOTAL_CREATED.toLocaleString(),
-      sub: `${MULTIPLIER}× input-to-output ratio`, color: 'var(--amber-lt)',
-      spark: MONTHLY_DATA.map(m => m.created), accent: 'card-amber', icon: '⊹',
-    },
-    {
       id: 'uploaded', label: 'TOTAL UPLOADED', value: TOTAL_UPLOADED.toLocaleString(),
-      sub: '807 hrs source footage', color: 'var(--ink2)',
+      sub: '807 hrs source footage', color: 'var(--ink)',
       spark: MONTHLY_DATA.map(m => m.uploaded), accent: '', icon: '↑',
     },
     {
       id: 'published', label: 'PUBLISHED', value: TOTAL_PUBLISHED.toLocaleString(),
-      sub: 'distributed to platforms', color: 'var(--green-lt)',
+      sub: 'distributed to platforms', color: 'var(--suc-lt)',
       spark: MONTHLY_DATA.map(m => m.published), accent: 'card-green', icon: '✓',
     },
     {
       id: 'pub_rate', label: 'PUBLISH RATE', value: `${PUBLISH_RATE}%`,
-      sub: '⚠ below 10% benchmark', color: 'var(--red-lt)',
+      sub: '⚠ below 10% benchmark', color: 'var(--dan-lt)',
       spark: null, accent: 'card-red', icon: '⚑',
     },
     {
-      id: 'process_rate', label: 'PROCESS RATE', value: `${PROCESS_RATE}%`,
-      sub: 'uploads → AI outputs', color: 'var(--amber-lt)',
-      spark: null, accent: 'card-amber', icon: '⚙',
-    },
-    {
-      id: 'content_gap', label: 'CONTENT GAP', value: CONTENT_GAP.toLocaleString(),
-      sub: 'AI outputs never distributed', color: 'var(--red-lt)',
-      spark: null, accent: 'card-red', icon: '△',
-    },
-    {
       id: 'active_channels', label: 'ACTIVE CHANNELS', value: '18 / 18',
-      sub: '100% channel coverage', color: 'var(--green-lt)',
+      sub: '100% channel coverage', color: 'var(--suc-lt)',
       spark: null, accent: 'card-green', icon: '◈',
     },
     {
       id: 'active_users', label: 'ACTIVE USERS', value: `${ACTIVE_USERS} / 45`,
-      sub: '1 zero-upload user (Sumit)', color: 'var(--ink2)',
+      sub: '1 zero-upload user (Sumit)', color: 'var(--ink)',
       spark: null, accent: '', icon: '⊞',
     },
     {
       id: 'peak_month', label: 'PEAK MONTH', value: PEAK_MONTH,
       sub: `${PEAK_COUNT.toLocaleString()} outputs · +194% MoM`, color: 'var(--amber-lt)',
       spark: null, accent: 'card-amber', icon: '⬆',
-    },
-    {
-      id: 'zero_pub_months', label: 'ZERO-PUB MONTHS', value: `${ZERO_PUB_MONTHS} / 12`,
-      sub: 'Mar, Jul, Sep 2025 gaps', color: 'var(--red-lt)',
-      spark: null, accent: 'card-red', icon: '⊘',
     },
   ];
 
@@ -126,19 +99,17 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
     ["content_mix", "Content Mix"],
   ];
 
+  const SIGNALS = {
+    summary: <><span className="sig-val">{TOTAL_PUBLISHED.toLocaleString()}</span> published from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — publish rate at <span className="sig-warn">{PUBLISH_RATE}%</span>, below 10% benchmark</>,
+    signals: <>3 <span className="sig-warn">critical operational gaps</span> detected — zero-publish months in <span className="sig-warn">Mar, Jul, Sep 2025</span></>,
+    channels: <><span className="sig-val">18 / 18</span> channels active — <span className="sig-val">Ch-A</span> leads with highest output volume this period</>,
+    content_mix: <>Short-form dominates at <span className="sig-val">68%</span> of created output — long-form at <span className="sig-warn">3%</span> publish rate</>,
+  };
+
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">
-          {data.meta.tag}
-        </div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
-      </div>
+      <p className="sig-line">{SIGNALS[subView]}</p>
 
-      {/* Sub-tabs */}
       <div className="sub-tabs">
         {SUB_TABS.map(([k, l]) => (
           <div key={k} className={`sub-tab${subView === k ? " active" : ""}`} onClick={() => setSubView(k)}>{l}</div>
@@ -148,29 +119,29 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── SUMMARY ── */}
       {subView === "summary" && (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
-            {FLASHCARDS.map((card, idx) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
+            {FLASHCARDS.map((card) => (
               <div
                 key={card.id}
                 className={`card ${card.accent} fade-up`}
-                style={{ padding: '18px 18px 16px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+                style={{ padding: '20px 22px 18px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                  <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink4)', fontWeight: 600 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--ink4)', fontWeight: 600 }}>
                     {card.label}
                   </div>
-                  <span style={{ fontSize: 11, opacity: 0.35 }}>{card.icon}</span>
+                  <span style={{ fontSize: 12, opacity: 0.30 }}>{card.icon}</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 24, color: card.color, lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 700 }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 32, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 700 }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 7, lineHeight: 1.4 }}>
+                <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 10, lineHeight: 1.4 }}>
                   {card.sub}
                 </div>
                 {card.spark && (
-                  <div style={{ marginTop: 10 }}>
-                    <Sparkline data={card.spark} max={Math.max(...card.spark)} color={card.color} h={20} />
+                  <div style={{ marginTop: 14 }}>
+                    <Sparkline data={card.spark} max={Math.max(...card.spark)} color={card.color} h={24} />
                   </div>
                 )}
               </div>

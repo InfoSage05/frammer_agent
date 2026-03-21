@@ -74,13 +74,7 @@ function SectionMultiDim({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sec-hd">
-        <div className="sec-tag">{data.meta.tag}</div>
-        <div className="sec-title-row">
-          <div className="sec-title">{data.meta.title}</div>
-          <SectionInfoHint text={data.meta.sub} />
-        </div>
-      </div>
+      <p className="sig-line">Video drives <span className="sig-val">61%</span> of uploads — publish rate varies from <span className="sig-warn">0%</span> to <span className="sig-pos">8.4%</span> across content types</p>
       <div className="filter-panel">
         <div className="filter-group">
           <div className="filter-group-label">KPI Metric</div>
