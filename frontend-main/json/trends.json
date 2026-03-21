@@ -128,14 +128,6 @@
     [
       "all",
       "All 12 months"
-    ],
-    [
-      "h1",
-      "H1 Mar–Aug"
-    ],
-    [
-      "h2",
-      "H2 Sep–Feb"
     ]
   ],
   "compareToggle": "H1 vs H2 Overlay",

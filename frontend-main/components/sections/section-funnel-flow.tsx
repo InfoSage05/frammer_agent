@@ -2,7 +2,7 @@
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
 import { useLiveSectionData } from '@/hooks/useDashboardData';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import D3SankeyChart from "../charts/D3SankeyChart";
 import PublishFunnel from "../charts/Funnel";
 import BarRow from "../charts/BarRow";
@@ -13,6 +13,471 @@ import GraphInsights from "../ui/GraphInsights";
 import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
+
+/* ─────────────────────────────────────────────────────────────
+   By Channel — premium redesign
+───────────────────────────────────────────────────────────── */
+function ByChannelTab({ channels }) {
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
+  const [fTip, setFTip] = useState(null);
+  const gaugeArcRef = useRef(null);
+  const gaugeGlowRef = useRef(null);
+  const funnelContainerRef = useRef(null);
+
+  const ch = channels[selectedIdx] || channels[0];
+  if (!ch) return null;
+
+  const pubRate = (ch.published / ch.uploaded) * 100;
+  const isGreen = pubRate >= 5;
+  const TC = isGreen ? "#3DAA6A" : "#D93B20";
+  const aiMult = ch.created / ch.uploaded;
+  const aiExpPct = Math.round((aiMult - 1) * 100);
+  const pubDropPct = ch.created > 0 ? (1 - ch.published / ch.created) * 100 : 0;
+  const CIRC = 2 * Math.PI * 54;
+
+  // Gauge animation
+  useEffect(() => {
+    if (!gaugeArcRef.current || !gaugeGlowRef.current) return;
+    const pct = Math.min(pubRate / 100, 1);
+    const target = CIRC * (1 - pct);
+    gaugeArcRef.current.style.transition = "none";
+    gaugeArcRef.current.style.strokeDashoffset = CIRC;
+    gaugeGlowRef.current.style.transition = "none";
+    gaugeGlowRef.current.style.strokeDashoffset = CIRC;
+    const t = setTimeout(() => {
+      if (!gaugeArcRef.current || !gaugeGlowRef.current) return;
+      gaugeArcRef.current.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)";
+      gaugeArcRef.current.style.strokeDashoffset = target;
+      gaugeGlowRef.current.style.transition = "stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)";
+      gaugeGlowRef.current.style.strokeDashoffset = target;
+    }, 60);
+    return () => clearTimeout(t);
+  }, [animKey, selectedIdx]);
+
+  const handleSelect = (idx) => {
+    if (idx === selectedIdx) return;
+    setSelectedIdx(idx);
+    setAnimKey((k) => k + 1);
+    setFTip(null);
+  };
+
+  // Funnel geometry
+  const crH = 74, CY = 105;
+  const upH = Math.max(14, (ch.uploaded / ch.created) * 74);
+  const puH = ch.published > 0 ? Math.max(5, (ch.published / ch.created) * 74) : 4;
+
+  const getTipData = (seg) => {
+    const estH = (ch.uploaded * 0.18).toFixed(1);
+    if (seg === "upload") return {
+      title: "UPLOADED", color: "rgba(255,255,255,0.7)",
+      rows: [
+        { label: "Total Files", value: ch.uploaded.toLocaleString(), unit: "raw files" },
+        { label: "Pipeline Role", value: "100%", unit: "entry point" },
+        { label: "AI Multiplier", value: `×${aiMult.toFixed(1)}`, unit: "expansion rate" },
+        { label: "Est. Hours", value: estH, unit: "processing hrs" },
+      ],
+    };
+    if (seg === "create") return {
+      title: "AI CREATED", color: "#FF6040",
+      rows: [
+        { label: "AI Outputs", value: ch.created.toLocaleString(), unit: "generated files" },
+        { label: "Expansion", value: `+${aiExpPct}%`, unit: "from uploaded" },
+        { label: "Net Added", value: (ch.created - ch.uploaded).toLocaleString(), unit: "new pieces" },
+        { label: "Filtered Out", value: (ch.created - ch.published).toLocaleString(), unit: "unpublished" },
+      ],
+    };
+    return {
+      title: "PUBLISHED", color: TC,
+      rows: [
+        { label: "Live Items", value: ch.published.toLocaleString(), unit: "active content" },
+        { label: "Pub Rate", value: `${pubRate.toFixed(1)}%`, unit: "of created" },
+        { label: "End-to-End", value: `${((ch.published / ch.uploaded) * 100).toFixed(1)}%`, unit: "of uploaded" },
+        { label: "Health", value: isGreen ? "Healthy" : "Critical", unit: isGreen ? "✓ above 5%" : "✗ below 5%" },
+      ],
+    };
+  };
+
+  const handleFunnelEnter = (e, seg) => {
+    const rect = funnelContainerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setFTip({ x: e.clientX - rect.left, y: e.clientY - rect.top, seg });
+  };
+  const handleFunnelMove = (e) => {
+    const rect = funnelContainerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setFTip((t) => t ? { ...t, x: e.clientX - rect.left, y: e.clientY - rect.top } : t);
+  };
+
+  const F = "var(--font-dm-sans,'DM Sans',Inter,sans-serif)";
+  const M = "var(--font-jetbrains-mono,'JetBrains Mono','IBM Plex Mono',monospace)";
+
+  return (
+    <>
+      <style>{`
+        @keyframes bch-glide {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bch-spin { to { transform: rotate(360deg); } }
+        .bch-pill {
+          background: rgba(255,255,255,.04);
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 12px;
+          backdrop-filter: blur(10px);
+          display: flex; flex-direction: column;
+          align-items: center; justify-content: center;
+          gap: 6px; padding: 12px 8px;
+          cursor: pointer; min-height: 68px;
+          position: relative; overflow: hidden;
+          transition: transform .18s ease, border-color .18s ease,
+                      background .18s ease, box-shadow .18s ease;
+        }
+        .bch-pill:hover { transform: translateY(-2px); background: rgba(255,255,255,.07); }
+        .bch-pill.bch-active {
+          border-color: rgba(217,59,32,.7);
+          box-shadow: 0 0 0 1px rgba(217,59,32,.3), 0 4px 20px rgba(217,59,32,.15);
+        }
+        .bch-pill.bch-active::before {
+          content: ''; position: absolute; inset: 0; pointer-events: none;
+          background: linear-gradient(135deg, rgba(217,59,32,.18) 0%, transparent 70%);
+        }
+        .bch-glass {
+          background: rgba(255,255,255,.04);
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 16px; backdrop-filter: blur(16px);
+          position: relative; overflow: hidden;
+        }
+        .bch-glass::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0;
+          height: 1px; z-index: 1; pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+        }
+        .bch-metric {
+          background: rgba(255,255,255,.04);
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 16px; backdrop-filter: blur(16px);
+          padding: 20px; position: relative; overflow: hidden;
+          transition: transform .18s ease;
+        }
+        .bch-metric::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0;
+          height: 1px; pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+        }
+        .bch-metric:hover { transform: translateY(-2px); }
+        .bch-conv {
+          background: rgba(255,255,255,.04);
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 14px; padding: 18px;
+          text-align: center; position: relative; overflow: hidden;
+        }
+        .bch-funnel-wrap {
+          background: rgba(255,255,255,.04);
+          border: 1px solid rgba(255,255,255,.08);
+          border-radius: 16px; backdrop-filter: blur(16px);
+          position: relative; overflow: visible;
+        }
+        .bch-funnel-wrap::before {
+          content: ''; position: absolute; top: 0; left: 0; right: 0;
+          height: 1px; z-index: 1; pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+        }
+      `}</style>
+
+      {/* ── Channel Selector Grid ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(8,1fr)", gap: 8, marginBottom: 16 }}>
+        {channels.map((c, i) => {
+          const r = (c.published / c.uploaded) * 100;
+          const tc = r >= 5 ? "#3DAA6A" : "#D93B20";
+          return (
+            <div key={c.ch} className={`bch-pill${i === selectedIdx ? " bch-active" : ""}`} onClick={() => handleSelect(i)}>
+              <span style={{ fontFamily: M, fontSize: 22, fontWeight: 700, color: tc, lineHeight: 1 }}>{c.ch}</span>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: tc, boxShadow: `0 0 6px ${tc}` }} />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Detail View ── */}
+      <div key={animKey} style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 16, animation: "bch-glide 0.35s ease both" }}>
+
+        {/* ── LEFT PANEL ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+          {/* Card 1 — Identity */}
+          <div className="bch-glass" style={{ padding: "22px 20px" }}>
+            <div style={{ fontFamily: F, fontSize: 9, color: "#555", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10 }}>
+              CHANNEL IDENTIFIER
+            </div>
+            <div style={{
+              fontFamily: M, fontSize: 64, fontWeight: 700, lineHeight: 1, marginBottom: 8,
+              background: "linear-gradient(135deg,#FF6040,#D93B20)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            }}>{ch.ch}</div>
+            <div style={{ fontFamily: F, fontSize: 13, color: "#F0F0F0", marginBottom: 14 }}>
+              Distribution Channel {ch.ch}
+            </div>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              background: isGreen ? "rgba(61,170,106,.12)" : "rgba(217,59,32,.12)",
+              border: `1px solid ${isGreen ? "rgba(61,170,106,.3)" : "rgba(217,59,32,.3)"}`,
+              borderRadius: 20, padding: "5px 12px",
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: TC, boxShadow: `0 0 6px ${TC}`, flexShrink: 0 }} />
+              <span style={{ fontFamily: F, fontSize: 10, fontWeight: 700, textTransform: "uppercase", color: TC, letterSpacing: "0.05em" }}>
+                {isGreen ? "Green Tier · Healthy" : "Red Tier · Critical"}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2 — Radial Gauge */}
+          <div className="bch-glass" style={{ padding: "22px 20px", textAlign: "center" }}>
+            <div style={{ fontFamily: F, fontSize: 9, color: "#555", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
+              PUBLISH RATE
+            </div>
+            <svg width="120" height="120" viewBox="0 0 120 120" style={{ display: "block", margin: "0 auto", overflow: "visible" }}>
+              <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,.06)" strokeWidth="10" />
+              <circle ref={gaugeGlowRef} cx="60" cy="60" r="54" fill="none" stroke={TC} strokeWidth="14" strokeLinecap="round"
+                opacity="0.1" strokeDasharray={CIRC} strokeDashoffset={CIRC} transform="rotate(-90 60 60)" />
+              <circle ref={gaugeArcRef} cx="60" cy="60" r="54" fill="none" stroke={TC} strokeWidth="10" strokeLinecap="round"
+                strokeDasharray={CIRC} strokeDashoffset={CIRC} transform="rotate(-90 60 60)" />
+              <text x="60" y="55" textAnchor="middle" dominantBaseline="middle"
+                fontFamily={M} fontSize="20" fontWeight="700" fill={TC}>
+                {pubRate.toFixed(1)}%
+              </text>
+              <text x="60" y="72" textAnchor="middle" dominantBaseline="middle"
+                fontFamily={M} fontSize="8" fill="#555" letterSpacing="0.08em">
+                PUB RATE
+              </text>
+            </svg>
+          </div>
+
+          {/* Card 3 — Stats */}
+          <div className="bch-glass" style={{ padding: "4px 20px" }}>
+            {[
+              { label: "Uploaded", value: ch.uploaded.toLocaleString(), color: "#F0F0F0" },
+              { label: "AI Created", value: ch.created.toLocaleString(), color: "#FF6040" },
+              { label: "Published", value: ch.published.toLocaleString(), color: TC },
+            ].map((row, i, arr) => (
+              <div key={row.label} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "13px 0",
+                borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,.05)" : "none",
+              }}>
+                <span style={{ fontFamily: F, fontSize: 11, color: "#555" }}>{row.label}</span>
+                <span style={{ fontFamily: M, fontSize: 13, fontWeight: 700, color: row.color }}>{row.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── RIGHT PANEL ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+          {/* Row 1 — Metrics */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
+            <div className="bch-metric">
+              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>AI Expansion</div>
+              <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#F0F0F0", lineHeight: 1, marginBottom: 10 }}>
+                +{aiExpPct}%
+              </div>
+              <span style={{
+                display: "inline-flex", alignItems: "center",
+                background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)",
+                borderRadius: 20, padding: "3px 10px",
+                fontFamily: F, fontSize: 9, fontWeight: 700, color: "#888",
+              }}>Content multiplied</span>
+            </div>
+
+            <div className="bch-metric">
+              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>Pub Drop</div>
+              <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#D93B20", lineHeight: 1, marginBottom: 10 }}>
+                -{pubDropPct.toFixed(1)}%
+              </div>
+              <span style={{
+                display: "inline-flex", alignItems: "center",
+                background: "rgba(217,59,32,.1)", border: "1px solid rgba(217,59,32,.25)",
+                borderRadius: 20, padding: "3px 10px",
+                fontFamily: F, fontSize: 9, fontWeight: 700, color: "#D93B20",
+              }}>Filtered out</span>
+            </div>
+
+            <div className="bch-metric">
+              <div style={{ fontFamily: F, fontSize: 10, color: "#555", marginBottom: 10 }}>Pub Rate</div>
+              <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: TC, lineHeight: 1, marginBottom: 10 }}>
+                {pubRate.toFixed(1)}%
+              </div>
+              <span style={{
+                display: "inline-flex", alignItems: "center",
+                background: isGreen ? "rgba(61,170,106,.1)" : "rgba(217,59,32,.1)",
+                border: `1px solid ${isGreen ? "rgba(61,170,106,.25)" : "rgba(217,59,32,.25)"}`,
+                borderRadius: 20, padding: "3px 10px",
+                fontFamily: F, fontSize: 9, fontWeight: 700, color: TC,
+              }}>{isGreen ? "Above threshold" : "Below threshold"}</span>
+            </div>
+          </div>
+
+          {/* Row 2 — Pipeline Funnel */}
+          <div className="bch-funnel-wrap" style={{ padding: "18px 20px 32px" }}>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontFamily: F, fontSize: 14, fontWeight: 700, color: "#F0F0F0", marginBottom: 3 }}>
+                Content Pipeline Flow
+              </div>
+              <div style={{ fontFamily: F, fontSize: 11, color: "#555" }}>
+                Upload → Create → Publish — hover each stage
+              </div>
+            </div>
+            <div ref={funnelContainerRef} style={{ position: "relative" }}>
+              <svg viewBox="0 0 660 210" width="100%" style={{ display: "block", overflow: "visible" }}
+                onMouseLeave={() => setFTip(null)}>
+                <defs>
+                  <linearGradient id={`bup${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="rgba(255,255,255,.06)" />
+                    <stop offset="100%" stopColor="rgba(255,255,255,.22)" />
+                  </linearGradient>
+                  <linearGradient id={`bcr${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="rgba(255,96,64,.5)" />
+                    <stop offset="50%" stopColor="rgba(255,130,60,.82)" />
+                    <stop offset="100%" stopColor="rgba(217,59,32,.55)" />
+                  </linearGradient>
+                  <linearGradient id={`bpu${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor={TC} stopOpacity="0.35" />
+                    <stop offset="100%" stopColor={TC} stopOpacity="0.9" />
+                  </linearGradient>
+                  <linearGradient id={`bt1${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="rgba(255,255,255,.18)" />
+                    <stop offset="100%" stopColor="rgba(255,96,64,.5)" />
+                  </linearGradient>
+                  <linearGradient id={`bt2${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="rgba(217,59,32,.5)" />
+                    <stop offset="100%" stopColor={TC} stopOpacity="0.35" />
+                  </linearGradient>
+                  <filter id={`gcr${ch.ch}`} x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="8" result="blur" />
+                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                  <filter id={`gpu${ch.ch}`} x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="6" result="blur" />
+                    <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                </defs>
+
+                {/* Segments */}
+                <polygon points={`0,${CY-upH/2} 158,${CY-upH/2} 158,${CY+upH/2} 0,${CY+upH/2}`}
+                  fill={`url(#bup${ch.ch})`} />
+                <polygon points={`158,${CY-upH/2} 218,${CY-crH/2} 218,${CY+crH/2} 158,${CY+upH/2}`}
+                  fill={`url(#bt1${ch.ch})`} />
+                <polygon points={`218,${CY-crH/2} 408,${CY-crH/2} 408,${CY+crH/2} 218,${CY+crH/2}`}
+                  fill={`url(#bcr${ch.ch})`} filter={`url(#gcr${ch.ch})`} />
+                <polygon points={`408,${CY-crH/2} 468,${CY-puH/2} 468,${CY+puH/2} 408,${CY+crH/2}`}
+                  fill={`url(#bt2${ch.ch})`} />
+                <polygon points={`468,${CY-puH/2} 660,${CY-puH/2} 660,${CY+puH/2} 468,${CY+puH/2}`}
+                  fill={`url(#bpu${ch.ch})`} filter={`url(#gpu${ch.ch})`} />
+
+                {/* Labels above */}
+                <text x="79" y={CY-upH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
+                  fill="rgba(255,255,255,.55)" letterSpacing="1.5">UPLOADED</text>
+                <text x="313" y={CY-crH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
+                  fill="#FF6040" letterSpacing="1.5">AI CREATED</text>
+                <text x="564" y={CY-puH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
+                  fill={TC} letterSpacing="1.5">PUBLISHED</text>
+
+                {/* Values below */}
+                <text x="79" y={CY+upH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
+                  fill="rgba(255,255,255,.85)">{ch.uploaded.toLocaleString()}</text>
+                <text x="79" y={CY+upH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">raw files</text>
+
+                <text x="313" y={CY+crH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
+                  fill="rgba(255,255,255,.85)">{ch.created.toLocaleString()}</text>
+                <text x="313" y={CY+crH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">+{aiExpPct}% expanded</text>
+
+                <text x="564" y={CY+puH/2+22} textAnchor="middle" fontFamily={M} fontSize="18" fontWeight="700"
+                  fill="rgba(255,255,255,.85)">{ch.published.toLocaleString()}</text>
+                <text x="564" y={CY+puH/2+36} textAnchor="middle" fontFamily={F} fontSize="9.5" fill="#555">{pubRate.toFixed(1)}% pub rate</text>
+
+                {/* Transition ratio labels */}
+                <text x="188" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="9.5" fill="rgba(255,255,255,.38)">×{aiMult.toFixed(1)}</text>
+                <text x="438" y={CY+4} textAnchor="middle" fontFamily={M} fontSize="9.5" fill="rgba(255,255,255,.38)">{pubRate.toFixed(1)}%</text>
+
+                {/* Hit zones */}
+                <rect x="0" y="0" width="218" height="210" fill="transparent" style={{ cursor: "pointer" }}
+                  onMouseEnter={(e) => handleFunnelEnter(e, "upload")} onMouseMove={handleFunnelMove} />
+                <rect x="218" y="0" width="250" height="210" fill="transparent" style={{ cursor: "pointer" }}
+                  onMouseEnter={(e) => handleFunnelEnter(e, "create")} onMouseMove={handleFunnelMove} />
+                <rect x="468" y="0" width="192" height="210" fill="transparent" style={{ cursor: "pointer" }}
+                  onMouseEnter={(e) => handleFunnelEnter(e, "publish")} onMouseMove={handleFunnelMove} />
+              </svg>
+
+              {/* Tooltip */}
+              {fTip && (() => {
+                const tip = getTipData(fTip.seg);
+                const isRight = fTip.seg === "publish";
+                return (
+                  <div style={{
+                    position: "absolute",
+                    ...(isRight ? { left: 20 } : { right: 20 }),
+                    top: Math.max(0, fTip.y - 100),
+                    background: "rgba(8,8,8,.98)",
+                    borderRadius: 12,
+                    boxShadow: "0 20px 60px rgba(0,0,0,.9)",
+                    pointerEvents: "none",
+                    zIndex: 100, minWidth: 200, overflow: "hidden",
+                  }}>
+                    <div style={{
+                      padding: "8px 14px", borderBottom: "1px solid rgba(255,255,255,.06)",
+                      fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase",
+                      color: tip.color, letterSpacing: "0.1em",
+                    }}>{tip.title}</div>
+                    {tip.rows?.map((r, i) => (
+                      <div key={i} style={{
+                        padding: "6px 14px",
+                        borderBottom: i < tip.rows.length - 1 ? "1px solid rgba(255,255,255,.04)" : "none",
+                      }}>
+                        <div style={{ fontFamily: F, fontSize: 10, color: "#444", marginBottom: 1 }}>{r.label}</div>
+                        <div style={{ fontFamily: M, fontSize: 12, fontWeight: 700, color: tip.color }}>{r.value}</div>
+                        <div style={{ fontFamily: F, fontSize: 9, color: "#383838" }}>{r.unit}</div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* Row 3 — Conversion */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
+            <div className="bch-conv">
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,.15)", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Create</div>
+              <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#F0F0F0", marginBottom: 4 }}>
+                {Math.round((ch.created / ch.uploaded) * 100)}%
+              </div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>AI expansion rate</div>
+            </div>
+            <div className="bch-conv">
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: TC, filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Create → Publish</div>
+              <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: TC, marginBottom: 4 }}>
+                {pubRate.toFixed(1)}%
+              </div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>Content pub rate</div>
+            </div>
+            <div className="bch-conv">
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "#FF6040", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
+              <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "#555", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Publish</div>
+              <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#FF6040", marginBottom: 4 }}>
+                {((ch.published / ch.uploaded) * 100).toFixed(1)}%
+              </div>
+              <div style={{ fontFamily: F, fontSize: 9, color: "#555" }}>End-to-end rate</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </>
+  );
+}
 
 function SectionFunnel({ theme, onAskAI }) {
   const dash = useDash();
@@ -627,151 +1092,7 @@ function SectionFunnel({ theme, onAskAI }) {
         </div>
       )}
 
-      {subView === "channels" && (() => {
-        const activeChannels = CHANNELS.filter((ch) => ch.uploaded > 55);
-        const greenChannels = activeChannels.filter(ch => (ch.published / ch.uploaded) * 100 >= 5);
-        const redChannels = activeChannels.filter(ch => (ch.published / ch.uploaded) * 100 < 5);
-
-        const renderChannelCard = (ch) => {
-          const rate = (ch.published / ch.uploaded) * 100;
-          const rateStr = rate.toFixed(1);
-          const isGreen = rate >= 5;
-          const badgeClass = rate > 5 ? "badge-green" : rate > 1 ? "badge-gold" : "badge-red";
-          const W = 260, stageH = 36, gap = 6;
-          const totalH = stageH * 3 + gap * 2 + 8;
-          const pxW = (pct) => Math.max(8, (pct / 100) * W);
-          const stageY = (i) => i * (stageH + gap);
-          const trapPath = (topW, botW, y, h) => {
-            const tl = (W - topW) / 2, tr = tl + topW;
-            const bl = (W - botW) / 2, br = bl + botW;
-            return `M${tl},${y} L${tr},${y} L${br},${y + h} L${bl},${y + h} Z`;
-          };
-          const upW_px = pxW(100);
-          const crW_px = Math.max(upW_px * 0.4, Math.min(W, upW_px * (ch.created / ch.uploaded)));
-          const pbW_px = ch.published > 0 ? Math.max(8, crW_px * (ch.published / ch.created)) : 0;
-          const createExpansion = ((ch.created / ch.uploaded - 1) * 100).toFixed(0);
-          const publishDrop = ((1 - ch.published / ch.created) * 100).toFixed(1);
-
-          return (
-            <div key={ch.ch} className="card" style={{
-              padding: "16px 18px",
-              borderLeft: `3px solid ${isGreen ? "var(--green)" : "var(--red)"}`,
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <div style={{ fontFamily: "var(--font-serif)", fontSize: 19, color: "var(--ink)" }}>
-                    Channel {ch.ch}
-                  </div>
-                  <GraphActionButtons
-                    insightsOpen={!!insightsOpen[`channel-${ch.ch}`]}
-                    onToggleInsights={() => toggleInsights(`channel-${ch.ch}`)}
-                    onAskAI={() => onAskAI && onAskAI(`Channel ${ch.ch}`, ch)}
-                  />
-                </div>
-                <span className={`badge ${badgeClass}`} style={{ fontSize: 9 }}>{rateStr}% pub</span>
-              </div>
-              <GraphFlip
-                flipped={!!insightsOpen[`channel-${ch.ch}`]}
-                minHeight={220}
-                front={<>
-                  <svg width="100%" viewBox={`0 0 ${W} ${totalH}`} style={{ display: "block", overflow: "visible" }}>
-                    <defs>
-                      <linearGradient id={`fu-up-${ch.ch}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#7a7268" stopOpacity="0.6" />
-                        <stop offset="100%" stopColor="#4a4440" stopOpacity="0.4" />
-                      </linearGradient>
-                      <linearGradient id={`fu-cr-${ch.ch}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#ff4757" stopOpacity="0.85" />
-                        <stop offset="100%" stopColor="rgba(255,71,87,0.32)" stopOpacity="0.7" />
-                      </linearGradient>
-                      <linearGradient id={`fu-pb-${ch.ch}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={isGreen ? "#3EC98A" : "#ffffff"} stopOpacity="0.9" />
-                        <stop offset="100%" stopColor={isGreen ? "rgba(62,201,138,0.28)" : "rgba(255,255,255,0.28)"} stopOpacity="0.75" />
-                      </linearGradient>
-                    </defs>
-                    <path d={trapPath(upW_px, crW_px, stageY(0), stageH)} fill={`url(#fu-up-${ch.ch})`} />
-                    <path d={trapPath(crW_px, crW_px, stageY(1), stageH)} fill={`url(#fu-cr-${ch.ch})`} />
-                    {pbW_px > 0 && <path d={trapPath(crW_px, pbW_px, stageY(2), stageH)} fill={`url(#fu-pb-${ch.ch})`} />}
-                    {pbW_px === 0 && (
-                      <text x={W/2} y={stageY(2) + stageH/2 + 4} textAnchor="middle" fill="rgba(255,71,87,0.55)" fontSize="10" fontFamily="var(--font-mono)">
-                        0 published
-                      </text>
-                    )}
-                    {[["Uploaded", ch.uploaded, stageY(0)], ["Created", ch.created, stageY(1)], ["Published", ch.published, stageY(2)]].map(([label, val, y]) => (
-                      <g key={label}>
-                        <text x="4" y={y + stageH/2 + 4} fill="rgba(255,255,255,0.5)" fontSize="8" fontFamily="var(--font-mono)">{label}</text>
-                        <text x={W - 4} y={y + stageH/2 + 4} textAnchor="end" fill="rgba(255,255,255,0.8)" fontSize="9" fontFamily="var(--font-mono)" fontWeight="600">{Number(val).toLocaleString()}</text>
-                      </g>
-                    ))}
-                  </svg>
-                  <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                    <div style={{ flex: 1, padding: "6px 8px", background: "var(--sankey-bg)", borderRadius: "var(--radius-sm)", border: "1px solid var(--line-lt)" }}>
-                      <div style={{ fontSize: 7, fontFamily: "var(--font-mono)", color: "var(--ink4)", marginBottom: 3 }}>AI EXPANSION</div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--amber-lt)" }}>+{createExpansion}%</div>
-                    </div>
-                    <div style={{ flex: 1, padding: "6px 8px", background: "var(--sankey-bg)", borderRadius: "var(--radius-sm)", border: "1px solid var(--line-lt)" }}>
-                      <div style={{ fontSize: 7, fontFamily: "var(--font-mono)", color: "var(--ink4)", marginBottom: 3 }}>PUB DROP</div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: isGreen ? "var(--green-lt)" : "var(--red-lt)" }}>-{publishDrop}%</div>
-                    </div>
-                    <div style={{ flex: 1, padding: "6px 8px", background: "var(--sankey-bg)", borderRadius: "var(--radius-sm)", border: "1px solid var(--line-lt)" }}>
-                      <div style={{ fontSize: 7, fontFamily: "var(--font-mono)", color: "var(--ink4)", marginBottom: 3 }}>PUB RATE</div>
-                      <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: isGreen ? "var(--green-lt)" : "var(--red-lt)" }}>{rateStr}%</div>
-                    </div>
-                  </div>
-                </>}
-                back={<GraphInsights title={`Channel ${ch.ch} Funnel`} />}
-              />
-            </div>
-          );
-        };
-
-        return (
-          <div className="stack">
-            {/* Green Tier: Healthy Publishers */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "8px 14px", background: "rgba(62,201,138,0.08)", borderRadius: "var(--radius)", border: "1px solid rgba(62,201,138,0.2)" }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--green-lt)", flexShrink: 0 }} />
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--green-lt)" }}>
-                  GREEN TIER — Publish Rate ≥ 5% &nbsp;·&nbsp; {greenChannels.length} channel{greenChannels.length !== 1 ? "s" : ""}
-                </div>
-                <div style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--ink4)" }}>
-                  Healthy distribution pipeline
-                </div>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 14 }}>
-                {greenChannels.length > 0 ? greenChannels.map(renderChannelCard) : (
-                  <div style={{ padding: "20px", color: "var(--ink4)", fontFamily: "var(--font-mono)", fontSize: 10 }}>No channels meeting ≥5% threshold</div>
-                )}
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
-              <div style={{ flex: 1, height: 1, background: "var(--line)" }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "var(--ink4)", letterSpacing: "0.14em" }}>PUBLISHING THRESHOLD</span>
-              <div style={{ flex: 1, height: 1, background: "var(--line)" }} />
-            </div>
-
-            {/* Red Tier: Under-Publishing */}
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, padding: "8px 14px", background: "rgba(255,71,87,0.07)", borderRadius: "var(--radius)", border: "1px solid rgba(255,71,87,0.18)" }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--red-lt)", flexShrink: 0 }} />
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--red-lt)" }}>
-                  RED TIER — Publish Rate &lt; 5% &nbsp;·&nbsp; {redChannels.length} channel{redChannels.length !== 1 ? "s" : ""}
-                </div>
-                <div style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--ink4)" }}>
-                  Needs distribution intervention
-                </div>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 14 }}>
-                {redChannels.length > 0 ? redChannels.map(renderChannelCard) : (
-                  <div style={{ padding: "20px", color: "var(--ink4)", fontFamily: "var(--font-mono)", fontSize: 10 }}>All channels performing well!</div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      })()}
+      {subView === "channels" && <ByChannelTab channels={CHANNELS} />}
  
       {subView === "types" && (
         <div className="g2">
