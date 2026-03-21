@@ -15,14 +15,10 @@ import { M } from '@/lib/constants';
 
 function SectionTrends({ theme, onAskAI }) {
   const dash = useDash();
-<<<<<<< HEAD
-  const { data } = useJsonData("trends");
-  const { data: funnelData } = useJsonData("funnel");
-  const INPUT_TYPES = funnelData?.inputTypes || [];
-=======
   const { data: staticData } = useJsonData("trends");
   const data = useLiveSectionData("trends", dash?.liveDashboard, staticData);
->>>>>>> 14bfa16c17e83b1b710fca18d74273eb5d85c220
+  const { data: funnelData } = useJsonData("funnel");
+  const INPUT_TYPES = funnelData?.inputTypes || [];
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     metricOptions: [],
