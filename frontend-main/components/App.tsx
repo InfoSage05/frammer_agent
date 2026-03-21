@@ -5,6 +5,7 @@ const INTRO_KEY = 'frammer-intro-seen-v19';
 import useScrollSpy from '@/hooks/useScrollSpy';
 import HighlightEscListener from '@/hooks/useHighlightEscListener';
 import useJsonData from '@/hooks/useJsonData';
+import useLiveMetrics from '@/hooks/useLiveMetrics';
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import ResizableSidebar from "./ui/ResizableSidebar";
@@ -13,6 +14,7 @@ import SectionClient from "./sections/section-client";
 import ToastZone, { useToasts } from "./ui/Toasts";
 import SectionExecutive from "./sections/section-executive-command-center";
 import SectionTrends from "./sections/section-trends-usage";
+import SectionLiftLab from "./sections/section-lift-lab";
 import SectionMultiDim from "./sections/section-multi-dim-explorer";
 import SectionFunnel from "./sections/section-funnel-flow";
 import SectionExplorer from "./sections/section-deep-explorer";
@@ -99,6 +101,18 @@ export default function App(props: any) {
   const [activeGraphData, setActiveGraphData] = useState([]);
   const [role, setRole] = useState('analyst');
   const [howToUseOpen, setHowToUseOpen] = useState(false);
+
+  // Live metrics from backend (includes raw dashboard with chart_data for sections)
+  const { metrics: liveM, isLive, dashboard: liveDashboard } = useLiveMetrics();
+
+  // Chat session (shared between RightPanel copilot and ChatWidget, persisted)
+  const [chatSessionId, setChatSessionId] = useState(() => {
+    try {
+      const stored = typeof window !== "undefined" && localStorage.getItem("frammer_chat");
+      if (stored) { const p = JSON.parse(stored); return p.sessionId || null; }
+    } catch {}
+    return null;
+  });
 
   // Highlight mode
   const [highlightSection, setHighlightSection] = useState(null);
@@ -343,7 +357,7 @@ export default function App(props: any) {
           id="executive"
           title="Executive Overview"
           icon="◈"
-          summary={`${M.created.toLocaleString()} AI frames · ${M.publishRate}% pub rate · ${M.activeChannels} channels`}
+          summary={`${(isLive ? liveM.created : M.created).toLocaleString()} AI frames · ${isLive ? liveM.publishRate : M.publishRate}% pub rate · ${isLive ? liveM.activeChannels : M.activeChannels} channels`}
           defaultExpanded={true}
         >
           <SectionExecutive addToast={addToast} theme={theme} onAskAI={handleAskAI} />
@@ -362,6 +376,20 @@ export default function App(props: any) {
           defaultExpanded={true}
         >
           <SectionTrends theme={theme} onAskAI={handleAskAI} />
+        </SectionShell>
+      );
+    }
+
+    if (activeSection === 'lift') {
+      return (
+        <SectionShell
+          id="lift"
+          title="Lift & Forecast Lab"
+          icon="⇡"
+          summary="Upload CSV or run demo for lift + causal forecast"
+          defaultExpanded={true}
+        >
+          <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
         </SectionShell>
       );
     }
@@ -444,12 +472,14 @@ export default function App(props: any) {
     activeChips, removeChip, clearAllFilters, exitStory, startStory,
     insightMode, setInsightMode, showBenchmark, setShowBenchmark,
     pinnedFindings, scrollToSection, addToast,
+    liveDashboard, isLive,
   }), [
     selectCtx, selectedCtx, startInvestigation, exitInvestigation,
     openCompare, closeCompare, filteredData, pinFinding, unpinFinding,
     openPanel, investigationMode, storyMode, compareState,
     activeChips, removeChip, clearAllFilters, exitStory, startStory,
     insightMode, showBenchmark, pinnedFindings, scrollToSection, addToast,
+    liveDashboard, isLive,
   ]);
 
   const appUICtx = useMemo(() => ({
@@ -527,6 +557,18 @@ export default function App(props: any) {
                   </div>
                 ))}
               </nav>
+
+              <div style={{ margin: "16px 0 8px" }}>
+                <div className="nav-grp">TOOLS</div>
+                <div
+                  className="nav-item"
+                  onClick={() => { window.location.href = '/analyze'; }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span className="nav-icon">⬆</span>
+                  <span className="nav-label">Upload &amp; Analyze</span>
+                </div>
+              </div>
 
               <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">WORKSPACE</div>
@@ -780,7 +822,7 @@ export default function App(props: any) {
                     <>
                       <SectionShell
                         id="executive" title="Executive Overview" icon="◈"
-                        summary={`${M.created.toLocaleString()} AI frames · ${M.publishRate}% pub rate · ${M.activeChannels} channels`}
+                        summary={`${(isLive ? liveM.created : M.created).toLocaleString()} AI frames · ${isLive ? liveM.publishRate : M.publishRate}% pub rate · ${isLive ? liveM.activeChannels : M.activeChannels} channels`}
                         defaultExpanded={true}
                       >
                         <SectionExecutive addToast={addToast} theme={theme} onAskAI={handleAskAI} />
@@ -793,6 +835,14 @@ export default function App(props: any) {
                       >
                         <SectionTrends theme={theme} onAskAI={handleAskAI} />
                       </SectionShell>
+
+                        <SectionShell
+                          id="lift" title="Lift & Forecast Lab" icon="⇡"
+                          summary="Upload CSV or run demo for lift + causal forecast"
+                          badge="Demo"
+                        >
+                          <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
+                        </SectionShell>
 
                       <SectionShell
                         id="multidim" title="Multi-Dimensional Analysis" icon="⬡"
@@ -837,6 +887,8 @@ export default function App(props: any) {
               onClose={() => setPanelOpen(false)}
               attachedData={activeGraphData}
               onRemoveData={removeGraphData}
+              chatSessionId={chatSessionId}
+              onChatSessionId={setChatSessionId}
             />
 
             <ToastZone toasts={toasts} remove={removeToast} />

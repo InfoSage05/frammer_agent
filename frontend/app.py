@@ -12,15 +12,20 @@ from typing import Dict, Any, List, Optional
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+<<<<<<< HEAD
 from frammer_agent.config import DATA_DIR, CHART_CATEGORIES, API_PORT
+=======
+from frammer_agent.config import DATA_DIR, CHART_CATEGORIES
+>>>>>>> 863cf4f6de41c601546c0b01dcf88e8e371d5443
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
-API_BASE_URL = f"http://localhost:{API_PORT}"
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:80")
 DATA_PATH = Path(DATA_DIR)
 
 # ─── Page Configuration ──────────────────────────────────────────────────────
@@ -557,6 +562,29 @@ with tab_assistant:
                         data = artifact.get("data", [])
                         if data:
                             st.dataframe(pd.DataFrame(data))
+                    elif artifact.get("type") == "chart":
+                        data = artifact.get("data", [])
+                        if data:
+                            df = pd.DataFrame(data)
+                            chart_type = artifact.get("chartType", "")
+                            x_key = artifact.get("xKey")
+                            y_keys = artifact.get("yKeys", [])
+
+                            try:
+                                if chart_type in ("line", "area") and x_key and y_keys:
+                                    fig = px.line(df, x=x_key, y=y_keys, title=artifact.get("title"))
+                                    st.plotly_chart(fig, use_container_width=True)
+                                elif chart_type in ("bar", "barh") and x_key and y_keys:
+                                    orientation = "h" if chart_type == "barh" else "v"
+                                    fig = px.bar(df, x=x_key, y=y_keys, orientation=orientation, title=artifact.get("title"))
+                                    st.plotly_chart(fig, use_container_width=True)
+                                elif chart_type == "pie" and len(df.columns) >= 2:
+                                    fig = px.pie(df, names=df.columns[0], values=df.columns[1], title=artifact.get("title"))
+                                    st.plotly_chart(fig, use_container_width=True)
+                                else:
+                                    st.dataframe(df)
+                            except Exception:
+                                st.dataframe(df)
                     elif artifact.get("type") == "plotly":
                         st.info("Plotly chart (interactive view)")
                     else:

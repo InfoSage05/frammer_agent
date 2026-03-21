@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-const SECTION_TO_BACKEND_PATH: Record<string, string> = {
-  executive: "overview",
+const SECTION_TO_VIEW: Record<string, string> = {
+  executive: "executive",
   trends: "trends",
   multidim: "multidim",
   funnel: "funnel",
@@ -16,14 +16,15 @@ export async function GET(
   { params }: { params: Promise<{ section: string }> },
 ) {
   const { section } = await params;
-  const mapped = SECTION_TO_BACKEND_PATH[section];
+  const viewName = SECTION_TO_VIEW[section];
 
-  if (!mapped) {
+  if (!viewName) {
     return NextResponse.json({ error: "Unknown section" }, { status: 404 });
   }
 
   try {
-    const upstream = await fetch(`${BACKEND_BASE}/data/${mapped}`, {
+    // Use /frontend-dashboard?view={section} endpoint
+    const upstream = await fetch(`${BACKEND_BASE}/frontend-dashboard?view=${viewName}`, {
       cache: "no-store",
     });
 

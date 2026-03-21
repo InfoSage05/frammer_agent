@@ -57,6 +57,6 @@ export const SAVED_VIEWS = [
 ];
 
 export const pageTitles: Record<string, string> = {
-  executive:'Overview', trends:'Trends', multidim:'Segments',
+  executive:'Overview', trends:'Trends', lift:'Lift & Forecast', multidim:'Segments',
   funnel:'Funnel', explorer:'Explorer', client:'Client'
 };

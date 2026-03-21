@@ -191,7 +191,20 @@ def run_column_mapper(
 
         logger.info(f"Mapping columns for dataset role: {role}")
         mapping = map_columns_for_dataset(role, df, semantic_columns)
-        existing[role] = mapping
+        if mapping:
+            # Merge with existing to preserve mappings for columns not in current DF
+            merged = dict(existing.get(role, {}))
+            merged.update(mapping)
+            existing[role] = merged
+        else:
+            logger.info(f"[{role}] LLM mapping returned empty, keeping existing mapping")
+
+        # Ensure all registry semantic columns have a mapping entry
+        role_mapping = existing.get(role, {})
+        for sem_name in semantic_columns:
+            if sem_name not in role_mapping:
+                role_mapping[sem_name] = sem_name  # identity fallback
+        existing[role] = role_mapping
 
     # Add metadata
     existing["_meta"] = {

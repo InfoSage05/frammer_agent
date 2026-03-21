@@ -524,7 +524,8 @@ function ByChannelTab({ channels }) {
 
 function SectionFunnel({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("funnel");
+  const { data: staticData } = useJsonData("funnel");
+  const data = useLiveSectionData("funnel", dash?.liveDashboard, staticData);
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     subTabs: [],

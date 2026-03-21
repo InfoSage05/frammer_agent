@@ -1,5 +1,6 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState, useCallback } from "react";
 import Treemap from "../charts/Treemap";
 import { useDash } from '@/lib/contexts';
@@ -322,7 +323,8 @@ function PremiumBarPanel({
 /* ── main section ────────────────────────────────────────────── */
 function SectionMultiDim({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("multidim");
+  const { data: staticData } = useJsonData("multidim");
+  const data = useLiveSectionData("multidim", dash?.liveDashboard, staticData);
   const [kpi, setKpi] = useState("uploaded");
   const [view, setView] = useState("bar");
 

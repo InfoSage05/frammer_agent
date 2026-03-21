@@ -1,9 +1,11 @@
 // @ts-nocheck
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useDash } from '@/lib/contexts';
 import { ANOMALIES, SAVED_VIEWS, STORY_PRESETS, M } from '@/lib/constants';
+import { sendChatMessage } from '@/lib/api';
+import useChartJs from '../charts/ChartJSWrapper';
 
 export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData }: any) {
   const dash = useDash();
