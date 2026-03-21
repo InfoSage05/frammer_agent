@@ -246,15 +246,8 @@ MULTIDIM_DATA: Dict[str, Any] = {
     ],
     "channelMetrics": [{"label": "A", "uploaded": 1470, "created": 4725, "published": 71}, {"label": "B", "uploaded": 1293, "created": 4251, "published": 19}, {"label": "D", "uploaded": 221, "created": 701, "published": 0}],
     "kpiOptions": [{"k": "uploaded", "l": "Uploaded"}, {"k": "created", "l": "Created"}, {"k": "published", "l": "Published"}, {"k": "pub_rate", "l": "Pub Rate"}],
-    "viewOptions": [["bar", "Bar Chart"], ["heatmap", "Heatmap"], ["treemap", "Treemap"], ["ternary", "Ternary"]],
-    "heatData": [{"input": "interview", "lang": "English", "val": 892}, {"input": "interview", "lang": "Hindi", "val": 407}, {"input": "news bulletin", "lang": "English", "val": 620}, {"input": "news bulletin", "lang": "Hindi", "val": 406}],
+    "viewOptions": [["bar", "Bar Chart"], ["treemap", "Treemap"]],
     "treemapColors": ["#b87514", "#c45e22", "#a87850", "#7a6858", "#5a7868", "#9b7058"],
-    "ternaryDatasets": {
-        "channels": [{"label": "A", "uploaded": 1470, "created": 4725, "published": 71}, {"label": "B", "uploaded": 1293, "created": 4251, "published": 19}, {"label": "D", "uploaded": 221, "created": 701, "published": 0}],
-        "users": [{"label": "Chandan", "uploaded": 489, "created": 2152, "published": 19}, {"label": "QA-Purushottam", "uploaded": 309, "created": 1227, "published": 13}, {"label": "Nitesh", "uploaded": 224, "created": 959, "published": 0}],
-        "inputtypes": [{"label": "interview", "uploaded": 1299, "created": 4972, "published": 35}, {"label": "news bulletin", "uploaded": 1026, "created": 3238, "published": 39}],
-    },
-    "ternaryAxisOptions": {"dataset": [["channels", "Channels"], ["users", "Users"], ["inputtypes", "Input types"]], "common": ["uploaded", "created", "published", "pub_rate", "multiplier"], "right": ["created", "uploaded", "published", "pub_rate", "multiplier"]},
 }
 
 FUNNEL_DATA: Dict[str, Any] = {

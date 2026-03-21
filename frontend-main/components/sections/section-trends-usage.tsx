@@ -8,6 +8,7 @@ import BarRow from "../charts/BarRow";
 import GraphActionButtons from "../ui/GraphActionButtons";
 import GraphFlip from "../ui/GraphFlip";
 import GraphInsights from "../ui/GraphInsights";
+import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
@@ -390,8 +391,10 @@ function SectionTrends({ theme, onAskAI }) {
     <div className="fade-up">
       <div className="sec-hd">
         <div className="sec-tag">{sectionData.meta.tag}</div>
-        <div className="sec-title">{sectionData.meta.title}</div>
-        <div className="sec-sub">{sectionData.meta.sub}</div>
+        <div className="sec-title-row">
+          <div className="sec-title">{sectionData.meta.title}</div>
+          <SectionInfoHint text={sectionData.meta.sub} />
+        </div>
       </div>
       <div className="filter-panel">
         <div className="filter-group">

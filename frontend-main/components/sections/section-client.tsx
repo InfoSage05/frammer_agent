@@ -1,5 +1,6 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
+import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
@@ -57,16 +58,23 @@ function SectionClient({ onClose }) {
           </div>
           <div
             style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: 22,
-              color: "var(--ink)",
-              lineHeight: 1.2,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              flexWrap: "wrap",
             }}
           >
-            {data.meta.title}
-          </div>
-          <div style={{ fontSize: 11, color: "var(--ink3)", marginTop: 4 }}>
-            {data.meta.sub}
+            <div
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: 22,
+                color: "var(--ink)",
+                lineHeight: 1.2,
+              }}
+            >
+              {data.meta.title}
+            </div>
+            <SectionInfoHint text={data.meta.sub} />
           </div>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>

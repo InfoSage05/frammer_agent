@@ -12,6 +12,7 @@ import D3CollapsibleTree from "../charts/D3CollapsibleTree";
 import GraphActionButtons from "../ui/GraphActionButtons";
 import GraphFlip from "../ui/GraphFlip";
 import GraphInsights from "../ui/GraphInsights";
+import SectionInfoHint from '@/components/ui/SectionInfoHint';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
@@ -165,8 +166,10 @@ function SectionExplorer({ theme, onAskAI }) {
     <div className="fade-up">
       <div className="sec-hd">
         <div className="sec-tag">{data.meta.tag}</div>
-        <div className="sec-title">{data.meta.title}</div>
-        <div className="sec-sub">{data.meta.sub}</div>
+        <div className="sec-title-row">
+          <div className="sec-title">{data.meta.title}</div>
+          <SectionInfoHint text={data.meta.sub} />
+        </div>
       </div>
       <div className="sub-tabs">
         {data.subTabs.map(([k, l]) => (
