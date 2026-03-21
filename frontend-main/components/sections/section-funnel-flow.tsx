@@ -30,7 +30,7 @@ function ByChannelTab({ channels }) {
 
   const pubRate = (ch.published / ch.uploaded) * 100;
   const isGreen = pubRate >= 5;
-  const TC = isGreen ? "#3DAA6A" : "#D93B20";
+  const TC = isGreen ? "#3EC98A" : "#ff4757";
   const aiMult = ch.created / ch.uploaded;
   const aiExpPct = Math.round((aiMult - 1) * 100);
   const pubDropPct = ch.created > 0 ? (1 - ch.published / ch.created) * 100 : 0;
@@ -79,7 +79,7 @@ function ByChannelTab({ channels }) {
       ],
     };
     if (seg === "create") return {
-      title: "AI CREATED", color: "#FF6040",
+      title: "AI CREATED", color: "#ff6b7a",
       rows: [
         { label: "AI Outputs", value: ch.created.toLocaleString(), unit: "generated files" },
         { label: "Expansion", value: `+${aiExpPct}%`, unit: "from uploaded" },
@@ -116,84 +116,124 @@ function ByChannelTab({ channels }) {
     <>
       <style>{`
         @keyframes bch-glide {
-          from { opacity: 0; transform: translateY(10px); }
+          from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes bch-spin { to { transform: rotate(360deg); } }
+        /* ── Channel selector pills ── */
         .bch-pill {
-          background: rgba(255,255,255,.04);
-          border: 1px solid rgba(255,255,255,.08);
-          border-radius: 12px;
-          backdrop-filter: blur(10px);
+          background: rgba(255,255,255,.03);
+          border: 1px solid rgba(255,255,255,.07);
+          border-radius: 10px;
           display: flex; flex-direction: column;
-          align-items: center; justify-content: center;
-          gap: 6px; padding: 12px 8px;
-          cursor: pointer; min-height: 68px;
+          align-items: flex-start; justify-content: space-between;
+          gap: 0; padding: 11px 12px 9px;
+          cursor: pointer; min-height: 76px;
           position: relative; overflow: hidden;
-          transition: transform .18s ease, border-color .18s ease,
-                      background .18s ease, box-shadow .18s ease;
+          transition: border-color .18s, background .18s, box-shadow .18s, transform .18s;
         }
-        .bch-pill:hover { transform: translateY(-2px); background: rgba(255,255,255,.07); }
+        .bch-pill:hover {
+          background: rgba(255,255,255,.06);
+          border-color: rgba(255,255,255,.13);
+          transform: translateY(-1px);
+        }
         .bch-pill.bch-active {
-          border-color: rgba(217,59,32,.7);
-          box-shadow: 0 0 0 1px rgba(217,59,32,.3), 0 4px 20px rgba(217,59,32,.15);
+          border-color: rgba(255,71,87,.55);
+          background: rgba(255,71,87,.06);
+          box-shadow: 0 0 0 1px rgba(255,71,87,.18), 0 6px 24px rgba(255,71,87,.12);
         }
-        .bch-pill.bch-active::before {
-          content: ''; position: absolute; inset: 0; pointer-events: none;
-          background: linear-gradient(135deg, rgba(217,59,32,.18) 0%, transparent 70%);
+        .bch-pill.bch-active::after {
+          content: ''; position: absolute; top: 0; left: 0; right: 0;
+          height: 2px; background: linear-gradient(90deg, transparent, rgba(255,71,87,.7), transparent);
         }
+        /* ── Glass cards ── */
         .bch-glass {
-          background: rgba(255,255,255,.04);
+          background: rgba(255,255,255,.035);
           border: 1px solid rgba(255,255,255,.08);
-          border-radius: 16px; backdrop-filter: blur(16px);
+          border-radius: 14px; backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           position: relative; overflow: hidden;
+          transition: border-color .18s, box-shadow .18s;
         }
+        .bch-glass:hover { border-color: rgba(255,255,255,.12); }
         .bch-glass::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0;
-          height: 1px; z-index: 1; pointer-events: none;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+          height: 1px; pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
         }
+        /* ── Metric cards ── */
         .bch-metric {
-          background: rgba(255,255,255,.04);
+          background: rgba(255,255,255,.035);
           border: 1px solid rgba(255,255,255,.08);
-          border-radius: 16px; backdrop-filter: blur(16px);
-          padding: 20px; position: relative; overflow: hidden;
-          transition: transform .18s ease;
+          border-radius: 14px; backdrop-filter: blur(20px);
+          padding: 20px 18px; position: relative; overflow: hidden;
+          transition: border-color .18s, box-shadow .18s, transform .18s;
+          cursor: default;
+        }
+        .bch-metric:hover {
+          border-color: rgba(255,71,87,.30);
+          box-shadow: 0 4px 24px rgba(255,71,87,.08);
+          transform: translateY(-2px);
         }
         .bch-metric::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0;
           height: 1px; pointer-events: none;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
         }
-        .bch-metric:hover { transform: translateY(-2px); }
+        /* ── Conversion cards ── */
         .bch-conv {
-          background: rgba(255,255,255,.04);
+          background: rgba(255,255,255,.035);
           border: 1px solid rgba(255,255,255,.08);
-          border-radius: 14px; padding: 18px;
+          border-radius: 14px; padding: 20px 18px;
           text-align: center; position: relative; overflow: hidden;
+          transition: border-color .18s, box-shadow .18s, transform .18s;
+          cursor: default;
         }
+        .bch-conv:hover {
+          border-color: rgba(255,255,255,.14);
+          transform: translateY(-1px);
+        }
+        /* ── Funnel wrapper ── */
         .bch-funnel-wrap {
-          background: rgba(255,255,255,.04);
-          border: 1px solid rgba(255,255,255,.08);
-          border-radius: 16px; backdrop-filter: blur(16px);
+          background: rgba(255,255,255,.025);
+          border: 1px solid rgba(255,255,255,.07);
+          border-radius: 14px;
           position: relative; overflow: visible;
+          transition: border-color .18s;
         }
+        .bch-funnel-wrap:hover { border-color: rgba(255,255,255,.11); }
         .bch-funnel-wrap::before {
           content: ''; position: absolute; top: 0; left: 0; right: 0;
-          height: 1px; z-index: 1; pointer-events: none;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+          height: 1px; pointer-events: none;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
         }
       `}</style>
 
       {/* ── Channel Selector Grid ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(8,1fr)", gap: 8, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: 8, marginBottom: 18 }}>
         {channels.map((c, i) => {
           const r = (c.published / c.uploaded) * 100;
-          const tc = r >= 5 ? "#3DAA6A" : "#D93B20";
+          const tc = r >= 5 ? "#3EC98A" : r >= 1 ? "#f59e0b" : "#ff4757";
+          const barW = Math.min(r / 10 * 100, 100); // 10% pub rate = full bar
+          const isActive = i === selectedIdx;
           return (
-            <div key={c.ch} className={`bch-pill${i === selectedIdx ? " bch-active" : ""}`} onClick={() => handleSelect(i)}>
-              <span style={{ fontFamily: M, fontSize: 22, fontWeight: 700, color: tc, lineHeight: 1 }}>{c.ch}</span>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: tc, boxShadow: `0 0 6px ${tc}` }} />
+            <div key={c.ch} className={`bch-pill${isActive ? " bch-active" : ""}`} onClick={() => handleSelect(i)}>
+              {/* Top row: label + rate */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", width: "100%", marginBottom: 6 }}>
+                <span style={{ fontFamily: M, fontSize: 13, fontWeight: 700, color: isActive ? "#fff" : "rgba(255,255,255,0.82)", lineHeight: 1 }}>
+                  Ch-{c.ch}
+                </span>
+                <span style={{ fontFamily: M, fontSize: 10.5, fontWeight: 600, color: tc, lineHeight: 1 }}>
+                  {r.toFixed(1)}%
+                </span>
+              </div>
+              {/* Uploaded count */}
+              <span style={{ fontFamily: M, fontSize: 10, color: "rgba(255,255,255,0.38)", lineHeight: 1, marginBottom: 8 }}>
+                {c.uploaded.toLocaleString()}
+              </span>
+              {/* Publish rate bar */}
+              <div style={{ width: "100%", height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ width: `${barW}%`, minWidth: barW > 0 ? 2 : 0, height: "100%", background: tc, borderRadius: 2, transition: "width 0.4s ease" }} />
+              </div>
             </div>
           );
         })}
@@ -212,9 +252,9 @@ function ByChannelTab({ channels }) {
             </div>
             <div style={{
               fontFamily: M, fontSize: 64, fontWeight: 700, lineHeight: 1, marginBottom: 8,
-              background: "linear-gradient(135deg,#FF6040,#D93B20)",
+              background: "linear-gradient(135deg,#ff6b7a,#ff4757)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            }}>{ch.ch}</div>
+            }}>Ch-{ch.ch}</div>
             <div style={{ fontFamily: F, fontSize: 13, color: "#F0F0F0", marginBottom: 14 }}>
               Distribution Channel {ch.ch}
             </div>
@@ -254,19 +294,23 @@ function ByChannelTab({ channels }) {
           </div>
 
           {/* Card 3 — Stats */}
-          <div className="bch-glass" style={{ padding: "4px 20px" }}>
+          <div className="bch-glass" style={{ padding: "6px 18px 10px" }}>
             {[
-              { label: "Uploaded", value: ch.uploaded.toLocaleString(), color: "#F0F0F0" },
-              { label: "AI Created", value: ch.created.toLocaleString(), color: "#FF6040" },
-              { label: "Published", value: ch.published.toLocaleString(), color: TC },
+              { label: "Uploaded",   value: ch.uploaded,   color: "rgba(255,255,255,0.88)", barColor: "rgba(255,255,255,0.25)", barW: 100 },
+              { label: "AI Created", value: ch.created,    color: "#ff6b7a",                barColor: "#ff4757",                barW: Math.min((ch.created / (ch.created || 1)) * 100, 100) },
+              { label: "Published",  value: ch.published,  color: TC,                       barColor: TC,                       barW: Math.min((ch.published / (ch.uploaded || 1)) * 200, 100) },
             ].map((row, i, arr) => (
               <div key={row.label} style={{
-                display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "13px 0",
+                padding: "12px 0",
                 borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,.05)" : "none",
               }}>
-                <span style={{ fontFamily: F, fontSize: 12.5, color: "rgba(255,255,255,0.62)" }}>{row.label}</span>
-                <span style={{ fontFamily: M, fontSize: 13, fontWeight: 700, color: row.color }}>{row.value}</span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                  <span style={{ fontFamily: F, fontSize: 12.5, color: "rgba(255,255,255,0.60)", fontWeight: 500 }}>{row.label}</span>
+                  <span style={{ fontFamily: M, fontSize: 13.5, fontWeight: 700, color: row.color }}>{row.value.toLocaleString()}</span>
+                </div>
+                <div style={{ height: 3, background: "rgba(255,255,255,0.05)", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ width: `${row.barW}%`, height: "100%", background: row.barColor, borderRadius: 2, opacity: 0.7 }} />
+                </div>
               </div>
             ))}
           </div>
@@ -284,22 +328,22 @@ function ByChannelTab({ channels }) {
               </div>
               <span style={{
                 display: "inline-flex", alignItems: "center",
-                background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)",
-                borderRadius: 20, padding: "3px 10px",
-                fontFamily: F, fontSize: 9, fontWeight: 700, color: "#888",
+                background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.10)",
+                borderRadius: 20, padding: "4px 11px",
+                fontFamily: F, fontSize: 11.5, fontWeight: 500, color: "rgba(255,255,255,0.55)",
               }}>Content multiplied</span>
             </div>
 
             <div className="bch-metric">
               <div style={{ fontFamily: F, fontSize: 12, color: "rgba(255,255,255,0.60)", marginBottom: 10, fontWeight: 500 }}>Pub Drop</div>
-              <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#D93B20", lineHeight: 1, marginBottom: 10 }}>
+              <div style={{ fontFamily: M, fontSize: 32, fontWeight: 700, color: "#ff4757", lineHeight: 1, marginBottom: 10 }}>
                 -{pubDropPct.toFixed(1)}%
               </div>
               <span style={{
                 display: "inline-flex", alignItems: "center",
-                background: "rgba(217,59,32,.1)", border: "1px solid rgba(217,59,32,.25)",
-                borderRadius: 20, padding: "3px 10px",
-                fontFamily: F, fontSize: 9, fontWeight: 700, color: "#D93B20",
+                background: "rgba(255,71,87,.10)", border: "1px solid rgba(255,71,87,.25)",
+                borderRadius: 20, padding: "4px 11px",
+                fontFamily: F, fontSize: 11.5, fontWeight: 500, color: "#ff6b7a",
               }}>Filtered out</span>
             </div>
 
@@ -310,10 +354,10 @@ function ByChannelTab({ channels }) {
               </div>
               <span style={{
                 display: "inline-flex", alignItems: "center",
-                background: isGreen ? "rgba(61,170,106,.1)" : "rgba(217,59,32,.1)",
-                border: `1px solid ${isGreen ? "rgba(61,170,106,.25)" : "rgba(217,59,32,.25)"}`,
-                borderRadius: 20, padding: "3px 10px",
-                fontFamily: F, fontSize: 9, fontWeight: 700, color: TC,
+                background: isGreen ? "rgba(62,201,138,.10)" : "rgba(255,71,87,.10)",
+                border: `1px solid ${isGreen ? "rgba(62,201,138,.25)" : "rgba(255,71,87,.25)"}`,
+                borderRadius: 20, padding: "4px 11px",
+                fontFamily: F, fontSize: 11.5, fontWeight: 500, color: TC,
               }}>{isGreen ? "Above threshold" : "Below threshold"}</span>
             </div>
           </div>
@@ -337,20 +381,20 @@ function ByChannelTab({ channels }) {
                     <stop offset="100%" stopColor="rgba(255,255,255,.22)" />
                   </linearGradient>
                   <linearGradient id={`bcr${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="rgba(255,96,64,.5)" />
-                    <stop offset="50%" stopColor="rgba(255,130,60,.82)" />
-                    <stop offset="100%" stopColor="rgba(217,59,32,.55)" />
+                    <stop offset="0%" stopColor="rgba(255,71,87,.45)" />
+                    <stop offset="50%" stopColor="rgba(255,100,110,.82)" />
+                    <stop offset="100%" stopColor="rgba(255,71,87,.55)" />
                   </linearGradient>
                   <linearGradient id={`bpu${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor={TC} stopOpacity="0.35" />
                     <stop offset="100%" stopColor={TC} stopOpacity="0.9" />
                   </linearGradient>
                   <linearGradient id={`bt1${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="rgba(255,255,255,.18)" />
-                    <stop offset="100%" stopColor="rgba(255,96,64,.5)" />
+                    <stop offset="0%" stopColor="rgba(255,255,255,.15)" />
+                    <stop offset="100%" stopColor="rgba(255,71,87,.45)" />
                   </linearGradient>
                   <linearGradient id={`bt2${ch.ch}`} x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="rgba(217,59,32,.5)" />
+                    <stop offset="0%" stopColor="rgba(255,71,87,.45)" />
                     <stop offset="100%" stopColor={TC} stopOpacity="0.35" />
                   </linearGradient>
                   <filter id={`gcr${ch.ch}`} x="-30%" y="-30%" width="160%" height="160%">
@@ -379,7 +423,7 @@ function ByChannelTab({ channels }) {
                 <text x="79" y={CY-upH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
                   fill="rgba(255,255,255,.55)" letterSpacing="1.5">UPLOADED</text>
                 <text x="313" y={CY-crH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
-                  fill="#FF6040" letterSpacing="1.5">AI CREATED</text>
+                  fill="#ff6b7a" letterSpacing="1.5">AI CREATED</text>
                 <text x="564" y={CY-puH/2-14} textAnchor="middle" fontFamily={F} fontSize="10"
                   fill={TC} letterSpacing="1.5">PUBLISHED</text>
 
@@ -426,7 +470,7 @@ function ByChannelTab({ channels }) {
                   }}>
                     <div style={{
                       padding: "8px 14px", borderBottom: "1px solid rgba(255,255,255,.06)",
-                      fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase",
+                      fontFamily: F, fontSize: 11, fontWeight: 700, textTransform: "uppercase",
                       color: tip.color, letterSpacing: "0.1em",
                     }}>{tip.title}</div>
                     {tip.rows?.map((r, i) => (
@@ -434,9 +478,9 @@ function ByChannelTab({ channels }) {
                         padding: "6px 14px",
                         borderBottom: i < tip.rows.length - 1 ? "1px solid rgba(255,255,255,.04)" : "none",
                       }}>
-                        <div style={{ fontFamily: F, fontSize: 10, color: "#444", marginBottom: 1 }}>{r.label}</div>
-                        <div style={{ fontFamily: M, fontSize: 12, fontWeight: 700, color: tip.color }}>{r.value}</div>
-                        <div style={{ fontFamily: F, fontSize: 9, color: "#383838" }}>{r.unit}</div>
+                        <div style={{ fontFamily: F, fontSize: 11, color: "rgba(255,255,255,0.48)", marginBottom: 1 }}>{r.label}</div>
+                        <div style={{ fontFamily: M, fontSize: 13, fontWeight: 700, color: tip.color }}>{r.value}</div>
+                        <div style={{ fontFamily: F, fontSize: 10, color: "rgba(255,255,255,0.35)" }}>{r.unit}</div>
                       </div>
                     ))}
                   </div>
@@ -464,9 +508,9 @@ function ByChannelTab({ channels }) {
               <div style={{ fontFamily: F, fontSize: 9, color: "rgba(255,255,255,0.55)" }}>Content pub rate</div>
             </div>
             <div className="bch-conv">
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "#FF6040", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 80, height: 80, borderRadius: "50%", background: "#ff4757", filter: "blur(30px)", opacity: 0.15, pointerEvents: "none" }} />
               <div style={{ fontFamily: F, fontSize: 9, fontWeight: 700, textTransform: "uppercase", color: "rgba(255,255,255,0.55)", letterSpacing: "0.08em", marginBottom: 8 }}>Upload → Publish</div>
-              <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#FF6040", marginBottom: 4 }}>
+              <div style={{ fontFamily: M, fontSize: 30, fontWeight: 700, color: "#ff4757", marginBottom: 4 }}>
                 {((ch.published / ch.uploaded) * 100).toFixed(1)}%
               </div>
               <div style={{ fontFamily: F, fontSize: 9, color: "rgba(255,255,255,0.55)" }}>End-to-end rate</div>
