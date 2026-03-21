@@ -125,11 +125,6 @@ function SectionFunnel({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sig-block">
-        <p className="sig-line">{sig.a}</p>
-        <p className="sig-line">{sig.b}</p>
-      </div>
-
       <div className="sub-tabs">
         {sectionData.subTabs.map(([k, l]) => (
           <div
@@ -381,83 +376,161 @@ function SectionFunnel({ theme, onAskAI }) {
       {subView === "pipeline" && (
         <div className="stack">
           <div className="g-4-6">
-            <div className="card" style={{ padding: "16px 18px" }}>
-              <div
-                style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--ink3)",
-                  marginBottom: 14,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span>LANGUAGE PIPELINE BREAKDOWN</span>
-                <GraphActionButtons
-                  insightsOpen={!!insightsOpen.languagePipeline}
-                  onToggleInsights={() => toggleInsights("languagePipeline")}
-                  onAskAI={() =>
-                    onAskAI && onAskAI("Language Pipeline", LANGUAGES)
-                  }
-                />
-              </div>
-              <GraphFlip
-                flipped={!!insightsOpen.languagePipeline}
-                minHeight={360}
-                front={
-                  <>
-                    {LANGUAGES.map((l) => {
-                      const pr = ((l.published / l.uploaded) * 100).toFixed(2);
-                      const color =
-                        parseFloat(pr) > 1
-                          ? "var(--pri)"
-                          : parseFloat(pr) > 0
-                            ? "var(--warn)"
-                            : "var(--red-lt)";
-                      return (
-                        <div key={l.lang} style={{ marginBottom: 12 }}>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              marginBottom: 5,
-                            }}
-                          >
-                            <span
-                              style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: 10,
-                                color: "var(--ink2)",
-                              }}
-                            >
-                              {l.lang}
-                            </span>
-                            <span
-                              style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: 9,
-                                color,
-                              }}
-                            >
-                              pub rate {pr}%
-                            </span>
-                          </div>
-                          <PublishFunnel
-                            uploaded={l.uploaded}
-                            created={l.created}
-                            published={l.published}
-                          />
+            {/* ── Language Pipeline — columnar table ── */}
+            {(() => {
+              const maxUp = Math.max(...LANGUAGES.map(l => l.uploaded), 1);
+              const maxCr = Math.max(...LANGUAGES.map(l => l.created), 1);
+              const maxPb = Math.max(...LANGUAGES.map(l => l.published), 1);
+              const totalUploaded  = LANGUAGES.reduce((s, l) => s + l.uploaded,  0);
+              const totalProcessed = LANGUAGES.reduce((s, l) => s + l.created,   0);
+              const totalPublished = LANGUAGES.reduce((s, l) => s + l.published, 0);
+              const totalLost      = totalProcessed - totalPublished;
+              const globalPubRate  = totalUploaded > 0 ? (totalPublished / totalUploaded * 100).toFixed(1) : '0.0';
+              const publishingLangs = LANGUAGES.filter(l => l.published > 0).length;
+              const top = LANGUAGES[0];
+              const topPct = totalUploaded > 0 ? (top?.uploaded / totalUploaded * 100).toFixed(0) : 0;
+              const SF = '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif';
+              const COL = '116px 1fr 1fr 1fr 72px';
+
+              return (
+                <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 14, fontFamily: SF, overflow: 'hidden' }}>
+
+                  {/* ── header ── */}
+                  <div style={{ padding: '20px 26px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400, marginBottom: 7 }}>
+                        Language Pipeline
+                      </div>
+                      <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.48)', fontWeight: 400, lineHeight: 1.55 }}>
+                        {top?.lang} leads with {topPct}% of uploads — {totalPublished.toLocaleString()} items distributed across platforms.
+                      </div>
+                    </div>
+                    {/* stat badges */}
+                    <div style={{ display: 'flex', gap: 0, borderRadius: 8, border: '0.5px solid rgba(255,255,255,0.07)', overflow: 'hidden', flexShrink: 0 }}>
+                      {[
+                        { l: 'Languages',  v: LANGUAGES.length },
+                        { l: 'Publishing', v: publishingLangs },
+                        { l: 'Pub rate',   v: globalPubRate + '%' },
+                      ].map((b, i, arr) => (
+                        <div key={b.l} style={{ padding: '8px 16px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
+                          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>{b.l}</div>
+                          <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{b.v}</div>
                         </div>
-                      );
-                    })}
-                  </>
-                }
-                back={<GraphInsights title="Language Pipeline Breakdown" />}
-              />
-            </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* ── column headers ── */}
+                  <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '10px 26px', borderBottom: '0.5px solid rgba(255,255,255,0.05)', alignItems: 'center' }}>
+                    <div />
+                    {[
+                      { l: 'Uploaded',  pip: 'rgba(255,255,255,0.30)' },
+                      { l: 'Processed', pip: 'rgba(200,160,74,0.75)' },
+                      { l: 'Published', pip: 'rgba(74,170,120,0.80)' },
+                    ].map(col => (
+                      <div key={col.l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 3, height: 12, background: col.pip, borderRadius: 1, flexShrink: 0 }} />
+                        <span style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400 }}>{col.l}</span>
+                      </div>
+                    ))}
+                    <div style={{ fontSize: 9, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)', fontWeight: 400, textAlign: 'right' }}>Rate</div>
+                  </div>
+
+                  {/* ── rows via GraphFlip ── */}
+                  <GraphFlip
+                    flipped={!!insightsOpen.languagePipeline}
+                    minHeight={180}
+                    front={
+                      <div>
+                        {LANGUAGES.map((l, i) => {
+                          const pr = l.uploaded > 0 ? l.published / l.uploaded * 100 : 0;
+                          const expansion = l.uploaded > 0 ? ((l.created / l.uploaded - 1) * 100).toFixed(0) : '0';
+                          const nameColor = i === 0 ? 'rgba(255,255,255,0.82)' : i === 1 ? 'rgba(255,255,255,0.62)' : 'rgba(255,255,255,0.40)';
+                          const pill = pr >= 2
+                            ? { c: '#4aaa78',  bg: 'rgba(74,170,120,0.08)',  b: 'rgba(74,170,120,0.16)'  }
+                            : pr > 0
+                              ? { c: '#c8a04a',  bg: 'rgba(200,160,74,0.07)', b: 'rgba(200,160,74,0.16)'  }
+                              : { c: 'rgba(255,255,255,0.20)', bg: 'transparent', b: 'rgba(255,255,255,0.07)' };
+                          return (
+                            <div key={l.lang} style={{ borderBottom: '0.5px solid rgba(255,255,255,0.04)' }}>
+                              {/* data row */}
+                              <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '16px 26px 8px', alignItems: 'flex-start' }}>
+                                <div style={{ fontSize: 13, color: nameColor, fontWeight: 500 }}>{l.lang}</div>
+                                <div>
+                                  <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.52)', fontVariantNumeric: 'tabular-nums' }}>{l.uploaded.toLocaleString()}</div>
+                                  <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.18)', marginTop: 3 }}>source files</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: 15, color: '#c8a04a', fontVariantNumeric: 'tabular-nums' }}>{l.created.toLocaleString()}</div>
+                                  <div style={{ fontSize: 9.5, color: 'rgba(200,160,74,0.40)', marginTop: 3 }}>+{expansion}% expanded</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: 15, color: l.published > 0 ? '#4aaa78' : 'rgba(255,255,255,0.20)', fontVariantNumeric: 'tabular-nums' }}>{l.published.toLocaleString()}</div>
+                                  <div style={{ fontSize: 9.5, color: l.published > 0 ? 'rgba(74,170,120,0.40)' : 'rgba(224,96,80,0.50)', marginTop: 3 }}>
+                                    {l.published > 0 ? 'distributed' : 'none distributed'}
+                                  </div>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', paddingTop: 2 }}>
+                                  <span style={{ fontSize: 11, fontWeight: 500, color: pill.c, background: pill.bg, border: `0.5px solid ${pill.b}`, borderRadius: 5, padding: '3px 8px', fontVariantNumeric: 'tabular-nums' }}>
+                                    {pr.toFixed(1)}%
+                                  </span>
+                                </div>
+                              </div>
+                              {/* bar row */}
+                              <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '6px 26px 14px', alignItems: 'center' }}>
+                                <div />
+                                <div style={{ paddingRight: 14 }}>
+                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
+                                    <div style={{ width: `${(l.uploaded / maxUp) * 100}%`, height: '100%', background: 'rgba(255,255,255,0.22)', borderRadius: 2 }} />
+                                  </div>
+                                </div>
+                                <div style={{ paddingRight: 14 }}>
+                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
+                                    <div style={{ width: `${(l.created / maxCr) * 100}%`, height: '100%', background: 'rgba(200,160,74,0.55)', borderRadius: 2 }} />
+                                  </div>
+                                </div>
+                                <div style={{ paddingRight: 14 }}>
+                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
+                                    <div style={{ width: `${maxPb > 0 ? (l.published / maxPb) * 100 : 0}%`, height: '100%', background: 'rgba(74,170,120,0.70)', borderRadius: 2 }} />
+                                  </div>
+                                </div>
+                                <div />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    }
+                    back={<GraphInsights title="Language Pipeline Breakdown" />}
+                  />
+
+                  {/* ── action buttons ── */}
+                  <div style={{ padding: '12px 26px', borderTop: '0.5px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'flex-end' }}>
+                    <GraphActionButtons
+                      insightsOpen={!!insightsOpen.languagePipeline}
+                      onToggleInsights={() => toggleInsights("languagePipeline")}
+                      onAskAI={() => onAskAI && onAskAI("Language Pipeline", LANGUAGES)}
+                    />
+                  </div>
+
+                  {/* ── footer totals ── */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderTop: '0.5px solid rgba(255,255,255,0.05)' }}>
+                    {[
+                      { l: 'Uploaded',  v: totalUploaded,  c: 'rgba(255,255,255,0.65)' },
+                      { l: 'Processed', v: totalProcessed, c: '#c8a04a' },
+                      { l: 'Published', v: totalPublished, c: '#4aaa78' },
+                      { l: 'Lost',      v: totalLost,      c: '#e06050' },
+                    ].map((s, i, arr) => (
+                      <div key={s.l} style={{ padding: '14px 26px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.05)' : 'none' }}>
+                        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5 }}>{s.l}</div>
+                        <div style={{ fontSize: 18, color: s.c, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.v.toLocaleString()}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+              );
+            })()}
             <div className="card" style={{ padding: "16px 18px" }}>
               <div
                 style={{

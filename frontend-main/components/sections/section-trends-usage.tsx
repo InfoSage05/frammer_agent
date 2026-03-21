@@ -389,10 +389,6 @@ function SectionTrends({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <div className="sig-block">
-        <p className="sig-line">Feb '26 peaked at <span className="sig-pos">2,756 outputs (+194% MoM)</span> — H2 outperformed H1 by <span className="sig-val">3.2×</span> across all content types.</p>
-        <p className="sig-line">Upload volume was steady across 12 months, while publish rate declined in <span className="sig-warn">Q4 2025</span>.</p>
-      </div>
       <div className="filter-panel">
         <div className="filter-group">
           <div className="filter-group-label">Metric</div>
@@ -444,7 +440,7 @@ function SectionTrends({ theme, onAskAI }) {
         </div>
       </div>
 
-      <div className="card card-gold mb12" style={{ padding: "18px 20px" }}>
+      <div className="card card-gold mb12" style={{ padding: "22px 26px" }}>
         <div
           style={{
             display: "flex",
@@ -515,7 +511,7 @@ function SectionTrends({ theme, onAskAI }) {
 
 
       <div className="g2 mb12">
-        <div className="card" style={{ padding: "16px 18px" }}>
+        <div className="card" style={{ padding: "20px 24px" }}>
           <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: 12, fontWeight: 400 }}>
             Duration Trend — Hours
           </div>
@@ -573,7 +569,7 @@ function SectionTrends({ theme, onAskAI }) {
             back={<GraphInsights title="Duration Trend" />}
           />
         </div>
-        <div className="card" style={{ padding: "16px 18px" }}>
+        <div className="card" style={{ padding: "20px 24px" }}>
           <div
             style={{
               fontSize: 11,
@@ -675,7 +671,7 @@ function SectionTrends({ theme, onAskAI }) {
       </div>
 
       {compare && (
-        <div className="card" style={{ padding: "18px 20px", marginTop: 0 }}>
+        <div className="card" style={{ padding: "22px 26px", marginTop: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
             <div>
               <div style={{ fontSize: 11, fontFamily: '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif', letterSpacing: "0.06em", textTransform: "uppercase", color: "rgba(255,179,64,0.80)", marginBottom: 3, fontWeight: 400 }}>
