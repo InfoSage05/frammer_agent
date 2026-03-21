@@ -59,6 +59,7 @@
     "language_breakdown",
     "user_performance",
     "channel_user_breakdown",
-    "language_pie"
+    "language_pie",
+    "channel_platform_heatmap"
   ]
 }

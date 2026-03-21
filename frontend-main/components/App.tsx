@@ -509,6 +509,18 @@ export default function App(props: any) {
               })}
 
               <div style={{ margin: "16px 0 8px" }}>
+                <div className="nav-grp">TOOLS</div>
+                <div
+                  className="nav-item"
+                  onClick={() => { window.location.href = '/analyze'; }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span className="nav-icon">⬆</span>
+                  <span className="nav-label">Upload &amp; Analyze</span>
+                </div>
+              </div>
+
+              <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">WORKSPACE</div>
                 <div className={`nav-item${panelOpen && panelTab === 'explain' ? ' active' : ''}`} onClick={() => openPanel('explain')}>
                   <span className="nav-icon">◈</span>

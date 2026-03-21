@@ -339,16 +339,102 @@ export function useLiveSectionData(
     }
 
     if (sectionKey === "explorer") {
-      const platforms = (cd.platform_distribution || []).map((p: any) => p.name);
+      const platformKeyLabels: [string, string][] = [
+        ["facebook", "Facebook"], ["instagram", "Instagram"], ["linkedin", "LinkedIn"],
+        ["youtube", "YouTube"], ["x", "X"], ["shorts", "Shorts"], ["reels", "Reels"], ["threads", "Threads"],
+      ];
+
+      // Build heatmap from channel_platform_heatmap chart data
+      const heatmapRaw = cd.channel_platform_heatmap || [];
+      let platformNames: string[] = [];
+      let platformHeatmap: any[] = [];
+      if (heatmapRaw.length > 0) {
+        // Filter to platforms that have at least one non-zero value
+        const activePlatforms = platformKeyLabels.filter(([key]) =>
+          heatmapRaw.some((r: any) => (r[key] || 0) > 0)
+        );
+        platformNames = activePlatforms.map(([, label]) => label);
+        platformHeatmap = heatmapRaw.map((r: any) => ({
+          channel: r.channel || "",
+          values: activePlatforms.map(([key]) => r[key] || 0),
+        }));
+      } else {
+        // Fallback to static or distribution-based names
+        platformNames = (cd.platform_distribution || []).map((p: any) => p.name);
+      }
+
       const languageDonut = languages.slice(0, 5).map((l, i) => ({
         label: l.lang, value: l.uploaded,
         color: ["var(--pri)", "var(--amber)", "var(--suc)", "var(--red)", "var(--ink3)"][i % 5],
       }));
+
+      const unknownTeam = getVal("unknown_team_rate", 99);
+      const nullPlatform = getVal("null_platform_rate", 136);
+      const qualityScore = getVal("data_quality_score", 30);
       const completenessRings = [
-        { label: "Team Attribution", pct: Math.max(0, 100 - getVal("unknown_team_rate", 99)), color: "var(--red)", size: 48 },
-        { label: "Platform Data", pct: Math.max(0, 100 - getVal("null_platform_rate", 136)), color: "var(--amber)", size: 48 },
-        { label: "Data Quality", pct: getVal("data_quality_score", 30), color: "var(--suc)", size: 48 },
+        { label: "Team Attribution", pct: Math.max(0, 100 - unknownTeam), color: "var(--red)", size: 48 },
+        { label: "Platform Data", pct: Math.max(0, 100 - nullPlatform), color: "var(--amber)", size: 48 },
+        { label: "Data Quality", pct: qualityScore, color: "var(--suc)", size: 48 },
       ];
+
+      // Build data quality rows from backend metrics
+      const publishRate = getVal("publish_rate", 0);
+      const zeroPubChannels = getVal("zero_pub_channel_count", 0);
+      const zeroPubUsers = getVal("zero_pub_user_count", 0);
+      const publishDropoff = getVal("publish_dropoff", 0);
+      const totalChannels = getVal("distinct_channels", 0);
+      const totalUsers = getVal("distinct_users", 0);
+      const dataQualityRows = [
+        {
+          l: "Team Attribution",
+          v: `${(100 - unknownTeam).toFixed(1)}%`,
+          pct: Math.max(0, 100 - unknownTeam),
+          c: unknownTeam > 50 ? "var(--red-lt)" : "var(--green-lt)",
+          severity: unknownTeam > 50 ? "critical" : "warning",
+          detail: `${unknownTeam.toFixed(1)}% of videos have unknown team attribution`,
+        },
+        {
+          l: "Platform Coverage",
+          v: `${Math.max(0, 100 - nullPlatform).toFixed(1)}%`,
+          pct: Math.max(0, 100 - nullPlatform),
+          c: nullPlatform > 50 ? "var(--red-lt)" : "var(--green-lt)",
+          severity: nullPlatform > 50 ? "critical" : "warning",
+          detail: `${nullPlatform.toFixed(1)}% of published videos missing platform info`,
+        },
+        {
+          l: "Overall Data Quality",
+          v: `${qualityScore.toFixed(1)}%`,
+          pct: qualityScore,
+          c: qualityScore < 50 ? "var(--red-lt)" : qualityScore < 75 ? "var(--amber-lt)" : "var(--green-lt)",
+          severity: qualityScore < 50 ? "critical" : "warning",
+          detail: `Weighted completeness score across key fields`,
+        },
+        {
+          l: "Publish Rate",
+          v: `${publishRate.toFixed(2)}%`,
+          pct: Math.min(publishRate * 10, 100),
+          c: publishRate < 5 ? "var(--amber-lt)" : "var(--green-lt)",
+          severity: publishRate < 5 ? "warning" : undefined,
+          detail: `${publishDropoff.toLocaleString()} created clips never published`,
+        },
+        {
+          l: "Zero-Publish Channels",
+          v: `${zeroPubChannels} / ${totalChannels}`,
+          pct: totalChannels > 0 ? ((totalChannels - zeroPubChannels) / totalChannels) * 100 : 100,
+          c: zeroPubChannels > 0 ? "var(--amber-lt)" : "var(--green-lt)",
+          severity: zeroPubChannels > 0 ? "warning" : undefined,
+          detail: `${zeroPubChannels} channel(s) with zero published clips`,
+        },
+        {
+          l: "Zero-Publish Users",
+          v: `${zeroPubUsers} / ${totalUsers}`,
+          pct: totalUsers > 0 ? ((totalUsers - zeroPubUsers) / totalUsers) * 100 : 100,
+          c: zeroPubUsers > 0 ? "var(--amber-lt)" : "var(--green-lt)",
+          severity: zeroPubUsers > 0 ? "warning" : undefined,
+          detail: `${zeroPubUsers} user(s) with zero published clips`,
+        },
+      ];
+
       return {
         ...s,
         meta,
@@ -358,9 +444,9 @@ export function useLiveSectionData(
         channelMetrics,
         subTabs: s.subTabs || [["users", "User Rankings"], ["channels", "Channel Drilldown"], ["quality", "Data Quality"], ["kpi_tree", "KPI Framework"], ["d3tree", "Hierarchy Tree"], ["advanced_kpi", "Advanced KPI"]],
         userSortOptions: s.userSortOptions || [["created", "Created"], ["published", "Published"], ["uploaded", "Uploaded"]],
-        platformNames: platforms.length ? platforms : (s.platformNames || []),
-        platformHeatmap: s.platformHeatmap || [],
-        dataQualityRows: s.dataQualityRows || [],
+        platformNames: platformNames.length ? platformNames : (s.platformNames || []),
+        platformHeatmap: platformHeatmap.length ? platformHeatmap : (s.platformHeatmap || []),
+        dataQualityRows,
         completenessRings,
         languageDonut,
         hierarchyOptions: s.hierarchyOptions || {
@@ -368,7 +454,33 @@ export function useLiveSectionData(
           child: [["user", "User"], ["channel", "Channel"], ["inputtype", "Input type"]],
           metric: [["cr", "Created"], ["up", "Uploaded"], ["pb", "Published"]],
         },
-        kpiTree: s.kpiTree || {},
+        kpiTree: (() => {
+          const catLabels: Record<string, string> = {
+            volume: "Volume & Scale", conversion: "Conversion & Publish",
+            efficiency: "Efficiency", duration: "Duration",
+            growth: "Growth & Trends", content_mix: "Content Mix",
+            platform: "Platform", data_quality: "Data Quality",
+          };
+          const grouped: Record<string, any[]> = {};
+          for (const met of m) {
+            const cat = met.category || "other";
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(met);
+          }
+          return {
+            name: "Frammer KPI Framework", type: "root",
+            children: Object.entries(grouped).map(([cat, items]) => ({
+              name: catLabels[cat] || cat, type: "category",
+              children: items.map((met: any) => ({
+                name: met.name, type: "leaf",
+                value: met.formatted || String(met.value),
+                formula: met.function?.replace("compute_", "").replace(/_/g, " ") || "",
+                avail: (met.dataset_sources || []).length ? "direct" : "derived",
+                critical: cat === "data_quality" || (cat === "conversion" && met.value < 2),
+              })),
+            })),
+          };
+        })(),
         _live: true,
       };
     }
