@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(node -e \"const fs = require\\(''fs''\\); const css = fs.readFileSync\\(''./app/globals.css'', ''utf8''\\); console.log\\(''lines:'', css.split\\(''\\\\n''\\).length\\); console.log\\(''sidebar::after present:'', css.includes\\(''sidebar::after''\\)\\); console.log\\(''topbar::after present:'', css.includes\\(''topbar::after''\\)\\);\")",
+      "Bash(npm run:*)",
+      "Bash(cmd /c \"npm run build 2>&1\")",
+      "Bash(powershell -Command \"cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30\")",
+      "Bash(powershell -Command \"& { \\\\$env:Path += ';C:\\\\Program Files\\\\nodejs'; cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30 }\")"
+    ]
+  }
+}

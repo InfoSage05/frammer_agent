@@ -62,7 +62,7 @@ export default function ContextBar() {
 
       {/* Filtered badge */}
       {filteredData?.isFiltered && (
-        <span className="badge badge-gold" style={{ fontSize: 7 }}>filtered</span>
+        <span className="badge badge-gold">filtered</span>
       )}
 
       {/* Hint when nothing active */}

@@ -459,7 +459,7 @@ export default function App(props: any) {
                 </div>
               </div>
 
-              <div className="nav-grp" style={{ letterSpacing: "0.16em", fontSize: 7 }}>SECTIONS</div>
+              <div className="nav-grp">SECTIONS</div>
               {ALL_SECTIONS.map((s) => {
                 const isClient = s.k === "client";
                 return (
@@ -474,7 +474,7 @@ export default function App(props: any) {
                     <span className="nav-label">
                       {pageTitles[s.k] || s.label}
                       {isClient && (
-                        <span style={{ marginLeft: 5, fontSize: 7, fontFamily: "var(--font-mono)", color: "var(--ink4)", letterSpacing: "0.1em" }}>
+                        <span style={{ marginLeft: 5, fontSize: 9, fontFamily: "var(--font-mono)", color: "var(--ink4)", letterSpacing: "0.08em" }}>
                           PRIVATE
                         </span>
                       )}
@@ -484,7 +484,7 @@ export default function App(props: any) {
               })}
 
               <div style={{ margin: "16px 0 8px" }}>
-                <div className="nav-grp" style={{ letterSpacing: "0.16em", fontSize: 7 }}>WORKSPACE</div>
+                <div className="nav-grp">WORKSPACE</div>
                 <div className={`nav-item${panelOpen && panelTab === 'explain' ? ' active' : ''}`} onClick={() => openPanel('explain')}>
                   <span className="nav-icon">◈</span>
                   <span className="nav-label">Explain</span>
@@ -499,7 +499,7 @@ export default function App(props: any) {
                 </div>
               </div>
 
-              <div style={{ margin: "8px 0 0" }}>
+              <div style={{ margin: "4px 0 0" }}>
                 <div className="nav-grp">{shellData?.sidebar?.period?.label || "Period"}</div>
                 <div className="sb-period">
                   {shellData?.sidebar?.period?.value}
@@ -508,7 +508,7 @@ export default function App(props: any) {
                 </div>
               </div>
               <div className="sb-stats">
-                <div style={{ fontSize: 7, fontFamily: "var(--font-mono)", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink4)", marginBottom: 8 }}>
+                <div className="nav-grp" style={{ paddingTop: 12 }}>
                   Platform
                 </div>
                 {(shellData?.sidebar?.platformKpis || []).map((s) => (
@@ -519,7 +519,7 @@ export default function App(props: any) {
                 ))}
               </div>
               <div className="sb-foot">
-                v19 · Production · <span style={{ color: 'var(--suc)' }}>●</span> live
+                v19 · <span style={{ color: 'var(--suc)', opacity: 0.9 }}>● live</span>
               </div>
             </ResizableSidebar>
 
@@ -555,11 +555,11 @@ export default function App(props: any) {
                     <span className="cmd-trigger-kbd">⌘K</span>
                   </div>
                   <div className="topbar-kpi-strip">
-                    <span style={{ color: 'var(--ink2)' }}><span className="kv">{M.uploaded.toLocaleString()}</span> up</span>
+                    <span><span className="kv">{M.uploaded.toLocaleString()}</span> <span style={{ opacity: 0.6 }}>up</span></span>
                     <span className="sep">·</span>
-                    <span style={{ color: 'var(--pri-lt)' }}><span className="kv">{M.created.toLocaleString()}</span> cr</span>
+                    <span><span className="kv" style={{ color: 'var(--pri-lt)' }}>{M.created.toLocaleString()}</span> <span style={{ opacity: 0.6 }}>cr</span></span>
                     <span className="sep">·</span>
-                    <span style={{ color: 'var(--warn-lt)' }}><span className="kv">{M.published}</span> pub</span>
+                    <span><span className="kv" style={{ color: 'var(--suc-lt)' }}>{M.published}</span> <span style={{ opacity: 0.6 }}>pub</span></span>
                   </div>
                   <RoleSwitcher role={role} setRole={setRole} />
                   <button
@@ -592,7 +592,7 @@ export default function App(props: any) {
 
               {/* Main scrollable sections with progressive disclosure */}
               {!clientOpen && (
-                <div className="content" ref={contentRef} style={{ padding: 16 }}>
+                <div className="content" ref={contentRef} style={{ padding: '20px 24px' }}>
                   {pagedMode ? (
                     renderPagedSection()
                   ) : (

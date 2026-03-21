@@ -148,32 +148,31 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
       {/* ── SUMMARY ── */}
       {subView === "summary" && (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10, marginBottom: 18 }} className="stagger">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 24 }} className="stagger">
             {FLASHCARDS.map((card, idx) => (
               <div
                 key={card.id}
                 className={`card ${card.accent} fade-up`}
-                style={{ padding: '14px 15px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+                style={{ padding: '18px 18px 16px', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
                 onClick={() => onAskAI && onAskAI(card.label, { value: card.value, sub: card.sub })}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                  <div style={{ fontSize: 7, fontFamily: 'var(--font-mono)', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--ink4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
+                  <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink4)', fontWeight: 600 }}>
                     {card.label}
                   </div>
-                  <span style={{ fontSize: 11, opacity: 0.5 }}>{card.icon}</span>
+                  <span style={{ fontSize: 11, opacity: 0.35 }}>{card.icon}</span>
                 </div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 26, color: card.color, lineHeight: 1, letterSpacing: '-0.01em' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 24, color: card.color, lineHeight: 1, letterSpacing: '-0.02em', fontWeight: 700 }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 8, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 5, lineHeight: 1.3 }}>
+                <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 7, lineHeight: 1.4 }}>
                   {card.sub}
                 </div>
                 {card.spark && (
-                  <div style={{ marginTop: 8 }}>
+                  <div style={{ marginTop: 10 }}>
                     <Sparkline data={card.spark} max={Math.max(...card.spark)} color={card.color} h={20} />
                   </div>
                 )}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: card.color, opacity: 0.25 }} />
               </div>
             ))}
           </div>
@@ -195,38 +194,42 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 key={i}
                 style={{
                   flex: 1,
-                  padding: "10px 16px",
+                  padding: "14px 20px",
                   borderRight: i < 4 ? "1px solid var(--line-lt)" : "none",
                 }}
               >
                 <div
                   style={{
-                    fontSize: 6.5,
+                    fontSize: 9,
                     fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.18em",
+                    letterSpacing: "0.14em",
                     textTransform: "uppercase",
                     color: "var(--ink4)",
-                    marginBottom: 5,
+                    marginBottom: 7,
+                    fontWeight: 600,
                   }}
                 >
                   {s.label}
                 </div>
                 <div
                   style={{
-                    fontFamily: "var(--font-serif)",
-                    fontSize: 17,
+                    fontFamily: "var(--font-sans)",
+                    fontSize: 18,
                     color: "var(--ink)",
                     lineHeight: 1,
+                    fontWeight: 600,
+                    letterSpacing: '-0.01em',
                   }}
                 >
                   {s.v}
                 </div>
                 <div
                   style={{
-                    fontSize: 8,
+                    fontSize: 10,
                     fontFamily: "var(--font-mono)",
                     color: "var(--ink4)",
-                    marginTop: 4,
+                    marginTop: 5,
+                    lineHeight: 1.4,
                   }}
                 >
                   {s.sub}
