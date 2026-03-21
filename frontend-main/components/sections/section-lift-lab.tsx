@@ -272,12 +272,6 @@ export default function SectionLiftLab({ theme, onAskAI }) {
       <div className="card" style={{ padding: 18 }}>
         <div className="card-head">
           <span className="card-lbl">Forecast + causal what-if</span>
-          <button
-            className="action-chip"
-            onClick={() => onAskAI && onAskAI("Forecast what-if", { baseline: BASELINE_POINTS, scenario: SCENARIO_POINTS })}
-          >
-            Send to Copilot
-          </button>
         </div>
         <div className="card-sub">Baseline Prophet-style forecast vs. scenario with +4h delay and 32% uplift for a trending hashtag.</div>
         <div style={{ height: 260, marginTop: 10 }}>

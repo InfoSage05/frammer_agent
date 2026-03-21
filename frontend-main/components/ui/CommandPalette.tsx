@@ -7,29 +7,13 @@ const ALL_COMMANDS = [
   // Navigate
   { group: 'Navigate', icon: '◈', label: 'Overview', desc: 'Executive dashboard', action: { type: 'nav', target: 'executive' }, kbd: '1' },
   { group: 'Navigate', icon: '⊳', label: 'Trends', desc: 'Usage & trend analysis', action: { type: 'nav', target: 'trends' }, kbd: '2' },
-  { group: 'Navigate', icon: '⊞', label: 'Segments', desc: 'Channel & user intelligence', action: { type: 'nav', target: 'multidim' }, kbd: '3' },
-  { group: 'Navigate', icon: '⊳', label: 'Funnel', desc: 'Content mix & publishing funnel', action: { type: 'nav', target: 'funnel' }, kbd: '4' },
-  { group: 'Navigate', icon: '⊹', label: 'Explorer', desc: 'Data explorer & quality', action: { type: 'nav', target: 'explorer' }, kbd: '5' },
-  { group: 'Navigate', icon: '◎', label: 'Client', desc: 'Client profile (gated)', action: { type: 'nav', target: 'client' }, kbd: '6' },
+  { group: 'Navigate', icon: '⊿', label: 'Lift & Forecast', desc: 'ML lift scoring & forecasting', action: { type: 'nav', target: 'lift' }, kbd: '3' },
+  { group: 'Navigate', icon: '⊞', label: 'Segments', desc: 'Channel & user intelligence', action: { type: 'nav', target: 'multidim' }, kbd: '4' },
+  { group: 'Navigate', icon: '⊳', label: 'Funnel', desc: 'Content mix & publishing funnel', action: { type: 'nav', target: 'funnel' }, kbd: '5' },
+  { group: 'Navigate', icon: '⊹', label: 'Explorer', desc: 'Data explorer & quality', action: { type: 'nav', target: 'explorer' }, kbd: '6' },
+  { group: 'Navigate', icon: '◎', label: 'Client', desc: 'Client profile (gated)', action: { type: 'nav', target: 'client' }, kbd: '7' },
   // Workspace
-  { group: 'Workspace', icon: '◈', label: 'Explain', desc: 'Open explain panel', action: { type: 'panel', tab: 'explain' } },
-  { group: 'Workspace', icon: '⚑', label: 'Evidence', desc: 'Open evidence panel', action: { type: 'panel', tab: 'evidence' } },
-  { group: 'Workspace', icon: '⇔', label: 'Compare', desc: 'Open compare panel', action: { type: 'panel', tab: 'compare' } },
-  { group: 'Workspace', icon: '◎', label: 'Views', desc: 'Saved views', action: { type: 'panel', tab: 'views' } },
   { group: 'Workspace', icon: '⊹', label: 'Copilot', desc: 'AI assistant', action: { type: 'panel', tab: 'copilot' } },
-  // Anomalies
-  { group: 'Anomalies', icon: '⚑', label: '3 Zero-Publish Months', desc: 'Investigate operational bottleneck', action: { type: 'investigate', id: 'zero_pub_months' } },
-  { group: 'Anomalies', icon: '⚑', label: '97.5% Utilization Gap', desc: 'Investigate publish gap', action: { type: 'investigate', id: 'pub_gap' } },
-  { group: 'Anomalies', icon: '⚑', label: '12/18 Zero-Pub Channels', desc: 'Investigate channel distribution', action: { type: 'investigate', id: 'zero_pub_channels' } },
-  { group: 'Anomalies', icon: '⚑', label: '68% Platform NULL', desc: 'Investigate data quality', action: { type: 'investigate', id: 'platform_null' } },
-  // Compare
-  { group: 'Compare', icon: '⇔', label: 'Ch-A vs Ch-D', desc: 'Channel comparison', action: { type: 'compare', typeA: 'channel', a: 'A', typeB: 'channel', b: 'D' } },
-  { group: 'Compare', icon: '⇔', label: 'English vs Hindi', desc: 'Language comparison', action: { type: 'compare', typeA: 'language', a: 'English', typeB: 'language', b: 'Hindi' } },
-  { group: 'Compare', icon: '⇔', label: 'H1 vs H2', desc: 'Half-year comparison', action: { type: 'compare', typeA: 'period', a: 'H1', typeB: 'period', b: 'H2' } },
-  // Actions
-  { group: 'Actions', icon: '↺', label: 'Clear Filters', desc: 'Reset all filters and context', action: { type: 'clear' } },
-  { group: 'Actions', icon: '◐', label: 'Toggle Theme', desc: 'Switch dark/light mode', action: { type: 'theme' } },
-  { group: 'Actions', icon: '◈', label: 'Toggle Insights', desc: 'Show/hide insight chips', action: { type: 'insights' } },
 ];
 
 export default function CommandPalette({ open, onClose, onAction }: { open: boolean; onClose: () => void; onAction: (action: any) => void }) {
@@ -89,7 +73,7 @@ export default function CommandPalette({ open, onClose, onAction }: { open: bool
           <input
             ref={inputRef}
             className="cmd-search-input"
-            placeholder="Search commands, views, anomalies..."
+            placeholder="Search commands and views..."
             value={query}
             onChange={e => { setQuery(e.target.value); setSelected(0); }}
           />

@@ -1,6 +1,7 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState, useRef, useEffect } from "react";
 import D3SankeyChart from "../charts/D3SankeyChart";
 import PublishFunnel from "../charts/Funnel";
@@ -525,6 +526,7 @@ function ByChannelTab({ channels }) {
 function SectionFunnel({ theme, onAskAI }) {
   const dash = useDash();
   const { data: staticData } = useJsonData("funnel");
+  const { data: explorerStaticData } = useJsonData("explorer");
   const data = useLiveSectionData("funnel", dash?.liveDashboard, staticData);
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
@@ -544,6 +546,7 @@ function SectionFunnel({ theme, onAskAI }) {
 
   const DIMS_CONFIG = [
     { k: "pipeline",    label: "Pipeline",  desc: "Upload→Create→Publish",  color: "#3B8BD4" },
+    { k: "user",        label: "User",      desc: "Top contributors",        color: "#F472B6" },
     { k: "channel",     label: "Channel",   desc: "Ch-A through Ch-I",      color: "#8B5CF6" },
     { k: "contentType", label: "Content",   desc: "Interview, News…",       color: "#EF9F27" },
     { k: "language",    label: "Language",  desc: "English, Hindi…",        color: "#3EC98A" },
@@ -552,14 +555,17 @@ function SectionFunnel({ theme, onAskAI }) {
   ];
   const COMPAT: Record<string,string[]> = {
     pipeline:    ["status"],
-    channel:     ["platform", "status"],
-    contentType: ["language", "status"],
+    user:        ["contentType", "channel"],
+    channel:     ["platform", "status", "user"],
+    contentType: ["language", "status", "user"],
     language:    ["platform", "status"],
     status:      [],
     platform:    [],
   };
 
   const computeSankeyData = (a: string, b: string) => {
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
     if (a === "channel" && b === "platform") return sectionData.sankey?.channel || { nodes: [], links: [] };
     if (a === "contentType" && b === "language") return sectionData.sankey?.content || { nodes: [], links: [] };
     if (a === "pipeline" && b === "status") return {
@@ -581,7 +587,6 @@ function SectionFunnel({ theme, onAskAI }) {
       return { nodes: [...active.map(c => `Ch-${c.ch}`), "Published", "Unpublished"], links };
     }
     if (a === "contentType" && b === "status") {
-      const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
       const active = INPUT_TYPES.filter(t => t.created > 0);
       const links = [];
       active.forEach(t => {
@@ -612,6 +617,60 @@ function SectionFunnel({ theme, onAskAI }) {
       const usedPlats = [...new Set(filtLinks.map(l => l.target))];
       return { nodes: [...usedLangs, ...usedPlats], links: filtLinks };
     }
+    // ── User → Content: distribute each user's created volume across content types ──
+    if (a === "user" && b === "contentType") {
+      const active = INPUT_TYPES.filter(t => t.created > 0);
+      const totalCreated = active.reduce((s, t) => s + t.created, 0);
+      const links = [];
+      USERS.forEach(u => {
+        active.forEach(t => {
+          const val = totalCreated > 0 ? Math.round(u.created * (t.created / totalCreated)) : 0;
+          if (val > 0) links.push({ source: u.user, target: cap(t.type), value: val });
+        });
+      });
+      const usedTargets = [...new Set(links.map(l => l.target))];
+      return { nodes: [...USERS.map(u => u.user), ...usedTargets], links };
+    }
+    // ── User → Channel: distribute each user's uploads across channels ──
+    if (a === "user" && b === "channel") {
+      const active = CHANNELS.filter(c => c.uploaded > 0);
+      const totalUploaded = active.reduce((s, c) => s + c.uploaded, 0);
+      const links = [];
+      USERS.forEach(u => {
+        active.forEach(c => {
+          const val = totalUploaded > 0 ? Math.round(u.uploaded * (c.uploaded / totalUploaded)) : 0;
+          if (val > 0) links.push({ source: u.user, target: `Ch-${c.ch}`, value: val });
+        });
+      });
+      const usedTargets = [...new Set(links.map(l => l.target))];
+      return { nodes: [...USERS.map(u => u.user), ...usedTargets], links };
+    }
+    // ── Channel → User: show how channel upload volume distributes across users ──
+    if (a === "channel" && b === "user") {
+      const active = CHANNELS.filter(c => c.uploaded > 0);
+      const totalUserUploads = USERS.reduce((s, u) => s + u.uploaded, 0);
+      const links = [];
+      active.forEach(c => {
+        USERS.forEach(u => {
+          const val = totalUserUploads > 0 ? Math.round(c.uploaded * (u.uploaded / totalUserUploads)) : 0;
+          if (val > 0) links.push({ source: `Ch-${c.ch}`, target: u.user, value: val });
+        });
+      });
+      return { nodes: [...active.map(c => `Ch-${c.ch}`), ...USERS.map(u => u.user)], links };
+    }
+    // ── Content → User: show how content type upload volume distributes across users ──
+    if (a === "contentType" && b === "user") {
+      const active = INPUT_TYPES.filter(t => t.uploaded > 0);
+      const totalUserUploads = USERS.reduce((s, u) => s + u.uploaded, 0);
+      const links = [];
+      active.forEach(t => {
+        USERS.forEach(u => {
+          const val = totalUserUploads > 0 ? Math.round(t.uploaded * (u.uploaded / totalUserUploads)) : 0;
+          if (val > 0) links.push({ source: cap(t.type), target: u.user, value: val });
+        });
+      });
+      return { nodes: [...active.map(t => cap(t.type)), ...USERS.map(u => u.user)], links };
+    }
     return { nodes: [], links: [] };
   };
 
@@ -621,6 +680,7 @@ function SectionFunnel({ theme, onAskAI }) {
   const INPUT_TYPES = data?.inputTypes || [];
   const LANGUAGES = data?.languages || [];
   const CHANNELS = data?.channels || [];
+  const USERS = (explorerStaticData?.users || []).slice(0, 8);
   const TOTAL_UPLOADED = data?.totals?.totalUploaded || 0;
   const TOTAL_CREATED = data?.totals?.totalCreated || 0;
   const TOTAL_PUBLISHED = data?.totals?.totalPublished || 0;
@@ -800,7 +860,7 @@ function SectionFunnel({ theme, onAskAI }) {
                 <div>
                   <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>TARGET</div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    {DIMS_CONFIG.filter(d => ["status","platform","language"].includes(d.k)).map(dim => {
+                    {DIMS_CONFIG.filter(d => new Set(Object.values(COMPAT).flat()).has(d.k)).map(dim => {
                       const isValid = validTargets.includes(dim.k);
                       const active = dimB === dim.k;
                       return (

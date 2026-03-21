@@ -29,7 +29,6 @@ function PremiumBarPanel({
   aiInsights: string[];
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [aiOpen, setAiOpen] = useState(false);
 
   const total = items.reduce((s, i) => s + i.value, 0);
   const max = items.length ? Math.max(...items.map(i => i.value)) : 1;
@@ -85,7 +84,7 @@ function PremiumBarPanel({
           </div>
         </div>
 
-        {/* chips + ask ai */}
+        {/* chips */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, paddingTop: 2 }}>
           <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {top2pct > 0 && (
@@ -117,22 +116,6 @@ function PremiumBarPanel({
               </span>
             )}
           </div>
-          <button
-            onClick={() => setAiOpen(v => !v)}
-            style={{
-              fontSize: 11,
-              color: aiOpen ? 'rgba(232,120,100,0.85)' : 'rgba(255,255,255,0.38)',
-              background: aiOpen ? 'rgba(232,67,45,0.08)' : 'transparent',
-              border: `0.5px solid ${aiOpen ? 'rgba(232,67,45,0.30)' : 'rgba(255,255,255,0.10)'}`,
-              borderRadius: 6,
-              padding: '4px 10px',
-              cursor: 'pointer',
-              transition: 'all 0.15s',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            {aiOpen ? '✕ Close AI' : '✦ Ask AI'}
-          </button>
         </div>
       </div>
 
@@ -291,31 +274,6 @@ function PremiumBarPanel({
         </div>
       </div>
 
-      {/* AI inline panel */}
-      {aiOpen && (
-        <div style={{
-          marginTop: 14,
-          background: 'rgba(255,255,255,0.025)',
-          border: '0.5px solid rgba(255,255,255,0.07)',
-          borderRadius: 8,
-          padding: '14px 16px',
-          animation: 'fade-in 0.18s ease',
-        }}>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.22)', textTransform: 'uppercase', letterSpacing: '0.10em', marginBottom: 12 }}>AI Insights</div>
-          {aiInsights.map((insight, i) => (
-            <p key={i} style={{
-              fontSize: 13,
-              color: 'rgba(255,255,255,0.55)',
-              margin: i > 0 ? '10px 0 0' : '0',
-              lineHeight: 1.65,
-              letterSpacing: '-0.01em',
-            }}>
-              <span style={{ color: 'rgba(232,120,100,0.70)', marginRight: 6 }}>›</span>
-              {insight}
-            </p>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
