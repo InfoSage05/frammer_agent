@@ -14,6 +14,7 @@ import SectionClient from "./sections/section-client";
 import ToastZone, { useToasts } from "./ui/Toasts";
 import SectionExecutive from "./sections/section-executive-command-center";
 import SectionTrends from "./sections/section-trends-usage";
+import SectionLiftLab from "./sections/section-lift-lab";
 import SectionMultiDim from "./sections/section-multi-dim-explorer";
 import SectionFunnel from "./sections/section-funnel-flow";
 import SectionExplorer from "./sections/section-deep-explorer";
@@ -329,6 +330,20 @@ export default function App(props: any) {
           defaultExpanded={true}
         >
           <SectionTrends theme={theme} onAskAI={handleAskAI} />
+        </SectionShell>
+      );
+    }
+
+    if (activeSection === 'lift') {
+      return (
+        <SectionShell
+          id="lift"
+          title="Lift & Forecast Lab"
+          icon="⇡"
+          summary="Upload CSV or run demo for lift + causal forecast"
+          defaultExpanded={true}
+        >
+          <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
         </SectionShell>
       );
     }
@@ -651,6 +666,14 @@ export default function App(props: any) {
                       >
                         <SectionTrends theme={theme} onAskAI={handleAskAI} />
                       </SectionShell>
+
+                        <SectionShell
+                          id="lift" title="Lift & Forecast Lab" icon="⇡"
+                          summary="Upload CSV or run demo for lift + causal forecast"
+                          badge="Demo"
+                        >
+                          <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
+                        </SectionShell>
 
                       <SectionShell
                         id="multidim" title="Multi-Dimensional Analysis" icon="⬡"
