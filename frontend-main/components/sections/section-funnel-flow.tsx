@@ -1,6 +1,7 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState } from "react";
 import D3SankeyChart from "../charts/D3SankeyChart";
 import PublishFunnel from "../charts/Funnel";
@@ -15,7 +16,8 @@ import { M } from '@/lib/constants';
 
 function SectionFunnel({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("funnel");
+  const { data: staticData } = useJsonData("funnel");
+  const data = useLiveSectionData("funnel", dash?.liveDashboard, staticData);
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     subTabs: [],

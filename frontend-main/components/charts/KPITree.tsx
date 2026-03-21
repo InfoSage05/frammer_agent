@@ -29,10 +29,9 @@ function KPITree({ data }) {
     let catIdx = 0;
     function buildHier(node) {
       const key = node.name;
-      // default collapse: categories and groups
+      // default: expand categories, collapse groups
       if (!(key in collapseState.current)) {
-        collapseState.current[key] =
-          node.type === "category" || node.type === "group";
+        collapseState.current[key] = node.type === "group";
       }
       const collapsed = collapseState.current[key];
       const kids =

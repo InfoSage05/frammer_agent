@@ -1,5 +1,6 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState, useEffect } from "react";
 import Sparkline from "../charts/Sparkline";
 import Ring from "../charts/Ring";
@@ -18,7 +19,8 @@ import { M } from '@/lib/constants';
 
 function SectionExecutive({ addToast, theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("executive");
+  const { data: staticData } = useJsonData("executive");
+  const data = useLiveSectionData("executive", dash?.liveDashboard, staticData);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerCh, setDrawerCh] = useState(null);
   const [expanded, setExpanded] = useState(null);

@@ -16,6 +16,11 @@
         "label": "Trend Analysis"
       },
       {
+        "k": "lift",
+        "icon": "⇡",
+        "label": "Lift & Forecast"
+      },
+      {
         "k": "multidim",
         "icon": "⊞",
         "label": "Channel & User"
@@ -75,6 +80,7 @@
     "pageTitles": {
       "executive": "Executive Command Centre",
       "trends": "Usage & Trend Analysis",
+      "lift": "Lift & Forecast Lab",
       "multidim": "Channel & User Intelligence",
       "funnel": "Content Mix & Publishing Funnel",
       "explorer": "Video Explorer & Data Quality",

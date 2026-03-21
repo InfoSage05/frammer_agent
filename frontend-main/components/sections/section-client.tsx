@@ -1,11 +1,15 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
 function SectionClient({ onClose }) {
   const dash = useDash();
-  const { data } = useJsonData("client");
+  const { data: staticData } = useJsonData("client");
+  // Client section doesn't have a dedicated live section transform yet,
+  // so we use static data directly but could be enhanced later
+  const data = staticData;
   const CHANNELS = data?.channels || [];
 
   if (!data) return null;
@@ -28,7 +32,7 @@ function SectionClient({ onClose }) {
       </div>
 
       <div className="g4 stagger">
-        {data.summaryCards.map((m) => (
+        {(data.summaryCards || []).map((m) => (
           <div
             key={m.l}
             className="card card-gold fade-up"
@@ -80,7 +84,7 @@ function SectionClient({ onClose }) {
           >
             PIPELINE SUMMARY
           </div>
-          {data.pipelineSummary.map((r) => (
+          {(data.pipelineSummary || []).map((r) => (
             <div
               key={r.l}
               style={{
@@ -147,7 +151,7 @@ function SectionClient({ onClose }) {
           >
             KEY SIGNALS
           </div>
-          {data.keySignals.map((signal) => (
+          {(data.keySignals || []).map((signal) => (
             <div
               key={signal.tag}
               className={`callout callout-${signal.type}`}

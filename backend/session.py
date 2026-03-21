@@ -15,7 +15,7 @@ from config import (
     DATA_DIR, SESSION_CONTEXT_PATH, SUPPORTED_DATA_EXTENSIONS,
     CHART_CATEGORIES, AGENT_DIR
 )
-from context_manager import get_registry, get_retrieval
+from context_manager import get_registry
 
 
 class SessionBootstrap:
@@ -104,13 +104,8 @@ class SessionBootstrap:
         return registered
     
     def _build_semantic_index(self):
-        """Build/update semantic search index."""
-        try:
-            retrieval = get_retrieval()
-            retrieval.index_datasets()
-        except Exception as e:
-            # Non-critical - semantic search will just be unavailable
-            print(f"Warning: Semantic indexing failed: {e}")
+        """Placeholder — semantic indexing removed (was using chromadb + sentence-transformers)."""
+        pass
     
     def _load_saved_context(self) -> List[Dict[str, Any]]:
         """Load pre-saved session context (metrics, findings)."""
@@ -139,7 +134,7 @@ class SessionBootstrap:
     
     def _index_charts(self) -> List[Dict[str, Any]]:
         """Index existing PNG charts from analysis."""
-        from tools import list_existing_charts
+        from frammer_agent.tools import list_existing_charts
         
         charts = list_existing_charts()
         self.charts_indexed = True
@@ -179,7 +174,7 @@ class SessionBootstrap:
     
     def get_charts_by_category(self) -> Dict[str, List[Dict]]:
         """Get existing charts organized by category."""
-        from tools import list_existing_charts
+        from frammer_agent.tools import list_existing_charts
         
         all_charts = list_existing_charts()
         chart_map = {c["filename"]: c for c in all_charts}

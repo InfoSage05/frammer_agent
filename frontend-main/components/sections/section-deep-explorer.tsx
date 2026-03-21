@@ -1,6 +1,7 @@
 // @ts-nocheck
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useState } from "react";
 import ScatterChart from "../charts/ScatterChart";
 import ChannelPlatformHeatmap from "../charts/ChannelHeatmap";
@@ -18,7 +19,8 @@ import { M } from '@/lib/constants';
 
 function SectionExplorer({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("explorer");
+  const { data: staticData } = useJsonData("explorer");
+  const data = useLiveSectionData("explorer", dash?.liveDashboard, staticData);
   const [subView, setSubView] = useState("users");
   const [userSort, setUserSort] = useState("created");
   const [treeRoot, setTreeRoot] = useState("channel");
@@ -724,6 +726,88 @@ function SectionExplorer({ theme, onAskAI }) {
                 </div>
               </>}
               back={<GraphInsights title="Data Quality Layer" />}
+            />
+          </div>
+        </div>
+      )}
+
+      {subView === "kpi_tree" && data.kpiTree?.children && (
+        <div className="stack">
+          <div className="card" style={{ padding: "16px 18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+              <div>
+                <div style={{ fontSize: 8, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 4 }}>
+                  KPI FRAMEWORK — INTERACTIVE TREE
+                </div>
+                <div style={{ fontSize: 11, color: "var(--ink3)" }}>
+                  Click category nodes to expand/collapse. Drag nodes to rearrange.
+                </div>
+              </div>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.kpiTree}
+                onToggleInsights={() => toggleInsights("kpiTree")}
+                onAskAI={() => onAskAI && onAskAI("KPI Framework Tree", { tree: data.kpiTree })}
+              />
+            </div>
+            <GraphFlip
+              flipped={!!insightsOpen.kpiTree}
+              minHeight={400}
+              front={<KPITree data={data.kpiTree} />}
+              back={<GraphInsights title="KPI Framework Tree" />}
+            />
+          </div>
+        </div>
+      )}
+
+      {subView === "d3tree" && (
+        <div className="stack">
+          <div className="card" style={{ padding: "16px 18px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+              <div>
+                <div style={{ fontSize: 8, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 4 }}>
+                  HIERARCHY EXPLORER
+                </div>
+                <div style={{ fontSize: 11, color: "var(--ink3)" }}>
+                  Explore channel, user, and content relationships
+                </div>
+              </div>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.d3tree}
+                onToggleInsights={() => toggleInsights("d3tree")}
+                onAskAI={() => onAskAI && onAskAI("Hierarchy Tree", { root: treeRoot, child: treeChild, metric: treeMetric })}
+              />
+            </div>
+            <div className="filter-panel" style={{ marginBottom: 12 }}>
+              <div className="filter-group">
+                <div className="filter-group-label">Root</div>
+                <div className="dim-row">
+                  {(data.hierarchyOptions?.root || []).map(([k, l]) => (
+                    <button key={k} className={`dim-opt${treeRoot === k ? " active" : ""}`} onClick={() => setTreeRoot(k)}>{l}</button>
+                  ))}
+                </div>
+              </div>
+              <div className="filter-group">
+                <div className="filter-group-label">Child</div>
+                <div className="dim-row">
+                  {(data.hierarchyOptions?.child || []).map(([k, l]) => (
+                    <button key={k} className={`dim-opt${treeChild === k ? " active" : ""}`} onClick={() => setTreeChild(k)}>{l}</button>
+                  ))}
+                </div>
+              </div>
+              <div className="filter-group">
+                <div className="filter-group-label">Metric</div>
+                <div className="dim-row">
+                  {(data.hierarchyOptions?.metric || []).map(([k, l]) => (
+                    <button key={k} className={`dim-opt${treeMetric === k ? " active" : ""}`} onClick={() => setTreeMetric(k)}>{l}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <GraphFlip
+              flipped={!!insightsOpen.d3tree}
+              minHeight={400}
+              front={<D3CollapsibleTree rootDim={treeRoot} childDim={treeChild} metric={treeMetric} theme={theme} data={data} />}
+              back={<GraphInsights title="Hierarchy Tree" />}
             />
           </div>
         </div>
