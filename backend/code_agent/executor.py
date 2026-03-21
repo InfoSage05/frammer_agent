@@ -181,6 +181,9 @@ def get_full_dataset(name):
         raise ValueError(f"Dataset '{{name}}' not found. Available: {{available}}")
     return pd.read_csv(DATASETS[name], encoding="utf-8-sig")
 
+# Backward-compatible alias used by legacy tests
+def load_dataset(name):
+    return get_full_dataset(name)
 def create_chart(chart_type, title, data, x_key=None, y_keys=None):
     """Create chart for frontend (Recharts format)"""
     # Convert numpy types to native Python types
@@ -352,7 +355,7 @@ CRITICAL RULES:
 1. DO NOT define get_full_dataset or create_chart - they are already provided!
 2. DO NOT add import statements - they are already provided!
 3. Just write the code body that uses these functions
-4. Use EXACT dataset names in quotes: get_full_dataset('channel-wise-publishing')
+4. Use EXACT dataset names in quotes from AVAILABLE DATASETS
 5. Use EXACT column names (case-sensitive)
 6. Data in charts must be list of dicts with native Python types
 

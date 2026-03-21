@@ -1,16 +1,191 @@
 // @ts-nocheck
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useDash } from '@/lib/contexts';
 import { ANOMALIES, SAVED_VIEWS, STORY_PRESETS, M } from '@/lib/constants';
 import { sendChatMessage } from '@/lib/api';
+import useChartJs from '../charts/ChartJSWrapper';
 
 const TABS = [
   { id: 'explain', icon: '◈', label: 'Explain' },
   { id: 'compare', icon: '⇔', label: 'Compare' },
   { id: 'copilot', icon: '⊹', label: 'Copilot' },
 ];
+
+function coerceNumber(value: any) {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const n = Number(String(value).replace(/,/g, ''));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function inferYKeys(data: any[], xKey: string, yKeys?: string[]) {
+  if (Array.isArray(yKeys) && yKeys.length) return yKeys;
+  const first = Array.isArray(data) && data.length ? data[0] : null;
+  if (!first) return [];
+  return Object.keys(first).filter((k) => k !== xKey);
+}
+
+function ChartArtifact({ artifact, id, theme = 'dark' }: any) {
+  const palette = [
+    '#ff4757',
+    '#3EC98A',
+    '#7C83FF',
+    '#F7B731',
+    '#32A1FF',
+    '#FF8A5B',
+  ];
+
+  const config = useMemo(() => {
+    const data = Array.isArray(artifact?.data) ? artifact.data : [];
+    const xKey = artifact?.xKey || 'name';
+    const keys = inferYKeys(data, xKey, artifact?.yKeys);
+    const labels = data.map((d: any, i: number) => {
+      const label = d?.[xKey];
+      return label === undefined || label === null ? String(i + 1) : String(label);
+    });
+    const rawType = String(artifact?.chartType || 'bar').toLowerCase();
+    const normalizedType =
+      rawType === 'stacked_bar' || rawType === 'stacked' || rawType === 'column'
+        ? 'bar'
+        : rawType;
+    const chartType = ['bar', 'line', 'area', 'pie', 'donut'].includes(normalizedType)
+      ? normalizedType
+      : 'bar';
+    const isPie = chartType === 'pie' || chartType === 'donut';
+    const primaryKey = keys[0] || 'value';
+    const datasets = isPie
+      ? [
+          {
+            label: primaryKey,
+            data: data.map((d: any) => coerceNumber(d?.[primaryKey])),
+            backgroundColor: labels.map((_: any, i: number) => palette[i % palette.length]),
+            borderColor: 'rgba(0,0,0,0.15)',
+            borderWidth: 1,
+          },
+        ]
+      : keys.map((k: string, i: number) => ({
+          label: k,
+          data: data.map((d: any) => coerceNumber(d?.[k])),
+          borderColor: palette[i % palette.length],
+          backgroundColor: chartType === 'bar' ? `${palette[i % palette.length]}B3` : `${palette[i % palette.length]}55`,
+          borderWidth: 2,
+          tension: 0.3,
+          fill: chartType === 'area',
+        }));
+
+    return {
+      type: isPie ? 'pie' : chartType === 'area' ? 'line' : chartType,
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              color: theme === 'light' ? '#111' : 'rgba(245,245,247,0.7)',
+              font: { size: 10, family: 'var(--font-ibm-plex-mono,monospace)' },
+            },
+          },
+          tooltip: {
+            backgroundColor: theme === 'light' ? 'rgba(255,255,255,0.97)' : 'rgba(14,15,17,0.95)',
+            titleColor: theme === 'light' ? '#111' : '#f5f5f7',
+            bodyColor: theme === 'light' ? '#555' : 'rgba(245,245,247,0.65)',
+          },
+        },
+        scales: isPie
+          ? undefined
+          : {
+              x: {
+                ticks: {
+                  color: theme === 'light' ? '#111' : 'rgba(245,245,247,0.65)',
+                  font: { size: 10, family: 'var(--font-ibm-plex-mono,monospace)' },
+                  maxRotation: 45,
+                },
+                grid: { color: theme === 'light' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)' },
+                border: { display: false },
+              },
+              y: {
+                ticks: {
+                  color: theme === 'light' ? '#111' : 'rgba(245,245,247,0.65)',
+                  font: { size: 10, family: 'var(--font-ibm-plex-mono,monospace)' },
+                  callback: (v: number) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k` : v),
+                },
+                grid: { color: theme === 'light' ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)' },
+                border: { display: false },
+                beginAtZero: true,
+              },
+            },
+      },
+    };
+  }, [artifact, theme]);
+
+  const canvasRef = useChartJs(id, config, [id, config]);
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: 210 }}>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+}
+
+function TableArtifact({ artifact }: any) {
+  const rows = Array.isArray(artifact?.data) ? artifact.data : [];
+  const columns = Array.isArray(artifact?.columns) && artifact.columns.length
+    ? artifact.columns
+    : rows.length
+      ? Object.keys(rows[0])
+      : [];
+
+  if (!rows.length || !columns.length) return null;
+
+  return (
+    <div style={{ overflowX: 'auto', border: '1px solid var(--line)', borderRadius: 6 }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+        <thead>
+          <tr>
+            {columns.map((col: string) => (
+              <th
+                key={col}
+                style={{
+                  textAlign: 'left',
+                  padding: '6px 8px',
+                  borderBottom: '1px solid var(--line)',
+                  color: 'var(--ink2)',
+                  fontFamily: 'var(--font-mono)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {col}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row: any, i: number) => (
+            <tr key={i}>
+              {columns.map((col: string) => (
+                <td
+                  key={col}
+                  style={{
+                    padding: '6px 8px',
+                    borderBottom: '1px solid var(--line)',
+                    color: 'var(--ink)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {row?.[col] ?? ''}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData, chatSessionId, onChatSessionId }: any) {
   const dash = useDash();
@@ -184,7 +359,7 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionIdLocal] = useState<string | null>(externalSessionId || null);
-  const [ragMode, setRagMode] = useState(false);
+  const [chatMode, setChatMode] = useState<'auto' | 'explain' | 'kpi' | 'analytics'>('auto');
   const chatRef = useRef<HTMLDivElement>(null);
 
   // Sync external session ID
@@ -234,42 +409,17 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
     }
 
     try {
-      if (ragMode) {
-        const ragRes = await fetch('http://localhost:8000/ask-ai', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            question: userMsg,
-            session_id: sessionId,
-            use_thinking_model: false,
-          }),
-        });
-        if (!ragRes.ok) throw new Error('RAG request failed');
-        const ragData = await ragRes.json();
-        setSessionId(ragData.session_id);
-        const datasets = Array.isArray(ragData.datasets_referenced)
-          ? ragData.datasets_referenced.join(', ')
-          : 'None';
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            text: `RAG response (context: ${ragData.context_size ?? 0}, datasets: ${datasets})\n\n${ragData.answer || ''}`,
-          },
-        ]);
-      } else {
-        // Use the API function for chat
-        const chatData = await sendChatMessage(fullMessage, sessionId);
-        setSessionId(chatData.session_id);
-        setMessages(prev => [
-          ...prev,
-          {
-            role: 'assistant',
-            text: chatData.response || 'No response returned.',
-            artifacts: chatData.artifacts || [],
-          },
-        ]);
-      }
+      // Use the API function for chat
+      const chatData = await sendChatMessage(fullMessage, sessionId, chatMode);
+      setSessionId(chatData.session_id);
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: chatData.response || 'No response returned.',
+          artifacts: chatData.artifacts || [],
+        },
+      ]);
     } catch (e: any) {
       setMessages(prev => [
         ...prev,
@@ -307,10 +457,35 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
             <div className="chat-bbl">
               {msg.text}
               {Array.isArray(msg.artifacts) && msg.artifacts.length > 0 && (
-                <div style={{ marginTop: 8, fontSize: 10, opacity: 0.8 }}>
-                  {msg.artifacts.map((a: any, idx: number) => (
-                    <div key={idx} style={{ marginTop: 4 }}>
-                      • {a.type || 'artifact'} {a.title ? `- ${a.title}` : ''}
+                <div style={{ marginTop: 10, display: 'grid', gap: 10 }}>
+                  {msg.artifacts.map((artifact: any, idx: number) => (
+                    <div
+                      key={idx}
+                      style={{
+                        border: '1px solid var(--line)',
+                        borderRadius: 8,
+                        background: 'var(--bg2)',
+                        padding: '10px 10px 8px',
+                      }}
+                    >
+                      {artifact?.title && (
+                        <div
+                          style={{
+                            fontSize: 11,
+                            color: 'var(--ink3)',
+                            marginBottom: 6,
+                            fontFamily: 'var(--font-mono)',
+                          }}
+                        >
+                          {artifact.title}
+                        </div>
+                      )}
+                      {artifact?.type === 'chart' && (
+                        <ChartArtifact artifact={artifact} id={`rp-chart-${i}-${idx}`} />
+                      )}
+                      {artifact?.type === 'table' && (
+                        <TableArtifact artifact={artifact} />
+                      )}
                     </div>
                   ))}
                 </div>
@@ -383,14 +558,32 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
       )}
 
       <div className="rp-chat-foot">
-        <button
+        <select
           className="chat-qp"
-          style={{ marginRight: 6 }}
-          onClick={() => setRagMode(v => !v)}
-          title="Toggle RAG mode"
+          style={{
+            marginRight: 6,
+            padding: "6px 10px",
+            borderRadius: 999,
+            background: "var(--bg2)",
+            border: "1px solid var(--line)",
+            color: "var(--ink2)",
+            fontSize: 10,
+            fontFamily: "var(--font-mono)",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+            appearance: "none",
+            WebkitAppearance: "none",
+            MozAppearance: "none",
+          }}
+          value={chatMode}
+          onChange={(e) => setChatMode(e.target.value as any)}
+          title="Chat routing mode"
         >
-          {ragMode ? 'RAG ON' : 'RAG OFF'}
-        </button>
+          <option value="auto">Auto</option>
+          <option value="explain">Explain</option>
+          <option value="kpi">KPI</option>
+          <option value="analytics">Analytics</option>
+        </select>
         <button
           className="chat-qp"
           style={{ marginRight: 6 }}

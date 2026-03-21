@@ -16,6 +16,10 @@ MODEL = "llama"
 FAST_MODEL = MODEL
 THINK_MODEL = MODEL
 
+# Backward-compatible aliases for callers expecting Groq-style constants
+FAST_MODEL = MODEL
+THINK_MODEL = MODEL
+
 # OpenAI-compatible client for sync calls
 _sync_client: Optional[OpenAI] = None
 

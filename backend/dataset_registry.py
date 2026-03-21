@@ -11,11 +11,19 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import json
 
-_backend_dir = Path(__file__).parent
+_backend_dir = Path(__file__).resolve().parent
 _agent_dir = _backend_dir.parent if _backend_dir.name == "backend" else _backend_dir
 
 DATASET_PATHS_JSON = _agent_dir / "data" / "saved_analytics" / "dataset_paths.json"
 DATASETS_DIR = _agent_dir / "data" / "datasets"
+
+
+def _find_merged_dir() -> Path:
+    for parent in Path(__file__).resolve().parents:
+        candidate = parent / "data" / "merged"
+        if candidate.exists():
+            return candidate
+    return _agent_dir / "data" / "merged"
 
 
 class DatasetRegistry:
@@ -44,10 +52,42 @@ class DatasetRegistry:
                 paths[filepath.stem] = str(filepath)
 
         self.datasets = {}
+        merged_dir = _find_merged_dir()
         for name, filepath_str in paths.items():
             filepath = Path(filepath_str)
             if not filepath.exists():
-                print(f"  [!] {name}: file not found ({filepath.name})")
+                # Try resolving by filename inside known data folders
+                alt = merged_dir / filepath.name
+                if alt.exists():
+                    filepath = alt
+                else:
+                    alt = self.data_dir / filepath.name
+                    if alt.exists():
+                        filepath = alt
+                    else:
+                        print(f"  [!] {name}: file not found ({filepath.name})")
+                        continue
+            try:
+                df = pd.read_csv(filepath, encoding="utf-8-sig")
+                self.datasets[name] = {
+                    "name": name,
+                    "path": str(filepath.absolute()),
+                    "rows": len(df),
+                    "columns": df.columns.tolist(),
+                    "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
+                    "sample": df.head(3).to_dict("records"),
+                    "sample_rows": df.head(3).to_dict("records"),
+                    "null_counts": df.isnull().sum().to_dict(),
+                }
+                print(f"  + {name}: {len(df)} rows, {len(df.columns)} columns")
+            except Exception as e:
+                print(f"  x Failed to load {name}: {e}")
+
+        # Also scan merged directory to add any missing datasets
+        scan_dir = merged_dir if merged_dir.exists() else self.data_dir
+        for filepath in sorted(scan_dir.glob("*.csv")):
+            name = filepath.stem
+            if name in self.datasets:
                 continue
             try:
                 df = pd.read_csv(filepath, encoding="utf-8-sig")
@@ -58,9 +98,9 @@ class DatasetRegistry:
                     "columns": df.columns.tolist(),
                     "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
                     "sample": df.head(3).to_dict("records"),
+                    "sample_rows": df.head(3).to_dict("records"),
                     "null_counts": df.isnull().sum().to_dict(),
                 }
-                print(f"  + {name}: {len(df)} rows, {len(df.columns)} columns")
             except Exception as e:
                 print(f"  x Failed to load {name}: {e}")
 
@@ -87,6 +127,7 @@ class DatasetRegistry:
                     "columns": df.columns.tolist(),
                     "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
                     "sample": df.head(3).to_dict("records"),
+                    "sample_rows": df.head(3).to_dict("records"),
                     "null_counts": df.isnull().sum().to_dict(),
                 }
             except Exception:
@@ -106,13 +147,36 @@ class DatasetRegistry:
             summary += f"  - Columns: {', '.join(meta['columns'])}\n\n"
         return summary
 
+    def _resolve_name(self, name: str) -> Optional[str]:
+        """Resolve dataset name, handling a few legacy aliases."""
+        if name in self.datasets:
+            return name
+
+        # Legacy naming: monthly-chart -> monthly
+        if name.endswith("-chart"):
+            alt = name.removesuffix("-chart")
+            if alt in self.datasets:
+                return alt
+
+        # Dashes vs underscores
+        alt = name.replace("-", "_")
+        if alt in self.datasets:
+            return alt
+
+        if name == "channel-wise-publishing" and "channel_summary" in self.datasets:
+            return "channel_summary"
+
+        return None
+
     def get_dataset_details(self, name: str) -> Optional[dict]:
-        """Get full metadata for a specific dataset"""
-        return self.datasets.get(name)
+        """Get full metadata for a specific dataset."""
+        resolved = self._resolve_name(name)
+        return self.datasets.get(resolved) if resolved else None
 
     def get_dataset_path(self, name: str) -> Optional[str]:
-        """Get file path for a dataset"""
-        meta = self.datasets.get(name)
+        """Get file path for a dataset."""
+        resolved = self._resolve_name(name)
+        meta = self.datasets.get(resolved) if resolved else None
         return meta["path"] if meta else None
 
     def to_json(self) -> str:
@@ -133,5 +197,5 @@ def initialize_registry(data_dir: str = "") -> DatasetRegistry:
 def get_registry() -> DatasetRegistry:
     global _registry
     if _registry is None:
-        raise RuntimeError("Registry not initialized")
+        _registry = DatasetRegistry()
     return _registry

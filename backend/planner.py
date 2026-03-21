@@ -58,6 +58,8 @@ GREETING_PATTERNS = ["hello", "hi", "hey", "help", "what can you do", "who are y
 LIST_PATTERNS = ["what datasets", "list datasets", "show datasets", "available data", "what data"]
 DESCRIBE_PATTERNS = ["describe", "schema", "columns in", "what columns", "show columns"]
 
+VISUALIZE_TRIGGERS = ["chart", "plot", "graph", "visualize", "show me"]
+
 
 def classify_task(query: str) -> TaskType:
     """Quick classification of task type"""
@@ -77,6 +79,11 @@ def classify_task(query: str) -> TaskType:
         return TaskType.COMPLEX
     
     return TaskType.SIMPLE_QUERY
+
+
+def is_visualization_request(query: str) -> bool:
+    q = query.lower()
+    return any(t in q for t in VISUALIZE_TRIGGERS)
 
 
 def handle_greeting(query: str) -> dict:
@@ -252,29 +259,7 @@ def generate_approach_plan(query: str, task_plan: TaskPlan, datasets: List[dict]
         dataset_overview += f"\n• '{ds['name']}' ({ds['row_count']} rows, {ds['col_count']} cols)"
     
     # Get detailed schema for relevant datasets
-    detailed_schemas = ""
-    relevant_datasets = task_plan.datasets_needed if task_plan.datasets_needed else [d["name"] for d in datasets[:5]]
-    
-    for ds_name in relevant_datasets:
-        try:
-            schema = get_schema(ds_name)
-            detailed_schemas += f"\n\n### '{ds_name}' Schema:\n"
-            for col in schema:
-                detailed_schemas += f"  - {col['col_name']} ({col['dtype']})"
-                if col['sample_values']:
-                    samples = str(col['sample_values'][:3])[:50]
-                    detailed_schemas += f" | samples: {samples}"
-                detailed_schemas += "\n"
-            
-            # Get first few rows preview
-            first_rows = get_first_rows(ds_name, 3)
-            if not first_rows.empty:
-                detailed_schemas += f"  Preview (first 3 rows):\n"
-                for _, row in first_rows.head(3).iterrows():
-                    row_preview = {k: str(v)[:20] for k, v in row.items()}
-                    detailed_schemas += f"    {row_preview}\n"
-        except Exception as e:
-            logger.debug(f"Could not get schema for {ds_name}: {e}")
+    detailed_schemas = build_detailed_schemas(task_plan, datasets)
     
     # Add conversation context section
     context_section = ""
@@ -367,7 +352,66 @@ Provide a clear, numbered EXECUTION PLAN:"""
     return plan
 
 
-def generate_code(query: str, task_plan: TaskPlan, datasets: List[dict], approach_plan: str = "") -> str:
+def build_detailed_schemas(task_plan: TaskPlan, datasets: List[dict]) -> str:
+    """Build detailed schema text for relevant datasets."""
+    detailed_schemas = ""
+    relevant_datasets = task_plan.datasets_needed if task_plan.datasets_needed else [d["name"] for d in datasets[:5]]
+
+    for ds_name in relevant_datasets:
+        try:
+            schema = get_schema(ds_name)
+            detailed_schemas += f"\n\n### '{ds_name}' Schema:\n"
+            for col in schema:
+                detailed_schemas += f"  - {col['col_name']} ({col['dtype']})"
+                if col['sample_values']:
+                    samples = str(col['sample_values'][:3])[:50]
+                    detailed_schemas += f" | samples: {samples}"
+                detailed_schemas += "\n"
+
+            # Get first few rows preview
+            first_rows = get_first_rows(ds_name, 3)
+            if not first_rows.empty:
+                detailed_schemas += "  Preview (first 3 rows):\n"
+                for _, row in first_rows.head(3).iterrows():
+                    row_preview = {k: str(v)[:20] for k, v in row.items()}
+                    detailed_schemas += f"    {row_preview}\n"
+        except Exception as e:
+            logger.debug(f"Could not get schema for {ds_name}: {e}")
+
+    return detailed_schemas
+
+
+def generate_visualization_plan(
+    query: str,
+    task_plan: TaskPlan,
+    datasets: List[dict],
+    conversation_context: str = "",
+    detailed_schemas: str = "",
+) -> str:
+    """Phase 4b: Visualization design via visualization agent."""
+    if task_plan.task_type not in [TaskType.VISUALIZATION, TaskType.COMPLEX, TaskType.ANALYSIS]:
+        return ""
+
+    try:
+        from visualization_agent import design_visualization
+        return design_visualization(
+            query=query,
+            datasets=datasets,
+            conversation_context=conversation_context,
+            detailed_schemas=detailed_schemas,
+        )
+    except Exception as e:
+        logger.debug(f"Visualization agent unavailable: {e}")
+        return ""
+
+
+def generate_code(
+    query: str,
+    task_plan: TaskPlan,
+    datasets: List[dict],
+    approach_plan: str = "",
+    visualization_plan: str = "",
+) -> str:
     """
     Phase 5: Code Generation
     Generate Python code based on task plan and approach
@@ -405,11 +449,19 @@ def generate_code(query: str, task_plan: TaskPlan, datasets: List[dict], approac
 ANALYSIS PLAN (follow this exactly):
 {approach_plan}
 """
+
+    viz_section = ""
+    if visualization_plan:
+        viz_section = f"""
+VISUALIZATION PLAN (follow this exactly):
+{visualization_plan}
+"""
     
     prompt = f"""Generate Python code to answer this data analysis question.
 
 QUESTION: {query}
 {plan_section}
+{viz_section}
 AVAILABLE DATA:{schema_context}
 
 CRITICAL RULES:
@@ -499,6 +551,27 @@ def run_planner(query: str, conversation_context: str = "") -> dict:
     
     if task_type == TaskType.DESCRIBE_DATA:
         return handle_describe_data(query)
+
+    # Recommendation requests
+    try:
+        from recommendation_agent import should_run as should_run_recs, answer_recommendations
+        if should_run_recs(query, conversation_context=conversation_context):
+            return answer_recommendations(query, conversation_context=conversation_context)
+    except Exception as e:
+        logger.debug(f"Recommendation agent unavailable: {e}")
+
+    # Short-circuit KPI queries (skip when explicit visualization requested)
+    try:
+        from kpi_agent import classify_kpi, answer_kpi_query
+        kpi_decision = classify_kpi(query, conversation_context=conversation_context)
+        if (
+            not is_visualization_request(query)
+            and kpi_decision.get("match")
+            and float(kpi_decision.get("confidence", 0.0)) >= 0.6
+        ):
+            return answer_kpi_query(query, conversation_context=conversation_context)
+    except Exception as e:
+        logger.debug(f"KPI agent unavailable: {e}")
     
     # For analysis/visualization tasks, use full pipeline
     datasets = list_datasets()
@@ -509,6 +582,7 @@ def run_planner(query: str, conversation_context: str = "") -> dict:
     
     # Phase 4: Approach Planning (for complex tasks or when conversation context exists)
     approach_plan = ""
+    visualization_plan = ""
     needs_approach = (
         task_plan.task_type in [TaskType.COMPLEX, TaskType.ANALYSIS, TaskType.VISUALIZATION] 
         or len(query.split()) > 10
@@ -516,9 +590,19 @@ def run_planner(query: str, conversation_context: str = "") -> dict:
     )
     if needs_approach:
         approach_plan = generate_approach_plan(query, task_plan, datasets, conversation_context)
+
+    # Phase 4b: Visualization Design (separate agent)
+    detailed_schemas = build_detailed_schemas(task_plan, datasets)
+    visualization_plan = generate_visualization_plan(
+        query,
+        task_plan,
+        datasets,
+        conversation_context=conversation_context,
+        detailed_schemas=detailed_schemas,
+    )
     
     # Phase 5: Code Generation (with approach plan)
-    code = generate_code(query, task_plan, datasets, approach_plan)
+    code = generate_code(query, task_plan, datasets, approach_plan, visualization_plan)
     
     # Phase 6: Code Execution with Reflexion
     logger.info("━━━ PHASE 6: Code Execution ━━━")
