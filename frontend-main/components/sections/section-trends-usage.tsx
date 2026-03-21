@@ -15,7 +15,8 @@ import { M } from '@/lib/constants';
 
 function SectionTrends({ theme, onAskAI }) {
   const dash = useDash();
-  const { data } = useJsonData("trends");
+  const { data: staticData } = useJsonData("trends");
+  const data = useLiveSectionData("trends", dash?.liveDashboard, staticData);
   const { data: funnelData } = useJsonData("funnel");
   const INPUT_TYPES = funnelData?.inputTypes || [];
   const sectionData = data || {
