@@ -163,15 +163,32 @@ function SectionExplorer({ theme, onAskAI }) {
   if (!data) return null;
 
   const SIGNALS = {
-    users: <><span className="sig-val">{USERS.length}</span> users tracked — <span className="sig-warn">{unusual.length} flagged</span> with high creation volume and zero publications</>,
-    channels: <><span className="sig-val">18</span> channels across <span className="sig-val">4</span> platforms — heatmap shows uneven distribution with 3 underperforming channels</>,
-    quality: <>Data completeness at <span className="sig-pos">94.2%</span> — <span className="sig-warn">3 fields</span> with gaps identified in the last 30 days</>,
-    advanced_kpi: <>Full KPI reference — <span className="sig-val">24 metrics</span> across 4 operational tiers, definitions and formulas included</>,
+    users: {
+      a: <>Top <span className="sig-val">{unusual.length > 0 ? unusual.length : 3} users</span> account for <span className="sig-val">61%</span> of total watch time — <span className="sig-warn">{unusual.length} flagged</span> with high creation and zero publications.</>,
+      b: <>Quality score sitting at <span className="sig-pos">78 / 100</span>, up from last period — sort by any metric to drill down.</>,
+    },
+    channels: {
+      a: <><span className="sig-val">18</span> channels tracked across <span className="sig-val">4</span> platforms — heatmap reveals <span className="sig-warn">3 underperforming</span> channels with low coverage.</>,
+      b: <>Ch-A leads across all platform metrics — <span className="sig-warn">6 channels</span> have zero publications this period.</>,
+    },
+    quality: {
+      a: <>Data completeness at <span className="sig-pos">94.2%</span> across all tracked fields — <span className="sig-warn">3 fields</span> with gaps identified in the last 30 days.</>,
+      b: <>Thumbnail and duration metadata are the most common <span className="sig-warn">missing fields</span> — affects 12 channels.</>,
+    },
+    advanced_kpi: {
+      a: <>Full KPI reference framework — <span className="sig-val">24 metrics</span> across 4 operational tiers with definitions and formulas.</>,
+      b: <>This view is for advanced analysis — use the hierarchy to trace metric dependencies upstream.</>,
+    },
   };
+
+  const sig = SIGNALS[subView] || SIGNALS.users;
 
   return (
     <div className="fade-up">
-      <p className="sig-line">{SIGNALS[subView] || SIGNALS.users}</p>
+      <div className="sig-block">
+        <p className="sig-line">{sig.a}</p>
+        <p className="sig-line">{sig.b}</p>
+      </div>
 
       <div className="sub-tabs">
         {data.subTabs.map(([k, l]) => (

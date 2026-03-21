@@ -12,10 +12,11 @@ function SectionClient({ onClose }) {
 
   return (
     <div className="stack fade-up">
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-        <p className="sig-line" style={{ marginBottom: 0 }}>
-          <span className="sig-val">{CHANNELS.length}</span> channels configured — reporting period <span className="sig-val">Mar 2025 – Feb 2026</span>, data anonymized
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }}>
+        <div className="sig-block" style={{ marginBottom: 0 }}>
+          <p className="sig-line"><span className="sig-val">{CHANNELS.length}</span> channels configured — reporting period <span className="sig-val">Mar 2025 – Feb 2026</span>, all data anonymized.</p>
+          <p className="sig-line">Use the cards below to explore per-channel performance and <span className="sig-warn">identify coverage gaps</span>.</p>
+        </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0, marginLeft: 16 }}>
           <span className="badge badge-muted">Anonymized</span>
           {onClose && (

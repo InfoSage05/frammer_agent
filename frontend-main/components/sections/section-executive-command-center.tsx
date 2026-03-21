@@ -100,15 +100,32 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
   ];
 
   const SIGNALS = {
-    summary: <><span className="sig-val">{TOTAL_PUBLISHED.toLocaleString()}</span> published from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — publish rate at <span className="sig-warn">{PUBLISH_RATE}%</span>, below 10% benchmark</>,
-    signals: <>3 <span className="sig-warn">critical operational gaps</span> detected — zero-publish months in <span className="sig-warn">Mar, Jul, Sep 2025</span></>,
-    channels: <><span className="sig-val">18 / 18</span> channels active — <span className="sig-val">Ch-A</span> leads with highest output volume this period</>,
-    content_mix: <>Short-form dominates at <span className="sig-val">68%</span> of created output — long-form at <span className="sig-warn">3%</span> publish rate</>,
+    summary: {
+      a: <><span className="sig-val">{TOTAL_PUBLISHED.toLocaleString()}</span> videos published from <span className="sig-val">{TOTAL_UPLOADED.toLocaleString()}</span> uploads — publish rate at <span className="sig-warn">{PUBLISH_RATE}%</span>, below the 10% benchmark.</>,
+      b: <><span className="sig-val">{ACTIVE_USERS} / 45</span> users active, peak month <span className="sig-pos">Feb '26</span> with <span className="sig-val">{PEAK_COUNT.toLocaleString()}</span> outputs.</>,
+    },
+    signals: {
+      a: <>3 <span className="sig-warn">critical operational gaps</span> detected this period — zero-publish months in <span className="sig-warn">Mar, Jul, Sep 2025</span>.</>,
+      b: <>Publish rate trending down in Q4 — <span className="sig-warn">1 user</span> with 400+ creations and zero publications flagged.</>,
+    },
+    channels: {
+      a: <><span className="sig-val">18 / 18</span> channels active with 100% coverage — <span className="sig-val">Ch-A</span> leads with highest output volume this period.</>,
+      b: <>4 channels show below-average publish rates — heatmap reveals uneven platform distribution.</>,
+    },
+    content_mix: {
+      a: <>Short-form dominates at <span className="sig-val">68%</span> of created output — long-form at <span className="sig-warn">3%</span> publish rate, the lowest tier.</>,
+      b: <>Docs and podcast formats account for <span className="sig-warn">near-zero</span> publications despite consistent upload volume.</>,
+    },
   };
+
+  const sig = SIGNALS[subView] || SIGNALS.summary;
 
   return (
     <div className="fade-up">
-      <p className="sig-line">{SIGNALS[subView]}</p>
+      <div className="sig-block">
+        <p className="sig-line">{sig.a}</p>
+        <p className="sig-line">{sig.b}</p>
+      </div>
 
       <div className="sub-tabs">
         {SUB_TABS.map(([k, l]) => (
@@ -136,7 +153,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 <div style={{ fontFamily: 'var(--font-sans)', fontSize: 32, color: card.color, lineHeight: 1, letterSpacing: '-0.03em', fontWeight: 700 }}>
                   {card.value}
                 </div>
-                <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 10, lineHeight: 1.4 }}>
+                <div style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--ink4)', marginTop: 10, lineHeight: 1.45 }}>
                   {card.sub}
                 </div>
                 {card.spark && (
@@ -171,12 +188,12 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               >
                 <div
                   style={{
-                    fontSize: 9,
+                    fontSize: 10,
                     fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.14em",
+                    letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     color: "var(--ink4)",
-                    marginBottom: 7,
+                    marginBottom: 8,
                     fontWeight: 600,
                   }}
                 >
@@ -185,21 +202,21 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 <div
                   style={{
                     fontFamily: "var(--font-sans)",
-                    fontSize: 18,
+                    fontSize: 20,
                     color: "var(--ink)",
                     lineHeight: 1,
                     fontWeight: 600,
-                    letterSpacing: '-0.01em',
+                    letterSpacing: '-0.02em',
                   }}
                 >
                   {s.v}
                 </div>
                 <div
                   style={{
-                    fontSize: 10,
+                    fontSize: 12,
                     fontFamily: "var(--font-mono)",
                     color: "var(--ink4)",
-                    marginTop: 5,
+                    marginTop: 6,
                     lineHeight: 1.4,
                   }}
                 >
@@ -222,9 +239,9 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
           <div className="card" style={{ padding: "16px 18px" }}>
             <div
               style={{
-                fontSize: 7,
+                fontSize: 10,
                 fontFamily: "var(--font-mono)",
-                letterSpacing: "0.2em",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 color: "var(--pri)",
                 marginBottom: 12,

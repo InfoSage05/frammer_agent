@@ -538,9 +538,6 @@ export default function App(props: any) {
               {/* Topbar */}
               <div className="topbar">
                 <div className="topbar-left">
-                  <span className="page-title">
-                    {clientOpen ? 'Client' : (pageTitles[activeSection] || 'Overview')}
-                  </span>
                   {breadcrumb.length > 1 && (
                     <div className="breadcrumb">
                       {breadcrumb.map((item, i) => (
@@ -552,6 +549,20 @@ export default function App(props: any) {
                     </div>
                   )}
                 </div>
+
+                {/* Centered section name */}
+                <div className="topbar-center">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" className="topbar-section-grid">
+                    <rect x="0" y="0" width="6" height="6" rx="1.5"/>
+                    <rect x="8" y="0" width="6" height="6" rx="1.5"/>
+                    <rect x="0" y="8" width="6" height="6" rx="1.5"/>
+                    <rect x="8" y="8" width="6" height="6" rx="1.5"/>
+                  </svg>
+                  <span className="topbar-section-name">
+                    {clientOpen ? 'Client' : (pageTitles[activeSection] || 'Overview')}
+                  </span>
+                </div>
+
                 <div className="topbar-right">
                   {clientOpen && (
                     <button className="ctrl-btn" onClick={backFromClient} style={{ fontSize: 9.5 }}>

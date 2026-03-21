@@ -389,7 +389,10 @@ function SectionTrends({ theme, onAskAI }) {
 
   return (
     <div className="fade-up">
-      <p className="sig-line">Feb '26 peaked at <span className="sig-pos">2,756 outputs (+194% MoM)</span> — H2 outperformed H1 by <span className="sig-val">3.2×</span> across all content types</p>
+      <div className="sig-block">
+        <p className="sig-line">Feb '26 peaked at <span className="sig-pos">2,756 outputs (+194% MoM)</span> — H2 outperformed H1 by <span className="sig-val">3.2×</span> across all content types.</p>
+        <p className="sig-line">Upload volume was steady across 12 months, while publish rate declined in <span className="sig-warn">Q4 2025</span>.</p>
+      </div>
       <div className="filter-panel">
         <div className="filter-group">
           <div className="filter-group-label">Metric</div>
