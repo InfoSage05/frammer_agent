@@ -526,6 +526,7 @@ function ByChannelTab({ channels }) {
 function SectionFunnel({ theme, onAskAI }) {
   const dash = useDash();
   const { data: staticData } = useJsonData("funnel");
+  const { data: explorerStaticData } = useJsonData("explorer");
   const data = useLiveSectionData("funnel", dash?.liveDashboard, staticData);
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
@@ -538,6 +539,9 @@ function SectionFunnel({ theme, onAskAI }) {
   };
   const [subView, setSubView] = useState("sankey");
   const [insightsOpen, setInsightsOpen] = useState({});
+  const [hoveredLang, setHoveredLang] = useState(null);
+  const [hoveredType, setHoveredType] = useState(null);
+  const [hoveredStage, setHoveredStage] = useState(null);
 
   // ── 2D Sankey dimension picker ──
   const [dimA, setDimA] = useState("channel");
@@ -545,6 +549,7 @@ function SectionFunnel({ theme, onAskAI }) {
 
   const DIMS_CONFIG = [
     { k: "pipeline",    label: "Pipeline",  desc: "Upload→Create→Publish",  color: "#3B8BD4" },
+    { k: "user",        label: "User",      desc: "Top contributors",        color: "#F472B6" },
     { k: "channel",     label: "Channel",   desc: "Ch-A through Ch-I",      color: "#8B5CF6" },
     { k: "contentType", label: "Content",   desc: "Interview, News…",       color: "#EF9F27" },
     { k: "language",    label: "Language",  desc: "English, Hindi…",        color: "#3EC98A" },
@@ -553,14 +558,17 @@ function SectionFunnel({ theme, onAskAI }) {
   ];
   const COMPAT: Record<string,string[]> = {
     pipeline:    ["status"],
-    channel:     ["platform", "status"],
-    contentType: ["language", "status"],
+    user:        ["contentType", "channel"],
+    channel:     ["platform", "status", "user"],
+    contentType: ["language", "status", "user"],
     language:    ["platform", "status"],
     status:      [],
     platform:    [],
   };
 
   const computeSankeyData = (a: string, b: string) => {
+    const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
     if (a === "channel" && b === "platform") return sectionData.sankey?.channel || { nodes: [], links: [] };
     if (a === "contentType" && b === "language") return sectionData.sankey?.content || { nodes: [], links: [] };
     if (a === "pipeline" && b === "status") return {
@@ -582,7 +590,6 @@ function SectionFunnel({ theme, onAskAI }) {
       return { nodes: [...active.map(c => `Ch-${c.ch}`), "Published", "Unpublished"], links };
     }
     if (a === "contentType" && b === "status") {
-      const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
       const active = INPUT_TYPES.filter(t => t.created > 0);
       const links = [];
       active.forEach(t => {
@@ -613,6 +620,60 @@ function SectionFunnel({ theme, onAskAI }) {
       const usedPlats = [...new Set(filtLinks.map(l => l.target))];
       return { nodes: [...usedLangs, ...usedPlats], links: filtLinks };
     }
+    // ── User → Content: distribute each user's created volume across content types ──
+    if (a === "user" && b === "contentType") {
+      const active = INPUT_TYPES.filter(t => t.created > 0);
+      const totalCreated = active.reduce((s, t) => s + t.created, 0);
+      const links = [];
+      USERS.forEach(u => {
+        active.forEach(t => {
+          const val = totalCreated > 0 ? Math.round(u.created * (t.created / totalCreated)) : 0;
+          if (val > 0) links.push({ source: u.user, target: cap(t.type), value: val });
+        });
+      });
+      const usedTargets = [...new Set(links.map(l => l.target))];
+      return { nodes: [...USERS.map(u => u.user), ...usedTargets], links };
+    }
+    // ── User → Channel: distribute each user's uploads across channels ──
+    if (a === "user" && b === "channel") {
+      const active = CHANNELS.filter(c => c.uploaded > 0);
+      const totalUploaded = active.reduce((s, c) => s + c.uploaded, 0);
+      const links = [];
+      USERS.forEach(u => {
+        active.forEach(c => {
+          const val = totalUploaded > 0 ? Math.round(u.uploaded * (c.uploaded / totalUploaded)) : 0;
+          if (val > 0) links.push({ source: u.user, target: `Ch-${c.ch}`, value: val });
+        });
+      });
+      const usedTargets = [...new Set(links.map(l => l.target))];
+      return { nodes: [...USERS.map(u => u.user), ...usedTargets], links };
+    }
+    // ── Channel → User: show how channel upload volume distributes across users ──
+    if (a === "channel" && b === "user") {
+      const active = CHANNELS.filter(c => c.uploaded > 0);
+      const totalUserUploads = USERS.reduce((s, u) => s + u.uploaded, 0);
+      const links = [];
+      active.forEach(c => {
+        USERS.forEach(u => {
+          const val = totalUserUploads > 0 ? Math.round(c.uploaded * (u.uploaded / totalUserUploads)) : 0;
+          if (val > 0) links.push({ source: `Ch-${c.ch}`, target: u.user, value: val });
+        });
+      });
+      return { nodes: [...active.map(c => `Ch-${c.ch}`), ...USERS.map(u => u.user)], links };
+    }
+    // ── Content → User: show how content type upload volume distributes across users ──
+    if (a === "contentType" && b === "user") {
+      const active = INPUT_TYPES.filter(t => t.uploaded > 0);
+      const totalUserUploads = USERS.reduce((s, u) => s + u.uploaded, 0);
+      const links = [];
+      active.forEach(t => {
+        USERS.forEach(u => {
+          const val = totalUserUploads > 0 ? Math.round(t.uploaded * (u.uploaded / totalUserUploads)) : 0;
+          if (val > 0) links.push({ source: cap(t.type), target: u.user, value: val });
+        });
+      });
+      return { nodes: [...active.map(t => cap(t.type)), ...USERS.map(u => u.user)], links };
+    }
     return { nodes: [], links: [] };
   };
 
@@ -622,6 +683,7 @@ function SectionFunnel({ theme, onAskAI }) {
   const INPUT_TYPES = data?.inputTypes || [];
   const LANGUAGES = data?.languages || [];
   const CHANNELS = data?.channels || [];
+  const USERS = (explorerStaticData?.users || []).slice(0, 8);
   const TOTAL_UPLOADED = data?.totals?.totalUploaded || 0;
   const TOTAL_CREATED = data?.totals?.totalCreated || 0;
   const TOTAL_PUBLISHED = data?.totals?.totalPublished || 0;
@@ -730,38 +792,63 @@ function SectionFunnel({ theme, onAskAI }) {
 
       {subView === "sankey" && (
         <div className="stack">
-          <div className="card card-gold" style={{ padding: "18px 20px" }}>
+          <div className="card card-gold" style={{ padding: "24px 26px" }}>
+
             {/* ── Header ── */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18, flexWrap: "wrap", gap: 10 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div>
-                <div style={{ fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--ink2)", fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
-                  <span style={{ color: "rgba(255,255,255,0.25)" }}>→</span>
-                  <span style={{ color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
-                  <span style={{ color: "rgba(255,255,255,0.25)" }}>· SANKEY FLOW</span>
-                  <GraphActionButtons
-                    insightsOpen={!!insightsOpen.contentFlow}
-                    onToggleInsights={() => toggleInsights("contentFlow")}
-                    onAskAI={() => onAskAI && onAskAI("Content Flow", { dimA, dimB })}
-                  />
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", marginBottom: 7 }}>
+                  SANKEY FLOW · {activeDimACfg?.label} → {activeDimBCfg?.label}
                 </div>
-                <div style={{ fontSize: 11.5, color: "var(--ink3)", fontFamily: "var(--font-mono)", marginTop: 4 }}>
-                  D3 Sankey · hover nodes and links for highlighted path details
+                <div style={{ fontFamily: "-apple-system,'SF Pro Display',system-ui,sans-serif", fontSize: 22, fontWeight: 600, color: "rgba(255,255,255,0.90)", letterSpacing: "-0.025em", lineHeight: 1.15, marginBottom: 5 }}>
+                  {activeDimACfg?.label}
+                  <span style={{ color: "rgba(255,255,255,0.18)", fontWeight: 300, margin: "0 12px" }}>→</span>
+                  {activeDimBCfg?.label}
+                  <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.30)", marginLeft: 12, letterSpacing: "-0.01em" }}>flow analysis</span>
+                </div>
+                <div style={{ fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif", fontSize: 12.5, color: "rgba(255,255,255,0.35)", fontWeight: 400 }}>
+                  Hover any node or link to highlight its path through the flow
                 </div>
               </div>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.contentFlow}
+                onToggleInsights={() => toggleInsights("contentFlow")}
+                onAskAI={() => onAskAI && onAskAI("Content Flow", { dimA, dimB })}
+              />
             </div>
 
             {/* ── 2D Dimension Picker ── */}
-            <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "16px 18px", marginBottom: 18 }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)", marginBottom: 12 }}>
-                2D DIMENSION FILTER — SELECT SOURCE &amp; TARGET
+            <div style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "0.5px solid rgba(255,255,255,0.08)",
+              borderRadius: 14,
+              overflow: "hidden",
+              marginBottom: 20,
+            }}>
+              {/* Picker top bar */}
+              <div style={{
+                padding: "11px 18px",
+                borderBottom: "0.5px solid rgba(255,255,255,0.06)",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "rgba(255,255,255,0.01)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.18)" }} />
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)" }}>DIMENSION FILTER</span>
+                </div>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.16)", letterSpacing: "0.12em", textTransform: "uppercase" }}>SELECT SOURCE &amp; TARGET</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, alignItems: "start" }}>
 
-                {/* Source column */}
+              {/* Picker columns */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 48px 1fr", alignItems: "start", padding: "16px 16px 0" }}>
+
+                {/* SOURCE column */}
                 <div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>SOURCE</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 9, borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
+                    <div style={{ width: 2.5, height: 13, borderRadius: 2, background: "rgba(232,67,45,0.65)" }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.36)" }}>SOURCE</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     {DIMS_CONFIG.filter(d => (COMPAT[d.k] || []).length > 0).map(dim => {
                       const active = dimA === dim.k;
                       return (
@@ -769,60 +856,96 @@ function SectionFunnel({ theme, onAskAI }) {
                           setDimA(dim.k);
                           if (!COMPAT[dim.k]?.includes(dimB)) setDimB(COMPAT[dim.k]?.[0] || "status");
                         }} style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
-                          cursor: "pointer", textAlign: "left",
-                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
-                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
-                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
-                          transition: "all .16s ease",
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "11px 13px", borderRadius: 9, border: "0.5px solid",
+                          cursor: "pointer", textAlign: "left", width: "100%",
+                          background: active ? "rgba(232,67,45,0.08)" : "transparent",
+                          borderColor: active ? "rgba(232,67,45,0.28)" : "rgba(255,255,255,0.05)",
+                          transition: "all .15s ease",
                         }}>
-                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
-                          <div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          <div style={{
+                            width: 3, height: 32, borderRadius: 3, flexShrink: 0,
+                            background: active ? "rgba(232,67,45,0.85)" : "rgba(255,255,255,0.09)",
+                            transition: "background .15s ease",
+                          }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                              fontSize: 14, fontWeight: active ? 600 : 400,
+                              color: active ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.50)",
+                              lineHeight: 1.2, letterSpacing: "-0.015em",
+                              transition: "color .15s ease",
+                            }}>{dim.label}</div>
+                            <div style={{
+                              fontFamily: "var(--font-mono)", fontSize: 10,
+                              color: active ? "rgba(255,255,255,0.38)" : "rgba(255,255,255,0.20)",
+                              marginTop: 3, letterSpacing: "0.01em",
+                              transition: "color .15s ease",
+                            }}>{dim.desc}</div>
                           </div>
-                          {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                          {active && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(232,67,45,0.90)", flexShrink: 0 }} />}
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Arrow */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 28, gap: 6 }}>
-                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 18, color: "rgba(255,255,255,0.20)", lineHeight: 1 }}>→</div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)", letterSpacing: "0.08em", textTransform: "uppercase" }}>flows</div>
-                  <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.10)" }} />
+                {/* Arrow connector */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 46, gap: 5 }}>
+                  <div style={{ width: 1, height: 20, background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.10))" }} />
+                  <div style={{
+                    width: 26, height: 26, borderRadius: "50%",
+                    border: "0.5px solid rgba(255,255,255,0.09)",
+                    background: "rgba(255,255,255,0.025)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "rgba(255,255,255,0.22)", fontSize: 13,
+                  }}>→</div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 7.5, color: "rgba(255,255,255,0.16)", letterSpacing: "0.12em", textTransform: "uppercase" }}>flows</div>
+                  <div style={{ width: 1, height: 20, background: "linear-gradient(to top, transparent, rgba(255,255,255,0.10))" }} />
                 </div>
 
-                {/* Target column */}
+                {/* TARGET column */}
                 <div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 8 }}>TARGET</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                    {DIMS_CONFIG.filter(d => ["status","platform","language"].includes(d.k)).map(dim => {
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, paddingBottom: 9, borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
+                    <div style={{ width: 2.5, height: 13, borderRadius: 2, background: "rgba(232,67,45,0.65)" }} />
+                    <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.36)" }}>TARGET</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                    {DIMS_CONFIG.filter(d => new Set(Object.values(COMPAT).flat()).has(d.k)).map(dim => {
                       const isValid = validTargets.includes(dim.k);
                       const active = dimB === dim.k;
                       return (
                         <button key={dim.k} onClick={() => isValid && setDimB(dim.k)} disabled={!isValid} style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 13px", borderRadius: 8, border: "1px solid",
-                          cursor: isValid ? "pointer" : "not-allowed", textAlign: "left",
-                          opacity: isValid ? 1 : 0.28,
-                          background: active ? `${dim.color}12` : "rgba(255,255,255,0.02)",
-                          borderColor: active ? `${dim.color}50` : "rgba(255,255,255,0.07)",
-                          boxShadow: active ? `0 0 0 1px ${dim.color}22, 0 4px 14px ${dim.color}15` : "none",
-                          transition: "all .16s ease",
-                          filter: isValid ? "none" : "grayscale(0.4)",
+                          display: "flex", alignItems: "center", gap: 12,
+                          padding: "11px 13px", borderRadius: 9, border: "0.5px solid",
+                          cursor: isValid ? "pointer" : "not-allowed", textAlign: "left", width: "100%",
+                          opacity: isValid ? 1 : 0.18,
+                          background: active ? "rgba(232,67,45,0.08)" : "transparent",
+                          borderColor: active ? "rgba(232,67,45,0.28)" : "rgba(255,255,255,0.05)",
+                          transition: "all .15s ease",
+                          filter: isValid ? "none" : "saturate(0)",
                         }}>
-                          <div style={{ width: 3, height: 28, borderRadius: 2, background: active ? dim.color : "rgba(255,255,255,0.12)", flexShrink: 0, transition: "background .16s" }} />
-                          <div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 700, color: active ? dim.color : "rgba(255,255,255,0.60)", lineHeight: 1.2 }}>{dim.label}</div>
-                            <div style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.30)", marginTop: 2 }}>{dim.desc}</div>
+                          <div style={{
+                            width: 3, height: 32, borderRadius: 3, flexShrink: 0,
+                            background: active ? "rgba(232,67,45,0.85)" : "rgba(255,255,255,0.09)",
+                            transition: "background .15s ease",
+                          }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{
+                              fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                              fontSize: 14, fontWeight: active ? 600 : 400,
+                              color: active ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.50)",
+                              lineHeight: 1.2, letterSpacing: "-0.015em",
+                              transition: "color .15s ease",
+                            }}>{dim.label}</div>
+                            <div style={{
+                              fontFamily: "var(--font-mono)", fontSize: 10,
+                              color: active ? "rgba(255,255,255,0.38)" : "rgba(255,255,255,0.20)",
+                              marginTop: 3, letterSpacing: "0.01em",
+                              transition: "color .15s ease",
+                            }}>{dim.desc}</div>
                           </div>
-                          {!isValid && <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 8, color: "rgba(255,255,255,0.22)" }}>N/A</span>}
-                          {active && isValid && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: dim.color, flexShrink: 0 }} />}
+                          {active && isValid && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(232,67,45,0.90)", flexShrink: 0 }} />}
                         </button>
                       );
                     })}
@@ -831,12 +954,32 @@ function SectionFunnel({ theme, onAskAI }) {
 
               </div>
 
-              {/* Active pair badge */}
-              <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, color: "rgba(255,255,255,0.28)", letterSpacing: "0.12em", textTransform: "uppercase" }}>ACTIVE VIEW</span>
-                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimACfg?.color}18`, border: `1px solid ${activeDimACfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimACfg?.color }}>{activeDimACfg?.label}</span>
-                <span style={{ color: "rgba(255,255,255,0.25)", fontSize: 12 }}>→</span>
-                <span style={{ padding: "3px 10px", borderRadius: 5, background: `${activeDimBCfg?.color}18`, border: `1px solid ${activeDimBCfg?.color}44`, fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 700, color: activeDimBCfg?.color }}>{activeDimBCfg?.label}</span>
+              {/* Active footer */}
+              <div style={{
+                margin: "16px 16px 0",
+                borderTop: "0.5px solid rgba(255,255,255,0.05)",
+                padding: "11px 0",
+                display: "flex", alignItems: "center", gap: 10,
+              }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: 9.5, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.20)" }}>ACTIVE</span>
+                <span style={{
+                  padding: "4px 12px", borderRadius: 6,
+                  background: "rgba(232,67,45,0.10)", border: "0.5px solid rgba(232,67,45,0.25)",
+                  fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                  fontSize: 12, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.82)",
+                }}>{activeDimACfg?.label}</span>
+                <svg width="16" height="8" viewBox="0 0 16 8" fill="none" style={{ flexShrink: 0 }}>
+                  <path d="M1 4h12M10 1.5l3 2.5-3 2.5" stroke="rgba(255,255,255,0.22)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span style={{
+                  padding: "4px 12px", borderRadius: 6,
+                  background: "rgba(232,67,45,0.10)", border: "0.5px solid rgba(232,67,45,0.25)",
+                  fontFamily: "-apple-system,'SF Pro Text',system-ui,sans-serif",
+                  fontSize: 12, fontWeight: 600, letterSpacing: "-0.01em", color: "rgba(255,255,255,0.82)",
+                }}>{activeDimBCfg?.label}</span>
+                <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: 9.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.06em" }}>
+                  {computeSankeyData(dimA, dimB).links?.length || 0} links
+                </span>
               </div>
             </div>
 
@@ -855,353 +998,407 @@ function SectionFunnel({ theme, onAskAI }) {
                   </div>
                 </>
               }
-              back={<GraphInsights title="Content Flow" />}
+              back={<GraphInsights title="Content Flow" insights={[
+                { type: 'warning', heading: '97.5% of content never reaches a distribution node', body: 'The Sankey confirms that the flow collapses almost entirely at the Created → Published transition. This is not a thin stream — it is a near-total blockage. Only 111 of 15,119 created pieces cross the publish threshold.' },
+                { type: 'signal',  heading: 'Ch-A receives 19% of uploads but delivers 41% of published content', body: 'Channel A shows a disproportionate conversion efficiency. Its internal workflow — whether content type selection, team process, or platform targeting — is meaningfully different from the fleet average.' },
+                { type: 'info',    heading: 'Non-English content drops out almost entirely post-creation', body: 'Hindi, Mixed, Spanish, and Arabic content together represent 41% of uploads, but their share of published output is near zero. Language-specific distribution barriers — platform availability, subtitle requirements — may be the cause.' },
+              ]} />}
             />
           </div>
         </div>
       )}
 
-      {subView === "pipeline" && (
-        <div className="stack">
-          <div className="g-4-6">
-            {/* ── Language Pipeline — columnar table ── */}
-            {(() => {
-              const maxUp = Math.max(...LANGUAGES.map(l => l.uploaded), 1);
-              const maxCr = Math.max(...LANGUAGES.map(l => l.created), 1);
-              const maxPb = Math.max(...LANGUAGES.map(l => l.published), 1);
-              const totalUploaded  = LANGUAGES.reduce((s, l) => s + l.uploaded,  0);
-              const totalProcessed = LANGUAGES.reduce((s, l) => s + l.created,   0);
-              const totalPublished = LANGUAGES.reduce((s, l) => s + l.published, 0);
-              const totalLost      = totalProcessed - totalPublished;
-              const globalPubRate  = totalUploaded > 0 ? (totalPublished / totalUploaded * 100).toFixed(1) : '0.0';
-              const publishingLangs = LANGUAGES.filter(l => l.published > 0).length;
-              const top = LANGUAGES[0];
-              const topPct = totalUploaded > 0 ? (top?.uploaded / totalUploaded * 100).toFixed(0) : 0;
-              const SF = '-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif';
-              const COL = '116px 1fr 1fr 1fr 72px';
+      {subView === "pipeline" && (() => {
+        const SF = '-apple-system,"SF Pro Display","SF Pro Text",system-ui,sans-serif';
+        const MONO = 'var(--font-mono)';
+        const totalUp   = LANGUAGES.reduce((s, l) => s + l.uploaded,  0);
+        const totalCr   = LANGUAGES.reduce((s, l) => s + l.created,   0);
+        const totalPub  = LANGUAGES.reduce((s, l) => s + l.published, 0);
+        const totalLost = totalCr - totalPub;
+        const globalRate = totalUp > 0 ? (totalPub / totalUp * 100).toFixed(1) : '0.0';
+        const publishingLangs = LANGUAGES.filter(l => l.published > 0).length;
+        const maxUp  = Math.max(...LANGUAGES.map(l => l.uploaded),  1);
+        const maxCr  = Math.max(...LANGUAGES.map(l => l.created),   1);
+        const maxPb  = Math.max(...LANGUAGES.map(l => l.published), 1);
+        const maxRate = Math.max(...INPUT_TYPES.map(t => t.uploaded > 0 ? t.published / t.uploaded * 100 : 0), 0.1);
 
-              return (
-                <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 14, fontFamily: SF, overflow: 'hidden' }}>
+        const STAGES = [
+          {
+            key: 'upload', label: 'Uploaded', value: totalUp, sub: 'raw source files',
+            color: 'rgba(255,255,255,0.88)', dim: 'rgba(255,255,255,0.40)',
+            glow: 'rgba(255,255,255,0.06)', bar: 'rgba(255,255,255,0.22)',
+            detail: `Entry point — ${totalUp.toLocaleString()} files ingested`,
+          },
+          {
+            key: 'create', label: 'AI Created', value: totalCr, sub: `${totalUp > 0 ? (totalCr/totalUp).toFixed(1) : '–'}× expansion`,
+            color: 'rgba(232,180,100,0.95)', dim: 'rgba(232,180,100,0.45)',
+            glow: 'rgba(232,180,100,0.07)', bar: 'rgba(232,180,100,0.28)',
+            detail: `+${(totalCr - totalUp).toLocaleString()} net new pieces generated`,
+          },
+          {
+            key: 'publish', label: 'Published', value: totalPub, sub: `${globalRate}% pub rate`,
+            color: 'rgba(74,180,120,0.95)', dim: 'rgba(74,180,120,0.45)',
+            glow: 'rgba(74,180,120,0.07)', bar: 'rgba(74,180,120,0.28)',
+            detail: `${totalPub.toLocaleString()} pieces distributed live`,
+          },
+          {
+            key: 'lost', label: 'Never Dist.', value: totalLost, sub: `${totalCr > 0 ? (totalLost/totalCr*100).toFixed(1) : 0}% of created`,
+            color: 'rgba(220,80,60,0.95)', dim: 'rgba(220,80,60,0.45)',
+            glow: 'rgba(220,80,60,0.07)', bar: 'rgba(220,80,60,0.20)',
+            detail: `${totalLost.toLocaleString()} pieces stalled in backlog`,
+          },
+        ];
 
-                  {/* ── header ── */}
-                  <div style={{ padding: '20px 26px 16px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 11, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', fontWeight: 600, marginBottom: 7 }}>
-                        Language Pipeline
-                      </div>
-                      <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.48)', fontWeight: 400, lineHeight: 1.55 }}>
-                        {top?.lang} leads with {topPct}% of uploads — {totalPublished.toLocaleString()} items distributed across platforms.
+        return (
+          <div className="stack">
+
+            {/* ── Pipeline Stage Flow ── */}
+            <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+
+              {/* header */}
+              <div style={{ padding: '20px 26px 17px', borderBottom: '0.5px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 5 }}>CONTENT PIPELINE</div>
+                  <div style={{ fontFamily: SF, fontSize: 21, fontWeight: 600, color: 'rgba(255,255,255,0.90)', letterSpacing: '-0.025em', lineHeight: 1 }}>
+                    Upload <span style={{ color: 'rgba(255,255,255,0.22)', fontWeight: 300 }}>→</span> Create <span style={{ color: 'rgba(255,255,255,0.22)', fontWeight: 300 }}>→</span> Publish
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 8, background: 'rgba(74,180,120,0.06)', border: '0.5px solid rgba(74,180,120,0.16)' }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(74,180,120,0.80)' }} />
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: 'rgba(74,180,120,0.80)', letterSpacing: '0.10em', textTransform: 'uppercase' }}>{globalRate}% published</span>
+                </div>
+              </div>
+
+              {/* stage cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0 }}>
+                {STAGES.map((s, si) => {
+                  const isH = hoveredStage === s.key;
+                  const widthPct = Math.min(100, totalCr > 0 ? (s.value / totalCr) * 100 : 0);
+                  return (
+                    <div
+                      key={s.key}
+                      onMouseEnter={() => setHoveredStage(s.key)}
+                      onMouseLeave={() => setHoveredStage(null)}
+                      style={{
+                        position: 'relative', padding: '22px 22px 18px',
+                        borderRight: si < STAGES.length - 1 ? '0.5px solid rgba(255,255,255,0.05)' : 'none',
+                        background: isH ? s.glow : 'transparent',
+                        transition: 'background .20s ease',
+                        cursor: 'default', overflow: 'hidden',
+                      }}
+                    >
+                      {/* top accent line */}
+                      <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+                        background: isH ? s.color : 'transparent',
+                        transition: 'background .20s ease',
+                        borderRadius: '2px 2px 0 0',
+                      }} />
+
+                      {/* glow blob behind number */}
+                      {isH && (
+                        <div style={{
+                          position: 'absolute', top: '30%', left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          width: 80, height: 80, borderRadius: '50%',
+                          background: s.color, filter: 'blur(40px)', opacity: 0.10,
+                          pointerEvents: 'none',
+                        }} />
+                      )}
+
+                      <div style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: isH ? s.dim : 'rgba(255,255,255,0.28)', marginBottom: 10, transition: 'color .18s' }}>{s.label}</div>
+                      <div style={{ fontFamily: SF, fontSize: 30, fontWeight: 600, color: s.color, letterSpacing: '-0.03em', fontVariantNumeric: 'tabular-nums', lineHeight: 1, marginBottom: 6 }}>{s.value.toLocaleString()}</div>
+                      <div style={{ fontFamily: MONO, fontSize: 10, color: isH ? s.dim : 'rgba(255,255,255,0.28)', marginBottom: 14, transition: 'color .18s' }}>{s.sub}</div>
+
+                      {/* hover detail line */}
+                      <div style={{ fontFamily: MONO, fontSize: 9.5, color: s.dim, opacity: isH ? 1 : 0, transform: isH ? 'translateY(0)' : 'translateY(4px)', transition: 'opacity .18s, transform .18s', marginBottom: 10, lineHeight: 1.4 }}>{s.detail}</div>
+
+                      {/* progress bar */}
+                      <div style={{ height: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 3, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${widthPct}%`, background: isH ? s.color : s.bar, borderRadius: 3, transition: 'background .20s ease, width .4s ease' }} />
                       </div>
                     </div>
-                    {/* stat badges */}
-                    <div style={{ display: 'flex', gap: 0, borderRadius: 8, border: '0.5px solid rgba(255,255,255,0.07)', overflow: 'hidden', flexShrink: 0 }}>
+                  );
+                })}
+              </div>
+
+              {/* flow connector row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', borderTop: '0.5px solid rgba(255,255,255,0.04)', padding: '0 22px' }}>
+                {[
+                  { from: 'Upload → Create', rate: totalUp > 0 ? (totalCr / totalUp).toFixed(1) + '×' : '–', label: 'AI expansion', c: 'rgba(232,180,100,0.70)' },
+                  { from: 'Create → Publish', rate: totalCr > 0 ? (totalPub / totalCr * 100).toFixed(1) + '%' : '–', label: 'publish rate', c: 'rgba(74,180,120,0.70)' },
+                  { from: 'Upload → Publish', rate: totalUp > 0 ? (totalPub / totalUp * 100).toFixed(1) + '%' : '–', label: 'end-to-end rate', c: 'rgba(74,180,120,0.55)' },
+                ].map((r, ri, arr) => (
+                  <div key={ri} style={{ padding: '10px 0', borderRight: ri < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.04)' : 'none', paddingRight: ri < arr.length - 1 ? 18 : 0, paddingLeft: ri > 0 ? 18 : 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(255,255,255,0.22)', letterSpacing: '0.06em' }}>{r.from}</span>
+                      <div style={{ flex: 1, height: '0.5px', background: 'rgba(255,255,255,0.06)' }} />
+                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: r.c, fontVariantNumeric: 'tabular-nums' }}>{r.rate}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(255,255,255,0.20)' }}>{r.label}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Language Pipeline ── */}
+            <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+
+              {/* header */}
+              <div style={{ padding: '18px 26px', borderBottom: '0.5px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+                <div>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 5 }}>LANGUAGE PIPELINE</div>
+                  <div style={{ fontFamily: SF, fontSize: 14, color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '-0.01em' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.72)', fontWeight: 500 }}>{LANGUAGES[0]?.lang}</span> leads with {totalUp > 0 ? (LANGUAGES[0]?.uploaded / totalUp * 100).toFixed(0) : 0}% of uploads
+                    <span style={{ color: 'rgba(255,255,255,0.22)', margin: '0 8px' }}>·</span>
+                    <span style={{ color: 'rgba(74,180,120,0.80)', fontWeight: 500 }}>{publishingLangs}</span> of {LANGUAGES.length} languages publishing
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 0, borderRadius: 10, border: '0.5px solid rgba(255,255,255,0.07)', overflow: 'hidden', flexShrink: 0 }}>
+                  {[
+                    { l: 'Languages',   v: LANGUAGES.length,   c: 'rgba(255,255,255,0.82)' },
+                    { l: 'Publishing',  v: publishingLangs,    c: 'rgba(74,180,120,0.85)'  },
+                    { l: 'Global Rate', v: globalRate + '%',   c: parseFloat(globalRate) >= 5 ? 'rgba(74,180,120,0.85)' : 'rgba(232,180,100,0.85)' },
+                  ].map((b, bi, arr) => (
+                    <div key={b.l} style={{ padding: '10px 20px', borderRight: bi < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.06)' : 'none', textAlign: 'center' }}>
+                      <div style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(255,255,255,0.28)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 5, fontWeight: 700 }}>{b.l}</div>
+                      <div style={{ fontFamily: SF, fontSize: 17, color: b.c, fontWeight: 600, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}>{b.v}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* column headers */}
+              <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr 1fr 1fr 90px', padding: '9px 26px', borderBottom: '0.5px solid rgba(255,255,255,0.04)', alignItems: 'center', gap: 8 }}>
+                <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.20)' }}>Language</div>
+                {[
+                  { l: 'Uploaded',   dot: 'rgba(255,255,255,0.32)' },
+                  { l: 'AI Created', dot: 'rgba(232,180,100,0.75)' },
+                  { l: 'Published',  dot: 'rgba(74,180,120,0.75)'  },
+                ].map(c => (
+                  <div key={c.l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ width: 5, height: 5, borderRadius: '50%', background: c.dot, flexShrink: 0 }} />
+                    <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.26)' }}>{c.l}</span>
+                  </div>
+                ))}
+                <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.26)', textAlign: 'right' }}>Rate</div>
+              </div>
+
+              {/* language rows */}
+              {LANGUAGES.map((l, i) => {
+                const pr = l.uploaded > 0 ? l.published / l.uploaded * 100 : 0;
+                const expansion = l.uploaded > 0 ? ((l.created / l.uploaded - 1) * 100).toFixed(0) : '0';
+                const sharePct = totalUp > 0 ? (l.uploaded / totalUp * 100).toFixed(0) : '0';
+                const isHov = hoveredLang === l.lang;
+                const pill = pr >= 3
+                  ? { c: 'rgba(74,180,120,0.95)',  bg: 'rgba(74,180,120,0.10)', b: 'rgba(74,180,120,0.25)' }
+                  : pr > 0
+                    ? { c: 'rgba(232,180,100,0.90)', bg: 'rgba(232,180,100,0.08)', b: 'rgba(232,180,100,0.22)' }
+                    : { c: 'rgba(255,255,255,0.25)', bg: 'rgba(255,255,255,0.02)', b: 'rgba(255,255,255,0.08)' };
+                const nameColor = i === 0 ? 'rgba(255,255,255,0.92)' : i === 1 ? 'rgba(255,255,255,0.68)' : 'rgba(255,255,255,0.38)';
+                return (
+                  <div
+                    key={l.lang}
+                    onMouseEnter={() => setHoveredLang(l.lang)}
+                    onMouseLeave={() => setHoveredLang(null)}
+                    style={{
+                      borderBottom: '0.5px solid rgba(255,255,255,0.04)',
+                      background: isHov ? 'rgba(255,255,255,0.022)' : 'transparent',
+                      transition: 'background .14s ease',
+                      cursor: 'default', position: 'relative',
+                    }}
+                  >
+                    {/* left accent */}
+                    <div style={{
+                      position: 'absolute', left: 0, top: 0, bottom: 0, width: 2,
+                      background: isHov ? (pr >= 3 ? 'rgba(74,180,120,0.60)' : pr > 0 ? 'rgba(232,180,100,0.60)' : 'rgba(255,255,255,0.20)') : 'transparent',
+                      transition: 'background .14s ease',
+                    }} />
+
+                    {/* data row */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr 1fr 1fr 90px', padding: '14px 26px 5px', alignItems: 'flex-start', gap: 8 }}>
+                      {/* Name */}
+                      <div>
+                        <div style={{ fontFamily: SF, fontSize: 14, fontWeight: i < 2 ? 600 : 500, color: isHov ? 'rgba(255,255,255,0.92)' : nameColor, letterSpacing: '-0.015em', transition: 'color .14s' }}>{l.lang}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 9, color: isHov ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.14)', marginTop: 3, letterSpacing: '0.06em', transition: 'color .14s' }}>{sharePct}% of uploads</div>
+                      </div>
+                      {/* Uploaded */}
+                      <div>
+                        <div style={{ fontFamily: SF, fontSize: 15, fontWeight: 500, color: isHov ? 'rgba(255,255,255,0.78)' : 'rgba(255,255,255,0.55)', fontVariantNumeric: 'tabular-nums', transition: 'color .14s' }}>{l.uploaded.toLocaleString()}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(255,255,255,0.22)', marginTop: 2 }}>source files</div>
+                      </div>
+                      {/* AI Created */}
+                      <div>
+                        <div style={{ fontFamily: SF, fontSize: 15, fontWeight: 500, color: isHov ? 'rgba(232,180,100,0.95)' : 'rgba(232,180,100,0.78)', fontVariantNumeric: 'tabular-nums', transition: 'color .14s' }}>{l.created.toLocaleString()}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(232,180,100,0.38)', marginTop: 2 }}>+{expansion}% expanded</div>
+                      </div>
+                      {/* Published */}
+                      <div>
+                        <div style={{ fontFamily: SF, fontSize: 15, fontWeight: 500, color: l.published > 0 ? (isHov ? 'rgba(74,180,120,0.98)' : 'rgba(74,180,120,0.82)') : 'rgba(255,255,255,0.18)', fontVariantNumeric: 'tabular-nums', transition: 'color .14s' }}>{l.published.toLocaleString()}</div>
+                        <div style={{ fontFamily: MONO, fontSize: 9, color: l.published > 0 ? 'rgba(74,180,120,0.38)' : 'rgba(220,80,60,0.45)', marginTop: 2 }}>
+                          {l.published > 0 ? 'distributed' : 'none distributed'}
+                        </div>
+                      </div>
+                      {/* Rate badge */}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 1 }}>
+                        <span style={{
+                          fontFamily: MONO, fontSize: 11, fontWeight: 700,
+                          color: pill.c, background: pill.bg, border: `0.5px solid ${pill.b}`,
+                          borderRadius: 7, padding: '4px 10px',
+                          fontVariantNumeric: 'tabular-nums', letterSpacing: '0.02em',
+                          boxShadow: isHov ? `0 0 12px ${pill.bg}` : 'none',
+                          transition: 'box-shadow .18s ease',
+                        }}>{pr.toFixed(1)}%</span>
+                      </div>
+                    </div>
+
+                    {/* mini bars */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr 1fr 1fr 90px', padding: '3px 26px 12px', gap: 8 }}>
+                      <div />
                       {[
-                        { l: 'Languages',  v: LANGUAGES.length },
-                        { l: 'Publishing', v: publishingLangs },
-                        { l: 'Pub rate',   v: globalPubRate + '%' },
-                      ].map((b, i, arr) => (
-                        <div key={b.l} style={{ padding: '8px 16px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.07)' : 'none' }}>
-                          <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.52)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, fontWeight: 600 }}>{b.l}</div>
-                          <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.78)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{b.v}</div>
+                        { val: l.uploaded, max: maxUp, c: isHov ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.14)', glow: 'rgba(255,255,255,0.10)' },
+                        { val: l.created,  max: maxCr, c: isHov ? 'rgba(232,180,100,0.80)' : 'rgba(232,180,100,0.38)', glow: 'rgba(232,180,100,0.12)' },
+                        { val: l.published,max: maxPb, c: isHov ? 'rgba(74,180,120,0.90)'  : 'rgba(74,180,120,0.45)',  glow: 'rgba(74,180,120,0.12)' },
+                      ].map((bar, bi) => (
+                        <div key={bi} style={{ paddingRight: 10 }}>
+                          <div style={{ height: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 3, overflow: 'hidden' }}>
+                            <div style={{
+                              width: `${bar.max > 0 ? (bar.val / bar.max) * 100 : 0}%`,
+                              height: '100%', background: bar.c, borderRadius: 3,
+                              transition: 'background .18s ease, width .3s ease',
+                              boxShadow: isHov ? `0 0 6px ${bar.glow}` : 'none',
+                            }} />
+                          </div>
                         </div>
                       ))}
+                      <div />
                     </div>
-                  </div>
 
-                  {/* ── column headers ── */}
-                  <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '10px 26px', borderBottom: '0.5px solid rgba(255,255,255,0.05)', alignItems: 'center' }}>
-                    <div />
-                    {[
-                      { l: 'Uploaded',  pip: 'rgba(255,255,255,0.30)' },
-                      { l: 'Processed', pip: 'rgba(200,160,74,0.75)' },
-                      { l: 'Published', pip: 'rgba(74,170,120,0.80)' },
-                    ].map(col => (
-                      <div key={col.l} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div style={{ width: 3, height: 12, background: col.pip, borderRadius: 1, flexShrink: 0 }} />
-                        <span style={{ fontSize: 10.5, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', fontWeight: 600 }}>{col.l}</span>
+                    {/* hover: inline conversion stats */}
+                    {isHov && (
+                      <div style={{ display: 'grid', gridTemplateColumns: '148px 1fr 1fr 1fr 90px', padding: '0 26px 10px', gap: 8 }}>
+                        <div />
+                        {[
+                          { v: `${sharePct}% share`, c: 'rgba(255,255,255,0.28)' },
+                          { v: `×${l.uploaded > 0 ? (l.created/l.uploaded).toFixed(1) : '–'} mult`, c: 'rgba(232,180,100,0.50)' },
+                          { v: `${l.created > 0 ? (l.published/l.created*100).toFixed(1) : '0.0'}% conv`, c: 'rgba(74,180,120,0.50)' },
+                        ].map((s, si) => (
+                          <div key={si} style={{ fontFamily: MONO, fontSize: 9, color: s.c, letterSpacing: '0.06em' }}>{s.v}</div>
+                        ))}
+                        <div />
                       </div>
-                    ))}
-                    <div style={{ fontSize: 10.5, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.52)', fontWeight: 600, textAlign: 'right' }}>Rate</div>
+                    )}
                   </div>
+                );
+              })}
 
-                  {/* ── rows via GraphFlip ── */}
-                  <GraphFlip
-                    flipped={!!insightsOpen.languagePipeline}
-                    minHeight={180}
-                    front={
-                      <div>
-                        {LANGUAGES.map((l, i) => {
-                          const pr = l.uploaded > 0 ? l.published / l.uploaded * 100 : 0;
-                          const expansion = l.uploaded > 0 ? ((l.created / l.uploaded - 1) * 100).toFixed(0) : '0';
-                          const nameColor = i === 0 ? 'rgba(255,255,255,0.82)' : i === 1 ? 'rgba(255,255,255,0.62)' : 'rgba(255,255,255,0.40)';
-                          const pill = pr >= 2
-                            ? { c: '#4aaa78',  bg: 'rgba(74,170,120,0.08)',  b: 'rgba(74,170,120,0.16)'  }
-                            : pr > 0
-                              ? { c: '#c8a04a',  bg: 'rgba(200,160,74,0.07)', b: 'rgba(200,160,74,0.16)'  }
-                              : { c: 'rgba(255,255,255,0.20)', bg: 'transparent', b: 'rgba(255,255,255,0.07)' };
-                          return (
-                            <div key={l.lang} style={{ borderBottom: '0.5px solid rgba(255,255,255,0.04)' }}>
-                              {/* data row */}
-                              <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '16px 26px 8px', alignItems: 'flex-start' }}>
-                                <div style={{ fontSize: 13, color: nameColor, fontWeight: 500 }}>{l.lang}</div>
-                                <div>
-                                  <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.52)', fontVariantNumeric: 'tabular-nums' }}>{l.uploaded.toLocaleString()}</div>
-                                  <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.50)', marginTop: 3 }}>source files</div>
-                                </div>
-                                <div>
-                                  <div style={{ fontSize: 15, color: '#c8a04a', fontVariantNumeric: 'tabular-nums' }}>{l.created.toLocaleString()}</div>
-                                  <div style={{ fontSize: 9.5, color: 'rgba(200,160,74,0.40)', marginTop: 3 }}>+{expansion}% expanded</div>
-                                </div>
-                                <div>
-                                  <div style={{ fontSize: 15, color: l.published > 0 ? '#4aaa78' : 'rgba(255,255,255,0.20)', fontVariantNumeric: 'tabular-nums' }}>{l.published.toLocaleString()}</div>
-                                  <div style={{ fontSize: 9.5, color: l.published > 0 ? 'rgba(74,170,120,0.40)' : 'rgba(224,96,80,0.50)', marginTop: 3 }}>
-                                    {l.published > 0 ? 'distributed' : 'none distributed'}
-                                  </div>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start', paddingTop: 2 }}>
-                                  <span style={{ fontSize: 11, fontWeight: 500, color: pill.c, background: pill.bg, border: `0.5px solid ${pill.b}`, borderRadius: 5, padding: '3px 8px', fontVariantNumeric: 'tabular-nums' }}>
-                                    {pr.toFixed(1)}%
-                                  </span>
-                                </div>
-                              </div>
-                              {/* bar row */}
-                              <div style={{ display: 'grid', gridTemplateColumns: COL, padding: '6px 26px 14px', alignItems: 'center' }}>
-                                <div />
-                                <div style={{ paddingRight: 14 }}>
-                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
-                                    <div style={{ width: `${(l.uploaded / maxUp) * 100}%`, height: '100%', background: 'rgba(255,255,255,0.22)', borderRadius: 2 }} />
-                                  </div>
-                                </div>
-                                <div style={{ paddingRight: 14 }}>
-                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
-                                    <div style={{ width: `${(l.created / maxCr) * 100}%`, height: '100%', background: 'rgba(200,160,74,0.55)', borderRadius: 2 }} />
-                                  </div>
-                                </div>
-                                <div style={{ paddingRight: 14 }}>
-                                  <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
-                                    <div style={{ width: `${maxPb > 0 ? (l.published / maxPb) * 100 : 0}%`, height: '100%', background: 'rgba(74,170,120,0.70)', borderRadius: 2 }} />
-                                  </div>
-                                </div>
-                                <div />
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    }
-                    back={<GraphInsights title="Language Pipeline Breakdown" />}
-                  />
-
-                  {/* ── action buttons ── */}
-                  <div style={{ padding: '12px 26px', borderTop: '0.5px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'flex-end' }}>
-                    <GraphActionButtons
-                      insightsOpen={!!insightsOpen.languagePipeline}
-                      onToggleInsights={() => toggleInsights("languagePipeline")}
-                      onAskAI={() => onAskAI && onAskAI("Language Pipeline", LANGUAGES)}
-                    />
+              {/* footer totals */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderTop: '0.5px solid rgba(255,255,255,0.06)' }}>
+                {[
+                  { l: 'Total Uploaded',    v: totalUp,   c: 'rgba(255,255,255,0.78)', bg: 'rgba(255,255,255,0.01)' },
+                  { l: 'Total AI Created',  v: totalCr,   c: 'rgba(232,180,100,0.90)', bg: 'rgba(232,180,100,0.02)' },
+                  { l: 'Total Published',   v: totalPub,  c: 'rgba(74,180,120,0.90)',  bg: 'rgba(74,180,120,0.02)'  },
+                  { l: 'Never Distributed', v: totalLost, c: 'rgba(220,80,60,0.85)',   bg: 'rgba(220,80,60,0.02)'   },
+                ].map((s, si, arr) => (
+                  <div key={s.l} style={{ padding: '14px 26px', borderRight: si < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.05)' : 'none', background: s.bg }}>
+                    <div style={{ fontFamily: MONO, fontSize: 9, color: 'rgba(255,255,255,0.26)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 7, fontWeight: 700 }}>{s.l}</div>
+                    <div style={{ fontFamily: SF, fontSize: 22, color: s.c, fontWeight: 600, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.025em' }}>{s.v.toLocaleString()}</div>
                   </div>
-
-                  {/* ── footer totals ── */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', borderTop: '0.5px solid rgba(255,255,255,0.05)' }}>
-                    {[
-                      { l: 'Uploaded',  v: totalUploaded,  c: 'rgba(255,255,255,0.65)' },
-                      { l: 'Processed', v: totalProcessed, c: '#c8a04a' },
-                      { l: 'Published', v: totalPublished, c: '#4aaa78' },
-                      { l: 'Lost',      v: totalLost,      c: '#e06050' },
-                    ].map((s, i, arr) => (
-                      <div key={s.l} style={{ padding: '14px 26px', borderRight: i < arr.length - 1 ? '0.5px solid rgba(255,255,255,0.05)' : 'none' }}>
-                        <div style={{ fontSize: 10.5, color: 'rgba(255,255,255,0.52)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, fontWeight: 600 }}>{s.l}</div>
-                        <div style={{ fontSize: 18, color: s.c, fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{s.v.toLocaleString()}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-              );
-            })()}
-            <div className="card" style={{ padding: "16px 18px" }}>
-              <div
-                style={{
-                  fontSize: 8,
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--ink3)",
-                  marginBottom: 14,
-                }}
-              >
-                DATA QUALITY ALERTS
+                ))}
               </div>
-              {sectionData.dataQualityAlerts.map((a, i) => (
-                <div
-                  key={i}
-                  className={`callout callout-${a.c}`}
-                  style={{ marginBottom: 8, padding: "9px 12px" }}
-                >
-                  <div
-                    className="c-text"
-                    style={{ fontSize: 11, marginBottom: 0 }}
-                  >
-                    {a.t}
-                  </div>
+            </div>
+
+            {/* ── Bottom Row: Quality Alerts + Input Type Rates ── */}
+            <div className="g-4-6">
+
+              {/* Data Quality Alerts */}
+              <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+                <div style={{ padding: '16px 20px 13px', borderBottom: '0.5px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)' }}>DATA QUALITY ALERTS</div>
                 </div>
-              ))}
-              <div style={{ marginTop: 16 }}>
-                <div
-                  style={{
-                    fontSize: 8,
-                    fontFamily: "var(--font-mono)",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    color: "var(--ink3)",
-                    marginBottom: 12,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>INPUT TYPE PUBLISH RATES</span>
+                <div style={{ padding: '10px 14px 14px', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                  {sectionData.dataQualityAlerts.map((a, i) => (
+                    <div key={i} className={`callout callout-${a.c}`} style={{ padding: '10px 14px', borderRadius: 9 }}>
+                      <div className="c-text" style={{ fontFamily: SF, fontSize: 12.5, fontWeight: 400, marginBottom: 0, lineHeight: 1.5 }}>{a.t}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Input Type Publish Rates */}
+              <div style={{ background: '#0c0c0e', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16, overflow: 'hidden' }}>
+                <div style={{ padding: '16px 20px 13px', borderBottom: '0.5px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)' }}>INPUT TYPE PUBLISH RATES</div>
                   <GraphActionButtons
                     insightsOpen={!!insightsOpen.inputTypePublishRates}
-                    onToggleInsights={() =>
-                      toggleInsights("inputTypePublishRates")
-                    }
-                    onAskAI={() =>
-                      onAskAI &&
-                      onAskAI("Input Type Publish Rates", INPUT_TYPES)
-                    }
+                    onToggleInsights={() => toggleInsights("inputTypePublishRates")}
                   />
                 </div>
                 <GraphFlip
                   flipped={!!insightsOpen.inputTypePublishRates}
-                  minHeight={240}
+                  minHeight={260}
                   front={
-                    <>
-                      {INPUT_TYPES.slice(0, 7).map((t) => {
-                        const rate = ((t.published / t.uploaded) * 100).toFixed(1);
-                        const color =
-                          parseFloat(rate) > 5
-                            ? "var(--green)"
-                            : parseFloat(rate) > 2
-                              ? "var(--pri)"
-                              : parseFloat(rate) > 0
-                                ? "var(--warn)"
-                                : "var(--red)";
+                    <div style={{ padding: '10px 18px 14px' }}>
+                      {INPUT_TYPES.slice(0, 8).map((t) => {
+                        const rate = t.uploaded > 0 ? (t.published / t.uploaded * 100) : 0;
+                        const isHov = hoveredType === t.type;
+                        const pct = maxRate > 0 ? (rate / maxRate) * 100 : 0;
+                        const barColor = rate > 5
+                          ? (isHov ? 'rgba(74,180,120,1.0)'   : 'rgba(74,180,120,0.62)')
+                          : rate > 2
+                            ? (isHov ? 'rgba(232,180,100,1.0)' : 'rgba(232,180,100,0.62)')
+                            : rate > 0
+                              ? (isHov ? 'rgba(220,140,60,0.95)' : 'rgba(220,140,60,0.52)')
+                              : (isHov ? 'rgba(220,80,60,0.85)'  : 'rgba(220,80,60,0.38)');
+                        const textColor = rate > 5 ? 'rgba(74,180,120,0.95)' : rate > 0 ? 'rgba(232,180,100,0.90)' : 'rgba(255,255,255,0.24)';
+                        const glowColor = rate > 5 ? 'rgba(74,180,120,0.18)' : rate > 2 ? 'rgba(232,180,100,0.15)' : 'rgba(220,80,60,0.12)';
                         return (
-                          <div key={t.type} className="bar-row">
-                            <span className="bar-lbl">{t.type}</span>
-                            <div className="bar-track">
-                              <div
-                                className="bar-fill"
-                                style={{
-                                  width: `${Math.max(1, (parseFloat(rate) / 20) * 100)}%`,
-                                  background: color,
-                                }}
-                              />
+                          <div
+                            key={t.type}
+                            onMouseEnter={() => setHoveredType(t.type)}
+                            onMouseLeave={() => setHoveredType(null)}
+                            style={{
+                              display: 'grid', gridTemplateColumns: '132px 1fr 58px',
+                              alignItems: 'center', gap: 10, padding: '7px 8px',
+                              borderRadius: 8, marginBottom: 2,
+                              background: isHov ? glowColor : 'transparent',
+                              border: isHov ? `0.5px solid ${barColor.replace(/[\d.]+\)$/, '0.25)')}` : '0.5px solid transparent',
+                              transition: 'background .14s ease, border .14s ease',
+                              cursor: 'default',
+                            }}
+                          >
+                            <div style={{ fontFamily: SF, fontSize: 12.5, fontWeight: isHov ? 500 : 400, color: isHov ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.48)', letterSpacing: '-0.01em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color .14s' }}>{t.type}</div>
+                            <div style={{ height: 6, background: 'rgba(255,255,255,0.04)', borderRadius: 3, overflow: 'hidden', position: 'relative' }}>
+                              <div style={{
+                                width: `${Math.max(0.5, pct)}%`, height: '100%',
+                                background: barColor, borderRadius: 3,
+                                transition: 'background .14s ease, width .3s ease',
+                                boxShadow: isHov ? `0 0 8px ${barColor}` : 'none',
+                              }} />
                             </div>
-                            <span className="bar-val">{rate}%</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+                              <div style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: textColor, fontVariantNumeric: 'tabular-nums', transition: 'color .14s' }}>{rate.toFixed(1)}%</div>
+                              {isHov && <div style={{ fontFamily: MONO, fontSize: 8.5, color: 'rgba(255,255,255,0.24)', letterSpacing: '0.04em' }}>{t.published}/{t.uploaded}</div>}
+                            </div>
                           </div>
                         );
                       })}
-                    </>
+                    </div>
                   }
-                  back={<GraphInsights title="Input Type Publish Rates" />}
+                  back={<GraphInsights title="Input Type Publish Rates" insights={[
+                    { type: 'signal',  heading: 'Short-form video is the only format above the 5% health line', body: 'At 8.4%, short-form video clears the minimum viable publish rate threshold by a meaningful margin. It outperforms the next-best format by 3× and should be prioritized in content strategy decisions.' },
+                    { type: 'warning', heading: 'Documentary and podcast formats show 0% publish rate', body: 'Despite non-trivial upload volume, these two formats have never successfully distributed a piece of content. They may be misconfigured for the available platform targets, or lack the post-production steps required for publishing.' },
+                    { type: 'info',    heading: 'Format selection is the largest single lever for publish rate', body: 'The spread between the best and median format is 8.4× — larger than any other variable in the system. Shifting upload mix toward high-converting formats would improve the overall rate without changing any pipeline infrastructure.' },
+                  ]} />}
                 />
               </div>
+
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {subView === "channels" && <ByChannelTab channels={CHANNELS} />}
-
-      {subView === "types" && (
-        <div className="g2">
-          <div className="card" style={{ padding: "14px 16px" }}>
-            <div
-              style={{
-                fontSize: 8,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--ink3)",
-                marginBottom: 12,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <span>TOP TYPES BY CREATION VOLUME</span>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.topTypes}
-                onToggleInsights={() => toggleInsights("topTypes")}
-                onAskAI={() =>
-                  onAskAI &&
-                  onAskAI("Top Types By Creation Volume", INPUT_TYPES)
-                }
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.topTypes}
-              minHeight={220}
-              front={
-                <>
-                  {INPUT_TYPES.slice(0, 6).map((t) => (
-                    <BarRow
-                      key={t.type}
-                      label={t.type}
-                      value={t.created}
-                      max={Math.max(...INPUT_TYPES.map((x) => x.created))}
-                      fillClass="bf-gold"
-                    />
-                  ))}
-                </>
-              }
-              back={<GraphInsights title="Top Types By Creation Volume" />}
-            />
-          </div>
-          <div className="card" style={{ padding: "14px 16px" }}>
-            <div
-              style={{
-                fontSize: 8,
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--ink3)",
-                marginBottom: 10,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <span>TYPE VOLUME TREEMAP</span>
-              <GraphActionButtons
-                insightsOpen={!!insightsOpen.typeTreemap}
-                onToggleInsights={() => toggleInsights("typeTreemap")}
-                onAskAI={() =>
-                  onAskAI && onAskAI("Type Volume Treemap", INPUT_TYPES)
-                }
-              />
-            </div>
-            <GraphFlip
-              flipped={!!insightsOpen.typeTreemap}
-              minHeight={220}
-              front={
-                <Treemap
-                  data={INPUT_TYPES.slice(0, 6).map((t, i) => ({
-                    label: t.type.substring(0, 11),
-                    value: t.created,
-                    color: sectionData.typeTreemapColors[i],
-                    note: `${t.published} published`,
-                  }))}
-                  height={220}
-                />
-              }
-              back={<GraphInsights title="Type Volume Treemap" />}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

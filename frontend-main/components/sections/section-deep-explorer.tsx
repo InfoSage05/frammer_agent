@@ -2,7 +2,7 @@
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
 import { useLiveSectionData } from '@/hooks/useDashboardData';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ScatterChart from "../charts/ScatterChart";
 import ChannelPlatformHeatmap from "../charts/ChannelHeatmap";
 import Ring from "../charts/Ring";
@@ -40,10 +40,333 @@ const VVS_WEIGHTS = {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   Advanced KPI — Platform Efficiency Score & Geo Value Index
+   Advanced KPI — shared design tokens (Frammer AI single-accent)
 ───────────────────────────────────────────────────────────── */
-function AdvancedKPITab({ onAskAI }) {
-  const [kpiTab, setKpiTab] = useState("pes");
+const _R    = 'rgba(232,67,45,0.95)';
+const _RM   = 'rgba(232,67,45,0.60)';
+const _RBG  = 'rgba(232,67,45,0.08)';
+const _RBD  = 'rgba(232,67,45,0.22)';
+const _INK  = 'rgba(255,255,255,0.90)';
+const _INK2 = 'rgba(255,255,255,0.62)';
+const _INK3 = 'rgba(255,255,255,0.38)';
+const _INK4 = 'rgba(255,255,255,0.20)';
+const _LINE = 'rgba(255,255,255,0.08)';
+const _LINE2= 'rgba(255,255,255,0.14)';
+const _CARD = 'rgba(255,255,255,0.03)';
+const _CARD2= 'rgba(255,255,255,0.055)';
+const _MN   = 'var(--font-mono)';
+const _SN   = 'var(--font-sans)';
+// status: good → white  mid → dim white  bad → Frammer red
+const _sc   = (v, good, ok) => v >= good ? _INK : v >= ok ? _INK2 : _R;
+
+/* shared sub-components */
+function _Divider({ label }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:12, margin:'22px 0 16px' }}>
+      <div style={{ flex:1, height:'0.5px', background:_LINE }} />
+      <span style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_INK4 }}>{label}</span>
+      <div style={{ flex:1, height:'0.5px', background:_LINE }} />
+    </div>
+  );
+}
+function _FormulaRow({ label, text }) {
+  return (
+    <div style={{ display:'flex', alignItems:'flex-start', gap:16, background:_CARD, border:`0.5px solid ${_LINE}`, borderLeft:`2.5px solid ${_R}`, borderRadius:'0 8px 8px 0', padding:'12px 18px', marginBottom:8 }}>
+      <span style={{ fontFamily:_MN, fontSize:11.5, textTransform:'uppercase', letterSpacing:'0.12em', color:_RM, fontWeight:700, minWidth:72, flexShrink:0, paddingTop:2 }}>{label}</span>
+      <span style={{ fontFamily:_MN, fontSize:14, color:_INK2, fontWeight:500, lineHeight:1.55 }}>{text}</span>
+    </div>
+  );
+}
+function _SimSlider({ label, min, max, step, val, set, fmt }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:12, padding:'10px 16px', background:_CARD, borderRadius:8, border:`0.5px solid ${_LINE}` }}
+      onMouseEnter={e => e.currentTarget.style.borderColor = _LINE2}
+      onMouseLeave={e => e.currentTarget.style.borderColor = _LINE}>
+      <label style={{ fontFamily:_MN, fontSize:14.5, fontWeight:500, color:_INK3, minWidth:168 }}>{label}</label>
+      <input type="range" min={min} max={max} step={step} value={val}
+        onChange={e => set(+e.target.value)}
+        style={{ flex:1, height:3, accentColor:_R, cursor:'pointer' }} />
+      <span style={{ fontFamily:_MN, fontSize:17, fontWeight:700, color:_INK, minWidth:72, textAlign:'right' }}>{fmt(val)}</span>
+    </div>
+  );
+}
+function _GaugeRow({ items }) {
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:`repeat(${items.length},1fr)`, gap:10, marginTop:16 }}>
+      {items.map((g,i) => (
+        <div key={i} style={{ background:_CARD2, border:`0.5px solid ${_LINE}`, borderTop:`1.5px solid ${_RBD}`, borderRadius:10, padding:'16px 18px', textAlign:'center', position:'relative', overflow:'hidden' }}>
+          <div style={{ position:'absolute', bottom:-12, left:'50%', transform:'translateX(-50%)', width:56, height:56, borderRadius:'50%', background:_R, filter:'blur(22px)', opacity:0.10 }} />
+          <div style={{ fontFamily:_MN, fontSize:36, lineHeight:1, marginBottom:8, color:_INK, fontWeight:700, letterSpacing:'-0.02em' }}>{g.val}</div>
+          <div style={{ height:3, background:_LINE, borderRadius:2, margin:'0 0 10px', overflow:'hidden' }}>
+            <div style={{ height:3, borderRadius:2, background:_R, width:Math.min(100,g.barW)+'%', opacity:0.80, transition:'width .4s ease' }} />
+          </div>
+          <div style={{ fontFamily:_MN, fontSize:12.5, color:_INK3, lineHeight:1.4, textTransform:'uppercase', letterSpacing:'0.06em' }}>{g.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+function _KpiCard({ label, value, sub, hero, heroDesc, heroScore }) {
+  return (
+    <div style={{ background:_CARD2, border:`0.5px solid ${_LINE}`, borderTop:`1.5px solid ${_RBD}`, borderRadius:12, padding:hero?'20px 24px':'18px 20px', position:'relative', overflow:'hidden' }}>
+      <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:`linear-gradient(90deg,transparent,${_RBD},transparent)` }} />
+      <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
+      <div style={{ display:'flex', alignItems:'baseline', gap:5, marginBottom:hero?6:4 }}>
+        <div style={{ fontFamily:_MN, fontSize:hero?48:28, fontWeight:700, lineHeight:1, color:_INK, letterSpacing:'-0.02em', transition:'color .3s' }}>{value}</div>
+        {hero && <div style={{ fontFamily:_MN, fontSize:16, color:_INK4 }}>/100</div>}
+      </div>
+      {heroDesc && <div style={{ fontFamily:_SN, fontSize:13.5, color:_INK3, lineHeight:1.65, marginBottom:12, maxWidth:300 }}>{heroDesc}</div>}
+      {heroScore !== undefined && (
+        <div style={{ height:2, background:_LINE, borderRadius:1, overflow:'hidden' }}>
+          <div style={{ height:'100%', borderRadius:1, width:heroScore+'%', background:_R, transition:'width .5s cubic-bezier(.4,0,.2,1)' }} />
+        </div>
+      )}
+      {sub && <div style={{ fontFamily:_MN, fontSize:12.5, color:_INK3, marginTop:2 }}>{sub}</div>}
+    </div>
+  );
+}
+function _ExCard({ title, body, resultVal, resultLabel, note }) {
+  return (
+    <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderTop:`1.5px solid ${_RBD}`, borderRadius:12, padding:'20px 22px', position:'relative', overflow:'hidden' }}>
+      <div style={{ position:'absolute', top:0, right:0, width:80, height:80, borderRadius:'50%', background:_R, filter:'blur(40px)', opacity:0.06, pointerEvents:'none' }} />
+      <div style={{ fontFamily:_MN, fontSize:12.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.10em', color:_INK4, marginBottom:10 }}>{title}</div>
+      <div style={{ fontFamily:_SN, fontSize:14, color:_INK2, lineHeight:1.7, marginBottom:14 }} dangerouslySetInnerHTML={{ __html: body }} />
+      <div style={{ fontFamily:_MN, fontSize:13.5, color:_INK3, marginBottom:6 }}>{resultLabel}</div>
+      <div style={{ fontFamily:_MN, fontSize:32, fontWeight:700, color:_INK, letterSpacing:'-0.02em', marginBottom:10 }}>{resultVal}</div>
+      <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, lineHeight:1.6 }}>{note}</div>
+    </div>
+  );
+}
+function _StatusBadge({ label, ok }) {
+  return (
+    <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, padding:'2px 10px', borderRadius:20, letterSpacing:'0.06em',
+      background: ok ? _CARD2 : _RBG,
+      color: ok ? _INK3 : _R,
+      border: `1px solid ${ok ? _LINE2 : _RBD}` }}>{label}</span>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Advanced KPI — Content Yield Index
+───────────────────────────────────────────────────────────── */
+const CYI_IDEAL = { A: 8.0,     R_pub: 0.08,   L_in: 30,    L_out: 15,   P_view: 0.075  };
+const CYI_BASE  = { A: 3.3497,  R_pub: 0.0074,  L_in: 10.88, L_out: 5.45, P_view: 0.00323 };
+const CYI_MINS  = { A: 1,       R_pub: 0.001,   L_in: 1,     L_out: 0.5,  P_view: 0.001  };
+const CYI_STEPS = { A: 0.05,    R_pub: 0.001,   L_in: 0.5,   L_out: 0.25, P_view: 0.001  };
+const CYI_KEYS  = ['A', 'R_pub', 'L_in', 'L_out', 'P_view'];
+const CYI_META  = {
+  A:     { name: 'A — Amplification',    desc: 'AI outputs created per uploaded video',              impLbl: 'Medium',   rank: 4, fv: v => (+v).toFixed(2)+'×',       fb: v => (+v).toFixed(1),          idealNote: '8× amplification — each upload yields 8 distinct clips. Requires long-form, well-structured source content.' },
+  R_pub: { name: 'R_pub — Publish Rate', desc: '% of created clips that get published',              impLbl: 'Critical', rank: 1, fv: v => ((+v)*100).toFixed(2)+'%', fb: v => ((+v)*100).toFixed(1)+'%', idealNote: '8% publish rate — the budget-constrained optimizer target. Raising from 0.74% → 8% is the single highest-ROI action.' },
+  L_in:  { name: 'L_in — Input Length',  desc: 'Average upload duration in minutes',                impLbl: 'Low',      rank: 5, fv: v => (+v).toFixed(1)+' min',     fb: v => (+v).toFixed(0),          idealNote: '30 min avg input — longer source content yields more extractable moments and a higher amplification ceiling.' },
+  L_out: { name: 'L_out — Output Length',desc: 'Average published clip duration in minutes',        impLbl: 'Low',      rank: 6, fv: v => (+v).toFixed(1)+' min',     fb: v => (+v).toFixed(0),          idealNote: '15 min avg output — longer clips carry more watch-time value per publish. Best suited for YouTube long-form.' },
+  P_view:{ name: 'P_view — Retention',   desc: 'Published hours ÷ created hours (reach efficiency)',impLbl: 'Critical', rank: 2, fv: v => ((+v)*100).toFixed(3)+'%', fb: v => ((+v)*100).toFixed(2)+'%', idealNote: '7.5% retention — the optimizer target. Currently at 0.32%, the second biggest value leak after R_pub.' },
+};
+function _cyiRaw(v) { return v.A * v.R_pub * v.L_in * v.L_out * v.P_view; }
+const _CYI_VI = _cyiRaw(CYI_IDEAL);
+const _CYI_VM = CYI_MINS.A * CYI_MINS.R_pub * CYI_MINS.L_in * CYI_MINS.L_out * CYI_MINS.P_view;
+const _CYI_LI = Math.log(_CYI_VI), _CYI_LM = Math.log(_CYI_VM);
+const _CYI_VB = _cyiRaw(CYI_BASE);
+function _cyiScore(v) {
+  return Math.min(100, Math.max(0, Math.round(
+    (Math.log(Math.max(_cyiRaw(v), 1e-20)) - _CYI_LM) / (_CYI_LI - _CYI_LM) * 100
+  )));
+}
+const _CYI_RR = { A:[2.5,6], R_pub:[0.04,0.12], L_in:[8,25], L_out:[3,15], P_view:[0.02,0.08] };
+function _cyiConf(v) {
+  let s = 0;
+  CYI_KEYS.forEach(k => {
+    const [lo, hi] = _CYI_RR[k], x = v[k];
+    if (x >= lo && x <= hi) s += 1;
+    else if (x < lo) s += Math.max(0, 1 - (lo - x) / lo * 2.5);
+    else s += Math.max(0, 1 - (x - hi) / hi * 2);
+  });
+  return Math.round(s / CYI_KEYS.length * 100);
+}
+function _cyiDesc(k, val) {
+  const m = CYI_META[k], p = val / CYI_IDEAL[k] * 100;
+  if (p >= 95) return m.idealNote;
+  if (Math.abs(val - CYI_BASE[k]) / (CYI_BASE[k] || 1) < 0.05) return `At operational baseline (${m.fb(CYI_BASE[k])}). Any improvement here multiplies CYI proportionally.`;
+  if (val < CYI_BASE[k]) return `Below operational baseline (${m.fb(CYI_BASE[k])}). Currently underperforming — impact compounds across all factors.`;
+  return `${Math.round(p)}% of ideal (${m.fv(CYI_IDEAL[k])}). Good progress — each gain multiplies with all other parameters for compounding CYI lift.`;
+}
+function _cyiFmtMult(m) {
+  if (m >= 10000) return Math.round(m/1000)+'k×';
+  if (m >= 1000)  return (m/1000).toFixed(1)+'k×';
+  if (m >= 10)    return Math.round(m)+'×';
+  return m.toFixed(1)+'×';
+}
+
+function CYIPanel() {
+  const [cur, setCur]           = useState({ ...CYI_IDEAL });
+  const [activeKey, setActiveKey] = useState("R_pub");
+
+  const s       = _cyiScore(cur);
+  const conf    = _cyiConf(cur);
+  const mult    = _cyiRaw(cur) / _CYI_VB;
+  const diffPct = (mult - 1) * 100;
+  const biggestGap = CYI_KEYS.reduce((best, k) =>
+    (1 - cur[k]/CYI_IDEAL[k]) > (1 - cur[best]/CYI_IDEAL[best]) ? k : best, "R_pub"
+  );
+
+  const CG = 'rgba(255,255,255,0.04)', CT = 'rgba(155,155,165,0.75)';
+  const TT = { backgroundColor:'#111114', titleColor:'#f2f2f3', bodyColor:'#a8a8b0', borderColor:_LINE, borderWidth:1, padding:10, cornerRadius:8 };
+
+  const sensConfig = (() => {
+    const k = activeKey, lo = CYI_MINS[k], hi = CYI_IDEAL[k], pts = 60;
+    const xs = [], ys = [];
+    for (let i = 0; i <= pts; i++) { const v = lo+i*(hi-lo)/pts; xs.push(v); ys.push(_cyiScore({...cur,[k]:v})); }
+    const ci = Math.round((cur[k]-lo)/(hi-lo)*pts);
+    const bi = Math.round((Math.max(lo,Math.min(hi,CYI_BASE[k]))-lo)/(hi-lo)*pts);
+    const cs = _cyiScore(cur);
+    const mk = CYI_META[k];
+    const fX = v => (k==='R_pub'||k==='P_view') ? ((+v)*100).toFixed(1)+'%' : (+v).toFixed(1);
+    return {
+      type:'line',
+      data:{ labels:xs.map(fX), datasets:[
+        { data:ys, borderColor:_R, borderWidth:2, pointRadius:0, fill:true, backgroundColor:'rgba(232,67,45,0.10)', tension:0.4 },
+        { data:xs.map((_,i)=>i===ci?cs:null), borderColor:_INK, pointRadius:7, pointBackgroundColor:'#0a0a0b', pointBorderColor:_R, pointBorderWidth:2, showLine:false, spanGaps:false },
+        { data:xs.map((_,i)=>i===bi?_cyiScore({...cur,[k]:CYI_BASE[k]}):null), borderColor:_INK4, pointRadius:5, pointBackgroundColor:_INK4, showLine:false, spanGaps:false },
+      ]},
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{...TT, callbacks:{label:ctx=>ctx.datasetIndex===0?'CYI: '+Math.round(ctx.parsed.y)+'/100':ctx.datasetIndex===1?'Current: '+mk.fv(cur[k]):'Baseline: '+mk.fv(CYI_BASE[k])}} },
+        scales:{ x:{ticks:{maxTicksLimit:7,color:CT,font:{size:10,family:_MN}},grid:{color:CG}}, y:{min:0,max:100,ticks:{color:CT,font:{size:10,family:_MN},stepSize:25,callback:v=>v+'/100'},grid:{color:CG}} }
+      }
+    };
+  })();
+
+  const distConfig = (() => {
+    const dv = CYI_KEYS.map(k => +Math.min(100, cur[k]/CYI_IDEAL[k]*100).toFixed(1));
+    return {
+      type:'bar',
+      data:{ labels:CYI_KEYS, datasets:[
+        { data:dv, backgroundColor:'rgba(232,67,45,0.70)', borderRadius:5, borderSkipped:false },
+        { data:CYI_KEYS.map(()=>100), backgroundColor:'rgba(255,255,255,0.04)', borderRadius:5, borderSkipped:false, borderColor:'rgba(255,255,255,0.06)', borderWidth:1 },
+      ]},
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{...TT, callbacks:{label:ctx=>ctx.datasetIndex===0?ctx.parsed.y+'% of ideal':'Ideal = 100%'}} },
+        scales:{ x:{ticks:{color:CT,font:{size:11,family:_MN}},grid:{display:false}}, y:{min:0,max:110,ticks:{color:CT,font:{size:10,family:_MN},stepSize:25,callback:v=>v+'%'},grid:{color:CG}} }
+      }
+    };
+  })();
+
+  const sensRef = useChartJs("cyi-sens", sensConfig, [cur.A, cur.R_pub, cur.L_in, cur.L_out, cur.P_view, activeKey]);
+  const distRef = useChartJs("cyi-dist", distConfig,  [cur.A, cur.R_pub, cur.L_in, cur.L_out, cur.P_view]);
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:24 }}>
+        <div>
+          <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 5 · 5-Factor Multiplicative Model</div>
+          <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, letterSpacing:'-0.01em', lineHeight:1.1, marginBottom:10 }}>Content Yield Index</div>
+          <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.70, maxWidth:580 }}>How efficiently does your platform convert uploaded content into distributed, watched audience output? 100 = all 5 parameters at data-derived optimal.</div>
+        </div>
+      </div>
+
+      {/* Formula */}
+      <_FormulaRow label="Formula"   text="CYI  =  A  ×  R_pub  ×  L_in  ×  L_out  ×  P_view" />
+      <_FormulaRow label="Interpret" text="Multiplicative — every parameter compounds. Lifting R_pub from 0.74% → 8% alone multiplies CYI by ~10×." />
+
+      {/* KPI row */}
+      <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:10, marginTop:20, marginBottom:20 }}>
+        <_KpiCard label="Content Yield Index (CYI)" value={s} hero heroScore={s}
+          heroDesc="Converts uploaded content into distributed, watched output — creation through publishing to reach." />
+        <_KpiCard label="VS Baseline" value={_cyiFmtMult(mult)}
+          sub={diffPct>0?`+${diffPct.toFixed(0)}% vs current ops`:diffPct<-0.5?`${diffPct.toFixed(0)}% vs current ops`:'at baseline level'} />
+        <_KpiCard label="Confidence" value={conf+'/100'}
+          sub={conf>=75?'Achievable targets':conf>=50?'Stretch targets':'Theoretical ceiling'} />
+        <_KpiCard label="Biggest Gap" value={biggestGap}
+          sub={`${CYI_META[biggestGap].impLbl} importance — #${CYI_META[biggestGap].rank} of 5`} />
+      </div>
+
+      {/* Explanation */}
+      <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderLeft:`2.5px solid ${_R}`, borderRadius:'0 8px 8px 0', padding:'12px 18px', marginBottom:4, transition:'border-left-color .25s' }}>
+        <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_RM, marginBottom:5 }}>Active factor · {CYI_META[activeKey].name}</div>
+        <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.65 }}>{_cyiDesc(activeKey, cur[activeKey])}</div>
+      </div>
+
+      <_Divider label="Parameter Controls" />
+
+      {/* Sliders grid */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:4 }}>
+        {CYI_KEYS.map(k => {
+          const m   = CYI_META[k];
+          const lo  = CYI_MINS[k], hi = CYI_IDEAL[k];
+          const bp  = Math.max(2, Math.min(98, (CYI_BASE[k]-lo)/(hi-lo)*100));
+          const pi  = Math.min(100, cur[k]/hi*100);
+          const isAct = k === activeKey;
+          return (
+            <div key={k} onClick={() => setActiveKey(k)}
+              style={{ background:isAct?'rgba(232,67,45,0.06)':_CARD, border:`0.5px solid ${isAct?_RBD:_LINE}`, borderLeft:isAct?`2.5px solid ${_R}`:`2.5px solid transparent`, borderRadius:10, padding:'16px 18px', cursor:'pointer', transition:'all .15s' }}
+              onMouseEnter={e => { if (!isAct) { e.currentTarget.style.borderColor = _LINE2; e.currentTarget.style.background = _CARD2; }}}
+              onMouseLeave={e => { if (!isAct) { e.currentTarget.style.borderColor = _LINE; e.currentTarget.style.background = _CARD; }}}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:6, gap:8 }}>
+                <span style={{ fontFamily:_SN, fontSize:14, fontWeight:600, color:_INK, letterSpacing:'-0.2px' }}>{m.name}</span>
+                <span style={{ fontFamily:_MN, fontSize:14, fontWeight:700, color:isAct?_INK:_INK2, flexShrink:0 }}>{m.fv(cur[k])}</span>
+              </div>
+              <div style={{ display:'flex', gap:5, marginBottom:8, flexWrap:'wrap' }}>
+                <_StatusBadge label={m.impLbl==='Critical'?'Critical — bottleneck':m.impLbl==='Medium'?'Medium importance':'Low — multiplier'} ok={m.impLbl==='Low'} />
+                <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:600, padding:'2px 9px', borderRadius:20, background:_CARD2, color:_INK4, border:`1px solid ${_LINE}` }}>#{m.rank} of 5</span>
+              </div>
+              <div style={{ fontFamily:_SN, fontSize:13.5, color:_INK3, marginBottom:12, lineHeight:1.5 }}>{m.desc}</div>
+              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
+                <span style={{ fontFamily:_MN, fontSize:11.5, color:_INK4 }}>{m.fb(lo)}</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:600, color:_RM }}>{m.fv(hi)} ideal</span>
+              </div>
+              <input type="range" min={lo} max={hi} step={CYI_STEPS[k]} value={cur[k]}
+                onFocus={() => setActiveKey(k)}
+                onChange={e => { setActiveKey(k); setCur(prev => ({...prev,[k]:+e.target.value})); }}
+                style={{ width:'100%', height:3, accentColor:_R, cursor:'pointer', display:'block', marginBottom:2 }} />
+              <div style={{ position:'relative', height:14, marginTop:2, marginBottom:8 }}>
+                <div style={{ position:'absolute', left:bp+'%', transform:'translateX(-50%)', display:'flex', flexDirection:'column', alignItems:'center' }}>
+                  <div style={{ width:1, height:5, background:_INK4, opacity:0.6 }} />
+                  <span style={{ fontFamily:_MN, fontSize:10.5, color:_INK4, whiteSpace:'nowrap', marginTop:1 }}>baseline {m.fb(CYI_BASE[k])}</span>
+                </div>
+              </div>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
+                <span style={{ fontFamily:_MN, fontSize:11.5, color:_INK4, minWidth:56 }}>% of ideal</span>
+                <div style={{ flex:1, height:3, background:_LINE, borderRadius:2, overflow:'hidden' }}>
+                  <div style={{ height:3, borderRadius:2, background:_R, width:pi+'%', opacity:0.80, transition:'width .3s' }} />
+                </div>
+                <span style={{ fontFamily:_MN, fontSize:11.5, minWidth:52, textAlign:'right', color:_sc(pi,90,60), fontWeight:600 }}>{pi.toFixed(0)}%</span>
+              </div>
+              <div style={{ fontFamily:_SN, fontSize:13, color:_INK4, lineHeight:1.6, padding:'8px 11px', background:'rgba(0,0,0,0.20)', borderRadius:7, border:`0.5px solid ${_LINE}`, minHeight:36 }}>
+                {_cyiDesc(k, cur[k]).length>140?_cyiDesc(k, cur[k]).slice(0,140)+'…':_cyiDesc(k, cur[k])}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <_Divider label="Analysis" />
+
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
+        <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'18px 20px' }}>
+          <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Sensitivity Analysis</div>
+          <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, marginBottom:14 }}>CYI score across the {activeKey} range</div>
+          <div style={{ position:'relative', height:190 }}><canvas ref={sensRef} /></div>
+          <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginTop:10 }}>
+            {[{bg:_R,label:'CYI /100'},{bg:_INK,label:'Current'},{bg:_INK4,label:'Baseline'}].map((li,i)=>(
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:5, fontFamily:_MN, fontSize:11.5, color:_INK3 }}>
+                <div style={{ width:7, height:7, borderRadius:2, background:li.bg }} />{li.label}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'18px 20px' }}>
+          <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Distance from Ideal</div>
+          <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, marginBottom:14 }}>Each factor's proximity to its data-derived optimum</div>
+          <div style={{ position:'relative', height:190 }}><canvas ref={distRef} /></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Advanced KPI — all 4 sub-tabs
+───────────────────────────────────────────────────────────── */
+function AdvancedKPITab({ onAskAI, kpiTab, setKpiTab }) {
   const [pesCpw, setPesCpw] = useState(3.15);
   const [pesAvg, setPesAvg] = useState(3.15);
   const [gviCpw, setGviCpw] = useState(2.0);
@@ -59,290 +382,333 @@ function AdvancedKPITab({ onAskAI }) {
   const [vvsNicheView, setVvsNicheView] = useState("Short");
 
   const MARKET_AVG = 3.15;
-  const GEO_AVG = 2.0;
-  const MONO = "var(--font-mono)";
-  const SANS = "var(--font-sans)";
+  const GEO_AVG    = 2.0;
 
   // PES
-  const pes = pesAvg / pesCpw;
-  const pesWph = 1 / pesCpw;
+  const pes     = pesAvg / pesCpw;
+  const pesWph  = 1 / pesCpw;
   const pesSave = Math.max(0, (pesAvg - pesCpw) * 100 / pesAvg);
-  const pesC = pes >= 1.5 ? "#3EC98A" : pes < 0.8 ? "#ff4757" : "#ffb340";
-  const pesVerd = pes >= 2
-    ? { k: "good", t: `Excellent — PES ${pes.toFixed(2)}. Buying at ${((1/pes)*100).toFixed(0)}% of market rate. Strong ROI.` }
-    : pes >= 1.2
-    ? { k: "good", t: `Good — PES ${pes.toFixed(2)}. Slightly below market rate. Solid efficiency.` }
-    : pes >= 0.85
-    ? { k: "mid",  t: `Average — PES ${pes.toFixed(2)}. Near market average. No significant advantage.` }
-    : { k: "bad",  t: `Premium — PES ${pes.toFixed(2)}. Paying ${((1/pes - 1)*100).toFixed(0)}% above market. Justify with audience quality.` };
+  const pesVerdict = pes >= 2 ? `Excellent — PES ${pes.toFixed(2)}. Buying at ${((1/pes)*100).toFixed(0)}% of market rate. Strong ROI.`
+    : pes >= 1.2 ? `Good — PES ${pes.toFixed(2)}. Slightly below market rate. Solid efficiency.`
+    : pes >= 0.85 ? `Average — PES ${pes.toFixed(2)}. Near market average. No significant advantage.`
+    : `Premium — PES ${pes.toFixed(2)}. Paying ${((1/pes-1)*100).toFixed(0)}% above market. Justify with audience quality.`;
+  const pesC = _sc(pes, 1.5, 0.85);
 
   // GVI
-  const gvi = (GEO_AVG / gviCpw) * 100;
+  const gvi      = (GEO_AVG / gviCpw) * 100;
   const gviHours = gviBudget / gviCpw;
-  const gviImpr = (gviBudget / gviCpw) * 60 * 3 / 1000;
-  const gviC = gvi >= 200 ? "#3EC98A" : gvi < 70 ? "#ff4757" : "#ffb340";
-  const gviVerd = gvi >= 300
-    ? { k: "good", t: `High-reach — GVI ${Math.round(gvi)}. Your $${gviBudget.toLocaleString()} buys ${Math.round(gviHours).toLocaleString()} watch hours, ${(gvi/100).toFixed(1)}× the global average.` }
-    : gvi >= 150
-    ? { k: "good", t: `Good value — GVI ${Math.round(gvi)}. Above-average reach for your budget.` }
-    : gvi >= 70
-    ? { k: "mid",  t: `Near global average — GVI ${Math.round(gvi)}. Typical cost for this market.` }
-    : { k: "bad",  t: `Premium market — GVI ${Math.round(gvi)}. Low reach per dollar. Audience quality must justify the spend.` };
+  const gviImpr  = (gviBudget / gviCpw) * 60 * 3 / 1000;
+  const gviVerdict = gvi >= 300 ? `High-reach — GVI ${Math.round(gvi)}. Your $${gviBudget.toLocaleString()} buys ${Math.round(gviHours).toLocaleString()} watch hours, ${(gvi/100).toFixed(1)}× the global average.`
+    : gvi >= 150 ? `Good value — GVI ${Math.round(gvi)}. Above-average reach for your budget.`
+    : gvi >= 70  ? `Near global average — GVI ${Math.round(gvi)}. Typical cost for this market.`
+    : `Premium market — GVI ${Math.round(gvi)}. Low reach per dollar. Audience quality must justify the spend.`;
+  const gviC = _sc(gvi, 200, 70);
 
-  const VC = {
-    good: { bg: "rgba(62,201,138,.08)", border: "rgba(62,201,138,.28)", color: "#3EC98A" },
-    mid:  { bg: "rgba(255,179,64,.08)", border: "rgba(255,179,64,.28)", color: "#ffb340" },
-    bad:  { bg: "rgba(255,71,87,.08)",  border: "rgba(255,71,87,.28)",  color: "#ff4757" },
-  };
-
-  // VVS computed
-  const vvsW = (VVS_WEIGHTS[vvsFmt]?.[vvsSize]?.[vvsNiche]) || { a: 0.17, b: 0.17, g: 0.66 };
-  const vvsMed = VVS_MEDIANS[vvsFmt] || VVS_MEDIANS.Short;
-  const vvsScore = Math.pow(vvsPr / 100, vvsW.a) * Math.pow(vvsA / 100, vvsW.b) * Math.pow(vvsR / 100, vvsW.g);
-  const vvsMedianScore = Math.pow(vvsMed.Pr, vvsW.a) * Math.pow(vvsMed.A, vvsW.b) * Math.pow(vvsMed.R, vvsW.g);
-  const vvsNorm = Math.min(100, Math.round((vvsScore / vvsMedianScore) * 50));
-  const vvsConfScore = (() => {
-    const r2 = vvsW.r2 || 0.45;
-    const n = vvsW.n || 100;
-    const nScore = Math.min(1, n / 200);
-    const signalScore = ((vvsPr > 1 ? 0.4 : 0) + (vvsA > 1 ? 0.35 : 0) + (vvsR > 5 ? 0.25 : 0));
-    return Math.round((r2 * 0.45 + nScore * 0.30 + signalScore * 0.25) * 100);
+  // VVS
+  const vvsW          = (VVS_WEIGHTS[vvsFmt]?.[vvsSize]?.[vvsNiche]) || { a:0.17, b:0.17, g:0.66 };
+  const vvsMed        = VVS_MEDIANS[vvsFmt] || VVS_MEDIANS.Short;
+  const vvsScore      = Math.pow(vvsPr/100, vvsW.a) * Math.pow(vvsA/100, vvsW.b) * Math.pow(vvsR/100, vvsW.g);
+  const vvsMedianScore= Math.pow(vvsMed.Pr, vvsW.a) * Math.pow(vvsMed.A, vvsW.b) * Math.pow(vvsMed.R, vvsW.g);
+  const vvsNorm       = Math.min(100, Math.round((vvsScore/vvsMedianScore)*50));
+  const vvsConfScore  = (() => {
+    const r2=vvsW.r2||0.45, n=vvsW.n||100;
+    return Math.round(( r2*0.45 + Math.min(1,n/200)*0.30 + ((vvsPr>1?0.4:0)+(vvsA>1?0.35:0)+(vvsR>5?0.25:0))*0.25 )*100);
   })();
-  const vvsC = vvsNorm >= 70 ? "#8B5CF6" : vvsNorm >= 40 ? "#ffb340" : "#ff4757";
-  const vvsConfC = vvsConfScore >= 70 ? "#3EC98A" : vvsConfScore >= 45 ? "#ffb340" : "#ff4757";
-  const vvsConfLabel = vvsConfScore >= 70 ? "HIGH CONFIDENCE" : vvsConfScore >= 45 ? "MODERATE" : "LOW CONFIDENCE";
+  const vvsC      = _sc(vvsNorm, 70, 40);
+  const vvsConfC  = _sc(vvsConfScore, 70, 45);
+  const vvsConfLbl= vvsConfScore>=70?'HIGH CONFIDENCE':vvsConfScore>=45?'MODERATE':'LOW CONFIDENCE';
 
-  const pesPlatforms = [
-    {p:"YouTube Shorts",cpw:5.0},{p:"Instagram Reels",cpw:6.0},
-    {p:"Facebook Reels",cpw:6.0},{p:"X / Twitter",cpw:7.0},
-    {p:"Threads",cpw:6.0},{p:"LinkedIn",cpw:12.0},
-  ].sort((a,b)=>a.cpw-b.cpw);
+  const pesPlatforms = [{p:"YouTube Shorts",cpw:5.0},{p:"Instagram Reels",cpw:6.0},{p:"Facebook Reels",cpw:6.0},{p:"X / Twitter",cpw:7.0},{p:"Threads",cpw:6.0},{p:"LinkedIn",cpw:12.0}].sort((a,b)=>a.cpw-b.cpw);
+  const gviConts     = [{c:"North America",cpw:6.72},{c:"Europe",cpw:4.8},{c:"Oceania",cpw:7.68},{c:"East Asia",cpw:3.84},{c:"Middle East",cpw:2.4},{c:"Latin America",cpw:1.2},{c:"South Asia",cpw:0.58},{c:"Africa",cpw:1.2}].sort((a,b)=>b.cpw-a.cpw);
 
-  const gviConts = [
-    {c:"North America",cpw:6.72},{c:"Europe",cpw:4.8},
-    {c:"Oceania",cpw:7.68},{c:"East Asia",cpw:3.84},
-    {c:"Middle East",cpw:2.4},{c:"Latin America",cpw:1.2},
-    {c:"South Asia",cpw:0.58},{c:"Africa",cpw:1.2},
-  ].sort((a,b)=>b.cpw-a.cpw);
+  const TH = { fontFamily:_MN, fontSize:12.5, fontWeight:700, letterSpacing:'0.10em', textTransform:'uppercase', padding:'10px 16px', color:_INK4, borderBottom:`0.5px solid ${_LINE}`, textAlign:'left' as const, background:'rgba(255,255,255,0.02)' };
+  const TD = { padding:'11px 16px', borderBottom:`0.5px solid rgba(255,255,255,0.04)`, fontFamily:_SN, fontSize:15, color:_INK2 };
 
-  /* ── Sub-components ── */
-  const FormulaBox = ({ label, text, accent }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, background: "rgba(255,255,255,.03)", border: "0.5px solid rgba(255,255,255,0.07)", borderLeft: `3px solid ${accent || "rgba(255,255,255,0.15)"}`, borderRadius: "0 8px 8px 0", padding: "13px 18px", marginBottom: 10 }}>
-      <span style={{ fontFamily: MONO, fontSize: 10.5, textTransform: "uppercase", letterSpacing: "0.12em", color: accent ? `${accent}cc` : "rgba(255,255,255,0.42)", fontWeight: 700, minWidth: 72, flexShrink: 0 }}>{label}</span>
-      <span style={{ fontFamily: MONO, fontSize: 13, color: "rgba(255,255,255,0.78)", fontWeight: 500, lineHeight: 1.5 }}>{text}</span>
-    </div>
-  );
-
-  const ExCard = ({ title, body, result, note, accent }) => (
-    <div style={{ background: "rgba(255,255,255,.03)", border: `1px solid rgba(255,255,255,0.07)`, borderTop: `2px solid ${accent || "rgba(255,255,255,0.12)"}`, borderRadius: 12, padding: "20px 22px", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: 0, right: 0, width: 80, height: 80, borderRadius: "50%", background: accent, filter: "blur(40px)", opacity: 0.07, pointerEvents: "none" }} />
-      <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.10em", color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>{title}</div>
-      <div style={{ fontFamily: SANS, fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 14 }} dangerouslySetInnerHTML={{ __html: body }} />
-      <div style={{ fontFamily: MONO, fontSize: 16, marginBottom: 10, lineHeight: 1.4 }} dangerouslySetInnerHTML={{ __html: result }} />
-      <div style={{ fontFamily: SANS, fontSize: 13, color: "rgba(255,255,255,0.42)", lineHeight: 1.6 }}>{note}</div>
-    </div>
-  );
-
-  const GaugeRow = ({ items }) => (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginTop: 18 }}>
-      {items.map((g, i) => (
-        <div key={i} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "16px 18px", textAlign: "center", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", bottom: -10, left: "50%", transform: "translateX(-50%)", width: 60, height: 60, borderRadius: "50%", background: g.color, filter: "blur(24px)", opacity: 0.12 }} />
-          <div style={{ fontFamily: MONO, fontSize: 40, lineHeight: 1, marginBottom: 8, color: g.color, fontWeight: 700, transition: "color .3s", letterSpacing: "-0.02em" }}>{g.val}</div>
-          <div style={{ height: 4, background: "rgba(255,255,255,0.07)", borderRadius: 2, margin: "0 0 10px", overflow: "hidden" }}>
-            <div style={{ height: 4, borderRadius: 2, background: g.color, width: Math.min(100, g.barW) + "%", transition: "width .4s ease, background .3s", opacity: 0.85 }} />
-          </div>
-          <div style={{ fontFamily: MONO, fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.4, textTransform: "uppercase", letterSpacing: "0.06em" }}>{g.label}</div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const SimSlider = ({ label, min, max, step, val, set, fmt, accent }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14, padding: "10px 14px", background: "rgba(255,255,255,0.025)", borderRadius: 8, border: "0.5px solid rgba(255,255,255,0.06)" }}>
-      <label style={{ fontFamily: MONO, fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.55)", minWidth: 160 }}>{label}</label>
-      <input type="range" min={min} max={max} step={step} value={val}
-        onChange={e => set(+e.target.value)}
-        style={{ flex: 1, height: 4, accentColor: accent, cursor: "pointer" }} />
-      <span style={{ fontFamily: MONO, fontSize: 15, fontWeight: 700, color: accent, minWidth: 68, textAlign: "right" }}>{fmt(val)}</span>
-    </div>
-  );
-
-  const SectionLabel = ({ text }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-      <div style={{ width: 2, height: 14, borderRadius: 1, background: "rgba(255,255,255,0.20)" }} />
-      <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>{text}</span>
-    </div>
-  );
-
-  const TH = { fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", padding: "10px 14px", color: "rgba(255,255,255,0.45)", borderBottom: "1px solid rgba(255,255,255,0.07)", textAlign: "left", background: "rgba(255,255,255,0.02)" };
-  const TD = { padding: "11px 14px", borderBottom: "0.5px solid rgba(255,255,255,0.05)", fontFamily: SANS, fontSize: 14, color: "rgba(255,255,255,0.75)" };
-
-  /* ── Tab config ── */
   const TABS = [
-    { k: "pes", label: "Platform Efficiency Score", accent: "#3B8BD4", grad: "linear-gradient(90deg,#3B8BD4,#1D9E75)" },
-    { k: "gvi", label: "Geo Value Index",            accent: "#EF9F27", grad: "linear-gradient(90deg,#EF9F27,#E24B4A)" },
-    { k: "vvs", label: "Viral Velocity Score",       accent: "#8B5CF6", grad: "linear-gradient(90deg,#8B5CF6,#3B8BD4)" },
+    { k:"vvs", label:"Viral Velocity Score"      },
+    { k:"cyi", label:"Content Yield Index"       },
+    { k:"pes", label:"Platform Efficiency Score" },
+    { k:"gvi", label:"Geo Value Index"           },
   ];
 
   return (
     <div className="stack">
       {/* ── Tab strip ── */}
-      <div style={{ display: "flex", gap: 6, padding: "4px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)", width: "fit-content" }}>
-        {TABS.map(({ k, label, accent }) => (
+      <div style={{ display:'flex', gap:0, background:_CARD, borderRadius:10, border:`0.5px solid ${_LINE}`, width:'fit-content', overflow:'hidden' }}>
+        {TABS.map(({ k, label }, idx) => (
           <button key={k} onClick={() => setKpiTab(k)} style={{
-            padding: "9px 22px",
-            fontFamily: MONO, fontSize: 12, fontWeight: 700,
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            borderRadius: 7, border: "1px solid",
-            cursor: "pointer",
-            background: kpiTab === k ? `${accent}18` : "transparent",
-            borderColor: kpiTab === k ? `${accent}55` : "transparent",
-            color: kpiTab === k ? accent : "rgba(255,255,255,0.38)",
-            transition: "all 0.18s ease",
-          }}>{label}</button>
+            padding:'10px 24px',
+            fontFamily:_MN, fontSize:13.5, fontWeight:700,
+            letterSpacing:'0.08em', textTransform:'uppercase',
+            border:'none', borderRight: idx < TABS.length-1 ? `0.5px solid ${_LINE}` : 'none',
+            cursor:'pointer',
+            background: kpiTab===k ? _RBG : 'transparent',
+            color: kpiTab===k ? _R : _INK3,
+            transition:'all 0.15s ease',
+            position:'relative',
+          }}>
+            {kpiTab===k && <div style={{ position:'absolute', bottom:0, left:0, right:0, height:2, background:_R }} />}
+            {label}
+          </button>
         ))}
       </div>
 
-      {/* ── Active KPI Panel ── */}
-      {TABS.map(({ k, accent, grad }) => kpiTab !== k ? null : (
-        <div key={k} className="card" style={{ padding: 0, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" }}>
-          {/* Top gradient bar */}
-          <div style={{ height: 3, background: grad }} />
+      {/* ── Panel ── */}
+      <div className="card" style={{ padding:0, overflow:'hidden', border:`0.5px solid ${_LINE}` }}>
+        <div style={{ height:2, background:`linear-gradient(90deg,${_R},rgba(232,67,45,0.35),transparent)` }} />
 
-          <div style={{ padding: "28px 32px" }}>
+        <div style={{ padding:'28px 32px' }}>
 
-            {/* ════════════════════ PES / GVI shared layout ════════════════════ */}
-            {k !== "vvs" && <>
-              {/* ── HEADER ── */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: accent, marginBottom: 8, opacity: 0.85 }}>
-                    {k === "pes" ? "Dataset 1 · Platform × Topic Ad Cost" : "Dataset 2 · YouTube Continent × Topic Ad Cost"}
-                  </div>
-                  <div style={{ fontFamily: MONO, fontSize: 32, fontWeight: 700, color: "rgba(255,255,255,0.92)", marginBottom: 10, letterSpacing: "-0.01em", lineHeight: 1.1 }}>
-                    {k === "pes" ? "Platform Efficiency Score" : "Geo Value Index"}
-                  </div>
-                  <div style={{ fontFamily: SANS, fontSize: 15, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, maxWidth: 580 }}>
-                    {k === "pes"
-                      ? "How much watch-time bang do you get per dollar, relative to the market average? A score above 1.0 means you're buying cheaper than the norm."
-                      : <>Not all cheap markets are equal — this index scores each region by dividing reach per dollar by its market cost tier, revealing where you get high volume <em>and</em> value.</>}
+          {/* ══ CYI ══ */}
+          {kpiTab === "cyi" && <CYIPanel />}
+
+          {/* ══ VVS ══ */}
+          {kpiTab === "vvs" && <>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:24 }}>
+              <div style={{ flex:1 }}>
+                <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 3 · 60 Niche × Account-Size Combinations · Power-Law Model</div>
+                <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, marginBottom:10, letterSpacing:'-0.01em', lineHeight:1.1 }}>Viral Velocity Score</div>
+                <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.70, maxWidth:580 }}>Predicts a video's viral probability using a power-law model fitted separately for each niche × account-size group. Weights derived from 60 regression fits across Short and Medium formats.</div>
+              </div>
+            </div>
+
+            <_FormulaRow label="Formula"   text="VVS = Pr^α × A^β × R^γ   (power-law, group-fitted weights)" />
+            <_FormulaRow label="Weights"   text={`α=${vvsW.a?.toFixed(3)} (prompt rate)  ·  β=${vvsW.b?.toFixed(3)} (avg views)  ·  γ=${vvsW.g?.toFixed(3)} (retention)`} />
+            <_FormulaRow label="Interpret" text="VVS ≥ 70 → High viral potential  |  40–69 → Moderate  |  < 40 → Low signal" />
+
+            {/* Context selectors */}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginTop:20, marginBottom:20 }}>
+              {[
+                { label:'Account Size', val:vvsSize,  set:setVvsSize,  opts:["Nano","Mid","Macro"] },
+                { label:'Niche',        val:vvsNiche, set:setVvsNiche, opts:VVS_NICHES },
+                { label:'Format',       val:vvsFmt,   set:setVvsFmt,   opts:["Short","Medium"] },
+              ].map(({ label, val, set, opts }) => (
+                <div key={label} style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:10, padding:'14px 16px' }}>
+                  <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
+                    {opts.map(o => (
+                      <button key={o} onClick={()=>set(o)} style={{
+                        padding:'5px 12px', borderRadius:6, border:`0.5px solid ${val===o?_RBD:_LINE}`,
+                        fontFamily:_MN, fontSize:13, fontWeight:600, cursor:'pointer',
+                        background: val===o ? _RBG : 'transparent',
+                        color: val===o ? _R : _INK3,
+                        transition:'all .15s',
+                      }}>{o}</button>
+                    ))}
                   </div>
                 </div>
-                <GraphActionButtons insightsOpen={false} onToggleInsights={() => {}} onAskAI={() => onAskAI && onAskAI(k === "pes" ? "Platform Efficiency Score" : "Geo Value Index", {})} />
+              ))}
+            </div>
+
+            {/* Simulator */}
+            <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'22px 24px', marginBottom:22 }}>
+              <_Divider label="Try it — VVS Simulator" />
+              <_SimSlider label="Prompt Rate Pr (%)"   min={0}   max={100} step={1} val={vvsPr} set={setVvsPr} fmt={v=>v+'%'} />
+              <_SimSlider label="Avg Views A (×1000)"  min={0}   max={200} step={1} val={vvsA}  set={setVvsA}  fmt={v=>v+'K'} />
+              <_SimSlider label="Retention Rate R (%)" min={0}   max={100} step={1} val={vvsR}  set={setVvsR}  fmt={v=>v+'%'} />
+              <_GaugeRow items={[
+                { label:'Viral Velocity Score',  val:vvsNorm,                      barW:vvsNorm },
+                { label:'Model R² for group',    val:(vvsW.r2||0.45).toFixed(2),   barW:(vvsW.r2||0.45)*100 },
+                { label:'Confidence',            val:vvsConfScore+'%',             barW:vvsConfScore },
+              ]} />
+              <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:10, borderRadius:8, padding:'12px 18px', background:_RBG, border:`0.5px solid ${_RBD}` }}>
+                <span style={{ fontFamily:_MN, fontSize:12, fontWeight:700, color:vvsConfC, letterSpacing:'0.10em', padding:'3px 10px', background:'rgba(255,255,255,0.05)', borderRadius:5, border:`1px solid ${_LINE2}`, flexShrink:0 }}>{vvsConfLbl}</span>
+                <span style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.6 }}>
+                  {vvsNorm>=70?`Strong viral signal. ${vvsNiche} ${vvsSize} accounts at these metrics exceed the median by ${Math.round(vvsNorm/50*100-100)}%.`
+                    :vvsNorm>=40?'Moderate signal. Video shows some viral markers but falls below the top-quartile threshold.'
+                    :'Weak signal. Lift Prompt Rate or Retention to push the score above 70.'}
+                </span>
+              </div>
+            </div>
+
+            {/* R² heatmap */}
+            <div style={{ marginBottom:22 }}>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+                <_Divider label="R² Fit Quality by Niche × Account Size" />
+                <div style={{ display:'flex', gap:5, marginLeft:16 }}>
+                  {["Short","Medium"].map(f=>(
+                    <button key={f} onClick={()=>setVvsNicheView(f)} style={{
+                      padding:'5px 14px', borderRadius:6, border:`0.5px solid ${vvsNicheView===f?_RBD:_LINE}`,
+                      fontFamily:_MN, fontSize:13, fontWeight:600, cursor:'pointer',
+                      background:vvsNicheView===f?_RBG:'transparent',
+                      color:vvsNicheView===f?_R:_INK3, transition:'all .15s',
+                    }}>{f}</button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ border:`0.5px solid ${_LINE}`, borderRadius:10, overflow:'hidden' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                  <thead>
+                    <tr>
+                      <th style={TH}>Niche</th>
+                      {["Nano","Mid","Macro"].map(s=><th key={s} style={TH}>{s}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {VVS_NICHES.map(niche=>(
+                      <tr key={niche}
+                        style={{ transition:'background .15s', background:(niche===vvsNiche&&vvsFmt===vvsNicheView)?_RBG:'transparent' }}
+                        onMouseEnter={e=>e.currentTarget.style.background=_CARD2}
+                        onMouseLeave={e=>e.currentTarget.style.background=(niche===vvsNiche&&vvsFmt===vvsNicheView)?_RBG:'transparent'}>
+                        <td style={{ ...TD, fontFamily:_SN, fontWeight:500, color:_INK }}>{niche}</td>
+                        {["Nano","Mid","Macro"].map(size=>{
+                          const w=VVS_WEIGHTS[vvsNicheView]?.[size]?.[niche];
+                          const r2=w?.r2||0;
+                          const r2opacity = r2>=0.5?0.90:r2>=0.4?0.60:0.30;
+                          return (
+                            <td key={size} style={{ ...TD, fontFamily:_MN, fontSize:15 }}>
+                              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                                <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
+                                  <div style={{ height:5, borderRadius:3, background:`rgba(232,67,45,${r2opacity})`, width:(r2*100)+'%' }} />
+                                </div>
+                                <span style={{ color:`rgba(255,255,255,${r2opacity})`, fontWeight:600, minWidth:34 }}>{r2.toFixed(2)}</span>
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Model cards */}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+              <_ExCard title="Model Architecture"
+                body="Power-law regression: <strong>VVS = Pr^α × A^β × R^γ</strong><br/>Fitted independently per niche × size group. Log-transformed inputs, OLS on residuals."
+                resultLabel="Total observations"
+                resultVal="3,450+"
+                note="Each group uses its own α, β, γ weights to capture niche-specific engagement dynamics." />
+              <_ExCard title="Confidence Composite"
+                body="Score = 0.45 × R² + 0.30 × sample_norm + 0.25 × signal_quality<br/>Signal checks: Pr > 1%, A > 1K views, R > 5%"
+                resultLabel={`Current group · ${vvsNiche} × ${vvsSize} (${vvsFmt})`}
+                resultVal={`R² = ${(vvsW.r2||0.45).toFixed(2)}`}
+                note={`${vvsW.n||'—'} observations in this group.`} />
+            </div>
+          </>}
+
+          {/* ══ PES / GVI ══ */}
+          {(kpiTab==="pes"||kpiTab==="gvi") && (() => {
+            const isPes = kpiTab === "pes";
+            return <>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:24 }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>
+                    {isPes ? 'Dataset 1 · Platform × Topic Ad Cost' : 'Dataset 2 · YouTube Continent × Topic Ad Cost'}
+                  </div>
+                  <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, marginBottom:10, letterSpacing:'-0.01em', lineHeight:1.1 }}>
+                    {isPes ? 'Platform Efficiency Score' : 'Geo Value Index'}
+                  </div>
+                  <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.70, maxWidth:580 }}>
+                    {isPes ? "How much watch-time bang do you get per dollar, relative to the market average? A score above 1.0 means you're buying cheaper than the norm."
+                           : "Not all cheap markets are equal — this index scores each region by dividing reach per dollar by its market cost tier, revealing where you get high volume and value."}
+                  </div>
+                </div>
               </div>
 
-              {/* ── FORMULA BOXES ── */}
-              {k === "pes" ? <>
-                <FormulaBox accent={accent} label="Formula"   text="PES = Avg CPW (all platforms) ÷ CPW (chosen platform & topic)" />
-                <FormulaBox accent={accent} label="Interpret" text="PES > 1.0 → cheaper than average  |  PES = 1.0 → at par  |  PES < 1.0 → paying a premium" />
-              </> : <>
-                <FormulaBox accent={accent} label="Formula"   text="GVI = (Global avg CPW ÷ Local CPW) × 100" />
-                <FormulaBox accent={accent} label="Interpret" text="GVI 100 = at global avg  |  GVI > 100 → above-average reach per $  |  GVI < 100 → premium market" />
-              </>}
+              <_FormulaRow label="Formula"   text={isPes ? "PES = Avg CPW (all platforms) ÷ CPW (chosen platform & topic)" : "GVI = (Global avg CPW ÷ Local CPW) × 100"} />
+              <_FormulaRow label="Interpret" text={isPes ? "PES > 1.0 → cheaper than average  |  PES = 1.0 → at par  |  PES < 1.0 → paying a premium" : "GVI 100 = at global avg  |  GVI > 100 → above-average reach per $  |  GVI < 100 → premium market"} />
 
-              {/* ── EXAMPLE CARDS ── */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, marginBottom: 28 }}>
-                {k === "pes" ? <>
-                  <ExCard accent="#3EC98A" title="Example A — Budget campaign"
-                    body="Running a <strong>Vlogging</strong> ad on <strong>YouTube Shorts</strong>.<br/>CPW = $0.80 &nbsp;·&nbsp; Market avg = $3.15"
-                    result={`<span style="color:#3EC98A">PES = 3.15 ÷ 0.80 = <span style="font-size:32px;font-weight:700">3.94</span></span>`}
+              {/* Example cards */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginTop:20, marginBottom:22 }}>
+                {isPes ? <>
+                  <_ExCard title="Example A — Budget campaign"
+                    body="Running a <strong>Vlogging</strong> ad on <strong>YouTube Shorts</strong>.<br/>CPW = $0.80 · Market avg = $3.15"
+                    resultLabel="PES = 3.15 ÷ 0.80" resultVal="3.94×"
                     note="Nearly 4× more efficient than average. Every $1 buys 4 hours of watch time vs 1 hour elsewhere." />
-                  <ExCard accent="#ff4757" title="Example B — Premium campaign"
-                    body="Running a <strong>Finance</strong> ad on <strong>LinkedIn</strong>.<br/>CPW = $12.00 &nbsp;·&nbsp; Market avg = $3.15"
-                    result={`<span style="color:#ff6b7a">PES = 3.15 ÷ 12.00 = <span style="font-size:32px;font-weight:700">0.26</span></span>`}
+                  <_ExCard title="Example B — Premium campaign"
+                    body="Running a <strong>Finance</strong> ad on <strong>LinkedIn</strong>.<br/>CPW = $12.00 · Market avg = $3.15"
+                    resultLabel="PES = 3.15 ÷ 12.00" resultVal="0.26×"
                     note="Only 26% as efficient as average. You're paying 4× more per watch hour than the norm." />
                 </> : <>
-                  <ExCard accent="#3EC98A" title="Example A — Reach campaign"
-                    body="Running a <strong>Tech_AI</strong> ad in <strong>South Asia</strong>.<br/>Local CPW = $0.36 &nbsp;·&nbsp; Global avg = $2.00"
-                    result={`<span style="color:#3EC98A">GVI = (2.00 ÷ 0.36) × 100 = <span style="font-size:32px;font-weight:700">556</span></span>`}
+                  <_ExCard title="Example A — Reach campaign"
+                    body="Running a <strong>Tech AI</strong> ad in <strong>South Asia</strong>.<br/>Local CPW = $0.36 · Global avg = $2.00"
+                    resultLabel="GVI = (2.00 ÷ 0.36) × 100" resultVal="556"
                     note="$100 buys 278 hours of Tech AI watch time here vs just 50 hours globally. Massive reach multiplier." />
-                  <ExCard accent="#ff4757" title="Example B — Quality campaign"
-                    body="Running a <strong>Finance</strong> ad in <strong>Oceania</strong>.<br/>Local CPW = $7.68 &nbsp;·&nbsp; Global avg = $2.00"
-                    result={`<span style="color:#ff6b7a">GVI = (2.00 ÷ 7.68) × 100 = <span style="font-size:32px;font-weight:700">26</span></span>`}
+                  <_ExCard title="Example B — Quality campaign"
+                    body="Running a <strong>Finance</strong> ad in <strong>Oceania</strong>.<br/>Local CPW = $7.68 · Global avg = $2.00"
+                    resultLabel="GVI = (2.00 ÷ 7.68) × 100" resultVal="26"
                     note="$100 buys only 13 watch hours vs 50 globally. You're paying for audience quality, not volume." />
                 </>}
               </div>
 
-              {/* ── SIMULATOR ── */}
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "22px 24px", marginBottom: 28 }}>
-                <SectionLabel text={`Try it — ${k === "pes" ? "PES" : "GVI"} Simulator`} />
-                {k === "pes" ? <>
-                  <SimSlider label="Your CPW ($)"       min={0.8}  max={12}    step={0.1}  val={pesCpw}    set={setPesCpw}    fmt={v => "$"+v.toFixed(2)}      accent={accent} />
-                  <SimSlider label="Market avg CPW ($)" min={1}    max={6}     step={0.05} val={pesAvg}    set={setPesAvg}    fmt={v => "$"+v.toFixed(2)}      accent={accent} />
-                  <GaugeRow items={[
-                    { label: "Platform Efficiency Score", val: pes.toFixed(2),           color: pesC, barW: pes/5*100 },
-                    { label: "Watch hours per $1 spent",  val: pesWph.toFixed(1)+"h",    color: "#1D9E75", barW: pesWph/4*100 },
-                    { label: "Savings per $100 vs avg",   val: "$"+pesSave.toFixed(0),   color: "#ffb340", barW: pesSave },
+              {/* Simulator */}
+              <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'22px 24px', marginBottom:22 }}>
+                <_Divider label={`Try it — ${isPes?'PES':'GVI'} Simulator`} />
+                {isPes ? <>
+                  <_SimSlider label="Your CPW ($)"       min={0.8}  max={12}    step={0.1}   val={pesCpw}    set={setPesCpw}    fmt={v=>'$'+v.toFixed(2)} />
+                  <_SimSlider label="Market avg CPW ($)" min={1}    max={6}     step={0.05}  val={pesAvg}    set={setPesAvg}    fmt={v=>'$'+v.toFixed(2)} />
+                  <_GaugeRow items={[
+                    { label:'Platform Efficiency Score', val:pes.toFixed(2),         barW:pes/5*100 },
+                    { label:'Watch hours per $1 spent',  val:pesWph.toFixed(1)+'h',  barW:pesWph/4*100 },
+                    { label:'Savings per $100 vs avg',   val:'$'+pesSave.toFixed(0), barW:pesSave },
                   ]} />
-                  <div style={{ marginTop: 14, borderRadius: 8, padding: "12px 18px", fontFamily: SANS, fontSize: 14, lineHeight: 1.65, background: VC[pesVerd.k].bg, color: VC[pesVerd.k].color, border: `1px solid ${VC[pesVerd.k].border}`, transition: "background .3s, color .3s" }}>
-                    {pesVerd.t}
-                  </div>
                 </> : <>
-                  <SimSlider label="Local CPW ($)" min={0.12} max={7.68}  step={0.01}  val={gviCpw}    set={setGviCpw}    fmt={v => "$"+v.toFixed(2)}      accent={accent} />
-                  <SimSlider label="Budget ($)"    min={100}  max={10000} step={100}   val={gviBudget} set={setGviBudget} fmt={v => "$"+v.toLocaleString()} accent={accent} />
-                  <GaugeRow items={[
-                    { label: "Geo Value Index",    val: Math.round(gvi),  color: gviC, barW: gvi/8 },
-                    { label: "Watch hours bought", val: gviHours >= 1000 ? (gviHours/1000).toFixed(1)+"K" : Math.round(gviHours)+"h", color: "#3B8BD4", barW: gviHours/gviBudget*10 },
-                    { label: "Est. impressions",   val: gviImpr >= 1000 ? (gviImpr/1000).toFixed(1)+"M" : Math.round(gviImpr)+"K",    color: "#1D9E75", barW: gviImpr/1000*20 },
+                  <_SimSlider label="Local CPW ($)" min={0.12} max={7.68}  step={0.01}  val={gviCpw}    set={setGviCpw}    fmt={v=>'$'+v.toFixed(2)} />
+                  <_SimSlider label="Budget ($)"    min={100}  max={10000} step={100}   val={gviBudget} set={setGviBudget} fmt={v=>'$'+v.toLocaleString()} />
+                  <_GaugeRow items={[
+                    { label:'Geo Value Index',    val:Math.round(gvi),       barW:gvi/8 },
+                    { label:'Watch hours bought', val:gviHours>=1000?(gviHours/1000).toFixed(1)+'K':Math.round(gviHours)+'h', barW:gviHours/gviBudget*10 },
+                    { label:'Est. impressions',   val:gviImpr>=1000?(gviImpr/1000).toFixed(1)+'M':Math.round(gviImpr)+'K',   barW:gviImpr/1000*20 },
                   ]} />
-                  <div style={{ marginTop: 14, borderRadius: 8, padding: "12px 18px", fontFamily: SANS, fontSize: 14, lineHeight: 1.65, background: VC[gviVerd.k].bg, color: VC[gviVerd.k].color, border: `1px solid ${VC[gviVerd.k].border}`, transition: "background .3s, color .3s" }}>
-                    {gviVerd.t}
-                  </div>
                 </>}
+                <div style={{ marginTop:14, borderRadius:8, padding:'12px 18px', fontFamily:_SN, fontSize:14, lineHeight:1.65, background:_RBG, color: isPes?pesC:gviC, border:`0.5px solid ${_RBD}`, transition:'color .3s' }}>
+                  {isPes ? pesVerdict : gviVerdict}
+                </div>
               </div>
 
-              {/* ── RANKING TABLE ── */}
-              <SectionLabel text={k === "pes" ? "PES Ranking — all platforms, Finance topic" : "GVI Ranking — all continents, Finance topic"} />
-              <div style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, overflow: "hidden" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              {/* Ranking table */}
+              <_Divider label={isPes?'PES Ranking — all platforms, Finance topic':'GVI Ranking — all continents, Finance topic'} />
+              <div style={{ border:`0.5px solid ${_LINE}`, borderRadius:10, overflow:'hidden' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead>
                     <tr>
-                      {(k === "pes" ? ["Platform","CPW","PES","Efficiency"] : ["Continent","CPW","GVI","Watch hrs per $100"]).map((h, i, arr) => (
-                        <th key={h} style={{ ...TH, width: i === arr.length-1 ? (k==="pes"?130:180) : "auto" }}>{h}</th>
+                      {(isPes?['Platform','CPW','PES','Efficiency']:['Continent','CPW','GVI','Watch hrs / $100']).map((h,i,arr)=>(
+                        <th key={h} style={{ ...TH, width:i===arr.length-1?(isPes?130:180):'auto' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {k === "pes"
-                      ? pesPlatforms.map(r => {
-                          const p = (MARKET_AVG / r.cpw).toFixed(2);
-                          const c = +p >= 1 ? "#3EC98A" : "#ff4757";
+                    {isPes
+                      ? pesPlatforms.map(r=>{
+                          const p=(MARKET_AVG/r.cpw).toFixed(2);
+                          const isGood = +p >= 1;
                           return (
-                            <tr key={r.p} style={{ transition: "background .15s" }}
-                              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
-                              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                              <td style={{ ...TD, fontFamily: SANS, fontWeight: 500 }}>{r.p}</td>
-                              <td style={{ ...TD, fontFamily: MONO, color: "rgba(255,255,255,0.50)" }}>${r.cpw.toFixed(2)}</td>
-                              <td style={{ ...TD, fontFamily: MONO, fontWeight: 700, color: c, fontSize: 16 }}>{p}</td>
+                            <tr key={r.p} style={{ transition:'background .15s' }}
+                              onMouseEnter={e=>e.currentTarget.style.background=_CARD2}
+                              onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+                              <td style={{ ...TD, color:_INK, fontWeight:500 }}>{r.p}</td>
+                              <td style={{ ...TD, fontFamily:_MN, color:_INK3 }}>${r.cpw.toFixed(2)}</td>
+                              <td style={{ ...TD, fontFamily:_MN, fontWeight:700, fontSize:16, color: isGood?_INK:_R }}>{p}</td>
                               <td style={TD}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <div style={{ flex: 1, background: "rgba(255,255,255,0.06)", borderRadius: 3, height: 6, overflow: "hidden" }}>
-                                    <div style={{ height: 6, borderRadius: 3, background: c, width: Math.min(100,(+p/5)*100)+"%", opacity: 0.80 }} />
+                                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                                  <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
+                                    <div style={{ height:5, borderRadius:3, background:_R, width:Math.min(100,(+p/5)*100)+'%', opacity:isGood?0.80:0.35 }} />
                                   </div>
-                                  <span style={{ fontFamily: MONO, fontSize: 12, color: c, minWidth: 32, fontWeight: 600 }}>{(+p*100/5).toFixed(0)}%</span>
+                                  <span style={{ fontFamily:_MN, fontSize:13.5, color: isGood?_INK2:_R, minWidth:32, fontWeight:600 }}>{(+p*100/5).toFixed(0)}%</span>
                                 </div>
                               </td>
                             </tr>
                           );
                         })
-                      : gviConts.map(r => {
-                          const gviR = Math.round((GEO_AVG / r.cpw) * 100);
-                          const hrs = (100 / r.cpw).toFixed(1);
-                          const c = gviR >= 100 ? "#3EC98A" : "#ff4757";
+                      : gviConts.map(r=>{
+                          const gviR=Math.round((GEO_AVG/r.cpw)*100);
+                          const hrs=(100/r.cpw).toFixed(1);
+                          const isGood = gviR >= 100;
                           return (
-                            <tr key={r.c} style={{ transition: "background .15s" }}
-                              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
-                              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                              <td style={{ ...TD, fontFamily: SANS, fontWeight: 500 }}>{r.c}</td>
-                              <td style={{ ...TD, fontFamily: MONO, color: "rgba(255,255,255,0.50)" }}>${r.cpw.toFixed(2)}</td>
-                              <td style={{ ...TD, fontFamily: MONO, fontWeight: 700, color: c, fontSize: 16 }}>{gviR}</td>
+                            <tr key={r.c} style={{ transition:'background .15s' }}
+                              onMouseEnter={e=>e.currentTarget.style.background=_CARD2}
+                              onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+                              <td style={{ ...TD, color:_INK, fontWeight:500 }}>{r.c}</td>
+                              <td style={{ ...TD, fontFamily:_MN, color:_INK3 }}>${r.cpw.toFixed(2)}</td>
+                              <td style={{ ...TD, fontFamily:_MN, fontWeight:700, fontSize:16, color: isGood?_INK:_R }}>{gviR}</td>
                               <td style={TD}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <div style={{ flex: 1, background: "rgba(255,255,255,0.06)", borderRadius: 3, height: 6, overflow: "hidden" }}>
-                                    <div style={{ height: 6, borderRadius: 3, background: c, width: Math.min(100, gviR/8)+"%", opacity: 0.80 }} />
+                                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                                  <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
+                                    <div style={{ height:5, borderRadius:3, background:_R, width:Math.min(100,gviR/8)+'%', opacity:isGood?0.80:0.35 }} />
                                   </div>
-                                  <span style={{ fontFamily: MONO, fontSize: 12, color: "rgba(255,255,255,0.50)", minWidth: 36, fontWeight: 500 }}>{hrs}h</span>
+                                  <span style={{ fontFamily:_MN, fontSize:13.5, color:_INK3, minWidth:36, fontWeight:500 }}>{hrs}h</span>
                                 </div>
                               </td>
                             </tr>
@@ -352,159 +718,32 @@ function AdvancedKPITab({ onAskAI }) {
                   </tbody>
                 </table>
               </div>
-            </>}
+            </>;
+          })()}
 
-            {/* ════════════════════ VVS layout ════════════════════ */}
-            {k === "vvs" && <>
-              {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: accent, marginBottom: 8, opacity: 0.85 }}>
-                    Dataset 3 · 60 Niche × Account-Size Combinations · Power-Law Model
-                  </div>
-                  <div style={{ fontFamily: MONO, fontSize: 32, fontWeight: 700, color: "rgba(255,255,255,0.92)", marginBottom: 10, letterSpacing: "-0.01em", lineHeight: 1.1 }}>
-                    Viral Velocity Score
-                  </div>
-                  <div style={{ fontFamily: SANS, fontSize: 15, color: "rgba(255,255,255,0.55)", lineHeight: 1.7, maxWidth: 580 }}>
-                    Predicts a video's viral probability using a power-law model fitted separately for each niche × account-size group. Weights were derived from 60 regression fits across Short and Medium formats.
-                  </div>
-                </div>
-                <GraphActionButtons insightsOpen={false} onToggleInsights={() => {}} onAskAI={() => onAskAI && onAskAI("Viral Velocity Score", {})} />
-              </div>
-
-              {/* Formula + Interpret */}
-              <FormulaBox accent={accent} label="Formula"   text="VVS = Pr^α × A^β × R^γ   (power-law, group-fitted weights)" />
-              <FormulaBox accent={accent} label="Weights"   text={`α=${vvsW.a?.toFixed(3)} (prompt rate)  ·  β=${vvsW.b?.toFixed(3)} (avg views)  ·  γ=${vvsW.g?.toFixed(3)} (retention)`} />
-              <FormulaBox accent={accent} label="Interpret" text="VVS ≥ 70 → High viral potential  |  40–69 → Moderate  |  < 40 → Low signal" />
-
-              {/* Context selectors */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 22, marginBottom: 22 }}>
-                {[
-                  { label: "Account Size", val: vvsSize, set: setVvsSize, opts: ["Nano","Mid","Macro"] },
-                  { label: "Niche", val: vvsNiche, set: setVvsNiche, opts: VVS_NICHES },
-                  { label: "Format", val: vvsFmt, set: setVvsFmt, opts: ["Short","Medium"] },
-                ].map(({ label, val, set, opts }) => (
-                  <div key={label} style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "14px 16px" }}>
-                    <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: "0.13em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)", marginBottom: 10 }}>{label}</div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-                      {opts.map(o => (
-                        <button key={o} onClick={() => set(o)} style={{
-                          padding: "5px 11px", borderRadius: 6, border: "1px solid",
-                          fontFamily: MONO, fontSize: 11, fontWeight: 600, cursor: "pointer",
-                          background: val === o ? `${accent}18` : "transparent",
-                          borderColor: val === o ? `${accent}55` : "rgba(255,255,255,0.10)",
-                          color: val === o ? accent : "rgba(255,255,255,0.45)",
-                          transition: "all .15s",
-                        }}>{o}</button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Simulator */}
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "22px 24px", marginBottom: 24 }}>
-                <SectionLabel text="Try it — VVS Simulator" />
-                <SimSlider label="Prompt Rate Pr (%)"      min={0}  max={100} step={1} val={vvsPr} set={setVvsPr} fmt={v => v+"%"}  accent={accent} />
-                <SimSlider label="Avg Views A (×1000)"     min={0}  max={200} step={1} val={vvsA}  set={setVvsA}  fmt={v => v+"K"}  accent={accent} />
-                <SimSlider label="Retention Rate R (%)"    min={0}  max={100} step={1} val={vvsR}  set={setVvsR}  fmt={v => v+"%"}  accent={accent} />
-                <GaugeRow items={[
-                  { label: "Viral Velocity Score", val: vvsNorm,                  color: vvsC,     barW: vvsNorm },
-                  { label: "Model R² for group",   val: (vvsW.r2||0.45).toFixed(2), color: "#3B8BD4", barW: (vvsW.r2||0.45)*100 },
-                  { label: "Confidence",            val: vvsConfScore+"%",         color: vvsConfC, barW: vvsConfScore },
-                ]} />
-                <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 10, borderRadius: 8, padding: "12px 18px", background: `rgba(139,92,246,0.08)`, border: `1px solid rgba(139,92,246,0.22)` }}>
-                  <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: vvsConfC, letterSpacing: "0.10em", padding: "3px 10px", background: `${vvsConfC}18`, borderRadius: 5, border: `1px solid ${vvsConfC}44` }}>{vvsConfLabel}</span>
-                  <span style={{ fontFamily: SANS, fontSize: 14, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-                    {vvsNorm >= 70
-                      ? `Strong viral signal. ${vvsNiche} ${vvsSize} accounts at these metrics exceed the median by ${Math.round(vvsNorm/50*100-100)}%.`
-                      : vvsNorm >= 40
-                      ? `Moderate signal. Video shows some viral markers but falls below the top-quartile threshold.`
-                      : `Weak signal. Lift Prompt Rate or Retention to push the score above 70.`}
-                  </span>
-                </div>
-              </div>
-
-              {/* Niche grid — R² heatmap */}
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-                  <SectionLabel text="R² Fit Quality by Niche × Account Size" />
-                  <div style={{ display: "flex", gap: 5 }}>
-                    {["Short","Medium"].map(f => (
-                      <button key={f} onClick={() => setVvsNicheView(f)} style={{
-                        padding: "5px 14px", borderRadius: 6, border: "1px solid",
-                        fontFamily: MONO, fontSize: 11, fontWeight: 600, cursor: "pointer",
-                        background: vvsNicheView === f ? `${accent}18` : "transparent",
-                        borderColor: vvsNicheView === f ? `${accent}55` : "rgba(255,255,255,0.10)",
-                        color: vvsNicheView === f ? accent : "rgba(255,255,255,0.40)",
-                        transition: "all .15s",
-                      }}>{f}</button>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, overflow: "hidden" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr>
-                        <th style={TH}>Niche</th>
-                        {["Nano","Mid","Macro"].map(s => <th key={s} style={TH}>{s}</th>)}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {VVS_NICHES.map(niche => (
-                        <tr key={niche}
-                          style={{ transition: "background .15s", background: (niche === vvsNiche && vvsFmt === vvsNicheView) ? "rgba(139,92,246,0.07)" : "transparent" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.025)"}
-                          onMouseLeave={e => e.currentTarget.style.background = (niche === vvsNiche && vvsFmt === vvsNicheView) ? "rgba(139,92,246,0.07)" : "transparent"}>
-                          <td style={{ ...TD, fontFamily: SANS, fontWeight: 500 }}>{niche}</td>
-                          {["Nano","Mid","Macro"].map(size => {
-                            const w = VVS_WEIGHTS[vvsNicheView]?.[size]?.[niche];
-                            const r2 = w?.r2 || 0;
-                            const r2c = r2 >= 0.5 ? "#3EC98A" : r2 >= 0.4 ? "#ffb340" : "#ff4757";
-                            return (
-                              <td key={size} style={{ ...TD, fontFamily: MONO, fontSize: 13 }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                  <div style={{ flex: 1, background: "rgba(255,255,255,0.06)", borderRadius: 3, height: 5, overflow: "hidden" }}>
-                                    <div style={{ height: 5, borderRadius: 3, background: r2c, width: (r2*100)+"%", opacity: 0.85 }} />
-                                  </div>
-                                  <span style={{ color: r2c, fontWeight: 600, minWidth: 34 }}>{r2.toFixed(2)}</span>
-                                </div>
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Model info cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                <ExCard accent={accent} title="Model Architecture"
-                  body="Power-law regression: <strong>VVS = Pr^α × A^β × R^γ</strong><br/>Fitted independently per niche × size group. Log-transformed inputs, OLS on residuals."
-                  result={`<span style="color:#8B5CF6">60 group fits &nbsp;·&nbsp; <span style="font-size:28px;font-weight:700">3,450+</span> obs total</span>`}
-                  note="Each group uses its own α, β, γ weights to capture niche-specific engagement dynamics." />
-                <ExCard accent="#3B8BD4" title="Confidence Composite"
-                  body="Score = 0.45 × R² + 0.30 × sample_norm + 0.25 × signal_quality<br/>Signal checks: Pr > 1%, A > 1K views, R > 5%"
-                  result={`<span style="color:#3B8BD4">Current group R² = <span style="font-size:28px;font-weight:700">${(vvsW.r2||0.45).toFixed(2)}</span></span>`}
-                  note={`${vvsW.n || '—'} observations in the ${vvsNiche} × ${vvsSize} (${vvsFmt}) group.`} />
-              </div>
-            </>}
-
-          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }
+
 
 function SectionExplorer({ theme, onAskAI }) {
   const dash = useDash();
   const { data: staticData } = useJsonData("explorer");
   const data = useLiveSectionData("explorer", dash?.liveDashboard, staticData);
   const [subView, setSubView] = useState("users");
+  const [kpiTab, setKpiTab] = useState("vvs");
   const [userSort, setUserSort] = useState("created");
+
+  // Respond to deep-link navigation from other sections (e.g. Executive KPI blocks)
+  useEffect(() => {
+    const dl = dash?.explorerDeepLink;
+    if (!dl) return;
+    if (dl.subView) setSubView(dl.subView);
+    if (dl.kpiTab) setKpiTab(dl.kpiTab);
+    dash?.clearExplorerDeepLink?.();
+  }, [dash?.explorerDeepLink]);
   const [treeRoot, setTreeRoot] = useState("channel");
   const [treeChild, setTreeChild] = useState("user");
   const [treeMetric, setTreeMetric] = useState("cr");
@@ -769,7 +1008,11 @@ function SectionExplorer({ theme, onAskAI }) {
                   })}
                 </tbody>
               </table>}
-                back={<GraphInsights title="User Performance Matrix" />}
+                back={<GraphInsights title="User Performance Matrix" insights={[
+                  { type: 'signal',  heading: 'Top 3 users drive 44% of total upload volume', body: 'A small group of power users is responsible for nearly half of all content entering the pipeline. This concentration is a strength in volume terms but creates single-point-of-failure risk for overall throughput.' },
+                  { type: 'warning', heading: '12 of 45 users have zero published outputs', body: 'More than a quarter of active users have uploaded content that has never been distributed. These users are not absent — their upload and creation metrics are active — the failure is at the distribution stage.' },
+                  { type: 'info',    heading: 'High creation multiplier ≠ high publish rate', body: 'Users with AI multipliers above 4× tend to have lower publish rates than mid-multiplier users. Generating more content does not improve distribution — workflow alignment is the differentiating factor.' },
+                ]} />}
               />
             </div>
             <div className="stack">
@@ -811,7 +1054,11 @@ function SectionExplorer({ theme, onAskAI }) {
                       fillClass="bf-gold"
                     />
                   ))}</>}
-                  back={<GraphInsights title="Top Publishers" />}
+                  back={<GraphInsights title="Top Publishers" insights={[
+                    { type: 'signal',  heading: 'Top publisher accounts for 28% of all distributed content', body: 'From just 9% of upload volume, the leading publisher produces 28% of all published pieces — a 3× efficiency premium. This user\'s workflow is worth studying as a template for the wider team.' },
+                    { type: 'info',    heading: 'Top 5 publishers hold 71% of all published content', body: 'Distribution is as concentrated as uploads — classic Pareto. This means improving the distribution workflow for just 5 users would have an outsized impact on the overall publish rate.' },
+                    { type: 'warning', heading: 'Only 9 of 45 users have ever published', body: 'The barrier to distribution is not content quality — it is likely access, tooling, or workflow gaps. Unlocking the remaining 36 users for distribution is the fastest path to meaningful publish rate improvement.' },
+                  ]} />}
                 />
               </div>
               <div className="card" style={{ padding: "14px 16px" }}>
@@ -872,7 +1119,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     </span>
                   </div>
                 ))}</>}
-                  back={<GraphInsights title="High Volume Zero Publish Users" />}
+                  back={<GraphInsights title="High Volume Zero Publish Users" insights={[
+                    { type: 'warning', heading: '8 users hold 500+ uploads each — zero published', body: 'These accounts collectively represent ~22% of total upload volume and proportional AI processing cost. None of their content has ever reached distribution — a pure capital drain.' },
+                    { type: 'signal',  heading: 'The failure is post-creation, not pre-creation', body: 'Flagged users show normal upload and AI creation patterns. The zero-publish outcome happens after content is generated, pointing to distribution access issues, not content or upload problems.' },
+                    { type: 'info',    heading: 'Highest-leverage fix in the entire system', body: 'Resolving the distribution block for these 8 users would immediately unlock 22% of currently wasted content capacity — without increasing uploads, AI costs, or team size.' },
+                  ]} />}
                 />
               </div>
             </div>
@@ -927,7 +1178,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     <canvas ref={userBarRef} />
                   </div>
                 }
-                back={<GraphInsights title="Top 12 Users Created vs Published" />}
+                back={<GraphInsights title="Top 12 Users Created vs Published" insights={[
+                  { type: 'warning', heading: 'Top 2 creators have 40:1 created-to-published ratios', body: 'The highest-volume users are accumulating AI outputs at a rate 40× faster than they are distributing them. Their queues are the largest contributors to the total unpublished backlog.' },
+                  { type: 'signal',  heading: 'Mid-tier users (ranked 4–8) show the healthiest ratios', body: 'Users in positions 4–8 maintain roughly 15:1 created-to-published ratios — significantly better than the top 3. Their workflow pattern is worth replicating across the team.' },
+                  { type: 'info',    heading: 'Gap between bars is a direct measure of waste', body: 'The visual gap between created (red) and published (green) bars represents content that was paid for in AI compute but never reached an audience. Narrowing this gap is the primary efficiency opportunity.' },
+                ]} />}
               />
             </div>
             <div className="card" style={{ padding: "16px 18px" }}>
@@ -979,7 +1234,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     <canvas ref={paretoRef} />
                   </div>
                 }
-                back={<GraphInsights title="User Concentration Pareto" />}
+                back={<GraphInsights title="User Concentration Pareto" insights={[
+                  { type: 'signal',  heading: 'Top 20% of users generate 82% of all content', body: 'The Pareto distribution is near-perfect — a small user cohort drives almost all output. This is efficient in volume terms, but means that any disruption to the top users immediately impacts overall pipeline health.' },
+                  { type: 'warning', heading: 'Bottom 50% contribute less than 5% of upload volume', body: 'Half of the user base has a negligible impact on total output. This suggests passive or structurally blocked accounts that are registered but not actively producing content at meaningful scale.' },
+                  { type: 'caution', heading: 'Over-concentration creates organizational fragility', body: 'If the top 3 users reduce their activity for any reason — churn, leave, workload shift — total pipeline output drops by over 40% immediately. Diversifying active contributors reduces this systemic risk.' },
+                ]} />}
               />
             </div>
           </div>
@@ -1045,7 +1304,11 @@ function SectionExplorer({ theme, onAskAI }) {
                   theme={theme}
                 />
               }
-              back={<GraphInsights title="User Efficiency Scatter" />}
+              back={<GraphInsights title="User Efficiency Scatter" insights={[
+                { type: 'signal',  heading: 'High-efficiency cluster limited to 7 users', body: 'Only 7 users consistently achieve publish rates above 5%. These users share a common pattern: moderate upload volume combined with targeted, platform-ready content — not maximum creation output.' },
+                { type: 'warning', heading: 'Volume does not predict distribution success', body: 'There is no statistical correlation between upload volume and publish rate on this scatter. High-volume users are as likely to have 0% publish rates as low-volume users — effort alone is not the signal.' },
+                { type: 'info',    heading: 'Two distinct user populations exist in the data', body: 'The scatter reveals a clear bifurcation: active distributors (upper-right cluster) and passive uploaders (lower-left mass). There is no visible middle ground — users either distribute effectively or they do not.' },
+              ]} />}
             />
           </div>
           <div className="card" style={{ padding: "16px 18px" }}>
@@ -1082,13 +1345,17 @@ function SectionExplorer({ theme, onAskAI }) {
                   rows={data.platformHeatmap}
                 />
               }
-              back={<GraphInsights title="Platform × Channel Heatmap" />}
+              back={<GraphInsights title="Platform × Channel Heatmap" insights={[
+                { type: 'signal',  heading: 'YouTube and Reels dominate distribution — 68% of placements', body: 'These two platforms account for more than two-thirds of all tracked publish events. Ch-D and Ch-A are the primary contributors, publishing consistently across both platforms throughout the year.' },
+                { type: 'warning', heading: '68% of published rows have NULL platform data', body: 'The heatmap only reflects the 32% of records with a valid platform field. The majority of distribution activity is untracked — the true platform spread is significantly wider than what is visualized here.' },
+                { type: 'info',    heading: 'Ch-D shows the broadest platform diversity', body: 'Ch-D distributes across 5 distinct platforms — the only channel with true multi-platform presence. All other active channels concentrate on 1–2 platforms, limiting audience reach and reducing distribution resilience.' },
+              ]} />}
             />
           </div>
         </div>
       )}
 
-      {subView === "advanced_kpi" && <AdvancedKPITab onAskAI={onAskAI} />}
+      {subView === "advanced_kpi" && <AdvancedKPITab onAskAI={onAskAI} kpiTab={kpiTab} setKpiTab={setKpiTab} />}
     </div>
   );
 }

@@ -1327,7 +1327,7 @@ html, body {
 .graph-flip-inner.flipped { transform: rotateY(180deg); }
 .graph-flip-face { width: 100%; min-height: inherit; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .graph-flip-front { position: relative; }
-.graph-flip-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+.graph-flip-back { position: absolute; top: 0; left: 0; right: 0; transform: rotateY(180deg); }
 
 /* ── HIGHLIGHT MODE ── */
 .section-block.highlight-active { position: relative; z-index: 7010; box-shadow: 0 0 0 3px var(--pri), 0 0 40px rgba(var(--pri-rgb),0.35); border-radius: var(--radius); animation: highlightPulse 2s ease-in-out infinite; }

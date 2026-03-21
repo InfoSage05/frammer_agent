@@ -1,9 +1,6 @@
-import AskAIButton from "./AskAIButton";
-
-function GraphActionButtons({ onAskAI, onToggleInsights, insightsOpen }) {
+function GraphActionButtons({ onToggleInsights, insightsOpen }) {
   return (
     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-      <AskAIButton onClick={onAskAI} />
       <button
         onClick={onToggleInsights}
         style={{

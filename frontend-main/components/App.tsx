@@ -32,42 +32,42 @@ import { M, ANOMALIES, STORY_PRESETS, SAVED_VIEWS, pageTitles } from '@/lib/cons
 const NAV_ICONS: Record<string, JSX.Element> = {
   executive: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="1.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
-      <rect x="8.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
-      <rect x="1.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
-      <rect x="8.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3"/>
+      <rect x="1.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="8.5" y="1.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="1.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3" />
+      <rect x="8.5" y="8.5" width="5" height="5" rx="1.2" stroke="currentColor" strokeWidth="1.3" />
     </svg>
   ),
   trends: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polyline points="1.5,11.5 5,7.5 8.5,9.5 13.5,3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-      <polyline points="10.5,3.5 13.5,3.5 13.5,6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      <polyline points="1.5,11.5 5,7.5 8.5,9.5 13.5,3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline points="10.5,3.5 13.5,3.5 13.5,6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   multidim: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="5.5" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M1 13.5C1 11 3 9 5.5 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      <circle cx="11" cy="4.5" r="2" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M8.5 13.5C8.5 11.2 9.5 9.5 11.5 9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      <circle cx="5.5" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M1 13.5C1 11 3 9 5.5 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <circle cx="11" cy="4.5" r="2" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M8.5 13.5C8.5 11.2 9.5 9.5 11.5 9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   ),
   funnel: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1.5 2.5H13.5L9.5 7.5V12.5L5.5 11V7.5L1.5 2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+      <path d="M1.5 2.5H13.5L9.5 7.5V12.5L5.5 11V7.5L1.5 2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
     </svg>
   ),
   explorer: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3"/>
-      <line x1="10" y1="10" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.3" />
+      <line x1="10" y1="10" x2="13.5" y2="13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   copilot: (
     <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 2.5C2 1.95 2.45 1.5 3 1.5H12C12.55 1.5 13 1.95 13 2.5V9C13 9.55 12.55 10 12 10H8.5L6 12.5V10H3C2.45 10 2 9.55 2 9V2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
-      <line x1="4.5" y1="4.5" x2="10.5" y2="4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      <line x1="4.5" y1="6.75" x2="8.5" y2="6.75" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
+      <path d="M2 2.5C2 1.95 2.45 1.5 3 1.5H12C12.55 1.5 13 1.95 13 2.5V9C13 9.55 12.55 10 12 10H8.5L6 12.5V10H3C2.45 10 2 9.55 2 9V2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      <line x1="4.5" y1="4.5" x2="10.5" y2="4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <line x1="4.5" y1="6.75" x2="8.5" y2="6.75" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
     </svg>
   ),
 };
@@ -80,7 +80,7 @@ export default function App(props: any) {
 
   const theme = "dark";
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const setTheme = (_: any) => {};
+  const setTheme = (_: any) => { };
   const [toasts, addToast, removeToast] = useToasts();
   const [sideCollapsed, setSideCollapsed] = useState(false);
   const contentRef = useRef(null);
@@ -101,6 +101,7 @@ export default function App(props: any) {
   const [activeGraphData, setActiveGraphData] = useState([]);
   const [role, setRole] = useState('analyst');
   const [howToUseOpen, setHowToUseOpen] = useState(false);
+  const [explorerDeepLink, setExplorerDeepLink] = useState<{ subView?: string, kpiTab?: string } | null>(null);
 
   // Live metrics from backend (includes raw dashboard with chart_data for sections)
   const { metrics: liveM, isLive, dashboard: liveDashboard } = useLiveMetrics();
@@ -110,7 +111,7 @@ export default function App(props: any) {
     try {
       const stored = typeof window !== "undefined" && localStorage.getItem("frammer_chat");
       if (stored) { const p = JSON.parse(stored); return p.sessionId || null; }
-    } catch {}
+    } catch { }
     return null;
   });
 
@@ -333,6 +334,13 @@ export default function App(props: any) {
     if (sEl) sEl.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [clientOpen, pagedMode, setActiveSection]);
 
+  const navigateToExplorerKPI = useCallback((kpiTab: string) => {
+    scrollToSection('explorer');
+    setExplorerDeepLink({ subView: 'advanced_kpi', kpiTab });
+  }, [scrollToSection]);
+
+  const clearExplorerDeepLink = useCallback(() => setExplorerDeepLink(null), []);
+
   const goToClient = useCallback(() => {
     setClientOpen(true);
     setActiveSection('client');
@@ -473,6 +481,7 @@ export default function App(props: any) {
     insightMode, setInsightMode, showBenchmark, setShowBenchmark,
     pinnedFindings, scrollToSection, addToast,
     liveDashboard, isLive,
+    navigateToExplorerKPI, explorerDeepLink, clearExplorerDeepLink,
   }), [
     selectCtx, selectedCtx, startInvestigation, exitInvestigation,
     openCompare, closeCompare, filteredData, pinFinding, unpinFinding,
@@ -480,6 +489,7 @@ export default function App(props: any) {
     activeChips, removeChip, clearAllFilters, exitStory, startStory,
     insightMode, showBenchmark, pinnedFindings, scrollToSection, addToast,
     liveDashboard, isLive,
+    navigateToExplorerKPI, explorerDeepLink, clearExplorerDeepLink,
   ]);
 
   const appUICtx = useMemo(() => ({
@@ -561,12 +571,49 @@ export default function App(props: any) {
               <div style={{ margin: "16px 0 8px" }}>
                 <div className="nav-grp">TOOLS</div>
                 <div
-                  className="nav-item"
                   onClick={() => { window.location.href = '/analyze'; }}
-                  style={{ cursor: 'pointer' }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    margin: '4px 8px', padding: '9px 14px',
+                    borderRadius: 8,
+                    background: 'rgba(48,201,120,0.10)',
+                    border: '1px solid rgba(48,201,120,0.28)',
+                    cursor: 'pointer',
+                    transition: 'all 0.18s ease',
+                    boxShadow: '0 0 14px rgba(48,201,120,0.08)',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = 'rgba(48,201,120,0.17)';
+                    e.currentTarget.style.borderColor = 'rgba(48,201,120,0.45)';
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(48,201,120,0.15)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = 'rgba(48,201,120,0.10)';
+                    e.currentTarget.style.borderColor = 'rgba(48,201,120,0.28)';
+                    e.currentTarget.style.boxShadow = '0 0 14px rgba(48,201,120,0.08)';
+                  }}
                 >
-                  <span className="nav-icon">⬆</span>
-                  <span className="nav-label">Upload &amp; Analyze</span>
+                  <span style={{
+                    width: 20, height: 20, display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', flexShrink: 0, color: 'rgba(72,220,140,0.90)',
+                  }}>
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M7.5 1.5V10M7.5 1.5L4.5 4.5M7.5 1.5L10.5 4.5" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 11V12.5C2 13.05 2.45 13.5 3 13.5H12C12.55 13.5 13 13.05 13 12.5V11" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round"/>
+                    </svg>
+                  </span>
+                  <span style={{
+                    flex: 1, fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
+                    color: 'rgba(72,220,140,0.92)', letterSpacing: '0.01em',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                  }}>
+                    Upload &amp; Analyze
+                  </span>
+                  <span style={{
+                    width: 6, height: 6, borderRadius: '50%',
+                    background: 'rgba(72,220,140,0.85)', flexShrink: 0,
+                    boxShadow: '0 0 6px rgba(72,220,140,0.60)',
+                  }} />
                 </div>
               </div>
 
@@ -652,7 +699,7 @@ export default function App(props: any) {
                 {/* Right — actions */}
                 <div className="topbar-right">
                   {/* Upload CSV — collapses to icon-only when panel is open */}
-                  <button
+                  {/* <button
                     onClick={() => {}}
                     title="Upload CSV data"
                     style={{
@@ -698,7 +745,7 @@ export default function App(props: any) {
                       transition: "max-width 0.20s ease, opacity 0.15s ease",
                       whiteSpace: "nowrap",
                     }}>Upload CSV</span>
-                  </button>
+                  </button> */}
 
                   {/* Divider */}
                   <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
@@ -714,23 +761,28 @@ export default function App(props: any) {
                     title={panelOpen && panelTab === 'copilot' ? "Close Copilot" : "Open AI Copilot"}
                     style={{
                       background: panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.10)" : "rgba(255,255,255,0.03)",
-                      border: `0.5px solid ${panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.35)" : "rgba(255,255,255,0.09)"}`,
-                      borderRadius: 5,
-                      padding: panelOpen ? "5px 8px" : "5px 12px",
-                      fontSize: 11,
-                      fontFamily: "var(--font-sans)",
-                      fontWeight: 500,
-                      color: panelOpen && panelTab === 'copilot' ? "rgba(232,100,80,1)" : "rgba(255,255,255,0.40)",
+                      border: `1px solid ${panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.38)" : "rgba(255,255,255,0.09)"}`,
+                      borderRadius: 7,
+                      padding: "5px 13px 5px 10px",
+                      fontSize: 12,
+                      fontFamily: "var(--font-mono)",
+                      fontWeight: 600,
+                      color: panelOpen && panelTab === 'copilot' ? "rgba(232,100,80,1)" : "rgba(255,255,255,0.45)",
                       cursor: "pointer",
-                      display: "flex", alignItems: "center", gap: panelOpen ? 4 : 5,
+                      display: "flex", alignItems: "center", gap: 7,
                       flexShrink: 0,
-                      transition: "all 0.20s ease",
+                      transition: "all 0.18s ease",
                       letterSpacing: "0.04em",
+                      boxShadow: panelOpen && panelTab === 'copilot' ? "0 0 12px rgba(232,67,45,0.12)" : "none",
                     }}
-                    onMouseEnter={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)"; e.currentTarget.style.color = "rgba(255,255,255,0.70)"; } }}
-                    onMouseLeave={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "rgba(255,255,255,0.40)"; } }}
+                    onMouseEnter={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.20)"; e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.055)"; } }}
+                    onMouseLeave={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.09)"; e.currentTarget.style.color = "rgba(255,255,255,0.45)"; e.currentTarget.style.background = "rgba(255,255,255,0.03)"; } }}
                   >
-                    <span style={{ fontSize: 12 }}>⊹</span>
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, opacity: panelOpen && panelTab === 'copilot' ? 1 : 0.75 }}>
+                      <path d="M2 2.5C2 1.95 2.45 1.5 3 1.5H12C12.55 1.5 13 1.95 13 2.5V9C13 9.55 12.55 10 12 10H8.5L6 12.5V10H3C2.45 10 2 9.55 2 9V2.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+                      <line x1="4.5" y1="4.5" x2="10.5" y2="4.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+                      <line x1="4.5" y1="6.75" x2="8.5" y2="6.75" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+                    </svg>
                     Copilot
                   </button>
 
@@ -760,7 +812,7 @@ export default function App(props: any) {
                       style={{ fontSize: 11, display: "flex", alignItems: "center", gap: 6 }}
                     >
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
-                        <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M7.5 2L3.5 6L7.5 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       Back
                     </button>
@@ -800,8 +852,8 @@ export default function App(props: any) {
                     >
                       {/* Premium person/user icon */}
                       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                        <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
-                        <path d="M1.5 12.5C1.5 10.015 4.015 8 7 8C9.985 8 12.5 10.015 12.5 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                        <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.3" />
+                        <path d="M1.5 12.5C1.5 10.015 4.015 8 7 8C9.985 8 12.5 10.015 12.5 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
                       </svg>
                       {!panelOpen && "Client"}
                       {panelOpen && <span style={{ fontSize: 11, letterSpacing: '0.03em' }}>Client</span>}
@@ -836,13 +888,13 @@ export default function App(props: any) {
                         <SectionTrends theme={theme} onAskAI={handleAskAI} />
                       </SectionShell>
 
-                        <SectionShell
-                          id="lift" title="Lift & Forecast Lab" icon="⇡"
-                          summary="Upload CSV or run demo for lift + causal forecast"
-                          badge="Demo"
-                        >
-                          <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
-                        </SectionShell>
+                      <SectionShell
+                        id="lift" title="Lift & Forecast Lab" icon="⇡"
+                        summary="Upload CSV or run demo for lift + causal forecast"
+                        badge="Demo"
+                      >
+                        <SectionLiftLab theme={theme} onAskAI={handleAskAI} />
+                      </SectionShell>
 
                       <SectionShell
                         id="multidim" title="Multi-Dimensional Analysis" icon="⬡"

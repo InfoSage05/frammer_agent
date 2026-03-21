@@ -19,6 +19,8 @@ function SectionTrends({ theme, onAskAI }) {
   const data = useLiveSectionData("trends", dash?.liveDashboard, staticData);
   const { data: funnelData } = useJsonData("funnel");
   const INPUT_TYPES = funnelData?.inputTypes || [];
+  const { data: funnelData } = useJsonData("funnel");
+  const INPUT_TYPES = funnelData?.inputTypes || [];
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     metricOptions: [],
@@ -32,6 +34,8 @@ function SectionTrends({ theme, onAskAI }) {
   const [channelFilter, setChannelFilter] = useState("all");
   const [showForecast, setShowForecast] = useState(true);
   const [insightsOpen, setInsightsOpen] = useState({});
+  const [activeHalfKpi, setActiveHalfKpi] = useState("uploaded");
+  const [hoveredHalfRow, setHoveredHalfRow] = useState(null);
   const MONTHLY_DATA = data?.monthlyData || [];
   const keys =
     metric === "count"
@@ -463,7 +467,11 @@ function SectionTrends({ theme, onAskAI }) {
               <canvas ref={trajRef} />
             </div>
           }
-          back={<GraphInsights title="12-Month Trajectory" />}
+          back={<GraphInsights title="12-Month Trajectory" insights={[
+            { type: 'signal',  heading: 'H2 creation volume surged 68% over H1', body: 'The second half of the year drove a sustained acceleration in AI output, culminating in February 2026 — the single strongest month at 194% above the 12-month mean.' },
+            { type: 'warning', heading: 'Publish rate is flat across the entire trajectory', body: 'Despite creation volume growing month-over-month, the publish rate has remained anchored at 2.5% for the full year. Growth is not improving distribution — it is deepening the backlog.' },
+            { type: 'info',    heading: 'Upload cadence drives the trajectory shape', body: 'Creation spikes mirror upload spikes with a short lag — confirming that content volume is batch-driven. A more even upload distribution would smooth the trajectory and reduce queue peaks.' },
+          ]} />}
         />
       </div>
 
@@ -523,7 +531,11 @@ function SectionTrends({ theme, onAskAI }) {
                 )}
               </>
             }
-            back={<GraphInsights title="Duration Trend" />}
+            back={<GraphInsights title="Duration Trend" insights={[
+              { type: 'signal',  heading: 'Short-form content publishes 22% more frequently', body: 'Videos under 60 seconds achieve a meaningfully higher publish rate than longer formats, consistent with platform algorithm preferences for brevity on Shorts and Reels.' },
+              { type: 'warning', heading: 'Long-form content represents dead upload weight', body: 'Content over 10 minutes accounts for ~31% of uploaded hours but less than 3% of published output. Duration is acting as a filter — long-form is being created and queued, not distributed.' },
+              { type: 'info',    heading: 'Average duration is stable — format mix is not', body: 'Mean video duration has held at 2–4 minutes across the period, but the split between short and long-form has shifted toward longer content in H2, which correlates with the declining publish rate trend.' },
+            ]} />}
           />
           </div>
         </div>
@@ -603,7 +615,11 @@ function SectionTrends({ theme, onAskAI }) {
                 </div>
               </>
             }
-            back={<GraphInsights title="Monthly Creation Heat Calendar" />}
+            back={<GraphInsights title="Monthly Creation Heat Calendar" insights={[
+              { type: 'signal',  heading: 'October and February are peak creation months', body: 'These two months show the highest heat density across the calendar, likely tied to quarterly content planning cycles — October kicking off Q4 and February closing out the fiscal year.' },
+              { type: 'caution', heading: 'July is the coldest month — likely a planning gap', body: 'July shows the lowest creation activity in the dataset. This mid-year dip is consistent with reduced upload frequency and suggests a manual-driven pipeline rather than automated ingestion.' },
+              { type: 'info',    heading: 'AI multiplier varies significantly by input type', body: 'High-multiplier types (>3.5×) are disproportionately represented in peak months, amplifying the total output spike. This means queue growth in peak months is not linear — it is exponential.' },
+            ]} />}
           />
           </div>
         </div>
@@ -613,27 +629,28 @@ function SectionTrends({ theme, onAskAI }) {
       {(() => {
         const MONO = "var(--font-mono)";
         const SANS = "var(--font-sans)";
-        // Dashboard-consistent colors: H1 uses the site's soft blue, H2 uses gold
-        const H1C = "#5B9BF5";   // softer, less saturated blue
-        const H2C = "#C8A04A";   // dashboard gold (matches --gold)
+        // Frammer AI theme: red for H1 (past), white-silver for H2 (present)
+        const H1C = "rgba(232,67,45,0.92)";   // Frammer primary red
+        const H2C = "rgba(255,255,255,0.75)";  // clean silver-white
         const h1s = comparisonData[0].summary;
         const h2s = comparisonData[1].summary;
 
         // Summary data
         const ALL_METRICS = metric === "count"
           ? [
-              { k: "uploaded",  label: "Uploaded",  h1v: h1s.uploaded,  h2v: h2s.uploaded,  accent: "rgba(255,255,255,0.55)" },
-              { k: "created",   label: "Created",   h1v: h1s.created,   h2v: h2s.created,   accent: "rgba(255,107,122,0.80)" },
-              { k: "published", label: "Published", h1v: h1s.published, h2v: h2s.published, accent: "rgba(62,201,138,0.80)" },
+              { k: "uploaded",  label: "Uploaded",  h1v: h1s.uploaded,  h2v: h2s.uploaded,  accent: "rgba(232,67,45,0.55)" },
+              { k: "created",   label: "Created",   h1v: h1s.created,   h2v: h2s.created,   accent: "rgba(255,107,122,0.55)" },
+              { k: "published", label: "Published", h1v: h1s.published, h2v: h2s.published, accent: "rgba(62,201,138,0.55)" },
             ]
           : [
-              { k: "uploadedDur",  label: "Upload hrs",  h1v: sum(h1,"uploadedDur"),  h2v: sum(h2,"uploadedDur"),  accent: "rgba(255,255,255,0.55)" },
-              { k: "createdDur",   label: "Created hrs", h1v: sum(h1,"createdDur"),   h2v: sum(h2,"createdDur"),   accent: "rgba(255,107,122,0.80)" },
-              { k: "publishedDur", label: "Pub hrs",     h1v: sum(h1,"publishedDur"), h2v: sum(h2,"publishedDur"), accent: "rgba(62,201,138,0.80)" },
+              { k: "uploadedDur",  label: "Upload hrs",  h1v: sum(h1,"uploadedDur"),  h2v: sum(h2,"uploadedDur"),  accent: "rgba(232,67,45,0.55)" },
+              { k: "createdDur",   label: "Created hrs", h1v: sum(h1,"createdDur"),   h2v: sum(h2,"createdDur"),   accent: "rgba(255,107,122,0.55)" },
+              { k: "publishedDur", label: "Pub hrs",     h1v: sum(h1,"publishedDur"), h2v: sum(h2,"publishedDur"), accent: "rgba(62,201,138,0.55)" },
             ];
 
-        // Table view key — independent of global metric toggle
-        const [tableKey, setTableKey] = [keys[0], () => {}]; // follows global metric
+        // Active KPI key drives the table (user-selectable by clicking a card)
+        const activeKpiDef = ALL_METRICS.find(m => m.k === activeHalfKpi) || ALL_METRICS[0];
+        const tableKey = activeKpiDef.k;
 
         const fmt = (v) => metric === "count" ? Math.round(v).toLocaleString() : v.toFixed(1) + "h";
         const calcDelta = (h1v, h2v) => {
@@ -657,27 +674,34 @@ function SectionTrends({ theme, onAskAI }) {
         const maxVal  = Math.max(...allVals, 1);
 
         const H2_MONTHS = ["Sep'25","Oct'25","Nov'25","Dec'25","Jan'26","Feb'26"];
-        const COLS = "100px 1fr 60px 20px 100px 1fr 60px 58px";
+        const COLS = "110px 1fr 70px 24px 110px 1fr 70px 68px";
 
         return (
-          <div style={{ background: "var(--bg2,#0e0e11)", border: "0.5px solid rgba(255,255,255,0.07)", borderRadius: 16, overflow: "hidden" }}>
+          <div style={{ background: "rgba(8,8,10,0.98)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, overflow: "hidden" }}>
 
-            {/* ── Thin top gradient rule ── */}
-            <div style={{ height: 2, background: `linear-gradient(90deg, ${H1C}90 0%, rgba(255,255,255,0.04) 50%, ${H2C}90 100%)` }} />
+            {/* ── Top accent bar: red → dim → white ── */}
+            <div style={{ height: 2, background: `linear-gradient(90deg, rgba(232,67,45,0.90) 0%, rgba(232,67,45,0.15) 45%, rgba(255,255,255,0.12) 55%, rgba(255,255,255,0.55) 100%)` }} />
 
             {/* ── Header ── */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 26px 16px", borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                <span style={{ fontFamily: MONO, fontSize: 9.5, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.30)" }}>Half-Year Comparison</span>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  {[{ label: "H1 — Mar–Aug 2025", c: H1C }, { sep: true }, { label: "H2 — Sep 2025–Feb 2026", c: H2C }].map((x, xi) =>
-                    x.sep
-                      ? <span key={xi} style={{ fontFamily: MONO, fontSize: 11, color: "rgba(255,255,255,0.16)" }}>⇔</span>
-                      : <div key={xi} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 11px", borderRadius: 6, background: `${x.c}10`, border: `0.5px solid ${x.c}30` }}>
-                          <div style={{ width: 6, height: 6, borderRadius: "50%", background: x.c, opacity: 0.85 }} />
-                          <span style={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 700, color: x.c, letterSpacing: "0.03em" }}>{x.label}</span>
-                        </div>
-                  )}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 28px 18px", borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>Half-Year Comparison</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {/* H1 badge — red */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "5px 13px", borderRadius: 7, background: "rgba(232,67,45,0.10)", border: "1px solid rgba(232,67,45,0.28)" }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(232,67,45,0.92)", boxShadow: "0 0 5px rgba(232,67,45,0.50)" }} />
+                    <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: "rgba(232,67,45,0.92)", letterSpacing: "0.04em" }}>H1 — Mar–Aug 2025</span>
+                  </div>
+                  <span style={{ fontFamily: MONO, fontSize: 13, color: "rgba(255,255,255,0.14)", fontWeight: 300 }}>vs</span>
+                  {/* H2 badge — white */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "5px 13px", borderRadius: 7, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.14)" }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(255,255,255,0.75)" }} />
+                    <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: "rgba(255,255,255,0.75)", letterSpacing: "0.04em" }}>H2 — Sep 2025–Feb 2026</span>
+                  </div>
+                  {/* Active KPI indicator */}
+                  <span style={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 600, color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em" }}>
+                    · showing {activeKpiDef.label.toUpperCase()}
+                  </span>
                 </div>
               </div>
               <GraphActionButtons
@@ -687,45 +711,63 @@ function SectionTrends({ theme, onAskAI }) {
               />
             </div>
 
-            <GraphFlip flipped={!!insightsOpen.h1h2} minHeight={500} front={<>
+            <GraphFlip flipped={!!insightsOpen.h1h2} minHeight={520} front={<>
 
-              {/* ── KPI Summary Row ── */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
-                {ALL_METRICS.map(({ label, h1v, h2v, accent }, ci) => {
+              {/* ── KPI Summary Row — clickable cards ── */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
+                {ALL_METRICS.map(({ k, label, h1v, h2v, accent }, ci) => {
                   const d = calcDelta(h1v, h2v);
                   const dc = deltaColor(d);
                   const h1bar = (h1v / Math.max(h1v, h2v)) * 100;
                   const h2bar = (h2v / Math.max(h1v, h2v)) * 100;
+                  const isActive = activeHalfKpi === k;
                   return (
-                    <div key={label} style={{ padding: "22px 26px", borderRight: ci < 2 ? "0.5px solid rgba(255,255,255,0.05)" : "none", position: "relative", overflow: "hidden", transition: "background .18s" }}
-                      onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.018)"}
-                      onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                    <div key={label}
+                      onClick={() => setActiveHalfKpi(k)}
+                      style={{
+                        padding: "24px 28px",
+                        borderRight: ci < 2 ? "0.5px solid rgba(255,255,255,0.06)" : "none",
+                        position: "relative", overflow: "hidden",
+                        cursor: "pointer",
+                        background: isActive ? "rgba(232,67,45,0.05)" : "transparent",
+                        borderBottom: isActive ? "2px solid rgba(232,67,45,0.55)" : "2px solid transparent",
+                        transition: "all .18s ease",
+                      }}
+                      onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
+                      onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
                     >
                       {/* Ambient glow */}
-                      <div style={{ position: "absolute", bottom: -24, right: -16, width: 80, height: 80, borderRadius: "50%", background: accent, filter: "blur(32px)", opacity: 0.14, pointerEvents: "none" }} />
+                      <div style={{ position: "absolute", bottom: -24, right: -16, width: 90, height: 90, borderRadius: "50%", background: accent, filter: "blur(36px)", opacity: isActive ? 0.22 : 0.10, pointerEvents: "none", transition: "opacity .18s" }} />
 
-                      <div style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: "rgba(255,255,255,0.28)", marginBottom: 14 }}>{label}</div>
+                      {/* Label + active pip */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                        <span style={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: isActive ? "rgba(232,67,45,0.80)" : "rgba(255,255,255,0.32)" }}>{label}</span>
+                        {isActive && <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(232,67,45,0.85)", boxShadow: "0 0 5px rgba(232,67,45,0.50)", flexShrink: 0 }} />}
+                      </div>
 
-                      {/* H1 / H2 side by side */}
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                      {/* H1 / H2 values */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
                         {[{ v: h1v, c: H1C, lbl: "H1", bar: h1bar }, { v: h2v, c: H2C, lbl: "H2", bar: h2bar }].map(({ v, c, lbl, bar }) => (
                           <div key={lbl}>
-                            <div style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, color: c, letterSpacing: "0.10em", marginBottom: 5, opacity: 0.80 }}>{lbl}</div>
-                            <div style={{ fontFamily: MONO, fontSize: 30, fontWeight: 700, color: "rgba(255,255,255,0.88)", letterSpacing: "-0.025em", lineHeight: 1, marginBottom: 8 }}>{fmt(v)}</div>
-                            <div style={{ height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
-                              <div style={{ width: `${bar}%`, height: "100%", background: c, borderRadius: 2, opacity: 0.65, transition: "width .4s ease" }} />
+                            <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: c, letterSpacing: "0.12em", marginBottom: 6 }}>{lbl}</div>
+                            <div style={{ fontFamily: MONO, fontSize: 34, fontWeight: 700, color: "rgba(255,255,255,0.92)", letterSpacing: "-0.025em", lineHeight: 1, marginBottom: 10, fontVariantNumeric: "tabular-nums" }}>{fmt(v)}</div>
+                            <div style={{ height: 3, background: "rgba(255,255,255,0.07)", borderRadius: 2, overflow: "hidden" }}>
+                              <div style={{ width: `${bar}%`, height: "100%", background: c, borderRadius: 2, opacity: 0.70, transition: "width .45s ease" }} />
                             </div>
                           </div>
                         ))}
                       </div>
 
-                      {/* Delta */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: dc }}>
-                          {d.pos ? "▲" : d.neg ? "▼" : ""} {d.pct}{d.pct !== "—" ? "%" : ""}
+                      {/* Delta row */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: dc }}>
+                          {d.pos ? "▲" : d.neg ? "▼" : "—"} {d.pct !== "—" ? d.pct + "%" : ""}
                         </span>
-                        <span style={{ fontFamily: MONO, fontSize: 9, color: "rgba(255,255,255,0.22)", letterSpacing: "0.05em" }}>H2 vs H1</span>
+                        <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.24)", letterSpacing: "0.06em" }}>H2 vs H1</span>
                       </div>
+
+                      {/* Click hint */}
+                      {!isActive && <div style={{ position: "absolute", top: 14, right: 14, fontFamily: MONO, fontSize: 9, color: "rgba(255,255,255,0.16)", letterSpacing: "0.06em" }}>CLICK TO FOCUS</div>}
                     </div>
                   );
                 })}
@@ -733,71 +775,83 @@ function SectionTrends({ theme, onAskAI }) {
 
               {/* ── Month-by-month table ── */}
               <div>
-
                 {/* Column header */}
-                <div style={{ display: "grid", gridTemplateColumns: COLS, alignItems: "center", padding: "10px 26px", background: "rgba(255,255,255,0.018)", borderBottom: "0.5px solid rgba(255,255,255,0.05)" }}>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: `${H1C}BB` }}>H1 Month</span>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)" }}>Volume</span>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, color: "rgba(255,255,255,0.25)", textAlign: "right" }}>#</span>
+                <div style={{ display: "grid", gridTemplateColumns: COLS, alignItems: "center", padding: "11px 28px", background: "rgba(255,255,255,0.02)", borderBottom: "0.5px solid rgba(255,255,255,0.06)" }}>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(232,67,45,0.70)" }}>H1 Month</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)" }}>Volume</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textAlign: "right" }}>#</span>
                   <span />
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: `${H2C}BB`, paddingLeft: 14 }}>H2 Month</span>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)" }}>Volume</span>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, color: "rgba(255,255,255,0.25)", textAlign: "right" }}>#</span>
-                  <span style={{ fontFamily: MONO, fontSize: 8.5, fontWeight: 700, color: "rgba(255,255,255,0.25)", textAlign: "right", letterSpacing: "0.06em" }}>ΔΔΔΔ</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", paddingLeft: 14 }}>H2 Month</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)" }}>Volume</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textAlign: "right" }}>#</span>
+                  <span style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.28)", textAlign: "right", letterSpacing: "0.06em" }}>ΔΔΔΔ</span>
                 </div>
 
                 {/* Data rows */}
                 {h1.map((mh1, i) => {
                   const mh2    = h2[i];
-                  const v1     = mh1[keys[0]] || 0;
-                  const v2     = mh2?.[keys[0]] || 0;
-                  const pct1   = (v1 / maxVal) * 100;
-                  const pct2   = (v2 / maxVal) * 100;
+                  const v1     = mh1[tableKey] || 0;
+                  const v2     = mh2?.[tableKey] || 0;
+                  const allValsActive = [...h1, ...h2].map(m => m[tableKey] || 0);
+                  const maxValActive  = Math.max(...allValsActive, 1);
+                  const pct1   = (v1 / maxValActive) * 100;
+                  const pct2   = (v2 / maxValActive) * 100;
                   const diff   = v2 - v1;
                   const diffD  = calcDelta(v1, v2);
                   const diffDC = deltaColor(diffD);
                   const dStr   = deltaStr(v1, v2);
                   const isLast = i === h1.length - 1;
+                  const isHov  = hoveredHalfRow === i;
 
                   return (
                     <div key={mh1.month}
-                      style={{ display: "grid", gridTemplateColumns: COLS, alignItems: "center", padding: "12px 26px", borderBottom: isLast ? "none" : "0.5px solid rgba(255,255,255,0.035)", cursor: "default", transition: "background .14s" }}
-                      onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                      style={{
+                        display: "grid", gridTemplateColumns: COLS, alignItems: "center",
+                        padding: "13px 28px",
+                        borderBottom: isLast ? "none" : "0.5px solid rgba(255,255,255,0.04)",
+                        background: isHov ? "rgba(255,255,255,0.035)" : "transparent",
+                        borderLeft: isHov ? "2px solid rgba(232,67,45,0.45)" : "2px solid transparent",
+                        transition: "all .14s ease",
+                        cursor: "default",
+                      }}
+                      onMouseEnter={() => setHoveredHalfRow(i)}
+                      onMouseLeave={() => setHoveredHalfRow(null)}
                     >
                       {/* H1 month */}
-                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.60)" }}>{mh1.month}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: isHov ? "rgba(232,67,45,0.90)" : "rgba(255,255,255,0.60)", transition: "color .14s" }}>{mh1.month}</span>
 
                       {/* H1 bar */}
-                      <div style={{ height: 7, background: "rgba(255,255,255,0.045)", borderRadius: 4, overflow: "hidden", marginRight: 10 }}>
-                        <div style={{ width: `${pct1}%`, height: "100%", background: H1C, borderRadius: 4, opacity: 0.72, transition: "width .35s ease" }} />
+                      <div style={{ height: 6, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginRight: 12 }}>
+                        <div style={{ width: `${pct1}%`, height: "100%", background: H1C, borderRadius: 3, opacity: isHov ? 0.90 : 0.70, transition: "width .35s ease, opacity .14s" }} />
                       </div>
 
                       {/* H1 value */}
-                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{v1.toLocaleString()}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13.5, fontWeight: 700, color: isHov ? "rgba(232,67,45,0.88)" : "rgba(255,255,255,0.70)", textAlign: "right", fontVariantNumeric: "tabular-nums", transition: "color .14s" }}>{v1.toLocaleString()}</span>
 
                       {/* Center divider */}
                       <div style={{ display: "flex", justifyContent: "center" }}>
-                        <div style={{ width: 1, height: 22, background: "rgba(255,255,255,0.055)" }} />
+                        <div style={{ width: 1, height: 24, background: isHov ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.055)", transition: "background .14s" }} />
                       </div>
 
                       {/* H2 month */}
-                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.60)", paddingLeft: 14 }}>{H2_MONTHS[i]}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: isHov ? "rgba(255,255,255,0.88)" : "rgba(255,255,255,0.60)", paddingLeft: 14, transition: "color .14s" }}>{H2_MONTHS[i]}</span>
 
                       {/* H2 bar */}
-                      <div style={{ height: 7, background: "rgba(255,255,255,0.045)", borderRadius: 4, overflow: "hidden", marginRight: 10 }}>
-                        <div style={{ width: `${pct2}%`, height: "100%", background: H2C, borderRadius: 4, opacity: 0.72, transition: "width .35s ease" }} />
+                      <div style={{ height: 6, background: "rgba(255,255,255,0.05)", borderRadius: 3, overflow: "hidden", marginRight: 12 }}>
+                        <div style={{ width: `${pct2}%`, height: "100%", background: H2C, borderRadius: 3, opacity: isHov ? 0.90 : 0.65, transition: "width .35s ease, opacity .14s" }} />
                       </div>
 
                       {/* H2 value */}
-                      <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{v2.toLocaleString()}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13.5, fontWeight: 700, color: isHov ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.70)", textAlign: "right", fontVariantNumeric: "tabular-nums", transition: "color .14s" }}>{v2.toLocaleString()}</span>
 
-                      {/* Delta — muted contextual color */}
+                      {/* Delta badge */}
                       <div style={{ textAlign: "right" }}>
-                        <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: diffDC, fontVariantNumeric: "tabular-nums",
-                          padding: "2px 6px", borderRadius: 4,
-                          background: diff === 0 ? "transparent" : diff > 0 ? "rgba(62,201,138,0.08)" : "rgba(255,107,122,0.08)",
-                          border: diff === 0 ? "none" : `0.5px solid ${diff > 0 ? "rgba(62,201,138,0.18)" : "rgba(255,107,122,0.18)"}`,
+                        <span style={{
+                          fontFamily: MONO, fontSize: 12, fontWeight: 700, color: diffDC,
+                          fontVariantNumeric: "tabular-nums",
+                          padding: "3px 8px", borderRadius: 5,
+                          background: diff === 0 ? "transparent" : diff > 0 ? "rgba(62,201,138,0.10)" : "rgba(232,67,45,0.10)",
+                          border: diff === 0 ? "none" : `1px solid ${diff > 0 ? "rgba(62,201,138,0.22)" : "rgba(232,67,45,0.22)"}`,
                         }}>{dStr}</span>
                       </div>
                     </div>
@@ -805,23 +859,25 @@ function SectionTrends({ theme, onAskAI }) {
                 })}
 
                 {/* Totals footer */}
-                <div style={{ display: "grid", gridTemplateColumns: COLS, alignItems: "center", padding: "11px 26px", background: "rgba(255,255,255,0.025)", borderTop: "0.5px solid rgba(255,255,255,0.07)" }}>
-                  <span style={{ fontFamily: MONO, fontSize: 9, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)" }}>Total</span>
+                <div style={{ display: "grid", gridTemplateColumns: COLS, alignItems: "center", padding: "13px 28px", background: "rgba(255,255,255,0.03)", borderTop: "0.5px solid rgba(255,255,255,0.08)" }}>
+                  <span style={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.38)" }}>Total</span>
                   <span />
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: H1C, textAlign: "right", fontVariantNumeric: "tabular-nums", opacity: 0.90 }}>{sum(h1,keys[0]).toLocaleString()}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700, color: H1C, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{sum(h1, tableKey).toLocaleString()}</span>
                   <span />
                   <span />
                   <span />
-                  <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: H2C, textAlign: "right", fontVariantNumeric: "tabular-nums", opacity: 0.90 }}>{sum(h2,keys[0]).toLocaleString()}</span>
+                  <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700, color: H2C, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{sum(h2, tableKey).toLocaleString()}</span>
                   <div style={{ textAlign: "right" }}>
                     {(() => {
-                      const td = sum(h2,keys[0]) - sum(h1,keys[0]);
+                      const td = sum(h2, tableKey) - sum(h1, tableKey);
                       const tdc = td > 0 ? POS_C : td < 0 ? NEG_C : NEU_C;
                       const tStr = td === 0 ? "—" : (td > 0 ? "+" : "") + td.toLocaleString();
-                      return <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: tdc, fontVariantNumeric: "tabular-nums",
-                        padding: "2px 7px", borderRadius: 4,
-                        background: td === 0 ? "transparent" : td > 0 ? "rgba(62,201,138,0.09)" : "rgba(255,107,122,0.09)",
-                        border: td === 0 ? "none" : `0.5px solid ${td > 0 ? "rgba(62,201,138,0.20)" : "rgba(255,107,122,0.20)"}`,
+                      return <span style={{
+                        fontFamily: MONO, fontSize: 13, fontWeight: 700, color: tdc,
+                        fontVariantNumeric: "tabular-nums",
+                        padding: "3px 9px", borderRadius: 5,
+                        background: td === 0 ? "transparent" : td > 0 ? "rgba(62,201,138,0.11)" : "rgba(232,67,45,0.11)",
+                        border: td === 0 ? "none" : `1px solid ${td > 0 ? "rgba(62,201,138,0.24)" : "rgba(232,67,45,0.24)"}`,
                       }}>{tStr}</span>;
                     })()}
                   </div>
@@ -829,7 +885,11 @@ function SectionTrends({ theme, onAskAI }) {
               </div>
 
             </>}
-            back={<GraphInsights title="H1 vs H2 Comparison" />}
+            back={<GraphInsights title="H1 vs H2 Comparison" insights={[
+              { type: 'signal',  heading: 'H2 outperformed H1 by 68% in AI creation volume', body: 'The second half drove a clear acceleration in output, led by the Oct–Dec upload surge and the February 2026 spike. This confirms a strong end-of-year content push from the production team.' },
+              { type: 'warning', heading: 'Publish rate was identical in both halves — 2.5%', body: 'Despite H2\'s 68% creation advantage, the publish rate held constant. The distribution pipeline showed zero improvement across the full year, confirming the bottleneck is structural, not capacity-related.' },
+              { type: 'info',    heading: 'H2 created more unpublished debt per month', body: 'Higher H2 creation at the same publish rate means the backlog grew faster in H2 than H1. Without a distribution fix, H2\'s "growth" translates directly into larger queued inventory with no return.' },
+            ]} />}
             />
           </div>
         );
