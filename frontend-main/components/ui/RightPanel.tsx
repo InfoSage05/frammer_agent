@@ -335,7 +335,8 @@ function ViewsTab({ dash }: any) {
   );
 }
 
-function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessionId, onSessionId }: any) {
+function CopilotTab({ dash, attachedData, onRemoveData }: any) {
+  /* ── State ── */
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -344,39 +345,33 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionIdLocal] = useState<string | null>(externalSessionId || null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [chatMode, setChatMode] = useState<'auto' | 'explain' | 'kpi' | 'analytics'>('auto');
+  const [modeDropdownOpen, setModeDropdownOpen] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
-  // Sync external session ID
-  useEffect(() => {
-    if (externalSessionId && externalSessionId !== sessionId) {
-      setSessionIdLocal(externalSessionId);
-    }
-  }, [externalSessionId]);
+  const CHAT_MODES = [
+    { id: 'auto'      as const, label: 'Auto',      desc: 'Let AI pick the best approach', icon: '⊹' },
+    { id: 'explain'   as const, label: 'Explain',   desc: 'Narrative explanations',         icon: '◈' },
+    { id: 'kpi'       as const, label: 'KPI',       desc: 'Metric & KPI focused answers',   icon: '⌇' },
+    { id: 'analytics' as const, label: 'Analytics', desc: 'Deep data analysis',             icon: '⬡' },
+  ];
 
-  const setSessionId = (id: string | null) => {
-    setSessionIdLocal(id);
-    if (onSessionId) onSessionId(id);
-  };
+  const QUICK_PROMPTS = [
+    { label: 'What is the overall publish rate?',   icon: '⌇' },
+    { label: 'Channels with highest volume',         icon: '◈' },
+    { label: 'Show me monthly trend breakdown',      icon: '⬡' },
+  ];
 
   const sel = dash?.selectedCtx || {};
   const hasContext = sel.channel || sel.month || sel.language || sel.user;
   const sources = Array.isArray(attachedData) ? attachedData : [];
+  const currentMode = CHAT_MODES.find(m => m.id === chatMode)!;
+  const isOnlyWelcome = messages.length <= 1;
 
-  const QUICK_PROMPTS = [
-    'What is the overall publish rate?',
-    'Which channels have the highest volume?',
-    'Show me monthly trends',
-  ];
-
+  /* ── Handlers ── */
   const resetMessages = () => {
-    setMessages([
-      {
-        role: 'assistant',
-        text: "Chat cleared. Ask me anything about the dashboard data.",
-      },
-    ]);
+    setMessages([{ role: 'assistant', text: 'Chat cleared. Ask me anything about the dashboard data.' }]);
     setSessionId(null);
   };
 
@@ -386,34 +381,20 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setInput('');
     setLoading(true);
-
-    // Build context message with attached sources
-    let fullMessage = userMsg;
-    if (sources.length > 0) {
-      const ctx = sources.map((s: any) => `[Attached: ${s.name}] ${JSON.stringify(s.data).substring(0, 800)}`).join('\n');
-      fullMessage = `${ctx}\n\nQuestion: ${userMsg}`;
-    }
-
+    const attachedSources = sources.map((s: any) => ({ name: s.name, data: s.data }));
     try {
-      // Use the API function for chat
-      const chatData = await sendChatMessage(fullMessage, sessionId, chatMode);
+      const chatData = await sendChatMessage(userMsg, sessionId, chatMode);
       setSessionId(chatData.session_id);
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          text: chatData.response || 'No response returned.',
-          artifacts: chatData.artifacts || [],
-        },
-      ]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: chatData.response || 'No response returned.',
+        artifacts: chatData.artifacts || [],
+      }]);
     } catch (e: any) {
-      setMessages(prev => [
-        ...prev,
-        {
-          role: 'assistant',
-          text: `Sorry, I couldn't process your request. ${e?.message ? `Error: ${e.message}` : 'Please make sure the backend server is running on port 8000.'}`,
-        },
-      ]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        text: `Unable to reach the backend. ${e?.message ? `(${e.message})` : 'Make sure the server is running on port 8000.'}`,
+      }]);
     } finally {
       setLoading(false);
     }
@@ -421,57 +402,99 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
 
   useEffect(() => {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  }, [messages]);
+  }, [messages, loading]);
 
+  /* ─────────────────────────────────────────────────
+     RENDER
+  ───────────────────────────────────────────────── */
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: '-16px', overflow: 'hidden' }}>
-      {/* Context capsule — selected filters */}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: '-16px', overflow: 'hidden', background: '#080808' }}>
+
+      {/* ── Keyframes (injected once) ── */}
+      <style>{`
+        @keyframes cop-dot { 0%,80%,100%{opacity:.25;transform:scale(.85)} 40%{opacity:1;transform:scale(1.2)} }
+        @keyframes cop-fadein { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
+
+      {/* ── Context capsule ── */}
       {hasContext && (
-        <div className="cop-ctx-capsule">
-          <span className="cop-ctx-label">Context</span>
-          {sel.channel && <span>Ch-{sel.channel}</span>}
-          {sel.month && <span>{sel.month}</span>}
-          {sel.language && <span>{sel.language}</span>}
-          {sel.user && <span>{sel.user}</span>}
+        <div style={{
+          display:'flex', alignItems:'center', gap:6, flexWrap:'wrap',
+          padding:'8px 16px', borderBottom:'0.5px solid rgba(255,255,255,0.06)',
+          background:'rgba(255,71,87,0.04)', flexShrink:0,
+        }}>
+          <span style={{fontSize:9,fontFamily:'var(--font-mono)',letterSpacing:'0.12em',textTransform:'uppercase',color:'rgba(255,71,87,0.65)',fontWeight:600}}>Context</span>
+          {[
+            sel.channel && `Ch-${sel.channel}`,
+            sel.month, sel.language, sel.user,
+          ].filter(Boolean).map((tag:string) => (
+            <span key={tag} style={{fontSize:11,background:'rgba(255,71,87,0.10)',border:'0.5px solid rgba(255,71,87,0.22)',borderRadius:5,padding:'2px 8px',color:'rgba(255,130,110,0.90)',fontFamily:'var(--font-mono)'}}>
+              {tag}
+            </span>
+          ))}
         </div>
       )}
 
-      <div className="rp-chat-body" ref={chatRef}>
+      {/* ── Chat body ── */}
+      <div ref={chatRef} style={{
+        flex:1, overflowY:'auto', padding:'20px 16px',
+        display:'flex', flexDirection:'column', gap:14,
+        scrollbarWidth:'none',
+      }}>
+
         {messages.map((msg, i) => (
-          <div key={i} className={`chat-msg ${msg.role === 'user' ? 'user' : ''}`}>
-            {msg.role === 'assistant' && <div className="chat-mav">F</div>}
-            <div className="chat-bbl">
-              {msg.text}
+          <div key={i} style={{
+            display:'flex', flexDirection: msg.role==='user' ? 'row-reverse' : 'row',
+            alignItems:'flex-start', gap:10,
+            animation:'cop-fadein 0.22s ease both',
+          }}>
+            {/* Avatar */}
+            {msg.role === 'assistant' ? (
+              <div style={{
+                width:30,height:30,borderRadius:'50%',flexShrink:0,
+                background:'linear-gradient(135deg,#ff4757 0%,#c0392b 100%)',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                fontSize:12,fontWeight:700,color:'#fff',fontFamily:'var(--font-sans)',
+                boxShadow:'0 0 0 1px rgba(255,71,87,0.30),0 4px 12px rgba(255,71,87,0.20)',
+              }}>F</div>
+            ) : (
+              <div style={{
+                width:30,height:30,borderRadius:'50%',flexShrink:0,
+                background:'rgba(255,255,255,0.07)',border:'0.5px solid rgba(255,255,255,0.14)',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                fontSize:11,color:'rgba(255,255,255,0.50)',
+              }}>U</div>
+            )}
+
+            {/* Bubble */}
+            <div style={{
+              maxWidth:'78%',
+              background: msg.role==='user' ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.04)',
+              border: `0.5px solid ${msg.role==='user' ? 'rgba(255,255,255,0.11)' : 'rgba(255,255,255,0.07)'}`,
+              borderRadius: msg.role==='user' ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
+              padding:'11px 14px',
+            }}>
+              <p style={{
+                margin:0, fontSize:13.5, lineHeight:1.65,
+                color: msg.role==='user' ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.75)',
+                fontFamily:'var(--font-sans)', letterSpacing:'-0.01em',
+                whiteSpace:'pre-wrap', wordBreak:'break-word',
+              }}>{msg.text}</p>
+
+              {/* Artifact pills */}
               {Array.isArray(msg.artifacts) && msg.artifacts.length > 0 && (
-                <div style={{ marginTop: 10, display: 'grid', gap: 10 }}>
-                  {msg.artifacts.map((artifact: any, idx: number) => (
-                    <div
-                      key={idx}
-                      style={{
-                        border: '1px solid var(--line)',
-                        borderRadius: 8,
-                        background: 'var(--bg2)',
-                        padding: '10px 10px 8px',
-                      }}
-                    >
-                      {artifact?.title && (
-                        <div
-                          style={{
-                            fontSize: 11,
-                            color: 'var(--ink3)',
-                            marginBottom: 6,
-                            fontFamily: 'var(--font-mono)',
-                          }}
-                        >
-                          {artifact.title}
-                        </div>
-                      )}
-                      {artifact?.type === 'chart' && (
-                        <ChartArtifact artifact={artifact} id={`rp-chart-${i}-${idx}`} />
-                      )}
-                      {artifact?.type === 'table' && (
-                        <TableArtifact artifact={artifact} />
-                      )}
+                <div style={{marginTop:10,display:'flex',flexDirection:'column',gap:5}}>
+                  {msg.artifacts.map((a:any,idx:number)=>(
+                    <div key={idx} style={{
+                      display:'flex',alignItems:'center',gap:7,
+                      padding:'6px 10px',
+                      background:'rgba(255,71,87,0.06)',border:'0.5px solid rgba(255,71,87,0.18)',
+                      borderRadius:7,
+                    }}>
+                      <span style={{fontSize:10,color:'rgba(255,71,87,0.65)'}}>◈</span>
+                      <span style={{fontSize:11,color:'rgba(255,255,255,0.55)',fontFamily:'var(--font-mono)'}}>
+                        {a.type||'artifact'}{a.title?` — ${a.title}`:''}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -480,113 +503,220 @@ function CopilotTab({ dash, attachedData, onRemoveData, sessionId: externalSessi
           </div>
         ))}
 
+        {/* Typing indicator */}
         {loading && (
-          <div className="chat-msg">
-            <div className="chat-mav">F</div>
-            <div className="chat-bbl" style={{ opacity: 0.8 }}>
-              Analyzing...
+          <div style={{display:'flex',alignItems:'flex-start',gap:10,animation:'cop-fadein 0.22s ease both'}}>
+            <div style={{
+              width:30,height:30,borderRadius:'50%',flexShrink:0,
+              background:'linear-gradient(135deg,#ff4757 0%,#c0392b 100%)',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              fontSize:12,fontWeight:700,color:'#fff',
+              boxShadow:'0 0 0 1px rgba(255,71,87,0.30),0 4px 12px rgba(255,71,87,0.20)',
+            }}>F</div>
+            <div style={{
+              background:'rgba(255,255,255,0.04)',border:'0.5px solid rgba(255,255,255,0.07)',
+              borderRadius:'4px 14px 14px 14px',padding:'14px 18px',
+              display:'flex',alignItems:'center',gap:6,
+            }}>
+              {[0,1,2].map(d=>(
+                <div key={d} style={{
+                  width:6,height:6,borderRadius:'50%',
+                  background:'rgba(255,71,87,0.55)',
+                  animation:`cop-dot 1.2s ease-in-out ${d*0.2}s infinite`,
+                }}/>
+              ))}
             </div>
           </div>
         )}
 
-        {messages.length <= 1 && !loading && (
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 8 }}>
-            {QUICK_PROMPTS.map((p) => (
-              <button key={p} className="chat-qp" onClick={() => handleSend(p)}>
-                {p}
+        {/* Suggested prompts (empty state) */}
+        {isOnlyWelcome && !loading && (
+          <div style={{marginTop:6,display:'flex',flexDirection:'column',gap:7}}>
+            <div style={{fontSize:9,fontFamily:'var(--font-mono)',letterSpacing:'0.12em',textTransform:'uppercase',color:'rgba(255,255,255,0.22)',marginBottom:2}}>
+              Suggested
+            </div>
+            {QUICK_PROMPTS.map(p => (
+              <button
+                key={p.label}
+                onClick={() => handleSend(p.label)}
+                style={{
+                  display:'flex',alignItems:'center',gap:10,
+                  width:'100%',padding:'10px 14px',textAlign:'left',
+                  background:'rgba(255,255,255,0.025)',
+                  border:'0.5px solid rgba(255,255,255,0.07)',
+                  borderRadius:10,cursor:'pointer',transition:'all 0.15s',
+                }}
+                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,71,87,0.07)';e.currentTarget.style.borderColor='rgba(255,71,87,0.22)';}}
+                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.025)';e.currentTarget.style.borderColor='rgba(255,255,255,0.07)';}}
+              >
+                <span style={{fontSize:15,flexShrink:0,color:'rgba(255,71,87,0.55)'}}>{p.icon}</span>
+                <span style={{fontSize:13,color:'rgba(255,255,255,0.62)',fontFamily:'var(--font-sans)',letterSpacing:'-0.01em',flex:1}}>{p.label}</span>
+                <span style={{fontSize:15,color:'rgba(255,255,255,0.18)',flexShrink:0}}>›</span>
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Attached graph sources — above textbox */}
+      {/* ── Attached sources strip ── */}
       {sources.length > 0 && (
         <div style={{
-          padding: '6px 14px 0', borderTop: '1px solid var(--line-lt)',
-          display: 'flex', gap: 4, flexWrap: 'wrap', flexShrink: 0,
-          background: 'var(--bg2)',
+          padding:'8px 14px',borderTop:'0.5px solid rgba(255,255,255,0.06)',
+          display:'flex',gap:6,flexWrap:'wrap',alignItems:'center',flexShrink:0,
+          background:'rgba(255,255,255,0.015)',
         }}>
-          {sources.map((source: any) => (
+          <span style={{fontSize:9,fontFamily:'var(--font-mono)',letterSpacing:'0.10em',textTransform:'uppercase',color:'rgba(255,255,255,0.22)',flexShrink:0}}>Sources</span>
+          {sources.map((source:any) => (
             <div key={source.name} style={{
-              display: 'inline-flex', alignItems: 'center', gap: 5,
-              padding: '3px 6px 3px 8px', background: 'var(--pri-dim)',
-              border: '1px solid rgba(255,71,87,0.18)', borderRadius: 20,
-              fontSize: 10, color: 'var(--ink2)',
+              display:'inline-flex',alignItems:'center',gap:5,
+              padding:'3px 7px 3px 9px',
+              background:'rgba(255,71,87,0.07)',border:'0.5px solid rgba(255,71,87,0.20)',
+              borderRadius:20,fontSize:11,color:'rgba(255,155,135,0.90)',
+              fontFamily:'var(--font-sans)',fontWeight:500,
             }}>
-              <span style={{ fontSize: 10, opacity: 0.6 }}>◈</span>
-              <span style={{
-                overflow: 'hidden', textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap', fontFamily: 'var(--font-sans)', fontWeight: 500,
-                maxWidth: 140,
-              }}>
-                {source.name}
-              </span>
+              <span style={{fontSize:10,opacity:0.60}}>◈</span>
+              <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:130}}>{source.name}</span>
               <button
-                onClick={() => onRemoveData?.(source.name)}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  color: 'var(--ink4)', fontSize: 12, lineHeight: 1,
-                  padding: 0, flexShrink: 0, display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                  borderRadius: '50%', width: 16, height: 16,
-                  transition: 'all 0.1s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--dan-lt)'; e.currentTarget.style.background = 'rgba(255,71,87,0.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink4)'; e.currentTarget.style.background = 'none'; }}
+                onClick={()=>onRemoveData?.(source.name)}
+                style={{background:'none',border:'none',cursor:'pointer',color:'rgba(255,155,135,0.50)',fontSize:11,lineHeight:1,padding:0,display:'flex',alignItems:'center',justifyContent:'center',borderRadius:'50%',width:14,height:14,flexShrink:0,transition:'color 0.12s'}}
+                onMouseEnter={e=>{e.currentTarget.style.color='#ff4757';}}
+                onMouseLeave={e=>{e.currentTarget.style.color='rgba(255,155,135,0.50)';}}
                 title={`Remove ${source.name}`}
-              >
-                ✕
-              </button>
+              >✕</button>
             </div>
           ))}
         </div>
       )}
 
-      <div className="rp-chat-foot">
-        <select
-          className="chat-qp"
-          style={{
-            marginRight: 6,
-            padding: "6px 10px",
-            borderRadius: 999,
-            background: "var(--bg2)",
-            border: "1px solid var(--line)",
-            color: "var(--ink2)",
-            fontSize: 10,
-            fontFamily: "var(--font-mono)",
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
-            appearance: "none",
-            WebkitAppearance: "none",
-            MozAppearance: "none",
-          }}
-          value={chatMode}
-          onChange={(e) => setChatMode(e.target.value as any)}
-          title="Chat routing mode"
-        >
-          <option value="auto">Auto</option>
-          <option value="explain">Explain</option>
-          <option value="kpi">KPI</option>
-          <option value="analytics">Analytics</option>
-        </select>
-        <button
-          className="chat-qp"
-          style={{ marginRight: 6 }}
-          onClick={resetMessages}
-          title="Clear chat"
-        >
-          Clear
-        </button>
-        <input
-          className="chat-inp"
-          placeholder={sources.length > 0 ? `Ask about ${sources[sources.length - 1].name}...` : "Ask about the data..."}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleSend()}
-        />
-        <button className="chat-send" onClick={() => handleSend()} disabled={loading}>↑</button>
+      {/* ── Footer ── */}
+      <div style={{
+        padding:'10px 12px 14px',flexShrink:0,
+        borderTop:'0.5px solid rgba(255,255,255,0.06)',
+        background:'#080808',
+        display:'flex',flexDirection:'column',gap:9,
+      }}>
+
+        {/* Top row: mode selector + clear */}
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+
+          {/* Mode dropdown trigger */}
+          <div style={{position:'relative'}}>
+            <button
+              onClick={()=>setModeDropdownOpen(v=>!v)}
+              title="Select response mode"
+              style={{
+                display:'flex',alignItems:'center',gap:7,
+                padding:'5px 11px',cursor:'pointer',
+                background: modeDropdownOpen ? 'rgba(255,71,87,0.10)' : 'rgba(255,255,255,0.04)',
+                border:`0.5px solid ${modeDropdownOpen ? 'rgba(255,71,87,0.35)' : 'rgba(255,255,255,0.09)'}`,
+                borderRadius:8,transition:'all 0.14s',
+              }}
+            >
+              <span style={{fontSize:13,color:modeDropdownOpen?'rgba(255,100,80,0.90)':'rgba(255,71,87,0.60)'}}>{currentMode.icon}</span>
+              <span style={{fontSize:11.5,fontWeight:500,color:'rgba(255,255,255,0.68)',fontFamily:'var(--font-sans)',letterSpacing:'-0.01em'}}>{currentMode.label}</span>
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none" style={{opacity:0.40,flexShrink:0,transform:modeDropdownOpen?'rotate(180deg)':'none',transition:'transform 0.15s'}}>
+                <path d="M1 2.5L4 5.5L7 2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+
+            {modeDropdownOpen && (
+              <>
+                <div style={{position:'fixed',inset:0,zIndex:999}} onClick={()=>setModeDropdownOpen(false)}/>
+                <div style={{
+                  position:'absolute',bottom:'calc(100% + 8px)',left:0,zIndex:1000,
+                  background:'#111',border:'0.5px solid rgba(255,255,255,0.10)',
+                  borderRadius:12,padding:'5px',minWidth:202,
+                  boxShadow:'0 20px 60px rgba(0,0,0,0.85)',
+                }}>
+                  {CHAT_MODES.map(mode=>(
+                    <button
+                      key={mode.id}
+                      onClick={()=>{setChatMode(mode.id);setModeDropdownOpen(false);}}
+                      style={{
+                        display:'flex',alignItems:'center',gap:10,
+                        width:'100%',padding:'9px 10px',border:'none',cursor:'pointer',
+                        borderRadius:8,textAlign:'left',transition:'background 0.12s',
+                        background: chatMode===mode.id ? 'rgba(255,71,87,0.10)' : 'transparent',
+                      }}
+                      onMouseEnter={e=>{if(chatMode!==mode.id)e.currentTarget.style.background='rgba(255,255,255,0.05)';}}
+                      onMouseLeave={e=>{e.currentTarget.style.background=chatMode===mode.id?'rgba(255,71,87,0.10)':'transparent';}}
+                    >
+                      <span style={{
+                        width:26,height:26,borderRadius:7,flexShrink:0,
+                        background: chatMode===mode.id ? 'rgba(255,71,87,0.18)' : 'rgba(255,255,255,0.05)',
+                        display:'flex',alignItems:'center',justifyContent:'center',
+                        fontSize:14,color: chatMode===mode.id ? 'rgba(255,100,80,1)' : 'rgba(255,255,255,0.38)',
+                        transition:'all 0.12s',
+                      }}>{mode.icon}</span>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontSize:13,fontWeight: chatMode===mode.id ? 600 : 400,color: chatMode===mode.id ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.68)',fontFamily:'var(--font-sans)',letterSpacing:'-0.01em'}}>
+                          {mode.label}
+                        </div>
+                        <div style={{fontSize:10.5,color:'rgba(255,255,255,0.30)',fontFamily:'var(--font-sans)',marginTop:2}}>
+                          {mode.desc}
+                        </div>
+                      </div>
+                      <span style={{fontSize:12,color:'rgba(255,71,87,0.85)',fontWeight:700,flexShrink:0,opacity:chatMode===mode.id?1:0}}>✓</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Clear */}
+          <button
+            onClick={resetMessages}
+            title="Clear conversation"
+            style={{
+              padding:'5px 12px',cursor:'pointer',
+              background:'rgba(255,255,255,0.04)',border:'0.5px solid rgba(255,255,255,0.09)',
+              borderRadius:8,fontSize:11.5,color:'rgba(255,255,255,0.40)',
+              fontFamily:'var(--font-sans)',transition:'all 0.14s',letterSpacing:'-0.01em',
+            }}
+            onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,0.08)';e.currentTarget.style.color='rgba(255,255,255,0.72)';}}
+            onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,0.04)';e.currentTarget.style.color='rgba(255,255,255,0.40)';}}
+          >Clear</button>
+        </div>
+
+        {/* Input row */}
+        <div style={{position:'relative',display:'flex',alignItems:'center'}}>
+          <input
+            placeholder={sources.length > 0 ? `Ask about "${sources[sources.length-1].name}"…` : 'Ask anything about the data…'}
+            value={input}
+            onChange={e=>setInput(e.target.value)}
+            onKeyDown={e=>e.key==='Enter'&&handleSend()}
+            style={{
+              width:'100%',height:42,padding:'0 48px 0 14px',
+              background:'rgba(255,255,255,0.05)',border:'0.5px solid rgba(255,255,255,0.10)',
+              borderRadius:11,fontSize:13.5,color:'rgba(255,255,255,0.85)',
+              fontFamily:'var(--font-sans)',letterSpacing:'-0.01em',outline:'none',
+              transition:'border-color 0.15s,background 0.15s',
+              boxSizing:'border-box',
+            }}
+            onFocus={e=>{e.currentTarget.style.borderColor='rgba(255,71,87,0.45)';e.currentTarget.style.background='rgba(255,255,255,0.07)';}}
+            onBlur={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.10)';e.currentTarget.style.background='rgba(255,255,255,0.05)';}}
+          />
+          <button
+            onClick={()=>handleSend()}
+            disabled={loading||!input.trim()}
+            style={{
+              position:'absolute',right:7,top:'50%',transform:'translateY(-50%)',
+              width:30,height:30,borderRadius:9,border:'none',
+              cursor: loading||!input.trim() ? 'default' : 'pointer',
+              background: loading||!input.trim() ? 'rgba(255,255,255,0.06)' : 'linear-gradient(135deg,#ff4757,#c0392b)',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              transition:'all 0.15s',flexShrink:0,
+              boxShadow: !loading&&input.trim() ? '0 2px 14px rgba(255,71,87,0.40)' : 'none',
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{opacity:loading||!input.trim()?0.28:1,transition:'opacity 0.15s'}}>
+              <path d="M6.5 11V2M6.5 2L3 5.5M6.5 2L10 5.5" stroke="white" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );
 }
+

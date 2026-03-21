@@ -634,11 +634,14 @@ export default function App(props: any) {
                 <div style={{
                   position: "absolute", left: "50%", transform: "translateX(-50%)",
                   display: "flex", alignItems: "center", pointerEvents: "all", zIndex: 5,
+                  /* clamp so it never visually overlaps left pill or right buttons */
+                  maxWidth: panelOpen ? 280 : 360,
+                  transition: "max-width 0.20s ease",
                 }}>
                   <div
                     className="cmd-trigger"
                     onClick={() => setCmdOpen(true)}
-                    style={{ width: 360, justifyContent: "flex-start" }}
+                    style={{ width: panelOpen ? 280 : 360, justifyContent: "flex-start", transition: "width 0.20s ease" }}
                   >
                     <span style={{ fontSize: 15, opacity: 0.45, flexShrink: 0, lineHeight: 1 }}>⌕</span>
                     <span className="cmd-trigger-text" style={{ flex: 1, textAlign: "left" }}>Search anything…</span>
@@ -648,13 +651,13 @@ export default function App(props: any) {
 
                 {/* Right — actions */}
                 <div className="topbar-right">
-                  {/* Upload CSV */}
+                  {/* Upload CSV — collapses to icon-only when panel is open */}
                   <button
                     onClick={() => {}}
                     title="Upload CSV data"
                     style={{
-                      display: "flex", alignItems: "center", gap: 7,
-                      padding: "0 14px", height: 32,
+                      display: "flex", alignItems: "center", gap: panelOpen ? 0 : 7,
+                      padding: panelOpen ? "0 9px" : "0 14px", height: 32,
                       background: "rgba(24,167,104,0.12)",
                       border: "1px solid rgba(24,167,104,0.40)",
                       borderRadius: 8,
@@ -665,8 +668,9 @@ export default function App(props: any) {
                       color: "#3EC98A",
                       cursor: "pointer",
                       flexShrink: 0,
-                      transition: "all 0.15s",
+                      transition: "all 0.20s ease",
                       whiteSpace: "nowrap",
+                      overflow: "hidden",
                     }}
                     onMouseEnter={e => {
                       e.currentTarget.style.background = "rgba(24,167,104,0.22)";
@@ -686,28 +690,41 @@ export default function App(props: any) {
                       <line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                       <line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
                     </svg>
-                    Upload CSV
+                    <span style={{
+                      maxWidth: panelOpen ? 0 : 80,
+                      overflow: "hidden",
+                      opacity: panelOpen ? 0 : 1,
+                      marginLeft: panelOpen ? 0 : undefined,
+                      transition: "max-width 0.20s ease, opacity 0.15s ease",
+                      whiteSpace: "nowrap",
+                    }}>Upload CSV</span>
                   </button>
 
                   {/* Divider */}
                   <span style={{ width: 1, height: 16, background: "rgba(255,255,255,0.08)", flexShrink: 0 }} />
 
                   <button
-                    onClick={() => openPanel('copilot')}
-                    title="Open AI Copilot"
+                    onClick={() => {
+                      if (panelOpen && panelTab === 'copilot') {
+                        setPanelOpen(false);
+                      } else {
+                        openPanel('copilot');
+                      }
+                    }}
+                    title={panelOpen && panelTab === 'copilot' ? "Close Copilot" : "Open AI Copilot"}
                     style={{
                       background: panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.10)" : "rgba(255,255,255,0.03)",
                       border: `0.5px solid ${panelOpen && panelTab === 'copilot' ? "rgba(232,67,45,0.35)" : "rgba(255,255,255,0.09)"}`,
                       borderRadius: 5,
-                      padding: "5px 12px",
+                      padding: panelOpen ? "5px 8px" : "5px 12px",
                       fontSize: 11,
                       fontFamily: "var(--font-sans)",
                       fontWeight: 500,
                       color: panelOpen && panelTab === 'copilot' ? "rgba(232,100,80,1)" : "rgba(255,255,255,0.40)",
                       cursor: "pointer",
-                      display: "flex", alignItems: "center", gap: 5,
+                      display: "flex", alignItems: "center", gap: panelOpen ? 4 : 5,
                       flexShrink: 0,
-                      transition: "all 0.15s",
+                      transition: "all 0.20s ease",
                       letterSpacing: "0.04em",
                     }}
                     onMouseEnter={e => { if (!(panelOpen && panelTab === 'copilot')) { e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)"; e.currentTarget.style.color = "rgba(255,255,255,0.70)"; } }}
@@ -752,8 +769,8 @@ export default function App(props: any) {
                       onClick={goToClient}
                       title="Client view"
                       style={{
-                        display: "flex", alignItems: "center", gap: 8,
-                        padding: "0 16px", height: 34,
+                        display: "flex", alignItems: "center", gap: panelOpen ? 6 : 8,
+                        padding: panelOpen ? "0 10px" : "0 16px", height: 34,
                         background: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)",
                         border: "1px solid rgba(255,255,255,0.14)",
                         borderRadius: 8,
@@ -764,7 +781,7 @@ export default function App(props: any) {
                         color: "rgba(255,255,255,0.70)",
                         cursor: "pointer",
                         flexShrink: 0,
-                        transition: "all 0.18s",
+                        transition: "all 0.20s ease",
                         textTransform: "uppercase",
                         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
                       }}
@@ -786,7 +803,8 @@ export default function App(props: any) {
                         <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
                         <path d="M1.5 12.5C1.5 10.015 4.015 8 7 8C9.985 8 12.5 10.015 12.5 12.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
                       </svg>
-                      Client
+                      {!panelOpen && "Client"}
+                      {panelOpen && <span style={{ fontSize: 11, letterSpacing: '0.03em' }}>Client</span>}
                     </button>
                   )}
                 </div>
