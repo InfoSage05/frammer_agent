@@ -134,7 +134,7 @@ class SessionBootstrap:
     
     def _index_charts(self) -> List[Dict[str, Any]]:
         """Index existing PNG charts from analysis."""
-        from gc26.tools import list_existing_charts
+        from frammer_agent.tools import list_existing_charts
         
         charts = list_existing_charts()
         self.charts_indexed = True
@@ -174,7 +174,7 @@ class SessionBootstrap:
     
     def get_charts_by_category(self) -> Dict[str, List[Dict]]:
         """Get existing charts organized by category."""
-        from gc26.tools import list_existing_charts
+        from frammer_agent.tools import list_existing_charts
         
         all_charts = list_existing_charts()
         chart_map = {c["filename"]: c for c in all_charts}

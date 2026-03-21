@@ -17,11 +17,11 @@ import plotly.express as px
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from gc26.config import DATA_DIR, CHART_CATEGORIES, API_PORT
+from frammer_agent.config import DATA_DIR, CHART_CATEGORIES
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
-API_BASE_URL = f"http://localhost:{API_PORT}"
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:80")
 DATA_PATH = Path(DATA_DIR)
 
 # ─── Page Configuration ──────────────────────────────────────────────────────

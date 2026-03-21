@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-21T19:38:52.514021",
+  "generated_at": "2026-03-21T21:11:20.721500",
   "from_cache": false,
   "change_type": "none",
   "metrics": [
@@ -461,8 +461,8 @@
     {
       "id": "null_platform_rate",
       "name": "Platform NULL Rate",
-      "value": 68.0,
-      "formatted": "68.00%",
+      "value": 0.0,
+      "formatted": "0.00%",
       "category": "data_quality",
       "description": "Percentage of published videos missing platform info",
       "unit": "percent",
@@ -474,8 +474,8 @@
     {
       "id": "data_quality_score",
       "name": "Data Quality Score",
-      "value": 30.3,
-      "formatted": "30.3%",
+      "value": 0.5,
+      "formatted": "0.5%",
       "category": "data_quality",
       "description": "Weighted average completeness score across key fields",
       "unit": "percent",
@@ -959,8 +959,8 @@
       {
         "id": "null_platform_rate",
         "name": "Platform NULL Rate",
-        "value": 68.0,
-        "formatted": "68.00%",
+        "value": 0.0,
+        "formatted": "0.00%",
         "category": "data_quality",
         "description": "Percentage of published videos missing platform info",
         "unit": "percent",
@@ -972,8 +972,8 @@
       {
         "id": "data_quality_score",
         "name": "Data Quality Score",
-        "value": 30.3,
-        "formatted": "30.3%",
+        "value": 0.5,
+        "formatted": "0.5%",
         "category": "data_quality",
         "description": "Weighted average completeness score across key fields",
         "unit": "percent",
@@ -3738,17 +3738,13 @@
   },
   "charts": {},
   "dataset_sources": {
-    "video_list": {
-      "filename": "video_list.csv",
-      "display_name": "video_list"
+    "channel_platform": {
+      "filename": "channel_platform.csv",
+      "display_name": "channel_platform"
     },
-    "language": {
-      "filename": "language.csv",
-      "display_name": "language"
-    },
-    "input_type": {
-      "filename": "input_type.csv",
-      "display_name": "input_type"
+    "channel_summary": {
+      "filename": "channel_summary.csv",
+      "display_name": "channel_summary"
     },
     "monthly": {
       "filename": "monthly.csv",
@@ -3758,21 +3754,25 @@
       "filename": "output_type.csv",
       "display_name": "output_type"
     },
+    "channel_user": {
+      "filename": "channel_user.csv",
+      "display_name": "channel_user"
+    },
+    "video_list": {
+      "filename": "video_list.csv",
+      "display_name": "video_list"
+    },
+    "language": {
+      "filename": "language.csv",
+      "display_name": "language"
+    },
     "user_summary": {
       "filename": "user_summary.csv",
       "display_name": "user_summary"
     },
-    "channel_summary": {
-      "filename": "channel_summary.csv",
-      "display_name": "channel_summary"
-    },
-    "channel_platform": {
-      "filename": "channel_platform.csv",
-      "display_name": "channel_platform"
-    },
-    "channel_user": {
-      "filename": "channel_user.csv",
-      "display_name": "channel_user"
+    "input_type": {
+      "filename": "input_type.csv",
+      "display_name": "input_type"
     }
   }
 }

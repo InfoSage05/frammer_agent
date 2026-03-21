@@ -48,7 +48,7 @@ Docker will create these as root if they don't exist, which causes permission
 errors. Create them first:
 
 ```bash
-mkdir -p data logs
+ta logsmkdir -p da
 ```
 
 ### 4. Build and start
@@ -78,15 +78,17 @@ Expected response: `{"status":"ok"}` (or similar — check your `/health` route)
 
 ## Day-to-day operations
 
-| Task | Command |
-|---|---|
-| Start | `docker compose up -d` |
-| Stop | `docker compose down` |
-| Restart backend only | `docker compose restart backend` |
+
+| Task                      | Command                                |
+| ------------------------- | -------------------------------------- |
+| Start                     | `docker compose up -d`                 |
+| Stop                      | `docker compose down`                  |
+| Restart backend only      | `docker compose restart backend`       |
 | Rebuild after code change | `docker compose up -d --build backend` |
-| View backend logs | `docker compose logs -f backend` |
-| View nginx logs | `docker compose logs -f nginx` |
-| Open a shell in backend | `docker compose exec backend bash` |
+| View backend logs         | `docker compose logs -f backend`       |
+| View nginx logs           | `docker compose logs -f nginx`         |
+| Open a shell in backend   | `docker compose exec backend bash`     |
+
 
 ---
 
@@ -104,10 +106,12 @@ mounts `nginx.conf` as a read-only bind mount.
 
 ## Persisted data
 
-| Host path | Container path | Contents |
-|---|---|---|
-| `./data` | `/app/frammer_agent/data` | Datasets, ChromaDB, SQLite, saved analytics |
-| `./logs` | `/app/frammer_agent/logs` | Daily rotating log files |
+
+| Host path | Container path            | Contents                                    |
+| --------- | ------------------------- | ------------------------------------------- |
+| `./data`  | `/app/frammer_agent/data` | Datasets, ChromaDB, SQLite, saved analytics |
+| `./logs`  | `/app/frammer_agent/logs` | Daily rotating log files                    |
+
 
 Deleting `./data` is destructive — back it up before running `docker compose down -v`.
 
@@ -158,9 +162,12 @@ volumes:
 
 ## Environment variable reference
 
-| Variable | Required | Set in | Description |
-|---|---|---|---|
-| `GROQ_API_KEY` | Yes | `.env` | Groq API key for LLM calls |
-| `API_HOST` | No | `docker-compose.yml` | Uvicorn bind host (default `0.0.0.0`) |
-| `API_PORT` | No | `docker-compose.yml` | Uvicorn port (default `8000`) |
-| `FRAMMER_DATA_DIR` | No | `docker-compose.yml` | Root data path inside container (default `/app`) |
+
+| Variable           | Required | Set in               | Description                                      |
+| ------------------ | -------- | -------------------- | ------------------------------------------------ |
+| `GROQ_API_KEY`     | Yes      | `.env`               | Groq API key for LLM calls                       |
+| `API_HOST`         | No       | `docker-compose.yml` | Uvicorn bind host (default `0.0.0.0`)            |
+| `API_PORT`         | No       | `docker-compose.yml` | Uvicorn port (default `8000`)                    |
+| `FRAMMER_DATA_DIR` | No       | `docker-compose.yml` | Root data path inside container (default `/app`) |
+
+

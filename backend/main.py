@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from contextlib import asynccontextmanager
 
-# Add parent directory (gc26) to path for imports FIRST
+# Add parent directory to path for imports FIRST
 _backend_dir = Path(__file__).parent
 _agent_dir = _backend_dir.parent
 _project_dir = _agent_dir.parent
@@ -28,7 +28,7 @@ else:
     load_dotenv(_project_dir / ".env", override=True)
 
 # Import config to set up logging
-from gc26.config import setup_logging, LOG_FILE
+from frammer_agent.config import setup_logging, LOG_FILE
 
 # Set up logger
 logger = logging.getLogger("frammer.api")
