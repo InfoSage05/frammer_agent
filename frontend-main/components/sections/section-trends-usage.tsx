@@ -19,8 +19,6 @@ function SectionTrends({ theme, onAskAI }) {
   const data = useLiveSectionData("trends", dash?.liveDashboard, staticData);
   const { data: funnelData } = useJsonData("funnel");
   const INPUT_TYPES = funnelData?.inputTypes || [];
-  const { data: funnelData } = useJsonData("funnel");
-  const INPUT_TYPES = funnelData?.inputTypes || [];
   const sectionData = data || {
     meta: { tag: "", title: "", sub: "" },
     metricOptions: [],
