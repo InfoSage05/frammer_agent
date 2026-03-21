@@ -1,50 +1,98 @@
 [
   {
-    "type": "Interview",
-    "uploaded": 410,
-    "created": 2100,
-    "published": 55,
-    "publishRate": 13.41,
-    "amp": 5.12
+    "type": "interview",
+    "uploaded": 860,
+    "created": 1685,
+    "published": 58,
+    "publishRate": 6.74,
+    "amp": 1.96
   },
   {
-    "type": "Press Conference",
-    "uploaded": 275,
-    "created": 1120,
-    "published": 28,
-    "publishRate": 10.18,
-    "amp": 4.07
+    "type": "news bulletin",
+    "uploaded": 1294,
+    "created": 769,
+    "published": 41,
+    "publishRate": 3.17,
+    "amp": 0.59
   },
   {
-    "type": "Meeting",
-    "uploaded": 190,
-    "created": 850,
-    "published": 15,
-    "publishRate": 7.89,
-    "amp": 4.47
+    "type": "special reports",
+    "uploaded": 1130,
+    "created": 6949,
+    "published": 59,
+    "publishRate": 5.22,
+    "amp": 6.15
   },
   {
-    "type": "Webinar",
-    "uploaded": 120,
-    "created": 510,
+    "type": "speech",
+    "uploaded": 1095,
+    "created": 2433,
     "published": 14,
-    "publishRate": 11.67,
-    "amp": 4.25
+    "publishRate": 1.28,
+    "amp": 2.22
   },
   {
-    "type": "Podcast",
-    "uploaded": 88,
-    "created": 340,
-    "published": 6,
-    "publishRate": 6.82,
-    "amp": 3.86
+    "type": "debate",
+    "uploaded": 1638,
+    "created": 5311,
+    "published": 61,
+    "publishRate": 3.72,
+    "amp": 3.24
   },
   {
-    "type": "Training",
-    "uploaded": 55,
-    "created": 220,
-    "published": 3,
-    "publishRate": 5.45,
-    "amp": 4.0
+    "type": "press conference",
+    "uploaded": 2169,
+    "created": 5051,
+    "published": 61,
+    "publishRate": 2.81,
+    "amp": 2.33
+  },
+  {
+    "type": "discussion-show",
+    "uploaded": 466,
+    "created": 6420,
+    "published": 46,
+    "publishRate": 9.87,
+    "amp": 13.78
+  },
+  {
+    "type": "sports show",
+    "uploaded": 1238,
+    "created": 1184,
+    "published": 61,
+    "publishRate": 4.93,
+    "amp": 0.96
+  },
+  {
+    "type": "Unknown",
+    "uploaded": 330,
+    "created": 4555,
+    "published": 50,
+    "publishRate": 15.15,
+    "amp": 13.8
+  },
+  {
+    "type": "podcast",
+    "uploaded": 1482,
+    "created": 3385,
+    "published": 54,
+    "publishRate": 3.64,
+    "amp": 2.28
+  },
+  {
+    "type": "drama",
+    "uploaded": 2135,
+    "created": 6396,
+    "published": 63,
+    "publishRate": 2.95,
+    "amp": 3.0
+  },
+  {
+    "type": "in-brief",
+    "uploaded": 130,
+    "created": 8666,
+    "published": 2,
+    "publishRate": 1.54,
+    "amp": 66.66
   }
 ]

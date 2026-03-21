@@ -187,6 +187,38 @@ export interface DatasetInfo {
   [key: string]: any;
 }
 
+// ── Lift model ──
+export interface LiftScoreRequest {
+  topic: string;
+  hashtags: string[];
+  region: string;
+  language: string;
+  engagement_score: number;
+}
+
+export interface LiftScoreResult {
+  best_platform: string;
+  probability: number;
+  rankings: { platform: string; probability: number }[];
+  meta?: any;
+}
+
+export async function fetchLiftScore(payload: LiftScoreRequest): Promise<LiftScoreResult | null> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/lift/score`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ video: payload }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.result as LiftScoreResult;
+  } catch (e) {
+    console.warn("Failed to fetch lift score", e);
+    return null;
+  }
+}
+
 /**
  * List all registered datasets
  */

@@ -34,7 +34,9 @@
       "Bash(curl -s http://localhost:8000/docs)",
       "Bash(curl -s http://localhost:8000/openapi.json)",
       "Bash(grep -n \"channel_performance\\\\|name:\" ../data/chart_data/*.json)",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f''''{k[:12]}... -> {v.get\\(role,?\\)} \\({v.get\\(filename,?\\)}\\)''''\\) for k,v in d.items\\(\\)]\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f''''{k[:12]}... -> {v.get\\(role,?\\)} \\({v.get\\(filename,?\\)}\\)''''\\) for k,v in d.items\\(\\)]\")",
+      "Bash(grep -r \"GROQ_API_KEY\\\\|groq\\\\|Groq\" /c/Users/ajsal/OneDrive/Desktop/Documents/codes/gc26/frammer_agent/backend/*.py)",
+      "Bash(grep -r \"DATA_DIR\\\\|DATASETS_DIR\\\\|data/\" /c/Users/ajsal/OneDrive/Desktop/Documents/codes/gc26/frammer_agent/backend/*.py)"
     ]
   }
 }

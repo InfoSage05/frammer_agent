@@ -1,42 +1,146 @@
 [
   {
-    "name": "Channel X",
-    "uploaded": 320,
-    "created": 1580,
-    "published": 42,
-    "rate": 2.66,
-    "amp": 4.94
+    "name": "Channel A",
+    "uploaded": 18,
+    "created": 2939,
+    "published": 16,
+    "rate": 0.54,
+    "amp": 163.28
   },
   {
-    "name": "Channel Y",
-    "uploaded": 275,
-    "created": 1120,
-    "published": 28,
-    "rate": 2.5,
-    "amp": 4.07
+    "name": "Channel B",
+    "uploaded": 1249,
+    "created": 7096,
+    "published": 49,
+    "rate": 0.69,
+    "amp": 5.68
   },
   {
-    "name": "Channel Z",
-    "uploaded": 190,
-    "created": 850,
-    "published": 15,
-    "rate": 1.76,
-    "amp": 4.47
+    "name": "Channel C",
+    "uploaded": 2928,
+    "created": 5765,
+    "published": 36,
+    "rate": 0.62,
+    "amp": 1.97
   },
   {
-    "name": "Channel W",
-    "uploaded": 410,
-    "created": 2100,
-    "published": 55,
-    "rate": 2.62,
-    "amp": 5.12
+    "name": "Channel D",
+    "uploaded": 1616,
+    "created": 1031,
+    "published": 117,
+    "rate": 11.35,
+    "amp": 0.64
   },
   {
-    "name": "Channel V",
-    "uploaded": 88,
+    "name": "Channel E",
+    "uploaded": 2222,
+    "created": 562,
+    "published": 79,
+    "rate": 14.06,
+    "amp": 0.25
+  },
+  {
+    "name": "Channel F",
+    "uploaded": 1245,
     "created": 340,
-    "published": 6,
-    "rate": 1.76,
-    "amp": 3.86
+    "published": 10,
+    "rate": 2.94,
+    "amp": 0.27
+  },
+  {
+    "name": "Channel G",
+    "uploaded": 1638,
+    "created": 4567,
+    "published": 133,
+    "rate": 2.91,
+    "amp": 2.79
+  },
+  {
+    "name": "Channel H",
+    "uploaded": 53,
+    "created": 7862,
+    "published": 122,
+    "rate": 1.55,
+    "amp": 148.34
+  },
+  {
+    "name": "Channel I",
+    "uploaded": 2742,
+    "created": 2296,
+    "published": 34,
+    "rate": 1.48,
+    "amp": 0.84
+  },
+  {
+    "name": "Channel J",
+    "uploaded": 2910,
+    "created": 234,
+    "published": 32,
+    "rate": 13.68,
+    "amp": 0.08
+  },
+  {
+    "name": "Channel K",
+    "uploaded": 1426,
+    "created": 5202,
+    "published": 17,
+    "rate": 0.33,
+    "amp": 3.65
+  },
+  {
+    "name": "Channel L",
+    "uploaded": 2396,
+    "created": 9308,
+    "published": 12,
+    "rate": 0.13,
+    "amp": 3.88
+  },
+  {
+    "name": "Channel M",
+    "uploaded": 442,
+    "created": 1291,
+    "published": 89,
+    "rate": 6.89,
+    "amp": 2.92
+  },
+  {
+    "name": "Channel N",
+    "uploaded": 2880,
+    "created": 4727,
+    "published": 109,
+    "rate": 2.31,
+    "amp": 1.64
+  },
+  {
+    "name": "Channel O",
+    "uploaded": 579,
+    "created": 8720,
+    "published": 0,
+    "rate": 0.0,
+    "amp": 15.06
+  },
+  {
+    "name": "Channel P",
+    "uploaded": 281,
+    "created": 2939,
+    "published": 62,
+    "rate": 2.11,
+    "amp": 10.46
+  },
+  {
+    "name": "Channel Q",
+    "uploaded": 2407,
+    "created": 5435,
+    "published": 33,
+    "rate": 0.61,
+    "amp": 2.26
+  },
+  {
+    "name": "Channel R",
+    "uploaded": 822,
+    "created": 6981,
+    "published": 102,
+    "rate": 1.46,
+    "amp": 8.49
   }
 ]

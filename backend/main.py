@@ -39,6 +39,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
+# Lift model imports
+from analytics.lift_service import (
+    score_video,
+    load_lift_artifacts,
+)
+
 # Configuration with fallbacks
 API_HOST = os.getenv("API_HOST", "0.0.0.0")
 API_PORT = int(os.getenv("API_PORT", "8000"))
@@ -232,6 +238,19 @@ class MetricInfo(BaseModel):
     value: float
     formatted: str
     category: str
+
+
+class VideoPayload(BaseModel):
+    topic: str
+    hashtags: List[str]
+    region: str
+    language: str
+    engagement_score: float
+    platforms: Optional[List[str]] = None
+
+
+class LiftScoreRequest(BaseModel):
+    video: VideoPayload
 
 
 # ─── Health Check ────────────────────────────────────────────────────────────
@@ -478,6 +497,40 @@ async def get_dataset(dataset_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ─── Lift Model Endpoint (inference only) ───────────────────────────────────
+
+
+@app.post("/lift/score")
+async def lift_score(body: LiftScoreRequest):
+    """Score a single video against the trained lift model.
+
+    Training should be run offline (see analytics/lift_service.py CLI) and
+    artifacts placed in data/models/lift/ before calling this endpoint.
+    """
+    try:
+        payload = body.video.dict()
+        logger.info("/lift/score payload: %s", payload)
+
+        load_lift_artifacts()
+        result = await asyncio.to_thread(score_video, payload)
+
+        logger.info(
+            "/lift/score result: best=%s prob=%.4f",
+            result.get("best_platform"),
+            float(result.get("probability", 0.0)),
+        )
+        return {"status": "ok", "result": result}
+    except FileNotFoundError:
+        logger.exception("/lift/score artifacts missing")
+        raise HTTPException(
+            status_code=500,
+            detail="Lift model artifacts missing. Train offline and place under data/models/lift/",
+        )
+    except Exception as e:
+        logger.exception("/lift/score error")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/datasets/{dataset_id}/sample")
 async def get_dataset_sample(
     dataset_id: int,
@@ -667,7 +720,7 @@ async def upload_and_analyze(
             )
 
         if mode == "merge":
-            dashboard = get_engine().run(force=True)
+            dashboard = get_engine().run(force=False)
             _reload_chat_registry()  # sync chat agent with new merged data
             # Regenerate recommendations with new data
             try:
