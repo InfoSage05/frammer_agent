@@ -183,13 +183,18 @@ Use this context to understand what "it", "that", "same", etc. refer to.
 {context_section}
 USER REQUEST: {query}
 
-AVAILABLE DATASETS:
+AVAILABLE DATASETS (use EXACT names when referencing):
 {dataset_info}
+
+IMPORTANT: Dataset names must match EXACTLY (e.g., 'channel_summary' not 'Channel Summary').
+If the user mentions "channels" or "channel data", look for datasets with "channel" in the name.
+If the user mentions "users" or "user data", look for datasets with "user" in the name.
+If the user mentions "monthly" or "trends", look for the "monthly" dataset.
 
 Respond with JSON only:
 {{
     "intent": "brief description of what user wants (resolve any pronouns using context)",
-    "datasets_needed": ["dataset1"],
+    "datasets_needed": ["exact_dataset_name"],
     "columns_likely_needed": ["col1", "col2"],
     "requires_calculation": true/false,
     "requires_visualization": true/false,
@@ -370,9 +375,14 @@ def generate_code(query: str, task_plan: TaskPlan, datasets: List[dict], approac
     logger.info("━━━ PHASE 5: Code Generation ━━━")
     
     # Build rich context with actual schema
+    # Always include needed datasets + a brief listing of others so the LLM knows what's available
     schema_context = ""
+    needed = set(task_plan.datasets_needed) if task_plan.datasets_needed else set()
+    include_all = len(datasets) <= 12  # If few datasets, show all schemas
+
     for ds in datasets:
-        if not task_plan.datasets_needed or ds["name"] in task_plan.datasets_needed:
+        is_needed = ds["name"] in needed or include_all
+        if is_needed:
             try:
                 schema = get_schema(ds["name"])
                 schema_context += f"\n\n### Dataset: '{ds['name']}' ({ds['row_count']} rows)\n"
@@ -380,10 +390,13 @@ def generate_code(query: str, task_plan: TaskPlan, datasets: List[dict], approac
                 for col in schema:
                     schema_context += f"  - `{col['col_name']}` ({col['dtype']})"
                     if col['sample_values']:
-                        schema_context += f" — samples: {col['sample_values'][:3]}"
+                        schema_context += f" -- samples: {col['sample_values'][:3]}"
                     schema_context += "\n"
             except:
                 schema_context += f"\n\n### Dataset: '{ds['name']}'\nColumns: {ds['columns']}\n"
+        else:
+            # Brief listing so LLM knows it exists
+            schema_context += f"\n\n### Dataset: '{ds['name']}' ({ds['row_count']} rows) — columns: {', '.join(ds['columns'][:6])}\n"
     
     # Include the approach plan in the prompt
     plan_section = ""
@@ -401,16 +414,21 @@ AVAILABLE DATA:{schema_context}
 
 CRITICAL RULES:
 1. DO NOT redefine get_full_dataset, create_chart, or RESULT - they already exist!
-2. Load data: df = get_full_dataset('exact-dataset-name')
-3. Use EXACT dataset/column names (case-sensitive!)
-4. Convert numpy to Python: int(value), float(value)
+2. Load data: df = get_full_dataset('exact-dataset-name') — name must match EXACTLY
+3. Use EXACT column names from the schema above (case-sensitive, including spaces!)
+4. Convert numpy to Python: int(value), float(value) — ALWAYS convert before putting in charts
 5. For charts use create_chart(type, title, data_list, x_key, y_keys):
    - type: 'bar', 'line', 'area', 'pie'
    - data_list: list of dicts, each dict is one data point
    - x_key: the key used for X-axis labels
    - y_keys: list of keys for Y-axis values (multiple = grouped/stacked bars)
-6. Set RESULT['summary'] = "your text" at the end
+6. Set RESULT['summary'] = "your text" at the end — ALWAYS set a summary
 7. DO NOT create a new RESULT dict
+8. Duration columns are strings like "HH:MM:SS" — convert to minutes/hours for numeric analysis
+9. When filtering top/bottom N, use .head(N) or .tail(N) after sorting
+10. IMPORTANT: After groupby().agg(), use .reset_index() before accessing the grouped column
+11. AVOID pivot() — instead use groupby + create dicts manually for chart data
+12. When creating grouped bar charts, build data like: [{{'User': name, 'Ch1': val1, 'Ch2': val2}}]
 
 CHART DATA STRUCTURE EXAMPLES:
 

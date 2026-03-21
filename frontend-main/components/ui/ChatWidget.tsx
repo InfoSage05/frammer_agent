@@ -1,13 +1,39 @@
 // @ts-nocheck
 import { useCallback, useState, useRef, useEffect } from "react";
 import useJsonData from "@/hooks/useJsonData";
+import { sendChatMessage } from "@/lib/api";
+
+const STORAGE_KEY = "frammer_chat";
+
+// Load persisted chat from localStorage
+function loadPersistedChat() {
+  try {
+    const raw = typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        msgs: parsed.msgs || null,
+        sessionId: parsed.sessionId || null,
+      };
+    }
+  } catch {}
+  return { msgs: null, sessionId: null };
+}
+
+function persistChat(msgs, sessionId) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ msgs, sessionId }));
+  } catch {}
+}
 
 // Persistent chat state stored outside component so it survives open/close
+const persisted = loadPersistedChat();
 const chatState = {
-  msgs: null,
+  msgs: persisted.msgs,
   input: "",
   pos: null,
   width: 345,
+  sessionId: persisted.sessionId,
 };
 
 // Answer → section mapping for "Show on dashboard"
@@ -67,7 +93,7 @@ function detectTarget(text) {
   return null;
 }
 
-function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }) {
+function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData, sessionId: externalSessionId, onSessionId }) {
   const { data } = useJsonData("chat-widget");
   const CHAT_W = 345,
     CHAT_H = 490;
@@ -93,13 +119,29 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
   const [pos, setPosRaw] = useState(initPos);
   const [width, setWidthRaw] = useState(chatState.width || CHAT_W);
   const [dragging, setDragging] = useState(false);
+  const [sessionId, setSessionIdLocal] = useState(externalSessionId || chatState.sessionId);
   const bodyRef = useRef(null);
 
-  // Sync state to persistent store
+  // Restore sessionId from persistence on mount
+  useEffect(() => {
+    if (chatState.sessionId && !sessionId && onSessionId) {
+      onSessionId(chatState.sessionId);
+    }
+  }, []);
+
+  const setSessionId = (id) => {
+    chatState.sessionId = id;
+    setSessionIdLocal(id);
+    if (onSessionId) onSessionId(id);
+    persistChat(chatState.msgs, id);
+  };
+
+  // Sync state to persistent store + localStorage
   const setMsgs = (v) => {
     const next = typeof v === "function" ? v(msgs) : v;
     chatState.msgs = next;
     setMsgsRaw(next);
+    persistChat(next, chatState.sessionId);
   };
   const setInput = (v) => {
     chatState.input = v;
@@ -177,7 +219,7 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
 
   const sendMsg = async (txt) => {
     const q = txt || input.trim();
-    if (!q) return;
+    if (!q || loading) return;
     setInput("");
     const t = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -185,53 +227,45 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
     });
     setMsgs((m) => [...m, { role: "user", text: q, time: t }]);
     setLoading(true);
-    let promptContext = data?.aiContext || "";
+
+    // Build message with attached context
+    let fullMessage = q;
     const attachedSources = Array.isArray(attachedData)
       ? attachedData
       : attachedData
         ? [attachedData]
         : [];
     if (attachedSources.length) {
-      promptContext += attachedSources
-        .map(
-          (source) =>
-            `\n\nAttached Data Context (${source.name}):\n${JSON.stringify(source.data).substring(0, 1000)}`,
-        )
-        .join("");
+      const ctx = attachedSources
+        .map((source) => `[Attached: ${source.name}] ${JSON.stringify(source.data).substring(0, 800)}`)
+        .join("\n");
+      fullMessage = `${ctx}\n\nQuestion: ${q}`;
     }
+
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 220,
-          messages: [{ role: "user", content: `${promptContext}\n\nQ: ${q}` }],
-        }),
-      });
-      const d = await res.json();
-      const rawText =
-        d.content?.map((c) => c.text || "").join("") || "No response.";
-      const displayText = rawText
-        .replace(/\s*\{"target":"[^"]+"\}/g, "")
-        .trim();
-      const target = detectTarget(rawText);
+      const res = await sendChatMessage(fullMessage, sessionId);
+      if (res.session_id) {
+        setSessionId(res.session_id);
+      }
+      const target = detectTarget(res.response);
       setMsgs((m) => [
         ...m,
         {
           role: "ai",
-          text: displayText,
+          text: res.response,
           time: new Date().toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           }),
           target,
+          suggestions: res.suggestions,
+          artifacts: res.artifacts,
         },
       ]);
     } catch (e) {
       const fb = data?.fallbacks || {};
       const key = Object.keys(fb).find((k) => q.toLowerCase().includes(k));
-      const resp = fb[key] || fb.default || { text: "No response.", target: null };
+      const resp = fb[key] || fb.default || { text: "Backend unavailable. Make sure the server is running on localhost:8000.", target: null };
       setMsgs((m) => [
         ...m,
         {
@@ -250,8 +284,11 @@ function ChatWidget({ onClose, fabPos, onHighlight, attachedData, onRemoveData }
 
   const resetChat = () => {
     chatState.msgs = initialMessages;
+    chatState.sessionId = null;
     setMsgsRaw(initialMessages);
     setInput("");
+    persistChat(initialMessages, null);
+    if (onSessionId) onSessionId(null);
   };
 
   const lastAiMsg = [...msgs]

@@ -1,11 +1,15 @@
 // @ts-nocheck
 import useJsonData from '@/hooks/useJsonData';
+import { useLiveSectionData } from '@/hooks/useDashboardData';
 import { useDash } from '@/lib/contexts';
 import { M } from '@/lib/constants';
 
 function SectionClient({ onClose }) {
   const dash = useDash();
-  const { data } = useJsonData("client");
+  const { data: staticData } = useJsonData("client");
+  // Client section doesn't have a dedicated live section transform yet,
+  // so we use static data directly but could be enhanced later
+  const data = staticData;
   const CHANNELS = data?.channels || [];
 
   if (!data) return null;

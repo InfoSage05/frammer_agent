@@ -28,7 +28,7 @@ else:
     load_dotenv(_project_dir / ".env", override=True)
 
 # Import config to set up logging
-from config import setup_logging, LOG_FILE
+from frammer_agent.config import setup_logging, LOG_FILE
 
 # Set up logger
 logger = logging.getLogger("frammer.api")
@@ -36,9 +36,8 @@ logger.info(f"Logging to: {LOG_FILE}")
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from sse_starlette.sse import EventSourceResponse
 
 # Configuration with fallbacks
 API_HOST = os.getenv("API_HOST", "0.0.0.0")
@@ -49,7 +48,6 @@ CHART_CATEGORIES = {}
 # Lazy imports for optional modules
 _bootstrap_imported = False
 _registry_imported = False
-_agent_imported = False
 
 def _import_modules():
     """Lazy import of heavy modules."""
@@ -85,29 +83,8 @@ def _import_modules():
             globals()['get_registry'] = lambda: DummyRegistry()
             _registry_imported = True
     
-    if not _agent_imported:
-        try:
-            # Use new orchestrator
-            from orchestrator.graph_new import run_agent
-            globals()['run_agent'] = run_agent
-            _agent_imported = True
-        except Exception as e:
-            print(f"Agent import error: {e}")
-            async def dummy_agent(query, session_id, conversation_history=None):
-                # Fallback: Use LLM directly
-                try:
-                    llm_dir = _agent_dir / "llm"
-                    sys.path.insert(0, str(llm_dir))
-                    from groq_client import fast_complete
-                    response = fast_complete(
-                        [{"role": "user", "content": query}],
-                        system_prompt="You are a helpful data analyst assistant."
-                    )
-                    return {"response": response, "artifacts": [], "suggestions": []}
-                except Exception as llm_err:
-                    return {"response": f"Agent not available: {e}. LLM error: {llm_err}", "artifacts": [], "suggestions": []}
-            globals()['run_agent'] = dummy_agent
-            _agent_imported = True
+    # Note: chat endpoint now uses planner.py + conversation_memory.py directly
+    # instead of the orchestrator/graph_new agent. No lazy import needed.
 
 
 # ─── Lifespan ────────────────────────────────────────────────────────────────
@@ -116,7 +93,58 @@ def _import_modules():
 async def lifespan(app: FastAPI):
     """Startup and shutdown logic."""
     _import_modules()
-    
+
+    # ── Clean up session artifacts that don't survive across machines ────
+    import shutil
+
+    # Remove uploaded datasets from previous session and recreate empty dir
+    uploads_dir = _agent_dir / "data" / "datasets" / "uploads"
+    if uploads_dir.exists():
+        shutil.rmtree(uploads_dir, ignore_errors=True)
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+
+    # Remove merged output from previous session (rebuilt by merger each run)
+    merged_dir = _agent_dir / "data" / "merged"
+    if merged_dir.exists():
+        shutil.rmtree(merged_dir, ignore_errors=True)
+    merged_dir.mkdir(parents=True, exist_ok=True)
+
+    # Reset standalone mode and clean up standalone reports
+    active_mode_path = _agent_dir / "data" / "saved_analytics" / "active_mode.json"
+    if active_mode_path.exists():
+        active_mode_path.unlink(missing_ok=True)
+    standalone_reports_dir = _agent_dir / "data" / "saved_analytics" / "standalone_reports"
+    if standalone_reports_dir.exists():
+        shutil.rmtree(standalone_reports_dir, ignore_errors=True)
+
+    # Remove SQLite DBs (contain stale metadata, rebuilt by bootstrap)
+    for db_file in [
+        _agent_dir / "data" / "registry.db",
+        _agent_dir / "merger.db",
+        _backend_dir / "merger.db",
+    ]:
+        if db_file.exists():
+            db_file.unlink(missing_ok=True)
+
+    # Remove legacy generated scripts (embed absolute paths from other machines)
+    for script in [
+        _agent_dir / "data" / "saved_analytics" / "kpi_script.py",
+        _agent_dir / "data" / "saved_analytics" / "chart_data_script.py",
+        _agent_dir / "data" / "saved_analytics" / "script_manifest.json",
+        _agent_dir / "data" / "session_context.json",
+    ]:
+        if script.exists():
+            script.unlink(missing_ok=True)
+
+    # Keep these — they ARE the caching system:
+    #   dataset_hashes.json       → hash-based change detection (cache vs recompute)
+    #   analytics_dashboard.json  → cached dashboard (served when hashes match)
+    #   dataset_paths.json        → role→path map (rebuilt if hashes change)
+    #   column_mappings.json      → LLM column mappings (content-hash-keyed)
+    #   role_classifications.json → LLM role classifications (content-hash-keyed)
+
+    print("🧹 Cleared stale session artifacts (DBs, legacy scripts)")
+
     # Startup: Run bootstrap
     print("🚀 Starting Frammer Agent...")
     try:
@@ -126,6 +154,33 @@ async def lifespan(app: FastAPI):
             print(f"⚠️ Warnings: {result['errors']}")
     except Exception as e:
         print(f"⚠️ Bootstrap error: {e}")
+
+    # Run analytics pipeline on startup so frontend has fresh KPIs/charts
+    try:
+        from analytics.analytics_engine import run_analytics
+        analytics_result = run_analytics(force=True)
+        change = analytics_result.get("change_type", "unknown")
+        cached = analytics_result.get("from_cache", False)
+        count = analytics_result.get("count", 0)
+        if cached:
+            logger.info(f"📊 Analytics: {count} metrics loaded from cache")
+        else:
+            logger.info(f"📊 Analytics: {count} metrics computed (change_type={change})")
+    except Exception as e:
+        logger.warning(f"⚠️ Analytics engine failed during startup: {e}")
+
+    # Generate recommendations in background (non-blocking)
+    try:
+        from rec_engine.engine import generate_recommendations
+        generate_recommendations(force=True)
+        logger.info("🎯 Recommendations generated on startup")
+    except Exception as e:
+        logger.warning(f"⚠️ Recommendation engine failed during startup: {e}")
+
+    # Initialize in-memory dataset registry AFTER analytics pipeline
+    # so it reads from dataset_paths.json (same data the dashboard uses)
+    from dataset_registry import initialize_registry
+    initialize_registry()
     yield
     # Shutdown
     print("👋 Shutting down Frammer Agent...")
@@ -148,152 +203,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# In-memory session storage (for demo; use Redis in production)
-sessions: Dict[str, Dict[str, Any]] = {}
-
-# ─── Hardcoded Section Data (Iteration 1: Overview) ─────────────────────────
-
-OVERVIEW_DATA: Dict[str, Any] = {
-    "meta": {
-        "tag": "EXECUTIVE COMMAND CENTRE · MAR 2025 → FEB 2026",
-        "title": "Executive Overview",
-        "sub": "Platform performance at a glance — growth, red flags, and top-line KPIs. Audience: Founders · Leadership · Client Success.",
-    },
-    "monthlyData": [
-        {"month": "Mar'25", "uploaded": 639, "created": 2555, "published": 0, "uploadedDur": 122.06, "createdDur": 176.28, "publishedDur": 0},
-        {"month": "Apr'25", "uploaded": 533, "created": 1656, "published": 44, "uploadedDur": 65.47, "createdDur": 98.02, "publishedDur": 1.09},
-        {"month": "May'25", "uploaded": 217, "created": 642, "published": 4, "uploadedDur": 46.95, "createdDur": 64.45, "publishedDur": 0.06},
-        {"month": "Jun'25", "uploaded": 239, "created": 907, "published": 3, "uploadedDur": 47.18, "createdDur": 84.16, "publishedDur": 0.2},
-        {"month": "Jul'25", "uploaded": 284, "created": 892, "published": 0, "uploadedDur": 33.62, "createdDur": 66.84, "publishedDur": 0},
-        {"month": "Aug'25", "uploaded": 256, "created": 699, "published": 7, "uploadedDur": 39.94, "createdDur": 64.52, "publishedDur": 0.11},
-        {"month": "Sep'25", "uploaded": 227, "created": 684, "published": 0, "uploadedDur": 34.35, "createdDur": 58.63, "publishedDur": 0},
-        {"month": "Oct'25", "uploaded": 343, "created": 1046, "published": 10, "uploadedDur": 47.86, "createdDur": 94.29, "publishedDur": 0.25},
-        {"month": "Nov'25", "uploaded": 353, "created": 943, "published": 2, "uploadedDur": 48.12, "createdDur": 83.38, "publishedDur": 0.04},
-        {"month": "Dec'25", "uploaded": 194, "created": 644, "published": 7, "uploadedDur": 38.26, "createdDur": 71.7, "publishedDur": 0.24},
-        {"month": "Jan'26", "uploaded": 492, "created": 1492, "published": 20, "uploadedDur": 121.99, "createdDur": 191.46, "publishedDur": 1.45},
-        {"month": "Feb'26", "uploaded": 676, "created": 2756, "published": 14, "uploadedDur": 161.87, "createdDur": 301.51, "publishedDur": 0.94},
-    ],
-    "inputTypes": [
-        {"type": "interview", "uploaded": 1299, "created": 4972, "published": 35, "uploadedH": 243.89, "createdH": 462.72},
-        {"type": "news bulletin", "uploaded": 1026, "created": 3238, "published": 39, "uploadedH": 171.76, "createdH": 275.87},
-        {"type": "special reports", "uploaded": 755, "created": 2129, "published": 15, "uploadedH": 133.01, "createdH": 197.85},
-        {"type": "speech", "uploaded": 742, "created": 2390, "published": 12, "uploadedH": 132.69, "createdH": 217.79},
-        {"type": "debate", "uploaded": 290, "created": 1074, "published": 5, "uploadedH": 63.69, "createdH": 98.29},
-        {"type": "press conference", "uploaded": 280, "created": 973, "published": 2, "uploadedH": 51.11, "createdH": 85.44},
-    ],
-    "channels": [
-        {"ch": "A", "uploaded": 847, "created": 3112, "published": 46, "uploadedH": 148.2, "platforms": {"Facebook": 1, "Instagram": 7, "Reels": 5, "Shorts": 1, "Youtube": 5}, "noPublish": False},
-        {"ch": "B", "uploaded": 620, "created": 1982, "published": 7, "uploadedH": 117.8, "platforms": {}, "noPublish": False},
-        {"ch": "C", "uploaded": 321, "created": 1080, "published": 1, "uploadedH": 68.2, "platforms": {}, "noPublish": False},
-        {"ch": "D", "uploaded": 412, "created": 1430, "published": 72, "uploadedH": 78.5, "platforms": {"Facebook": 6, "Instagram": 3, "Reels": 15, "Shorts": 18, "Youtube": 29}, "noPublish": False},
-    ],
-    "totals": {
-        "totalCreated": 15119,
-        "totalUploaded": 4453,
-        "totalPublished": 111,
-        "publishRate": "2.5",
-        "multiplier": "3.4",
-        "activeChannels": 18,
-    },
-    "toasts": [
-        {"text": "97.5% of processed content never gets published — 15,008 videos created but not distributed.", "tone": "crit", "title": "Critical Finding", "delay": 1800},
-        {"text": "Feb 2026 peak: 2,756 outputs — 194% above monthly average.", "tone": "info", "title": "Momentum Signal", "delay": 4200},
-    ],
-    "contextStrip": [
-        {"label": "UPLOAD PERIOD", "v": "Mar 2025 – Feb 2026", "sub": "12 months active"},
-        {"label": "AI MULTIPLIER", "v": "3.4×", "sub": "inputs → AI outputs"},
-        {"label": "TOP CHANNEL", "v": "Ch-D", "sub": "72 pub · 17.5% rate"},
-        {"label": "PEAK MONTH", "v": "Feb '26", "sub": "2,756 outputs · +194%"},
-        {"label": "PUBLISH GAP", "v": "97.5%", "sub": "15,008 never distributed"},
-    ],
-    "strategicSignals": [
-        {"type": "crit", "tag": "⚠ CRITICAL", "num": "97.5%", "text": "of processed content never published.", "stat": "Created: 15,119 · Published: 111 · Gap: 15,008", "k": "c1"},
-        {"type": "warn", "tag": "⚡ PATTERN", "num": "3", "text": "months had zero published output.", "stat": "Mar, Jul, Sep 2025 — operational bottleneck, not volume issue", "k": "c2"},
-        {"type": "ok", "tag": "↑ MOMENTUM", "num": "2,756", "text": "outputs in Feb 2026 — all-time peak.", "stat": "Feb avg vs 937 monthly avg = +194% · growth confirmed", "k": "c3"},
-    ],
-    "monthlyChart": {"badge": "Feb ↑ +194%", "legend": [["Uploaded", "var(--gold)"], ["Published", "var(--green)"]]},
-    "statusDonut": [{"label": "Unpublished", "value": 15008, "color": "#6a1818"}, {"label": "Published", "value": 111, "color": "#30b060"}],
-}
-
-TRENDS_DATA: Dict[str, Any] = {
-    "meta": {
-        "tag": "TEMPORAL ANALYSIS · MAR 2025 → FEB 2026",
-        "title": "Usage & Trend Analysis",
-        "sub": "How volumes trend over time — strongest periods, count vs duration, H1 vs H2.",
-    },
-    "monthlyData": OVERVIEW_DATA["monthlyData"],
-    "metricOptions": [["count", "Count"], ["duration", "Duration"]],
-    "timeOptions": [["all", "All 12 months"], ["h1", "H1 Mar–Aug"], ["h2", "H2 Sep–Feb"]],
-    "compareToggle": "H1 vs H2 Overlay",
-    "heatLegend": {"colors": ["#1a1614", "#4a2a08", "#7a4a10", "#b87514", "#d4952a", "#f0b84a"], "label": "Low → Peak creation"},
-    "durationLegend": [["Upload hrs", "#d4952a"], ["Created hrs", "#e07038"], ["Published hrs", "#30b060"]],
-}
-
-MULTIDIM_DATA: Dict[str, Any] = {
-    "meta": {"tag": "CHANNEL · USER · PLATFORM INTELLIGENCE", "title": "Channel & User Intelligence", "sub": "Compare channels, users, languages and input types."},
-    "inputTypes": OVERVIEW_DATA["inputTypes"],
-    "languages": [
-        {"lang": "English", "uploaded": 2647, "created": 8861, "published": 91, "uploadedH": 437.5},
-        {"lang": "Hindi", "uploaded": 1792, "created": 6021, "published": 20, "uploadedH": 366.56},
-        {"lang": "Mixed", "uploaded": 11, "created": 29, "published": 0, "uploadedH": 2.51},
-    ],
-    "users": [
-        {"user": "Chandan", "uploaded": 489, "created": 2152, "published": 19, "uploadedH": 100.73},
-        {"user": "QA-Purushottam", "uploaded": 309, "created": 1227, "published": 13, "uploadedH": 33.15},
-        {"user": "Nitesh", "uploaded": 224, "created": 959, "published": 0, "uploadedH": 59.96},
-        {"user": "Neha", "uploaded": 158, "created": 510, "published": 10, "uploadedH": 20.19},
-    ],
-    "channelMetrics": [{"label": "A", "uploaded": 1470, "created": 4725, "published": 71}, {"label": "B", "uploaded": 1293, "created": 4251, "published": 19}, {"label": "D", "uploaded": 221, "created": 701, "published": 0}],
-    "kpiOptions": [{"k": "uploaded", "l": "Uploaded"}, {"k": "created", "l": "Created"}, {"k": "published", "l": "Published"}, {"k": "pub_rate", "l": "Pub Rate"}],
-    "viewOptions": [["bar", "Bar Chart"], ["treemap", "Treemap"]],
-    "treemapColors": ["#b87514", "#c45e22", "#a87850", "#7a6858", "#5a7868", "#9b7058"],
-}
-
-FUNNEL_DATA: Dict[str, Any] = {
-    "meta": {"tag": "CONTENT MIX & PUBLISHING FUNNEL", "title": "Content Mix & Publishing Funnel", "sub": "Where publish drop-off occurs and conversion by channel/type."},
-    "subTabs": [["sankey", "Sankey Flow"], ["pipeline", "Pipeline"], ["channels", "By Channel"], ["types", "By Type"]],
-    "sankeyTypeOptions": [["funnel", "Upload→Publish"], ["channel", "Channel→Platform"], ["content", "Content→Language"]],
-    "inputTypes": OVERVIEW_DATA["inputTypes"],
-    "languages": MULTIDIM_DATA["languages"],
-    "channels": OVERVIEW_DATA["channels"],
-    "totals": {"totalUploaded": 4453, "totalCreated": 15119, "totalPublished": 111, "publishRate": "2.5", "multiplier": "3.4"},
-    "contentFlowLegend": [{"c": "var(--ink3)", "l": "Uploaded: 4,453"}, {"c": "var(--gold)", "l": "AI Created: 15,119 (3.4×)"}, {"c": "var(--green)", "l": "Published: 111 (2.5%)"}],
-    "dataQualityAlerts": [{"t": "🔴 Team attribution: 99.3% rows have Unknown team", "c": "crit"}, {"t": "🔴 Platform NULL: 68% published items have no platform", "c": "crit"}],
-    "typeTreemapColors": ["#b87514", "#c45e22", "#a87850", "#7a6858", "#5a7868", "#9b7058"],
-    "sankey": {
-        "funnel": {"nodes": ["Uploads", "AI Created", "Published", "Unpublished"], "links": [{"source": "Uploads", "target": "AI Created", "value": 4453}, {"source": "AI Created", "target": "Published", "value": 111}, {"source": "AI Created", "target": "Unpublished", "value": 14803}]},
-        "channel": {"nodes": ["Ch-A", "Ch-D", "YouTube", "Reels", "Shorts"], "links": [{"source": "Ch-A", "target": "YouTube", "value": 5}, {"source": "Ch-D", "target": "YouTube", "value": 29}, {"source": "Ch-D", "target": "Reels", "value": 15}]},
-        "content": {"nodes": ["Interview", "News bulletin", "Published (111)"], "links": [{"source": "Interview", "target": "Published (111)", "value": 35}, {"source": "News bulletin", "target": "Published (111)", "value": 39}]},
-    },
-}
-
-EXPLORER_DATA: Dict[str, Any] = {
-    "meta": {"tag": "VIDEO EXPLORER & DATA QUALITY", "title": "Data Explorer & Quality Diagnostics", "sub": "User rankings, drilldowns and data quality checks."},
-    "subTabs": [["users", "User Rankings"], ["channels", "Channel Drilldown"], ["quality", "Data Quality"], ["kpi_tree", "KPI Framework"], ["d3tree", "Hierarchy Tree"], ["advanced_kpi", "Advanced KPI"]],
-    "userSortOptions": [["created", "Created"], ["published", "Published"], ["uploaded", "Uploaded"]],
-    "users": MULTIDIM_DATA["users"],
-    "languages": MULTIDIM_DATA["languages"],
-    "inputTypes": OVERVIEW_DATA["inputTypes"],
-    "channelMetrics": MULTIDIM_DATA["channelMetrics"],
-    "platformNames": ["YouTube", "Reels", "Shorts", "Facebook", "Instagram"],
-    "platformHeatmap": [{"channel": "Ch-A", "values": [5, 5, 1, 1, 7]}, {"channel": "Ch-D", "values": [29, 15, 18, 6, 3]}],
-    "dataQualityRows": [
-        {"l": "Missing Values by Field", "v": "28.1%", "c": "var(--red-lt)", "severity": "critical", "detail": "Team/platform fields have major gaps.", "pct": 28},
-        {"l": "\"Unknown\" Buckets", "v": "99.3%", "c": "var(--red-lt)", "severity": "critical", "detail": "Team attribution is mostly unknown.", "pct": 99},
-    ],
-    "completenessRings": [{"label": "Field Coverage", "pct": 72, "color": "var(--amber)", "size": 68}, {"label": "ID Integrity", "pct": 84, "color": "var(--amber)", "size": 54}, {"label": "URL Validity", "pct": 32, "color": "var(--red)", "size": 54}],
-    "hierarchyOptions": {"root": [["channel", "Channel"], ["inputtype", "Input type"], ["language", "Language"]], "child": [["user", "User"], ["channel", "Channel"], ["inputtype", "Input type"]], "metric": [["cr", "Created"], ["up", "Uploaded"], ["pb", "Published"]]},
-    "kpiTree": {"name": "Frammer KPI Framework", "type": "root", "children": [{"name": "[A] Usage & Adoption", "type": "category", "color": "#d4952a", "children": [{"name": "Total Platform Volume", "formula": "SUM(Uploaded)", "value": "4,453", "critical": False, "avail": "direct"}, {"name": "Total AI Outputs Created", "formula": "SUM(Created)", "value": "15,119", "critical": False, "avail": "direct"}]}]},
-}
-
-CLIENT_DATA: Dict[str, Any] = {
-    "meta": {"tag": "CLIENT OVERVIEW", "badge": "EXPLICIT ACCESS ONLY", "title": "Client Profile", "sub": "Anonymized client dataset · Mar 2025 – Feb 2026"},
-    "summaryCards": [{"l": "Client ID", "v": "[Anon]", "c": "var(--ink)", "icon": "◎"}, {"l": "Active Channels", "v": "18", "c": "var(--gold-lt)", "icon": "◉"}, {"l": "Active Users", "v": "44 / 45", "c": "var(--ink2)", "icon": "⊹"}, {"l": "Dataset Period", "v": "12 months", "c": "var(--amber)", "icon": "⊳"}],
-    "pipelineSummary": [{"l": "Total Uploaded", "v": "4,453", "pct": 100, "color": "var(--ink3)"}, {"l": "Total Processed", "v": "15,119", "pct": 100, "color": "var(--gold)"}, {"l": "Total Published", "v": "111", "pct": 2.5, "color": "var(--amber)"}, {"l": "Publish Rate", "v": "2.5%", "pct": 2.5, "color": "var(--red)"}, {"l": "AI Multiplier", "v": "3.4×", "pct": 85, "color": "var(--gold-lt)"}],
-    "keySignals": [{"type": "crit", "tag": "⚠ CRITICAL — PUBLISH GAP", "text": "97.5% of AI-created outputs were never distributed."}, {"type": "warn", "tag": "⚡ DATA QUALITY", "text": "99.3% unknown team names · 68% NULL platform on published rows."}, {"type": "ok", "tag": "✓ GROWTH SIGNAL", "text": "Feb 2026 created 2,756 outputs — strong upward trajectory."}],
-    "channels": OVERVIEW_DATA["channels"],
-}
 
 
 # ─── Request/Response Models ─────────────────────────────────────────────────
@@ -333,138 +242,107 @@ async def health_check():
     return {"status": "healthy", "service": "frammer-agent"}
 
 
-@app.get("/data/overview")
-async def get_overview_data():
-    """Hardcoded overview section payload (temporary)."""
-    return OVERVIEW_DATA
-
-
-@app.get("/data/trends")
-async def get_trends_data():
-    """Hardcoded trends section payload (temporary)."""
-    return TRENDS_DATA
-
-
-@app.get("/data/multidim")
-async def get_multidim_data():
-    """Hardcoded multidim section payload (temporary)."""
-    return MULTIDIM_DATA
-
-
-@app.get("/data/funnel")
-async def get_funnel_data():
-    """Hardcoded funnel section payload (temporary)."""
-    return FUNNEL_DATA
-
-
-@app.get("/data/explorer")
-async def get_explorer_data():
-    """Hardcoded explorer section payload (temporary)."""
-    return EXPLORER_DATA
-
-
-@app.get("/data/client")
-async def get_client_data():
-    """Hardcoded client section payload (temporary)."""
-    return CLIENT_DATA
-
-
-# ─── Chat Endpoints ──────────────────────────────────────────────────────────
+# ─── Chat Endpoint (planner-based, from main_simple.py @ 220daa1) ───────────
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    """
-    Process a chat message and return response with artifacts.
-    """
+    """Main chat endpoint — uses planner + conversation memory."""
     session_id = request.session_id or str(uuid.uuid4())
-    logger.info(f"📨 Chat request: '{request.message[:100]}...' (session: {session_id[:8]})")
-    
-    # Get or create session
-    if session_id not in sessions:
-        sessions[session_id] = {"history": []}
-    
-    session = sessions[session_id]
-    
+    logger.info(f"Chat request: {request.message[:100]}... (session: {session_id[:8]})")
+
     try:
-        # Ensure modules are imported
-        _import_modules()
-        
-        # Run agent
-        logger.info("🤖 Running agent...")
-        result = await run_agent(
-            query=request.message,
-            session_id=session_id,
-            conversation_history=session["history"]
+        from conversation_memory import get_session_memory
+        session_memory = get_session_memory(session_id)
+
+        # Get conversation context for the planner
+        conversation_context = session_memory.get_context_for_llm(include_last_n=5)
+
+        # Run planner with context
+        from planner import run_planner
+        result = run_planner(request.message, conversation_context=conversation_context)
+
+        # Extract key findings from result
+        key_findings = []
+        if result.get("answer"):
+            first_sentence = result["answer"].split('.')[0]
+            if len(first_sentence) > 10:
+                key_findings.append(first_sentence)
+
+        datasets_used = result.get("datasets_used", [])
+
+        charts_created = []
+        for artifact in result.get("artifacts", []):
+            if artifact.get("type") == "chart" and artifact.get("title"):
+                charts_created.append(artifact["title"])
+
+        # Store this turn in memory
+        session_memory.add_turn(
+            user_query=request.message,
+            assistant_response=result["answer"],
+            datasets_used=datasets_used,
+            charts_created=charts_created,
+            key_findings=key_findings,
         )
-        
-        logger.info(f"✅ Agent response: {len(result.get('response', ''))} chars, {len(result.get('artifacts', []))} artifacts")
-        
-        # Update session history
-        session["history"].append({"role": "user", "content": request.message})
-        session["history"].append({"role": "assistant", "content": result["response"]})
-        
-        # Keep history bounded
-        if len(session["history"]) > 20:
-            session["history"] = session["history"][-20:]
-        
+
+        # Generate smart follow-up suggestions based on context
+        suggestions = result.get("suggestions", [])
+        if not suggestions:
+            suggestions = _generate_followup_suggestions(
+                query=request.message,
+                datasets_used=datasets_used,
+                charts_created=charts_created,
+                session_memory=session_memory,
+            )
+
+        artifacts = result.get("artifacts", [])
+        logger.info(f"Response: {len(result['answer'])} chars, {len(artifacts)} artifacts")
+
         return ChatResponse(
-            response=result["response"],
+            response=result["answer"],
             session_id=session_id,
-            artifacts=result.get("artifacts", []),
-            suggestions=result.get("suggestions", [])
+            artifacts=artifacts,
+            suggestions=suggestions,
         )
-        
+
     except Exception as e:
-        logger.exception(f"❌ Chat error: {e}")
+        logger.error(f"Chat error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/chat/stream")
-async def chat_stream(
-    message: str = Query(...),
-    session_id: Optional[str] = Query(None)
-):
-    """
-    Stream chat response using Server-Sent Events.
-    """
-    session_id = session_id or str(uuid.uuid4())
-    
-    if session_id not in sessions:
-        sessions[session_id] = {"history": []}
-    
-    session = sessions[session_id]
-    
-    async def event_generator():
-        try:
-            # Send session ID first
-            yield {"event": "session", "data": json.dumps({"session_id": session_id})}
-            
-            # Build messages for streaming
-            messages = session["history"] + [{"role": "user", "content": message}]
-            
-            # Try to use LLM streaming
-            try:
-                llm_dir = _agent_dir / "llm"
-                sys.path.insert(0, str(llm_dir))
-                from groq_client import stream_fast
-                full_response = ""
-                async for token in stream_fast(messages, system_prompt="You are a helpful data analyst."):
-                    full_response += token
-                    yield {"event": "token", "data": json.dumps({"token": token})}
-            except Exception as llm_error:
-                full_response = f"LLM not available: {llm_error}"
-                yield {"event": "token", "data": json.dumps({"token": full_response})}
-            
-            # Update history
-            session["history"].append({"role": "user", "content": message})
-            session["history"].append({"role": "assistant", "content": full_response})
-            
-            yield {"event": "done", "data": json.dumps({"complete": True})}
-            
-        except Exception as e:
-            yield {"event": "error", "data": json.dumps({"error": str(e)})}
-    
-    return EventSourceResponse(event_generator())
+def _generate_followup_suggestions(
+    query: str, datasets_used: list, charts_created: list, session_memory
+) -> list:
+    """Generate contextual follow-up suggestions based on conversation."""
+    suggestions = []
+
+    if datasets_used:
+        ds = datasets_used[0]
+        if "user" in ds.lower():
+            suggestions.append("Show me the bottom 5 users")
+            suggestions.append("Compare this with the previous month")
+        elif "channel" in ds.lower():
+            suggestions.append("Which channel has the highest growth?")
+            suggestions.append("Show channel-wise monthly trend")
+        elif "month" in ds.lower():
+            suggestions.append("Forecast the next 3 months")
+            suggestions.append("Which month had the highest activity?")
+
+    if charts_created:
+        if any("bar" in c.lower() for c in charts_created):
+            suggestions.append("Show this as a pie chart instead")
+        suggestions.append("Explain these results in more detail")
+
+    if len(session_memory.turns) > 0:
+        suggestions.append("Compare this with my previous analysis")
+
+    if not suggestions:
+        suggestions = [
+            "What datasets do you have?",
+            "Show me the top performers",
+            "Create a monthly trend chart",
+        ]
+
+    return suggestions[:3]
 
 
 # ─── Dataset Endpoints ───────────────────────────────────────────────────────
@@ -479,6 +357,107 @@ async def list_datasets():
         return {"datasets": datasets}
     except Exception as e:
         return {"datasets": [], "error": str(e)}
+
+
+@app.get("/datasets/lineage")
+async def get_dataset_lineage():
+    """Return the full dataset lineage graph: source files -> classified roles -> merged outputs.
+
+    Generic, no hardcoded roles or filenames — derived entirely from the analytics
+    registry, file scan, and classification cache. Suitable for any frontend.
+    """
+    try:
+        sys.path.insert(0, str(_backend_dir))
+        from analytics.analytics_engine import _load_registry_config
+        from analytics.merger import find_merge_candidates
+        from analytics.role_classifier import load_cached_classifications
+
+        registry_config = _load_registry_config()
+        registry_datasets = registry_config.get("datasets", {})
+
+        # Group source files by role (same logic the pipeline uses)
+        groups, unmatched_paths = find_merge_candidates(registry_datasets)
+
+        # Load classification cache for method info
+        classification_cache = load_cached_classifications()
+        method_by_filename: Dict[str, str] = {}
+        for _hash, info in classification_cache.items():
+            if info.get("filename"):
+                method_by_filename[info["filename"]] = info.get("method", "unknown")
+
+        # Load current dataset_paths to know what the pipeline actually uses
+        dataset_paths_file = _agent_dir / "data" / "saved_analytics" / "dataset_paths.json"
+        dataset_paths: Dict[str, str] = {}
+        if dataset_paths_file.exists():
+            try:
+                dataset_paths = json.loads(dataset_paths_file.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+        # Build source_files list
+        source_files = []
+        for role, paths in groups.items():
+            for p in paths:
+                source_files.append({
+                    "filename": p.name,
+                    "file_path": str(p),
+                    "role": role,
+                    "classification_method": method_by_filename.get(p.name, "pattern"),
+                })
+
+        # Build roles dict
+        import pandas as pd
+        roles: Dict[str, Any] = {}
+        for role, paths in groups.items():
+            source_names = [p.name for p in paths]
+            is_merged = len(paths) > 1
+            active_path = dataset_paths.get(role, str(paths[0]))
+
+            row_count = col_count = 0
+            try:
+                df_peek = pd.read_csv(active_path, encoding="utf-8-sig", nrows=0)
+                col_count = len(df_peek.columns)
+                with open(active_path, "r", encoding="utf-8-sig") as fh:
+                    row_count = sum(1 for _ in fh) - 1
+            except Exception:
+                pass
+
+            # Check if this role has a supplement
+            supplement_path = dataset_paths.get(f"{role}_supplement")
+            has_supplement = supplement_path is not None and Path(supplement_path).exists()
+            supp_info = None
+            if has_supplement:
+                try:
+                    df_supp = pd.read_csv(supplement_path, encoding="utf-8-sig", nrows=0)
+                    supp_info = {
+                        "path": supplement_path,
+                        "filename": Path(supplement_path).name,
+                        "columns": list(df_supp.columns),
+                    }
+                except Exception:
+                    pass
+
+            roles[role] = {
+                "sources": source_names,
+                "is_merged": is_merged,
+                "active_path": active_path,
+                "active_filename": Path(active_path).name,
+                "row_count": max(row_count, 0),
+                "col_count": col_count,
+                "has_supplement": has_supplement,
+                "supplement": supp_info,
+            }
+
+        unclassified = [{"filename": p.name, "file_path": str(p)} for p in unmatched_paths]
+
+        return {
+            "source_files": source_files,
+            "roles": roles,
+            "unclassified": unclassified,
+        }
+    except Exception as e:
+        logger.exception(f"Lineage endpoint error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/datasets/{dataset_id}")
@@ -548,18 +527,306 @@ async def upload_dataset(
         raise HTTPException(status_code=500, detail=str(e))
 
 
+ALLOWED_UPLOAD_EXTENSIONS = {".csv", ".xlsx", ".xls"}
+
+
+def _reload_chat_registry(dataset_paths: Optional[Dict[str, str]] = None):
+    """Reload the in-memory DatasetRegistry so the chat agent sees updated data.
+    If dataset_paths is given, load from that dict. Otherwise re-read dataset_paths.json."""
+    try:
+        from dataset_registry import get_registry as get_ds_registry
+        reg = get_ds_registry()
+        if dataset_paths:
+            reg.load_from_paths(dataset_paths)
+        else:
+            reg.reload()
+    except Exception as e:
+        logger.warning(f"Failed to reload chat registry: {e}")
+
+# ─── Standalone Mode Paths ─────────────────────────────────────────────────
+ACTIVE_MODE_PATH = _agent_dir / "data" / "saved_analytics" / "active_mode.json"
+STANDALONE_REPORTS_DIR = _agent_dir / "data" / "saved_analytics" / "standalone_reports"
+
+
+def _get_active_mode() -> dict:
+    """Read active_mode.json. Returns {"mode": "main"} if not set."""
+    if ACTIVE_MODE_PATH.exists():
+        try:
+            return json.loads(ACTIVE_MODE_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"mode": "main"}
+
+
+def _set_active_mode(mode_data: dict) -> None:
+    """Write active_mode.json."""
+    ACTIVE_MODE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ACTIVE_MODE_PATH.write_text(json.dumps(mode_data, indent=2), encoding="utf-8")
+
+
+@app.post("/datasets/upload-and-analyze")
+async def upload_and_analyze(
+    files: List[UploadFile] = File(...),
+    mode: str = Query("merge", pattern="^(merge|standalone)$"),
+):
+    """Upload one or more dataset files, classify each via LLM, then merge or analyze standalone.
+
+    mode=merge: save to datasets dir, re-run full analytics pipeline once after all files are saved.
+    mode=standalone: save to uploads subdir, run partial analytics on all uploaded files together.
+    """
+    # Validate all files first
+    for f in files:
+        ext = Path(f.filename or "").suffix.lower()
+        if ext not in ALLOWED_UPLOAD_EXTENSIONS:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported file type '{ext}' for '{f.filename}'. Allowed: {', '.join(ALLOWED_UPLOAD_EXTENSIONS)}",
+            )
+
+    try:
+        sys.path.insert(0, str(_backend_dir))
+        sys.path.insert(0, str(_agent_dir))
+
+        from analytics.role_classifier import classify_dataset_role as llm_classify, load_cached_classifications, save_cached_classifications
+        from analytics.analytics_engine import _load_registry_config, get_engine
+        import pandas as pd
+
+        registry_config = _load_registry_config()
+        registry_datasets = registry_config.get("datasets", {})
+
+        if mode == "merge":
+            dest_dir = _agent_dir / "data" / "datasets"
+        else:
+            dest_dir = _agent_dir / "data" / "datasets" / "uploads"
+        dest_dir.mkdir(parents=True, exist_ok=True)
+
+        cache = load_cached_classifications()
+        file_results = []  # per-file classification results
+        classified_files = {}  # role -> dest_path (for standalone)
+
+        for f in files:
+            content = await f.read()
+            dest_path = dest_dir / f.filename
+
+            # Convert xlsx/xls to csv for the pipeline
+            ext = Path(f.filename).suffix.lower()
+            if ext in (".xlsx", ".xls"):
+                try:
+                    from io import BytesIO
+                    df_conv = pd.read_excel(BytesIO(content))
+                    csv_name = Path(f.filename).stem + ".csv"
+                    dest_path = dest_dir / csv_name
+                    df_conv.to_csv(dest_path, index=False, encoding="utf-8-sig")
+                    logger.info(f"Converted {f.filename} → {csv_name}")
+                except Exception as e:
+                    file_results.append({
+                        "filename": f.filename,
+                        "status": "error",
+                        "error": f"Failed to convert Excel file: {e}",
+                    })
+                    continue
+            else:
+                dest_path.write_bytes(content)
+
+            logger.info(f"Saved uploaded file to {dest_path}")
+
+            # Classify
+            classified_role = llm_classify(dest_path, registry_datasets, cache)
+
+            if not classified_role:
+                try:
+                    df_peek = pd.read_csv(dest_path, encoding="utf-8-sig", nrows=3)
+                    columns = list(df_peek.columns)
+                except Exception:
+                    columns = []
+                file_results.append({
+                    "filename": f.filename,
+                    "status": "unclassified",
+                    "columns": columns,
+                    "error": "Could not classify into any known role",
+                })
+                continue
+
+            classified_files[classified_role] = str(dest_path)
+            file_results.append({
+                "filename": f.filename,
+                "status": "classified",
+                "classified_role": classified_role,
+            })
+
+        save_cached_classifications(cache)
+
+        if not classified_files:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "None of the uploaded files could be classified",
+                    "files": file_results,
+                    "available_roles": list(registry_datasets.keys()),
+                },
+            )
+
+        if mode == "merge":
+            dashboard = get_engine().run(force=True)
+            _reload_chat_registry()  # sync chat agent with new merged data
+            # Regenerate recommendations with new data
+            try:
+                from rec_engine.engine import generate_recommendations
+                generate_recommendations(force=True)
+            except Exception as e:
+                logger.warning(f"Recommendations regeneration failed after merge: {e}")
+            return {
+                "success": True,
+                "mode": "merge",
+                "files": file_results,
+                "dashboard": dashboard,
+            }
+        else:
+            # Standalone: run analytics on all classified uploaded files together
+            from analytics.column_mapper import run_column_mapper, load_persisted_mappings
+            from analytics.kpi_executor import compute_kpis_from_registry, compute_charts_from_registry
+
+            # Column mapping for each classified role
+            role_dfs = {}
+            for role, path in classified_files.items():
+                try:
+                    role_dfs[role] = pd.read_csv(path, encoding="utf-8-sig")
+                except Exception as e:
+                    logger.warning(f"Failed to read {path} for column mapping: {e}")
+
+            existing_mappings = load_persisted_mappings()
+            column_mappings = run_column_mapper(
+                role_to_df=role_dfs,
+                registry_datasets=registry_datasets,
+                existing_mappings=existing_mappings,
+                changed_roles=list(classified_files.keys()),
+            )
+
+            metrics = compute_kpis_from_registry(column_mappings, classified_files)
+            chart_data = compute_charts_from_registry(column_mappings, classified_files)
+
+            # Figure out which KPIs were skipped
+            kpi_registry_path = _backend_dir / "analytics" / "kpi_registry.json"
+            all_kpis = json.loads(kpi_registry_path.read_text(encoding="utf-8")).get("kpis", [])
+            computed_ids = {m.get("id") for m in metrics}
+            skipped = [
+                {"id": k["id"], "name": k["name"], "reason": f"Requires dataset(s): {k['input']['datasets']}"}
+                for k in all_kpis
+                if k["id"] not in computed_ids
+            ]
+
+            # Build dataset_sources for attribution
+            dataset_sources = {}
+            for role, path in classified_files.items():
+                dataset_sources[role] = {
+                    "filename": Path(path).name,
+                    "display_name": Path(path).stem,
+                }
+
+            # Build a full dashboard-shaped report so frontend can render it identically
+            from analytics.analytics_engine import assemble_dashboard
+            standalone_dashboard = {
+                "generated_at": __import__("datetime").datetime.now().isoformat(),
+                "from_cache": False,
+                "change_type": "standalone",
+                "metrics": metrics,
+                "by_category": {},
+                "count": len(metrics),
+                "chart_data": chart_data,
+                "charts": {},
+                "dataset_sources": dataset_sources,
+                "standalone_mode": True,
+                "standalone_filenames": [f.filename for f in files if any(
+                    r["filename"] == f.filename and r.get("status") == "classified"
+                    for r in file_results
+                )],
+                "standalone_roles": list(classified_files.keys()),
+                "skipped_kpis": skipped,
+            }
+
+            # Group metrics by category
+            for m in metrics:
+                cat = m.get("category", "other")
+                standalone_dashboard["by_category"].setdefault(cat, []).append(m)
+
+            # Persist the report
+            report_id = str(uuid.uuid4())
+            STANDALONE_REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+            report_path = STANDALONE_REPORTS_DIR / f"{report_id}.json"
+            report_path.write_text(json.dumps(standalone_dashboard, indent=2, default=str), encoding="utf-8")
+
+            # Set active mode to standalone
+            _set_active_mode({
+                "mode": "standalone",
+                "report_id": report_id,
+                "filenames": standalone_dashboard["standalone_filenames"],
+                "roles": list(classified_files.keys()),
+            })
+
+            # Sync registry.db: wipe old entries, register only standalone files
+            try:
+                from context_manager import get_registry
+                registry = get_registry()
+                registry.clear_all_datasets()
+                for role, path in classified_files.items():
+                    registry.register_dataset(file_path=path, name=role, domain_tags=[role])
+                # Also save metrics so chat agent can reference them
+                for m in metrics:
+                    registry.save_metric(
+                        name=m.get("name", m.get("id", "")),
+                        value=float(m.get("value", 0)) if isinstance(m.get("value"), (int, float)) else 0,
+                        formatted=m.get("formatted", ""),
+                        category=m.get("category", ""),
+                        description=m.get("description", ""),
+                    )
+                logger.info(f"Registry.db synced with {len(classified_files)} standalone datasets")
+            except Exception as e:
+                logger.warning(f"Failed to sync registry.db for standalone mode: {e}")
+
+            # Sync in-memory chat registry with standalone files only
+            _reload_chat_registry(classified_files)
+
+            logger.info(f"Standalone report saved: {report_id} with {len(metrics)} metrics")
+
+            return {
+                "success": True,
+                "mode": "standalone",
+                "report_id": report_id,
+                "files": file_results,
+                "metrics": metrics,
+                "chart_data": chart_data,
+                "skipped_kpis": skipped,
+                "available_roles": list(classified_files.keys()),
+            }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Upload and analyze failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ─── Metrics Endpoints ───────────────────────────────────────────────────────
 
 @app.get("/metrics")
 async def get_metrics(category: Optional[str] = None):
-    """Get all computed metrics/KPIs."""
+    """Get computed metrics/KPIs (uses analytics engine, falls back to registry)."""
     _import_modules()
     try:
-        registry = get_registry()
-        metrics = registry.get_metrics(category=category)
+        from analytics.analytics_engine import get_engine
+        dashboard = get_engine().get_dashboard()
+        metrics = dashboard.get("metrics", [])
+        if category:
+            metrics = [m for m in metrics if m.get("category") == category]
         return {"metrics": metrics}
     except Exception as e:
-        return {"metrics": [], "error": str(e)}
+        logger.warning(f"Metrics endpoint error: {e}")
+        try:
+            registry = get_registry()
+            metrics = registry.get_metrics(category=category)
+            return {"metrics": metrics}
+        except Exception:
+            return {"metrics": [], "error": str(e)}
 
 
 @app.get("/kpi-summary")
@@ -585,14 +852,142 @@ async def get_kpi_summary():
 
 @app.get("/analytics-dashboard")
 async def get_analytics_dashboard():
-    """Get the complete analytics dashboard (KPIs + chart data + chart list)."""
+    """Get the complete analytics dashboard. If standalone mode is active, serve the standalone report."""
     _import_modules()
     try:
+        # Check if standalone mode is active
+        mode_data = _get_active_mode()
+        if mode_data.get("mode") == "standalone":
+            report_id = mode_data.get("report_id")
+            report_path = STANDALONE_REPORTS_DIR / f"{report_id}.json"
+            if report_path.exists():
+                report = json.loads(report_path.read_text(encoding="utf-8"))
+                report["standalone_mode"] = True
+                return report
+            else:
+                # Report file missing, revert to main
+                _set_active_mode({"mode": "main"})
+
         from analytics.analytics_engine import get_engine
-        return get_engine().get_dashboard()
+        dashboard = get_engine().get_dashboard()
+        dashboard["standalone_mode"] = False
+        return dashboard
     except Exception as e:
         logger.exception(f"Analytics dashboard error: {e}")
         return {"metrics": [], "by_category": {}, "count": 0, "chart_data": {}, "charts": {}, "error": str(e)}
+
+
+@app.get("/active-mode")
+async def get_active_mode():
+    """Get current dashboard mode (standalone vs main)."""
+    return _get_active_mode()
+
+
+@app.post("/restore-main-dashboard")
+async def restore_main_dashboard():
+    """Switch back from standalone mode to main multi-dataset dashboard.
+    Re-runs the full analytics pipeline so registry.db is repopulated with main datasets."""
+    _set_active_mode({"mode": "main"})
+
+    # Re-run analytics so registry.db gets re-populated with main datasets
+    # (_register_datasets_in_db is called inside the engine's schema/data paths)
+    try:
+        from analytics.analytics_engine import run_analytics
+        run_analytics(force=True)
+        logger.info("Restored main dashboard and re-synced registry.db")
+    except Exception as e:
+        logger.warning(f"Failed to re-run analytics on restore: {e}")
+
+    _reload_chat_registry()  # sync chat agent with main datasets
+    return {"status": "restored", "mode": "main"}
+
+
+# ─── Frontend Dashboard Endpoint (New UI format) ─────────────────────────────
+
+@app.get("/frontend-dashboard")
+async def get_frontend_dashboard(view: Optional[str] = None):
+    """
+    Get analytics data formatted for the new frontend UI.
+    
+    Returns data shaped for: executive, client, funnel, trends, explorer, multidim views.
+    
+    Args:
+        view: Optional specific view to return (executive, client, funnel, trends, explorer, multidim).
+              If not provided, returns all views.
+    """
+    _import_modules()
+    try:
+        from analytics.analytics_engine import get_engine
+        from analytics.frontend_adapter import transform_dashboard_for_frontend, get_view
+        
+        dashboard = get_engine().get_dashboard()
+        
+        if view:
+            # Return specific view only
+            return get_view(dashboard, view)
+        else:
+            # Return all views
+            return transform_dashboard_for_frontend(dashboard)
+    except Exception as e:
+        logger.exception(f"Frontend dashboard error: {e}")
+        return {"error": str(e)}
+
+
+@app.delete("/datasets/{filename:path}")
+async def delete_dataset(filename: str):
+    """Delete a dataset file from data/datasets/, clear it from caches, and re-run analytics."""
+    _import_modules()
+    datasets_dir = _agent_dir / "data" / "datasets"
+    file_path = datasets_dir / filename
+
+    # Security: prevent path traversal
+    try:
+        resolved = file_path.resolve()
+        if not str(resolved).startswith(str(datasets_dir.resolve())):
+            raise HTTPException(status_code=403, detail="Cannot delete files outside datasets directory")
+    except Exception:
+        raise HTTPException(status_code=403, detail="Invalid path")
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail=f"Dataset '{filename}' not found")
+
+    # Delete the file
+    file_path.unlink()
+    logger.info(f"Deleted dataset: {filename}")
+
+    # Clear from dataset_hashes.json
+    hashes_path = _agent_dir / "data" / "saved_analytics" / "dataset_hashes.json"
+    if hashes_path.exists():
+        try:
+            hashes = json.loads(hashes_path.read_text(encoding="utf-8"))
+            hashes = {k: v for k, v in hashes.items() if not k.endswith(filename)}
+            hashes_path.write_text(json.dumps(hashes, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+
+    # Clear from role_classifications.json
+    classifications_path = _agent_dir / "data" / "saved_analytics" / "role_classifications.json"
+    if classifications_path.exists():
+        try:
+            classifications = json.loads(classifications_path.read_text(encoding="utf-8"))
+            classifications = {k: v for k, v in classifications.items()
+                              if v.get("filename") != filename}
+            classifications_path.write_text(json.dumps(classifications, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+
+    # Re-run analytics
+    try:
+        from analytics.analytics_engine import run_analytics
+        result = run_analytics(force=True)
+        _reload_chat_registry()  # sync chat agent after deletion
+        return {
+            "status": "deleted",
+            "filename": filename,
+            "metrics_count": result.get("count", 0),
+        }
+    except Exception as e:
+        return {"status": "deleted", "filename": filename, "warning": f"Re-analysis failed: {e}"}
 
 
 @app.post("/analytics-refresh")
@@ -602,6 +997,12 @@ async def refresh_analytics(force: bool = True):
     try:
         from analytics.analytics_engine import run_analytics
         result = run_analytics(force=force)
+        # Regenerate recommendations after analytics refresh
+        try:
+            from rec_engine.engine import generate_recommendations
+            generate_recommendations(force=True)
+        except Exception as e:
+            logger.warning(f"Recommendations regeneration failed after refresh: {e}")
         return {
             "status": "refreshed",
             "change_type": result.get("change_type", "unknown"),
@@ -611,6 +1012,19 @@ async def refresh_analytics(force: bool = True):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ─── Recommendations Endpoint ─────────────────────────────────────────────────
+
+@app.get("/recommendations")
+async def get_recommendations(force: bool = False):
+    """Get LLM-generated strategic recommendations based on analytics data."""
+    try:
+        from rec_engine.engine import generate_recommendations
+        return generate_recommendations(force=force)
+    except Exception as e:
+        logger.error(f"Recommendations endpoint failed: {e}")
+        return {"error": str(e), "recommendations": [], "insights": []}
 
 
 # ─── Charts Endpoints ────────────────────────────────────────────────────────
@@ -626,6 +1040,15 @@ async def get_charts():
         return {"charts": {}}
     except Exception as e:
         return {"charts": {}, "error": str(e)}
+
+
+@app.get("/charts/{filename}")
+async def get_chart(filename: str):
+    """Serve a chart PNG file for the frontend dashboard."""
+    chart_path = Path(DATA_DIR) / filename
+    if not chart_path.exists():
+        raise HTTPException(status_code=404, detail="Chart not found")
+    return FileResponse(path=str(chart_path), media_type="image/png", filename=filename)
 
 
 @app.get("/charts/list")

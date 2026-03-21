@@ -7,7 +7,25 @@
       "Bash(cmd /c \"npm run build 2>&1\")",
       "Bash(powershell -Command \"cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30\")",
       "Bash(powershell -Command \"& { \\\\$env:Path += ';C:\\\\Program Files\\\\nodejs'; cd 'C:\\\\Users\\\\Aditya\\\\Downloads\\\\frammer_agent\\\\frontend-main'; npm run build 2>&1 | Select-Object -Last 30 }\")",
-      "WebFetch(domain:www.frammer.com)"
+      "WebFetch(domain:www.frammer.com)",
+      "Bash(wc:*)",
+      "Bash(python -m backend.analytics.merger --merge-datasets)",
+      "Bash(PYTHONIOENCODING=utf-8 python -m backend.analytics.merger --merge-datasets)",
+      "Bash(head -1 \"data/datasets/CLIENT 1 combined_data\\(2025-3-1-2026-2-28\\).csv\")",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(len\\(d\\),''''roles''''\\); [print\\(f''''  {k}''''\\) for k in sorted\\(d\\) if not k.startswith\\(''''_''''\\)]\")",
+      "Bash(PYTHONIOENCODING=utf-8 python -c \":*)",
+      "Bash(curl -s http://localhost:8000/analytics-dashboard)",
+      "Bash(xxd data/datasets/monthly-chart.csv)",
+      "Bash(curl -s http://localhost:8000/run-analytics)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({k:v for k,v in d.items\\(\\) if k in [''''status'''',''''error'''']}, indent=2\\)\\)\")",
+      "Bash(curl -s -X POST http://localhost:8000/run-analytics)",
+      "Bash(curl -s -X POST http://localhost:8000/analytics/refresh?force=true)",
+      "Bash(python -c \"import json,sys; print\\(json.dumps\\(json.load\\(sys.stdin\\), indent=2\\)\\)\")",
+      "Bash(curl -s -X POST http://localhost:8000/analytics-refresh?force=true)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(''''status:'''', d.get\\(''''status'''',''''''''\\)\\); print\\(''''metrics:'''', d.get\\(''''metrics_count'''',''''''''\\)\\); print\\(''''charts:'''', d.get\\(''''charts_count'''',''''''''\\)\\)\")",
+      "Bash(python -c \":*)",
+      "Bash(find C:/Users/ajsal/OneDrive/Desktop/Documents/codes/gc26/frammer_agent/new_frontend -name *.tsx -o -name *.ts)",
+      "Bash(find new_frontend -maxdepth 3 -name *.tsx -not -path */node_modules/* -not -path */.next/*)"
     ]
   }
 }

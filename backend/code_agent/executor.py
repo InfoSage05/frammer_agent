@@ -179,7 +179,7 @@ def get_full_dataset(name):
     if name not in DATASETS:
         available = list(DATASETS.keys())
         raise ValueError(f"Dataset '{{name}}' not found. Available: {{available}}")
-    return pd.read_csv(DATASETS[name])
+    return pd.read_csv(DATASETS[name], encoding="utf-8-sig")
 
 def create_chart(chart_type, title, data, x_key=None, y_keys=None):
     """Create chart for frontend (Recharts format)"""
@@ -470,30 +470,3 @@ def execute_code_with_retry(code: str, description: str = "", max_retries: int =
         "code": result.code,
         "reflections": result.reflections
     }
-
-if __name__ == "__main__":
-    # Configure logging for the test run
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(name)s | %(levelname)s | %(message)s")
-    
-    import os
-    from dotenv import load_dotenv
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
-    success = load_dotenv(env_path)
-    print(f"DEBUG: env_path={env_path}, load_success={success}, key_present={'GROQ_API_KEY' in os.environ}")
-    
-    # Initialize registry so dbms functions work
-    from dataset_registry import initialize_registry
-    data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "gc"))
-    initialize_registry(data_dir)
-    
-    test_code = """
-import pandas as pd
-df = pd.DataFrame({'A': [1, 2, 3]})
-# Intentional KeyError to test reflexion
-val = df['NON_EXISTENT_COLUMN']
-RESULT['data'] = val.tolist()
-"""
-    print("\n=== Running Test Code ===")
-    out = execute_code_with_retry(test_code, "Testing KeyError recovery")
-    print("\n=== Final Output ===")
-    print(json.dumps(out, indent=2))

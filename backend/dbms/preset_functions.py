@@ -62,7 +62,7 @@ def get_schema(dataset_name: str) -> List[Dict[str, Any]]:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
     
     # Load actual data to get accurate stats
-    df = pd.read_csv(meta["path"])
+    df = pd.read_csv(meta["path"], encoding="utf-8-sig")
     
     schema = []
     for col in df.columns:
@@ -100,7 +100,7 @@ def get_first_rows(dataset_name: str, n: int = 5) -> pd.DataFrame:
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
     
-    df = pd.read_csv(meta["path"], nrows=n)
+    df = pd.read_csv(meta["path"], nrows=n, encoding="utf-8-sig")
     return df
 
 
@@ -121,7 +121,7 @@ def get_stats(dataset_name: str, column: str) -> Dict[str, Any]:
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
     
-    df = pd.read_csv(meta["path"])
+    df = pd.read_csv(meta["path"], encoding="utf-8-sig")
     
     if column not in df.columns:
         raise ValueError(f"Column '{column}' not found in '{dataset_name}'. Available: {df.columns.tolist()}")
@@ -166,7 +166,7 @@ def get_full_dataset(dataset_name: str) -> pd.DataFrame:
     if not meta:
         raise ValueError(f"Dataset '{dataset_name}' not found. Available: {list(registry.datasets.keys())}")
     
-    return pd.read_csv(meta["path"])
+    return pd.read_csv(meta["path"], encoding="utf-8-sig")
 
 
 def get_dataset_path(dataset_name: str) -> str:
