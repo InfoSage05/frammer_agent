@@ -2,7 +2,7 @@
 import useChartJs from '@/components/charts/ChartJSWrapper';
 import useJsonData from '@/hooks/useJsonData';
 import { useLiveSectionData } from '@/hooks/useDashboardData';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ScatterChart from "../charts/ScatterChart";
 import ChannelPlatformHeatmap from "../charts/ChannelHeatmap";
 import Ring from "../charts/Ring";
@@ -64,7 +64,7 @@ function _Divider({ label }) {
   return (
     <div style={{ display:'flex', alignItems:'center', gap:12, margin:'22px 0 16px' }}>
       <div style={{ flex:1, height:'0.5px', background:_LINE }} />
-      <span style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_INK4 }}>{label}</span>
+      <span style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_INK4 }}>{label}</span>
       <div style={{ flex:1, height:'0.5px', background:_LINE }} />
     </div>
   );
@@ -72,8 +72,8 @@ function _Divider({ label }) {
 function _FormulaRow({ label, text }) {
   return (
     <div style={{ display:'flex', alignItems:'flex-start', gap:16, background:_CARD, border:`0.5px solid ${_LINE}`, borderLeft:`2.5px solid ${_R}`, borderRadius:'0 8px 8px 0', padding:'12px 18px', marginBottom:8 }}>
-      <span style={{ fontFamily:_MN, fontSize:9.5, textTransform:'uppercase', letterSpacing:'0.12em', color:_RM, fontWeight:700, minWidth:72, flexShrink:0, paddingTop:2 }}>{label}</span>
-      <span style={{ fontFamily:_MN, fontSize:12.5, color:_INK2, fontWeight:500, lineHeight:1.55 }}>{text}</span>
+      <span style={{ fontFamily:_MN, fontSize:11.5, textTransform:'uppercase', letterSpacing:'0.12em', color:_RM, fontWeight:700, minWidth:72, flexShrink:0, paddingTop:2 }}>{label}</span>
+      <span style={{ fontFamily:_MN, fontSize:14, color:_INK2, fontWeight:500, lineHeight:1.55 }}>{text}</span>
     </div>
   );
 }
@@ -82,11 +82,11 @@ function _SimSlider({ label, min, max, step, val, set, fmt }) {
     <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:12, padding:'10px 16px', background:_CARD, borderRadius:8, border:`0.5px solid ${_LINE}` }}
       onMouseEnter={e => e.currentTarget.style.borderColor = _LINE2}
       onMouseLeave={e => e.currentTarget.style.borderColor = _LINE}>
-      <label style={{ fontFamily:_MN, fontSize:12.5, fontWeight:500, color:_INK3, minWidth:168 }}>{label}</label>
+      <label style={{ fontFamily:_MN, fontSize:14.5, fontWeight:500, color:_INK3, minWidth:168 }}>{label}</label>
       <input type="range" min={min} max={max} step={step} value={val}
         onChange={e => set(+e.target.value)}
         style={{ flex:1, height:3, accentColor:_R, cursor:'pointer' }} />
-      <span style={{ fontFamily:_MN, fontSize:15, fontWeight:700, color:_INK, minWidth:72, textAlign:'right' }}>{fmt(val)}</span>
+      <span style={{ fontFamily:_MN, fontSize:17, fontWeight:700, color:_INK, minWidth:72, textAlign:'right' }}>{fmt(val)}</span>
     </div>
   );
 }
@@ -100,7 +100,7 @@ function _GaugeRow({ items }) {
           <div style={{ height:3, background:_LINE, borderRadius:2, margin:'0 0 10px', overflow:'hidden' }}>
             <div style={{ height:3, borderRadius:2, background:_R, width:Math.min(100,g.barW)+'%', opacity:0.80, transition:'width .4s ease' }} />
           </div>
-          <div style={{ fontFamily:_MN, fontSize:10, color:_INK3, lineHeight:1.4, textTransform:'uppercase', letterSpacing:'0.06em' }}>{g.label}</div>
+          <div style={{ fontFamily:_MN, fontSize:12.5, color:_INK3, lineHeight:1.4, textTransform:'uppercase', letterSpacing:'0.06em' }}>{g.label}</div>
         </div>
       ))}
     </div>
@@ -110,18 +110,18 @@ function _KpiCard({ label, value, sub, hero, heroDesc, heroScore }) {
   return (
     <div style={{ background:_CARD2, border:`0.5px solid ${_LINE}`, borderTop:`1.5px solid ${_RBD}`, borderRadius:12, padding:hero?'20px 24px':'18px 20px', position:'relative', overflow:'hidden' }}>
       <div style={{ position:'absolute', top:0, left:0, right:0, height:1, background:`linear-gradient(90deg,transparent,${_RBD},transparent)` }} />
-      <div style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
+      <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
       <div style={{ display:'flex', alignItems:'baseline', gap:5, marginBottom:hero?6:4 }}>
         <div style={{ fontFamily:_MN, fontSize:hero?48:28, fontWeight:700, lineHeight:1, color:_INK, letterSpacing:'-0.02em', transition:'color .3s' }}>{value}</div>
-        {hero && <div style={{ fontFamily:_MN, fontSize:14, color:_INK4 }}>/100</div>}
+        {hero && <div style={{ fontFamily:_MN, fontSize:16, color:_INK4 }}>/100</div>}
       </div>
-      {heroDesc && <div style={{ fontFamily:_SN, fontSize:11.5, color:_INK3, lineHeight:1.65, marginBottom:12, maxWidth:300 }}>{heroDesc}</div>}
+      {heroDesc && <div style={{ fontFamily:_SN, fontSize:13.5, color:_INK3, lineHeight:1.65, marginBottom:12, maxWidth:300 }}>{heroDesc}</div>}
       {heroScore !== undefined && (
         <div style={{ height:2, background:_LINE, borderRadius:1, overflow:'hidden' }}>
           <div style={{ height:'100%', borderRadius:1, width:heroScore+'%', background:_R, transition:'width .5s cubic-bezier(.4,0,.2,1)' }} />
         </div>
       )}
-      {sub && <div style={{ fontFamily:_MN, fontSize:10, color:_INK3, marginTop:2 }}>{sub}</div>}
+      {sub && <div style={{ fontFamily:_MN, fontSize:12.5, color:_INK3, marginTop:2 }}>{sub}</div>}
     </div>
   );
 }
@@ -129,17 +129,17 @@ function _ExCard({ title, body, resultVal, resultLabel, note }) {
   return (
     <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderTop:`1.5px solid ${_RBD}`, borderRadius:12, padding:'20px 22px', position:'relative', overflow:'hidden' }}>
       <div style={{ position:'absolute', top:0, right:0, width:80, height:80, borderRadius:'50%', background:_R, filter:'blur(40px)', opacity:0.06, pointerEvents:'none' }} />
-      <div style={{ fontFamily:_MN, fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.10em', color:_INK4, marginBottom:10 }}>{title}</div>
+      <div style={{ fontFamily:_MN, fontSize:12.5, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.10em', color:_INK4, marginBottom:10 }}>{title}</div>
       <div style={{ fontFamily:_SN, fontSize:14, color:_INK2, lineHeight:1.7, marginBottom:14 }} dangerouslySetInnerHTML={{ __html: body }} />
-      <div style={{ fontFamily:_MN, fontSize:12, color:_INK3, marginBottom:6 }}>{resultLabel}</div>
+      <div style={{ fontFamily:_MN, fontSize:13.5, color:_INK3, marginBottom:6 }}>{resultLabel}</div>
       <div style={{ fontFamily:_MN, fontSize:32, fontWeight:700, color:_INK, letterSpacing:'-0.02em', marginBottom:10 }}>{resultVal}</div>
-      <div style={{ fontFamily:_SN, fontSize:12.5, color:_INK3, lineHeight:1.6 }}>{note}</div>
+      <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, lineHeight:1.6 }}>{note}</div>
     </div>
   );
 }
 function _StatusBadge({ label, ok }) {
   return (
-    <span style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, padding:'2px 10px', borderRadius:20, letterSpacing:'0.06em',
+    <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, padding:'2px 10px', borderRadius:20, letterSpacing:'0.06em',
       background: ok ? _CARD2 : _RBG,
       color: ok ? _INK3 : _R,
       border: `1px solid ${ok ? _LINE2 : _RBD}` }}>{label}</span>
@@ -257,7 +257,7 @@ function CYIPanel() {
       {/* Header */}
       <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:24 }}>
         <div>
-          <div style={{ fontFamily:_MN, fontSize:10, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 5 · 5-Factor Multiplicative Model</div>
+          <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 5 · 5-Factor Multiplicative Model</div>
           <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, letterSpacing:'-0.01em', lineHeight:1.1, marginBottom:10 }}>Content Yield Index</div>
           <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.70, maxWidth:580 }}>How efficiently does your platform convert uploaded content into distributed, watched audience output? 100 = all 5 parameters at data-derived optimal.</div>
         </div>
@@ -281,8 +281,8 @@ function CYIPanel() {
 
       {/* Explanation */}
       <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderLeft:`2.5px solid ${_R}`, borderRadius:'0 8px 8px 0', padding:'12px 18px', marginBottom:4, transition:'border-left-color .25s' }}>
-        <div style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_RM, marginBottom:5 }}>Active factor · {CYI_META[activeKey].name}</div>
-        <div style={{ fontFamily:_SN, fontSize:13.5, color:_INK2, lineHeight:1.65 }}>{_cyiDesc(activeKey, cur[activeKey])}</div>
+        <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_RM, marginBottom:5 }}>Active factor · {CYI_META[activeKey].name}</div>
+        <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.65 }}>{_cyiDesc(activeKey, cur[activeKey])}</div>
       </div>
 
       <_Divider label="Parameter Controls" />
@@ -306,12 +306,12 @@ function CYIPanel() {
               </div>
               <div style={{ display:'flex', gap:5, marginBottom:8, flexWrap:'wrap' }}>
                 <_StatusBadge label={m.impLbl==='Critical'?'Critical — bottleneck':m.impLbl==='Medium'?'Medium importance':'Low — multiplier'} ok={m.impLbl==='Low'} />
-                <span style={{ fontFamily:_MN, fontSize:9.5, fontWeight:600, padding:'2px 9px', borderRadius:20, background:_CARD2, color:_INK4, border:`1px solid ${_LINE}` }}>#{m.rank} of 5</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:600, padding:'2px 9px', borderRadius:20, background:_CARD2, color:_INK4, border:`1px solid ${_LINE}` }}>#{m.rank} of 5</span>
               </div>
-              <div style={{ fontFamily:_SN, fontSize:11.5, color:_INK3, marginBottom:12, lineHeight:1.5 }}>{m.desc}</div>
+              <div style={{ fontFamily:_SN, fontSize:13.5, color:_INK3, marginBottom:12, lineHeight:1.5 }}>{m.desc}</div>
               <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
-                <span style={{ fontFamily:_MN, fontSize:9.5, color:_INK4 }}>{m.fb(lo)}</span>
-                <span style={{ fontFamily:_MN, fontSize:9.5, fontWeight:600, color:_RM }}>{m.fv(hi)} ideal</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, color:_INK4 }}>{m.fb(lo)}</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, fontWeight:600, color:_RM }}>{m.fv(hi)} ideal</span>
               </div>
               <input type="range" min={lo} max={hi} step={CYI_STEPS[k]} value={cur[k]}
                 onFocus={() => setActiveKey(k)}
@@ -320,17 +320,17 @@ function CYIPanel() {
               <div style={{ position:'relative', height:14, marginTop:2, marginBottom:8 }}>
                 <div style={{ position:'absolute', left:bp+'%', transform:'translateX(-50%)', display:'flex', flexDirection:'column', alignItems:'center' }}>
                   <div style={{ width:1, height:5, background:_INK4, opacity:0.6 }} />
-                  <span style={{ fontFamily:_MN, fontSize:8.5, color:_INK4, whiteSpace:'nowrap', marginTop:1 }}>baseline {m.fb(CYI_BASE[k])}</span>
+                  <span style={{ fontFamily:_MN, fontSize:10.5, color:_INK4, whiteSpace:'nowrap', marginTop:1 }}>baseline {m.fb(CYI_BASE[k])}</span>
                 </div>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:8 }}>
-                <span style={{ fontFamily:_MN, fontSize:9.5, color:_INK4, minWidth:56 }}>% of ideal</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, color:_INK4, minWidth:56 }}>% of ideal</span>
                 <div style={{ flex:1, height:3, background:_LINE, borderRadius:2, overflow:'hidden' }}>
                   <div style={{ height:3, borderRadius:2, background:_R, width:pi+'%', opacity:0.80, transition:'width .3s' }} />
                 </div>
-                <span style={{ fontFamily:_MN, fontSize:9.5, minWidth:52, textAlign:'right', color:_sc(pi,90,60), fontWeight:600 }}>{pi.toFixed(0)}%</span>
+                <span style={{ fontFamily:_MN, fontSize:11.5, minWidth:52, textAlign:'right', color:_sc(pi,90,60), fontWeight:600 }}>{pi.toFixed(0)}%</span>
               </div>
-              <div style={{ fontFamily:_SN, fontSize:11, color:_INK4, lineHeight:1.6, padding:'8px 11px', background:'rgba(0,0,0,0.20)', borderRadius:7, border:`0.5px solid ${_LINE}`, minHeight:36 }}>
+              <div style={{ fontFamily:_SN, fontSize:13, color:_INK4, lineHeight:1.6, padding:'8px 11px', background:'rgba(0,0,0,0.20)', borderRadius:7, border:`0.5px solid ${_LINE}`, minHeight:36 }}>
                 {_cyiDesc(k, cur[k]).length>140?_cyiDesc(k, cur[k]).slice(0,140)+'…':_cyiDesc(k, cur[k])}
               </div>
             </div>
@@ -342,20 +342,20 @@ function CYIPanel() {
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
         <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'18px 20px' }}>
-          <div style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Sensitivity Analysis</div>
-          <div style={{ fontFamily:_SN, fontSize:12, color:_INK3, marginBottom:14 }}>CYI score across the {activeKey} range</div>
+          <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Sensitivity Analysis</div>
+          <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, marginBottom:14 }}>CYI score across the {activeKey} range</div>
           <div style={{ position:'relative', height:190 }}><canvas ref={sensRef} /></div>
           <div style={{ display:'flex', gap:16, flexWrap:'wrap', marginTop:10 }}>
             {[{bg:_R,label:'CYI /100'},{bg:_INK,label:'Current'},{bg:_INK4,label:'Baseline'}].map((li,i)=>(
-              <div key={i} style={{ display:'flex', alignItems:'center', gap:5, fontFamily:_MN, fontSize:9.5, color:_INK3 }}>
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:5, fontFamily:_MN, fontSize:11.5, color:_INK3 }}>
                 <div style={{ width:7, height:7, borderRadius:2, background:li.bg }} />{li.label}
               </div>
             ))}
           </div>
         </div>
         <div style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:12, padding:'18px 20px' }}>
-          <div style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Distance from Ideal</div>
-          <div style={{ fontFamily:_SN, fontSize:12, color:_INK3, marginBottom:14 }}>Each factor's proximity to its data-derived optimum</div>
+          <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:3 }}>Distance from Ideal</div>
+          <div style={{ fontFamily:_SN, fontSize:14, color:_INK3, marginBottom:14 }}>Each factor's proximity to its data-derived optimum</div>
           <div style={{ position:'relative', height:190 }}><canvas ref={distRef} /></div>
         </div>
       </div>
@@ -366,8 +366,7 @@ function CYIPanel() {
 /* ─────────────────────────────────────────────────────────────
    Advanced KPI — all 4 sub-tabs
 ───────────────────────────────────────────────────────────── */
-function AdvancedKPITab({ onAskAI }) {
-  const [kpiTab, setKpiTab] = useState("vvs");
+function AdvancedKPITab({ onAskAI, kpiTab, setKpiTab }) {
   const [pesCpw, setPesCpw] = useState(3.15);
   const [pesAvg, setPesAvg] = useState(3.15);
   const [gviCpw, setGviCpw] = useState(2.0);
@@ -422,8 +421,8 @@ function AdvancedKPITab({ onAskAI }) {
   const pesPlatforms = [{p:"YouTube Shorts",cpw:5.0},{p:"Instagram Reels",cpw:6.0},{p:"Facebook Reels",cpw:6.0},{p:"X / Twitter",cpw:7.0},{p:"Threads",cpw:6.0},{p:"LinkedIn",cpw:12.0}].sort((a,b)=>a.cpw-b.cpw);
   const gviConts     = [{c:"North America",cpw:6.72},{c:"Europe",cpw:4.8},{c:"Oceania",cpw:7.68},{c:"East Asia",cpw:3.84},{c:"Middle East",cpw:2.4},{c:"Latin America",cpw:1.2},{c:"South Asia",cpw:0.58},{c:"Africa",cpw:1.2}].sort((a,b)=>b.cpw-a.cpw);
 
-  const TH = { fontFamily:_MN, fontSize:10.5, fontWeight:700, letterSpacing:'0.10em', textTransform:'uppercase', padding:'10px 16px', color:_INK4, borderBottom:`0.5px solid ${_LINE}`, textAlign:'left' as const, background:'rgba(255,255,255,0.02)' };
-  const TD = { padding:'11px 16px', borderBottom:`0.5px solid rgba(255,255,255,0.04)`, fontFamily:_SN, fontSize:14, color:_INK2 };
+  const TH = { fontFamily:_MN, fontSize:12.5, fontWeight:700, letterSpacing:'0.10em', textTransform:'uppercase', padding:'10px 16px', color:_INK4, borderBottom:`0.5px solid ${_LINE}`, textAlign:'left' as const, background:'rgba(255,255,255,0.02)' };
+  const TD = { padding:'11px 16px', borderBottom:`0.5px solid rgba(255,255,255,0.04)`, fontFamily:_SN, fontSize:15, color:_INK2 };
 
   const TABS = [
     { k:"vvs", label:"Viral Velocity Score"      },
@@ -439,7 +438,7 @@ function AdvancedKPITab({ onAskAI }) {
         {TABS.map(({ k, label }, idx) => (
           <button key={k} onClick={() => setKpiTab(k)} style={{
             padding:'10px 24px',
-            fontFamily:_MN, fontSize:11.5, fontWeight:700,
+            fontFamily:_MN, fontSize:13.5, fontWeight:700,
             letterSpacing:'0.08em', textTransform:'uppercase',
             border:'none', borderRight: idx < TABS.length-1 ? `0.5px solid ${_LINE}` : 'none',
             cursor:'pointer',
@@ -467,11 +466,10 @@ function AdvancedKPITab({ onAskAI }) {
           {kpiTab === "vvs" && <>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:24 }}>
               <div style={{ flex:1 }}>
-                <div style={{ fontFamily:_MN, fontSize:10, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 3 · 60 Niche × Account-Size Combinations · Power-Law Model</div>
+                <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>Dataset 3 · 60 Niche × Account-Size Combinations · Power-Law Model</div>
                 <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, marginBottom:10, letterSpacing:'-0.01em', lineHeight:1.1 }}>Viral Velocity Score</div>
                 <div style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.70, maxWidth:580 }}>Predicts a video's viral probability using a power-law model fitted separately for each niche × account-size group. Weights derived from 60 regression fits across Short and Medium formats.</div>
               </div>
-              <GraphActionButtons insightsOpen={false} onToggleInsights={()=>{}} onAskAI={()=>onAskAI&&onAskAI("Viral Velocity Score",{})} />
             </div>
 
             <_FormulaRow label="Formula"   text="VVS = Pr^α × A^β × R^γ   (power-law, group-fitted weights)" />
@@ -486,12 +484,12 @@ function AdvancedKPITab({ onAskAI }) {
                 { label:'Format',       val:vvsFmt,   set:setVvsFmt,   opts:["Short","Medium"] },
               ].map(({ label, val, set, opts }) => (
                 <div key={label} style={{ background:_CARD, border:`0.5px solid ${_LINE}`, borderRadius:10, padding:'14px 16px' }}>
-                  <div style={{ fontFamily:_MN, fontSize:9.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
+                  <div style={{ fontFamily:_MN, fontSize:11.5, fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:_INK4, marginBottom:10 }}>{label}</div>
                   <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
                     {opts.map(o => (
                       <button key={o} onClick={()=>set(o)} style={{
                         padding:'5px 12px', borderRadius:6, border:`0.5px solid ${val===o?_RBD:_LINE}`,
-                        fontFamily:_MN, fontSize:11, fontWeight:600, cursor:'pointer',
+                        fontFamily:_MN, fontSize:13, fontWeight:600, cursor:'pointer',
                         background: val===o ? _RBG : 'transparent',
                         color: val===o ? _R : _INK3,
                         transition:'all .15s',
@@ -514,8 +512,8 @@ function AdvancedKPITab({ onAskAI }) {
                 { label:'Confidence',            val:vvsConfScore+'%',             barW:vvsConfScore },
               ]} />
               <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:10, borderRadius:8, padding:'12px 18px', background:_RBG, border:`0.5px solid ${_RBD}` }}>
-                <span style={{ fontFamily:_MN, fontSize:10, fontWeight:700, color:vvsConfC, letterSpacing:'0.10em', padding:'3px 10px', background:'rgba(255,255,255,0.05)', borderRadius:5, border:`1px solid ${_LINE2}`, flexShrink:0 }}>{vvsConfLbl}</span>
-                <span style={{ fontFamily:_SN, fontSize:13.5, color:_INK2, lineHeight:1.6 }}>
+                <span style={{ fontFamily:_MN, fontSize:12, fontWeight:700, color:vvsConfC, letterSpacing:'0.10em', padding:'3px 10px', background:'rgba(255,255,255,0.05)', borderRadius:5, border:`1px solid ${_LINE2}`, flexShrink:0 }}>{vvsConfLbl}</span>
+                <span style={{ fontFamily:_SN, fontSize:14.5, color:_INK2, lineHeight:1.6 }}>
                   {vvsNorm>=70?`Strong viral signal. ${vvsNiche} ${vvsSize} accounts at these metrics exceed the median by ${Math.round(vvsNorm/50*100-100)}%.`
                     :vvsNorm>=40?'Moderate signal. Video shows some viral markers but falls below the top-quartile threshold.'
                     :'Weak signal. Lift Prompt Rate or Retention to push the score above 70.'}
@@ -531,7 +529,7 @@ function AdvancedKPITab({ onAskAI }) {
                   {["Short","Medium"].map(f=>(
                     <button key={f} onClick={()=>setVvsNicheView(f)} style={{
                       padding:'5px 14px', borderRadius:6, border:`0.5px solid ${vvsNicheView===f?_RBD:_LINE}`,
-                      fontFamily:_MN, fontSize:11, fontWeight:600, cursor:'pointer',
+                      fontFamily:_MN, fontSize:13, fontWeight:600, cursor:'pointer',
                       background:vvsNicheView===f?_RBG:'transparent',
                       color:vvsNicheView===f?_R:_INK3, transition:'all .15s',
                     }}>{f}</button>
@@ -558,7 +556,7 @@ function AdvancedKPITab({ onAskAI }) {
                           const r2=w?.r2||0;
                           const r2opacity = r2>=0.5?0.90:r2>=0.4?0.60:0.30;
                           return (
-                            <td key={size} style={{ ...TD, fontFamily:_MN, fontSize:13 }}>
+                            <td key={size} style={{ ...TD, fontFamily:_MN, fontSize:15 }}>
                               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                                 <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
                                   <div style={{ height:5, borderRadius:3, background:`rgba(232,67,45,${r2opacity})`, width:(r2*100)+'%' }} />
@@ -596,7 +594,7 @@ function AdvancedKPITab({ onAskAI }) {
             return <>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:24 }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontFamily:_MN, fontSize:10, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>
+                  <div style={{ fontFamily:_MN, fontSize:12, fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:_RM, marginBottom:8 }}>
                     {isPes ? 'Dataset 1 · Platform × Topic Ad Cost' : 'Dataset 2 · YouTube Continent × Topic Ad Cost'}
                   </div>
                   <div style={{ fontFamily:_MN, fontSize:30, fontWeight:700, color:_INK, marginBottom:10, letterSpacing:'-0.01em', lineHeight:1.1 }}>
@@ -607,7 +605,6 @@ function AdvancedKPITab({ onAskAI }) {
                            : "Not all cheap markets are equal — this index scores each region by dividing reach per dollar by its market cost tier, revealing where you get high volume and value."}
                   </div>
                 </div>
-                <GraphActionButtons insightsOpen={false} onToggleInsights={()=>{}} onAskAI={()=>onAskAI&&onAskAI(isPes?'Platform Efficiency Score':'Geo Value Index',{})} />
               </div>
 
               <_FormulaRow label="Formula"   text={isPes ? "PES = Avg CPW (all platforms) ÷ CPW (chosen platform & topic)" : "GVI = (Global avg CPW ÷ Local CPW) × 100"} />
@@ -689,7 +686,7 @@ function AdvancedKPITab({ onAskAI }) {
                                   <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
                                     <div style={{ height:5, borderRadius:3, background:_R, width:Math.min(100,(+p/5)*100)+'%', opacity:isGood?0.80:0.35 }} />
                                   </div>
-                                  <span style={{ fontFamily:_MN, fontSize:11.5, color: isGood?_INK2:_R, minWidth:32, fontWeight:600 }}>{(+p*100/5).toFixed(0)}%</span>
+                                  <span style={{ fontFamily:_MN, fontSize:13.5, color: isGood?_INK2:_R, minWidth:32, fontWeight:600 }}>{(+p*100/5).toFixed(0)}%</span>
                                 </div>
                               </td>
                             </tr>
@@ -711,7 +708,7 @@ function AdvancedKPITab({ onAskAI }) {
                                   <div style={{ flex:1, background:_LINE, borderRadius:3, height:5, overflow:'hidden' }}>
                                     <div style={{ height:5, borderRadius:3, background:_R, width:Math.min(100,gviR/8)+'%', opacity:isGood?0.80:0.35 }} />
                                   </div>
-                                  <span style={{ fontFamily:_MN, fontSize:11.5, color:_INK3, minWidth:36, fontWeight:500 }}>{hrs}h</span>
+                                  <span style={{ fontFamily:_MN, fontSize:13.5, color:_INK3, minWidth:36, fontWeight:500 }}>{hrs}h</span>
                                 </div>
                               </td>
                             </tr>
@@ -736,7 +733,17 @@ function SectionExplorer({ theme, onAskAI }) {
   const { data: staticData } = useJsonData("explorer");
   const data = useLiveSectionData("explorer", dash?.liveDashboard, staticData);
   const [subView, setSubView] = useState("users");
+  const [kpiTab, setKpiTab] = useState("vvs");
   const [userSort, setUserSort] = useState("created");
+
+  // Respond to deep-link navigation from other sections (e.g. Executive KPI blocks)
+  useEffect(() => {
+    const dl = dash?.explorerDeepLink;
+    if (!dl) return;
+    if (dl.subView) setSubView(dl.subView);
+    if (dl.kpiTab) setKpiTab(dl.kpiTab);
+    dash?.clearExplorerDeepLink?.();
+  }, [dash?.explorerDeepLink]);
   const [treeRoot, setTreeRoot] = useState("channel");
   const [treeChild, setTreeChild] = useState("user");
   const [treeMetric, setTreeMetric] = useState("cr");
@@ -1348,7 +1355,7 @@ function SectionExplorer({ theme, onAskAI }) {
         </div>
       )}
 
-      {subView === "advanced_kpi" && <AdvancedKPITab onAskAI={onAskAI} />}
+      {subView === "advanced_kpi" && <AdvancedKPITab onAskAI={onAskAI} kpiTab={kpiTab} setKpiTab={setKpiTab} />}
     </div>
   );
 }
