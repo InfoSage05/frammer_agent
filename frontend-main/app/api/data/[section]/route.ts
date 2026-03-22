@@ -9,7 +9,7 @@ const SECTION_TO_VIEW: Record<string, string> = {
   client: "client",
 };
 
-const BACKEND_BASE = process.env.BACKEND_API_BASE ?? "http://localhost:8000";
+const BACKEND_BASE = process.env.BACKEND_API_BASE ?? "http://34.60.183.121";
 
 export async function GET(
   _request: Request,

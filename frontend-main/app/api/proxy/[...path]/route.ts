@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_BASE =
-  process.env.BACKEND_API_BASE ?? "http://localhost:8000";
+  process.env.BACKEND_API_BASE ?? "http://34.60.183.121";
 
 async function proxy(
   req: NextRequest,
