@@ -667,4 +667,3 @@ def run_planner(query: str, conversation_context: str = "") -> dict:
             {"phase": "execution", "success": result["success"]}
         ]
     }
-

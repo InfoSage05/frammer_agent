@@ -1,7 +1,6 @@
 {
   "version": "2.0",
   "description": "Modular KPI Registry - Each KPI has a dedicated Python function with clear input/output spec",
-
   "how_to_add_new_kpi": {
     "step1": "Add Python function to kpi_functions.py with signature: fn(datasets: Dict, columns: Dict) -> value",
     "step2": "Register function in KPI_FUNCTION_REGISTRY dict at bottom of kpi_functions.py",
@@ -16,7 +15,9 @@
       "format": "{:.2f}",
       "unit": "items",
       "input": {
-        "datasets": ["dataset_role_name"],
+        "datasets": [
+          "dataset_role_name"
+        ],
         "columns": {
           "semantic_col_name": {
             "description": "What this column represents",
@@ -32,7 +33,6 @@
       "formula": "Human-readable formula like SUM(col) or A/B*100"
     }
   },
-
   "usage": {
     "description": "How to call a KPI function programmatically",
     "signature": "fn(datasets: Dict[str, pd.DataFrame], columns: Dict[str, str]) -> value",
@@ -42,19 +42,25 @@
       "columns_param": "Dict mapping semantic column names to actual column names. Use defaults if not provided."
     }
   },
-
   "kpis": [
     {
       "id": "total_uploaded",
       "name": "Total Uploaded",
       "description": "Total videos uploaded by users",
       "category": "volume",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_total_uploaded",
       "format": "{:,}",
       "unit": "videos",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "uploaded_count": {
             "description": "Count of source videos uploaded",
@@ -74,12 +80,19 @@
       "name": "Total Processed",
       "description": "Total clips created by AI",
       "category": "volume",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_total_processed",
       "format": "{:,}",
       "unit": "outputs",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "created_count": {
             "description": "Count of AI-generated clips",
@@ -99,12 +112,19 @@
       "name": "Total Published",
       "description": "Total clips published to platforms",
       "category": "volume",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_total_published",
       "format": "{:,}",
       "unit": "videos",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "published_count": {
             "description": "Count of clips published to social platforms",
@@ -124,12 +144,17 @@
       "name": "Distinct Channels",
       "description": "Number of unique channels",
       "category": "volume",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_distinct_channels",
       "format": "{}",
       "unit": "channels",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "channel_name": {
             "description": "Channel identifier",
@@ -149,12 +174,17 @@
       "name": "Distinct Users",
       "description": "Number of unique users",
       "category": "volume",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_distinct_users",
       "format": "{}",
       "unit": "users",
       "input": {
-        "datasets": ["user_summary"],
+        "datasets": [
+          "user_summary"
+        ],
         "columns": {
           "user_name": {
             "description": "User or operator identifier",
@@ -174,12 +204,19 @@
       "name": "Publish Rate",
       "description": "Percentage of processed clips published",
       "category": "conversion",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_publish_rate",
       "format": "{:.2f}%",
       "unit": "percent",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "published_count": {
             "description": "Count of clips published",
@@ -195,7 +232,10 @@
       },
       "output": {
         "type": "float",
-        "range": [0, 100],
+        "range": [
+          0,
+          100
+        ],
         "description": "Percentage value"
       },
       "formula": "(SUM(published_count) / SUM(created_count)) * 100"
@@ -205,11 +245,17 @@
       "name": "Top Channel",
       "description": "Channel with highest publish rate",
       "category": "conversion",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_performing_channel",
       "format": "{}",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "channel_name": {
             "description": "Channel identifier",
@@ -240,12 +286,19 @@
       "name": "Amplification Ratio",
       "description": "Output clips per uploaded video",
       "category": "efficiency",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_amplification_ratio",
       "format": "{:.2f}x",
       "unit": "ratio",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "created_count": {
             "description": "Count of clips created",
@@ -270,12 +323,19 @@
       "name": "Process Rate",
       "description": "Processing rate as percentage",
       "category": "efficiency",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_process_rate",
       "format": "{:.2f}%",
       "unit": "percent",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "created_count": {
             "description": "Count of clips created",
@@ -300,11 +360,17 @@
       "name": "Peak Upload Month",
       "description": "Month with highest upload volume",
       "category": "efficiency",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_peak_upload_month",
       "format": "{}",
       "input": {
-        "datasets": ["monthly"],
+        "datasets": [
+          "monthly"
+        ],
         "columns": {
           "month_label": {
             "description": "Month identifier (e.g., 'Apr, 2025')",
@@ -329,12 +395,19 @@
       "name": "Uploaded Hours",
       "description": "Total duration of uploaded videos in hours",
       "category": "duration",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_uploaded_hours",
       "format": "{:.2f}h",
       "unit": "hours",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "uploaded_duration": {
             "description": "Duration in hh:mm:ss format",
@@ -355,12 +428,19 @@
       "name": "Processed Hours",
       "description": "Total duration of processed clips in hours",
       "category": "duration",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_processed_hours",
       "format": "{:.2f}h",
       "unit": "hours",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "created_duration": {
             "description": "Duration in hh:mm:ss format",
@@ -381,12 +461,19 @@
       "name": "Published Hours",
       "description": "Total duration of published clips in hours",
       "category": "duration",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_published_hours",
       "format": "{:.2f}h",
       "unit": "hours",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "published_duration": {
             "description": "Duration in hh:mm:ss format",
@@ -407,12 +494,19 @@
       "name": "Avg Upload Duration",
       "description": "Average duration per uploaded video in minutes",
       "category": "duration",
-      "level": ["admin", "client", "channel", "user"],
+      "level": [
+        "admin",
+        "client",
+        "channel",
+        "user"
+      ],
       "function": "compute_avg_upload_duration",
       "format": "{:.2f} min",
       "unit": "minutes",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
           "uploaded_duration": {
             "description": "Duration in hh:mm:ss format",
@@ -438,17 +532,34 @@
       "name": "Top Output Type",
       "description": "Output type with highest created count",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_output_type",
       "format": "{}",
       "input": {
-        "datasets": ["output_type"],
+        "datasets": [
+          "output_type"
+        ],
         "columns": {
-          "output_type_name": { "description": "Output type identifier", "default": "Output Type", "dtype": "categorical" },
-          "created_count": { "description": "Count of clips created", "default": "Created Count", "dtype": "numeric" }
+          "output_type_name": {
+            "description": "Output type identifier",
+            "default": "Output Type",
+            "dtype": "categorical"
+          },
+          "created_count": {
+            "description": "Count of clips created",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "string", "description": "Output type name with highest count" },
+      "output": {
+        "type": "string",
+        "description": "Output type name with highest count"
+      },
       "formula": "output_type WHERE MAX(created_count)"
     },
     {
@@ -456,17 +567,34 @@
       "name": "Top Input Type",
       "description": "Input type with highest uploaded count",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_input_type",
       "format": "{}",
       "input": {
-        "datasets": ["input_type"],
+        "datasets": [
+          "input_type"
+        ],
         "columns": {
-          "input_type_name": { "description": "Input type identifier", "default": "Input Type", "dtype": "categorical" },
-          "uploaded_count": { "description": "Count of uploads", "default": "Uploaded Count", "dtype": "numeric" }
+          "input_type_name": {
+            "description": "Input type identifier",
+            "default": "Input Type",
+            "dtype": "categorical"
+          },
+          "uploaded_count": {
+            "description": "Count of uploads",
+            "default": "Uploaded Count",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "string", "description": "Input type name with highest count" },
+      "output": {
+        "type": "string",
+        "description": "Input type name with highest count"
+      },
       "formula": "input_type WHERE MAX(uploaded_count)"
     },
     {
@@ -474,17 +602,30 @@
       "name": "Language Count",
       "description": "Number of distinct languages across channels",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_language_count",
       "format": "{}",
       "unit": "languages",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
-          "language": { "description": "Language column", "default": "Language", "dtype": "categorical" }
+          "language": {
+            "description": "Language column",
+            "default": "Language",
+            "dtype": "categorical"
+          }
         }
       },
-      "output": { "type": "integer", "description": "Count of unique languages" },
+      "output": {
+        "type": "integer",
+        "description": "Count of unique languages"
+      },
       "formula": "COUNT_DISTINCT(language)"
     },
     {
@@ -492,18 +633,40 @@
       "name": "Lowest Channel",
       "description": "Channel with lowest publish rate",
       "category": "conversion",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_bottom_performing_channel",
       "format": "{}",
       "input": {
-        "datasets": ["channel_summary"],
+        "datasets": [
+          "channel_summary"
+        ],
         "columns": {
-          "channel_name": { "description": "Channel identifier", "default": "Channel", "dtype": "categorical" },
-          "created_count": { "description": "Count of clips created", "default": "Created Count", "dtype": "numeric" },
-          "published_count": { "description": "Count of clips published", "default": "Published Count", "dtype": "numeric" }
+          "channel_name": {
+            "description": "Channel identifier",
+            "default": "Channel",
+            "dtype": "categorical"
+          },
+          "created_count": {
+            "description": "Count of clips created",
+            "default": "Created Count",
+            "dtype": "numeric"
+          },
+          "published_count": {
+            "description": "Count of clips published",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "string", "format": "ChannelName (XX.XX%)", "description": "Channel name with its publish rate" },
+      "output": {
+        "type": "string",
+        "format": "ChannelName (XX.XX%)",
+        "description": "Channel name with its publish rate"
+      },
       "formula": "channel WHERE MIN(published/created)"
     },
     {
@@ -511,18 +674,40 @@
       "name": "Best Output Publish Rate",
       "description": "Output type with highest publish rate",
       "category": "conversion",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_output_type_publish_rate",
       "format": "{}",
       "input": {
-        "datasets": ["output_type"],
+        "datasets": [
+          "output_type"
+        ],
         "columns": {
-          "output_type_name": { "description": "Output type identifier", "default": "Output Type", "dtype": "categorical" },
-          "published_count": { "description": "Count published", "default": "Published Count", "dtype": "numeric" },
-          "created_count": { "description": "Count created", "default": "Created Count", "dtype": "numeric" }
+          "output_type_name": {
+            "description": "Output type identifier",
+            "default": "Output Type",
+            "dtype": "categorical"
+          },
+          "published_count": {
+            "description": "Count published",
+            "default": "Published Count",
+            "dtype": "numeric"
+          },
+          "created_count": {
+            "description": "Count created",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "string", "format": "TypeName (XX.XX%)", "description": "Output type with best publish rate" },
+      "output": {
+        "type": "string",
+        "format": "TypeName (XX.XX%)",
+        "description": "Output type with best publish rate"
+      },
       "formula": "MAX(published/created) by output_type"
     },
     {
@@ -530,17 +715,30 @@
       "name": "MoM Upload Growth",
       "description": "Month-over-month upload growth percentage",
       "category": "growth",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_mom_upload_growth",
       "format": "{:.2f}%",
       "unit": "percent",
       "input": {
-        "datasets": ["monthly"],
+        "datasets": [
+          "monthly"
+        ],
         "columns": {
-          "monthly_uploaded": { "description": "Monthly upload count", "default": "Total Uploaded", "dtype": "numeric" }
+          "monthly_uploaded": {
+            "description": "Monthly upload count",
+            "default": "Total Uploaded",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "float", "description": "Percentage growth between last two months" },
+      "output": {
+        "type": "float",
+        "description": "Percentage growth between last two months"
+      },
       "formula": "((last_month - prev_month) / prev_month) * 100"
     },
     {
@@ -548,17 +746,34 @@
       "name": "Peak Publish Month",
       "description": "Month with highest publish volume",
       "category": "growth",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_peak_publish_month",
       "format": "{}",
       "input": {
-        "datasets": ["monthly"],
+        "datasets": [
+          "monthly"
+        ],
         "columns": {
-          "month_label": { "description": "Month identifier", "default": "Month", "dtype": "categorical" },
-          "monthly_published": { "description": "Total published in that month", "default": "Total Published", "dtype": "numeric" }
+          "month_label": {
+            "description": "Month identifier",
+            "default": "Month",
+            "dtype": "categorical"
+          },
+          "monthly_published": {
+            "description": "Total published in that month",
+            "default": "Total Published",
+            "dtype": "numeric"
+          }
         }
       },
-      "output": { "type": "string", "description": "Month label with highest publish count" },
+      "output": {
+        "type": "string",
+        "description": "Month label with highest publish count"
+      },
       "formula": "month WHERE MAX(published)"
     },
     {
@@ -566,16 +781,30 @@
       "name": "Top Platform",
       "description": "Platform with highest total published count",
       "category": "platform",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_platform",
       "format": "{}",
       "input": {
-        "datasets": ["channel_platform"],
+        "datasets": [
+          "channel_platform"
+        ],
         "columns": {
-          "channel_name": { "description": "Channel identifier to exclude", "default": "Channel", "dtype": "categorical" }
+          "channel_name": {
+            "description": "Channel identifier to exclude",
+            "default": "Channel",
+            "dtype": "categorical"
+          }
         }
       },
-      "output": { "type": "string", "format": "PlatformName (count)", "description": "Top platform with its count" },
+      "output": {
+        "type": "string",
+        "format": "PlatformName (count)",
+        "description": "Top platform with its count"
+      },
       "formula": "platform WHERE MAX(count)"
     },
     {
@@ -583,12 +812,35 @@
       "name": "Publish Drop-off",
       "description": "Number of created clips that were not published",
       "category": "conversion",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_publish_dropoff",
       "format": "{:,}",
       "unit": "videos",
-      "input": {"datasets": ["channel_summary"], "columns": {"created_count": {"description": "Created clips", "default": "Created Count", "dtype": "numeric"}, "published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "SUM(created) - SUM(published)"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "created_count": {
+            "description": "Created clips",
+            "default": "Created Count",
+            "dtype": "numeric"
+          },
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "SUM(created) - SUM(published)"
+      },
       "formula": "SUM(created_count) - SUM(published_count)"
     },
     {
@@ -596,12 +848,29 @@
       "name": "Zero-Pub Channels",
       "description": "Number of channels with zero published clips",
       "category": "conversion",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_zero_pub_channel_count",
       "format": "{}",
       "unit": "channels",
-      "input": {"datasets": ["channel_summary"], "columns": {"published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of channels where published=0"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of channels where published=0"
+      },
       "formula": "COUNT(channels WHERE published_count=0)"
     },
     {
@@ -609,12 +878,29 @@
       "name": "Active Channels",
       "description": "Number of channels with at least one upload",
       "category": "volume",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_active_channel_count",
       "format": "{}",
       "unit": "channels",
-      "input": {"datasets": ["channel_summary"], "columns": {"uploaded_count": {"description": "Upload count", "default": "Uploaded Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of channels where uploaded>0"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "uploaded_count": {
+            "description": "Upload count",
+            "default": "Uploaded Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of channels where uploaded>0"
+      },
       "formula": "COUNT(channels WHERE uploaded_count>0)"
     },
     {
@@ -622,12 +908,29 @@
       "name": "Publishing Channels",
       "description": "Number of channels that have published at least one clip",
       "category": "volume",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_publishing_channel_count",
       "format": "{}",
       "unit": "channels",
-      "input": {"datasets": ["channel_summary"], "columns": {"published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of channels where published>0"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of channels where published>0"
+      },
       "formula": "COUNT(channels WHERE published_count>0)"
     },
     {
@@ -635,12 +938,30 @@
       "name": "Zero-Pub Months",
       "description": "Number of months with zero published output",
       "category": "growth",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_zero_pub_month_count",
       "format": "{}",
       "unit": "months",
-      "input": {"datasets": ["monthly"], "columns": {"monthly_published": {"description": "Monthly published count", "default": "Total Published", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of months where published=0"},
+      "input": {
+        "datasets": [
+          "monthly"
+        ],
+        "columns": {
+          "monthly_published": {
+            "description": "Monthly published count",
+            "default": "Total Published",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of months where published=0"
+      },
       "formula": "COUNT(months WHERE monthly_published=0)"
     },
     {
@@ -648,12 +969,30 @@
       "name": "MoM Created Growth",
       "description": "Month-over-month growth in created clips",
       "category": "growth",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_mom_created_growth",
       "format": "{:.2f}%",
       "unit": "percent",
-      "input": {"datasets": ["monthly"], "columns": {"monthly_created": {"description": "Monthly created count", "default": "Total Created", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "Percentage growth between last two months"},
+      "input": {
+        "datasets": [
+          "monthly"
+        ],
+        "columns": {
+          "monthly_created": {
+            "description": "Monthly created count",
+            "default": "Total Created",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Percentage growth between last two months"
+      },
       "formula": "((last_month_created - prev_month_created) / prev_month_created) * 100"
     },
     {
@@ -661,12 +1000,29 @@
       "name": "Channel Publish Concentration",
       "description": "Percentage of total publishes from the top channel",
       "category": "conversion",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_channel_publish_concentration",
       "format": "{:.2f}%",
       "unit": "percent",
-      "input": {"datasets": ["channel_summary"], "columns": {"published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "Max channel published / total published * 100"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Max channel published / total published * 100"
+      },
       "formula": "MAX(channel_published) / SUM(published) * 100"
     },
     {
@@ -674,11 +1030,34 @@
       "name": "Top Creator",
       "description": "User with the most created clips",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_user_by_created",
       "format": "{}",
-      "input": {"datasets": ["user_summary"], "columns": {"user_name": {"description": "User name", "default": "User", "dtype": "categorical"}, "created_count": {"description": "Created count", "default": "Created Count", "dtype": "numeric"}}},
-      "output": {"type": "string", "description": "User name with highest created count"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "user_name": {
+            "description": "User name",
+            "default": "User",
+            "dtype": "categorical"
+          },
+          "created_count": {
+            "description": "Created count",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "string",
+        "description": "User name with highest created count"
+      },
       "formula": "user WHERE MAX(created_count)"
     },
     {
@@ -686,11 +1065,34 @@
       "name": "Top Publisher",
       "description": "User with the most published clips",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_user_by_published",
       "format": "{}",
-      "input": {"datasets": ["user_summary"], "columns": {"user_name": {"description": "User name", "default": "User", "dtype": "categorical"}, "published_count": {"description": "Published count", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "string", "description": "User name with highest published count"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "user_name": {
+            "description": "User name",
+            "default": "User",
+            "dtype": "categorical"
+          },
+          "published_count": {
+            "description": "Published count",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "string",
+        "description": "User name with highest published count"
+      },
       "formula": "user WHERE MAX(published_count)"
     },
     {
@@ -698,12 +1100,29 @@
       "name": "Zero-Pub Users",
       "description": "Number of users with zero published clips",
       "category": "content_mix",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_zero_pub_user_count",
       "format": "{}",
       "unit": "users",
-      "input": {"datasets": ["user_summary"], "columns": {"published_count": {"description": "Published count", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of users where published=0"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "published_count": {
+            "description": "Published count",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of users where published=0"
+      },
       "formula": "COUNT(users WHERE published_count=0)"
     },
     {
@@ -711,11 +1130,34 @@
       "name": "Top Language",
       "description": "Language with the most created clips",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_top_language",
       "format": "{}",
-      "input": {"datasets": ["language"], "columns": {"language_name": {"description": "Language name", "default": "Language", "dtype": "categorical"}, "created_count": {"description": "Created count", "default": "Created Count", "dtype": "numeric"}}},
-      "output": {"type": "string", "description": "Language with highest created count"},
+      "input": {
+        "datasets": [
+          "language"
+        ],
+        "columns": {
+          "language_name": {
+            "description": "Language name",
+            "default": "Language",
+            "dtype": "categorical"
+          },
+          "created_count": {
+            "description": "Created count",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "string",
+        "description": "Language with highest created count"
+      },
       "formula": "language WHERE MAX(created_count)"
     },
     {
@@ -723,12 +1165,40 @@
       "name": "English Publish Rate",
       "description": "Publish rate for English content",
       "category": "content_mix",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_english_publish_rate",
       "format": "{:.2f}%",
       "unit": "percent",
-      "input": {"datasets": ["language"], "columns": {"language_name": {"description": "Language name", "default": "Language", "dtype": "categorical"}, "published_count": {"description": "Published count", "default": "Published Count", "dtype": "numeric"}, "created_count": {"description": "Created count", "default": "Created Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "English published/created * 100"},
+      "input": {
+        "datasets": [
+          "language"
+        ],
+        "columns": {
+          "language_name": {
+            "description": "Language name",
+            "default": "Language",
+            "dtype": "categorical"
+          },
+          "published_count": {
+            "description": "Published count",
+            "default": "Published Count",
+            "dtype": "numeric"
+          },
+          "created_count": {
+            "description": "Created count",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "English published/created * 100"
+      },
       "formula": "EN_published / EN_created * 100"
     },
     {
@@ -736,12 +1206,28 @@
       "name": "Unknown Team Rate",
       "description": "Percentage of videos with unknown team attribution",
       "category": "data_quality",
-      "level": ["admin"],
+      "level": [
+        "admin"
+      ],
       "function": "compute_unknown_team_rate",
       "format": "{:.2f}%",
       "unit": "percent",
-      "input": {"datasets": ["video_list"], "columns": {"team_name": {"description": "Team attribution", "default": "Team", "dtype": "categorical"}}},
-      "output": {"type": "float", "description": "Unknown/Total * 100"},
+      "input": {
+        "datasets": [
+          "video_list"
+        ],
+        "columns": {
+          "team_name": {
+            "description": "Team attribution",
+            "default": "Team",
+            "dtype": "categorical"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Unknown/Total * 100"
+      },
       "formula": "COUNT(team='Unknown') / COUNT(*) * 100"
     },
     {
@@ -749,12 +1235,33 @@
       "name": "Platform NULL Rate",
       "description": "Percentage of published videos missing platform info",
       "category": "data_quality",
-      "level": ["admin"],
+      "level": [
+        "admin"
+      ],
       "function": "compute_null_platform_rate",
       "format": "{:.2f}%",
       "unit": "percent",
-      "input": {"datasets": ["video_list"], "columns": {"platform": {"description": "Platform name", "default": "Platform", "dtype": "categorical"}, "published_flag": {"description": "Publish status", "default": "Published", "dtype": "categorical"}}},
-      "output": {"type": "float", "description": "NULL platform among published / total published * 100"},
+      "input": {
+        "datasets": [
+          "video_list"
+        ],
+        "columns": {
+          "platform": {
+            "description": "Platform name",
+            "default": "Platform",
+            "dtype": "categorical"
+          },
+          "published_flag": {
+            "description": "Publish status",
+            "default": "Published",
+            "dtype": "categorical"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "NULL platform among published / total published * 100"
+      },
       "formula": "COUNT(published AND platform IS NULL) / COUNT(published) * 100"
     },
     {
@@ -762,12 +1269,38 @@
       "name": "Data Quality Score",
       "description": "Weighted average completeness score across key fields",
       "category": "data_quality",
-      "level": ["admin"],
+      "level": [
+        "admin"
+      ],
       "function": "compute_data_quality_score",
       "format": "{:.1f}%",
       "unit": "percent",
-      "input": {"datasets": ["video_list"], "columns": {"team_name": {"description": "Team field", "default": "Team", "dtype": "categorical"}, "platform": {"description": "Platform field", "default": "Platform", "dtype": "categorical"}, "video_type": {"description": "Video type field", "default": "Video Type", "dtype": "categorical"}}},
-      "output": {"type": "float", "description": "Weighted avg completeness 0-100"},
+      "input": {
+        "datasets": [
+          "video_list"
+        ],
+        "columns": {
+          "team_name": {
+            "description": "Team field",
+            "default": "Team",
+            "dtype": "categorical"
+          },
+          "platform": {
+            "description": "Platform field",
+            "default": "Platform",
+            "dtype": "categorical"
+          },
+          "video_type": {
+            "description": "Video type field",
+            "default": "Video Type",
+            "dtype": "categorical"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Weighted avg completeness 0-100"
+      },
       "formula": "weighted_avg(non_null_rate(team)*0.4, non_null_rate(platform)*0.3, non_null_rate(video_type)*0.3)"
     },
     {
@@ -775,12 +1308,35 @@
       "name": "Publish Gap",
       "description": "Percentage of processed content never published",
       "category": "conversion",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_publish_gap",
       "format": "{:.1f}%",
       "unit": "percent",
-      "input": {"datasets": ["channel_summary"], "columns": {"created_count": {"description": "Created clips", "default": "Created Count", "dtype": "numeric"}, "published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "100 - publish_rate"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "created_count": {
+            "description": "Created clips",
+            "default": "Created Count",
+            "dtype": "numeric"
+          },
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "100 - publish_rate"
+      },
       "formula": "(1 - SUM(published) / SUM(created)) * 100"
     },
     {
@@ -788,12 +1344,29 @@
       "name": "Zero Upload Users",
       "description": "Number of users with no uploads",
       "category": "adoption",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_zero_upload_users",
       "format": "{}",
       "unit": "users",
-      "input": {"datasets": ["user_summary"], "columns": {"uploaded_count": {"description": "Upload count", "default": "Uploaded Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of users where uploaded=0"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "uploaded_count": {
+            "description": "Upload count",
+            "default": "Uploaded Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of users where uploaded=0"
+      },
       "formula": "COUNT(users WHERE uploaded_count=0)"
     },
     {
@@ -801,12 +1374,29 @@
       "name": "Active Users",
       "description": "Number of users with at least one upload",
       "category": "adoption",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_active_users",
       "format": "{}",
       "unit": "users",
-      "input": {"datasets": ["user_summary"], "columns": {"uploaded_count": {"description": "Upload count", "default": "Uploaded Count", "dtype": "numeric"}}},
-      "output": {"type": "integer", "description": "Count of users where uploaded>0"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "uploaded_count": {
+            "description": "Upload count",
+            "default": "Uploaded Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "integer",
+        "description": "Count of users where uploaded>0"
+      },
       "formula": "COUNT(users WHERE uploaded_count>0)"
     },
     {
@@ -814,12 +1404,29 @@
       "name": "User Concentration Top 5",
       "description": "Percentage of total created by top 5 users",
       "category": "adoption",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_user_concentration_top5",
       "format": "{:.1f}%",
       "unit": "percent",
-      "input": {"datasets": ["user_summary"], "columns": {"created_count": {"description": "Created count", "default": "Created Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "Top 5 users created / total created * 100"},
+      "input": {
+        "datasets": [
+          "user_summary"
+        ],
+        "columns": {
+          "created_count": {
+            "description": "Created count",
+            "default": "Created Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Top 5 users created / total created * 100"
+      },
       "formula": "SUM(top5_created) / SUM(created) * 100"
     },
     {
@@ -827,12 +1434,35 @@
       "name": "Avg Clips per Upload",
       "description": "Average number of clips created per upload",
       "category": "efficiency",
-      "level": ["admin", "client", "channel"],
+      "level": [
+        "admin",
+        "client",
+        "channel"
+      ],
       "function": "compute_avg_clips_per_upload",
       "format": "{:.2f}",
       "unit": "clips",
-      "input": {"datasets": ["channel_summary"], "columns": {"created_count": {"description": "Created clips", "default": "Created Count", "dtype": "numeric"}, "uploaded_count": {"description": "Uploaded videos", "default": "Uploaded Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "Average clips per upload"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "created_count": {
+            "description": "Created clips",
+            "default": "Created Count",
+            "dtype": "numeric"
+          },
+          "uploaded_count": {
+            "description": "Uploaded videos",
+            "default": "Uploaded Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Average clips per upload"
+      },
       "formula": "SUM(created) / SUM(uploaded)"
     },
     {
@@ -840,16 +1470,324 @@
       "name": "Zero-Pub Channel Rate",
       "description": "Percentage of channels with no published output",
       "category": "conversion",
-      "level": ["admin", "client"],
+      "level": [
+        "admin",
+        "client"
+      ],
       "function": "compute_zero_pub_channel_rate",
       "format": "{:.1f}%",
       "unit": "percent",
-      "input": {"datasets": ["channel_summary"], "columns": {"published_count": {"description": "Published clips", "default": "Published Count", "dtype": "numeric"}}},
-      "output": {"type": "float", "description": "Zero pub channels / total channels * 100"},
+      "input": {
+        "datasets": [
+          "channel_summary"
+        ],
+        "columns": {
+          "published_count": {
+            "description": "Published clips",
+            "default": "Published Count",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Zero pub channels / total channels * 100"
+      },
       "formula": "COUNT(channels WHERE published=0) / COUNT(channels) * 100"
+    },
+    {
+      "id": "viral_velocity_score",
+      "name": "Viral Velocity Score",
+      "description": "Predicts a video's viral probability using a power-law model fitted separately for each niche x account-size group. Weights derived from 60 regression fits across Short and Medium formats.",
+      "category": "advanced_framework",
+      "function": "simulator_only",
+      "format": "{:.0f}/100",
+      "unit": "score",
+      "formula": "VVS = Pr^a * A^b * R^g (power-law, group-fitted weights). a=prompt rate, b=avg views, g=retention. Normalized to 0-100.",
+      "level": [
+        "video",
+        "niche",
+        "account_size"
+      ],
+      "input": {
+        "datasets": [
+          "external_niche_benchmark"
+        ],
+        "columns": {
+          "prompt_rate": {
+            "description": "Percentage of viewers prompted to share/engage (%)",
+            "default": "Pr",
+            "dtype": "numeric"
+          },
+          "avg_views": {
+            "description": "Average view count (x1000)",
+            "default": "A",
+            "dtype": "numeric"
+          },
+          "retention_rate": {
+            "description": "Percentage of viewers who watch past key retention point (%)",
+            "default": "R",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Viral velocity score 0-100. >=70 high, 40-69 moderate, <40 low"
+      },
+      "interpretation": {
+        "high": "VVS >= 70: Strong viral signal.",
+        "moderate": "VVS 40-69: Moderate signal.",
+        "low": "VVS < 40: Weak signal. Lift Prompt Rate or Retention."
+      },
+      "model_details": {
+        "type": "Power-law regression (OLS on log-transformed inputs)",
+        "groups": "60 niche x account-size combinations",
+        "formats": [
+          "Short",
+          "Medium"
+        ],
+        "account_sizes": [
+          "Nano",
+          "Mid",
+          "Macro"
+        ],
+        "niches": [
+          "Gaming",
+          "Entertainment",
+          "Education",
+          "Tech",
+          "Lifestyle",
+          "Music",
+          "News",
+          "Sports",
+          "Food",
+          "Travel"
+        ],
+        "total_observations": "3450+",
+        "confidence_formula": "0.45*R2 + 0.30*sample_norm + 0.25*signal_quality"
+      },
+      "note": "Interactive simulator in Explorer > KPI Framework > VVS tab. Uses external niche benchmark data."
+    },
+    {
+      "id": "content_yield_index",
+      "name": "Content Yield Index",
+      "description": "Measures how efficiently the platform converts uploaded content into distributed, watched audience output. Multiplicative index across 5 pipeline parameters. 100 = all parameters at data-derived optimal.",
+      "category": "advanced_framework",
+      "function": "simulator_only",
+      "format": "{:.0f}/100",
+      "unit": "score",
+      "formula": "CYI = A * R_pub * L_in * L_out * P_view. A=amplification, R_pub=publish rate, L_in=input duration, L_out=output duration, P_view=view probability.",
+      "level": [
+        "platform"
+      ],
+      "input": {
+        "datasets": [
+          "channel_summary",
+          "monthly_data"
+        ],
+        "columns": {
+          "amplification": {
+            "description": "AI outputs per upload",
+            "default": "A",
+            "dtype": "numeric"
+          },
+          "publish_rate": {
+            "description": "Fraction of created clips published (0-1)",
+            "default": "R_pub",
+            "dtype": "numeric"
+          },
+          "avg_input_duration": {
+            "description": "Avg input video duration (min)",
+            "default": "L_in",
+            "dtype": "numeric"
+          },
+          "avg_output_duration": {
+            "description": "Avg output clip duration (min)",
+            "default": "L_out",
+            "dtype": "numeric"
+          },
+          "view_probability": {
+            "description": "View probability per published clip (0-1)",
+            "default": "P_view",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Content yield index 0-100"
+      },
+      "interpretation": {
+        "key_insight": "Multiplicative - every parameter compounds. Lifting R_pub from 0.74% to 8% multiplies CYI by ~10x.",
+        "baseline_values": {
+          "A": 3.35,
+          "R_pub": 0.0074,
+          "L_in": 10.88,
+          "L_out": 5.45,
+          "P_view": 0.00323
+        },
+        "ideal_values": {
+          "A": 8.0,
+          "R_pub": 0.08,
+          "L_in": 30,
+          "L_out": 15,
+          "P_view": 0.075
+        }
+      },
+      "note": "Interactive simulator in Explorer > KPI Framework > CYI tab."
+    },
+    {
+      "id": "platform_efficiency_score",
+      "name": "Platform Efficiency Score",
+      "description": "How much watch-time you get per dollar relative to market average. Above 1.0 means buying cheaper than the norm.",
+      "category": "advanced_framework",
+      "function": "simulator_only",
+      "format": "{:.2f}x",
+      "unit": "ratio",
+      "formula": "PES = Avg CPW (all platforms) / CPW (chosen platform & topic). Market avg CPW = $3.15.",
+      "level": [
+        "platform",
+        "topic"
+      ],
+      "input": {
+        "datasets": [
+          "external_ad_cost"
+        ],
+        "columns": {
+          "your_cpw": {
+            "description": "Cost per watch-hour ($)",
+            "default": "CPW",
+            "dtype": "numeric"
+          },
+          "market_avg_cpw": {
+            "description": "Average CPW ($)",
+            "default": "Avg_CPW",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Efficiency ratio. >1.0 cheaper, 1.0 at par, <1.0 premium"
+      },
+      "interpretation": {
+        "excellent": "PES >= 2.0: Excellent efficiency.",
+        "good": "PES 1.2-2.0: Good efficiency.",
+        "average": "PES 0.85-1.2: Average.",
+        "premium": "PES < 0.85: Premium pricing."
+      },
+      "benchmark_data": {
+        "market_avg_cpw": 3.15,
+        "platform_cpw": [
+          {
+            "platform": "YouTube Shorts",
+            "cpw": 5.0
+          },
+          {
+            "platform": "Instagram Reels",
+            "cpw": 6.0
+          },
+          {
+            "platform": "Facebook Reels",
+            "cpw": 6.0
+          },
+          {
+            "platform": "X / Twitter",
+            "cpw": 7.0
+          },
+          {
+            "platform": "Threads",
+            "cpw": 6.0
+          },
+          {
+            "platform": "LinkedIn",
+            "cpw": 12.0
+          }
+        ]
+      },
+      "note": "Interactive simulator in Explorer > KPI Framework > PES tab."
+    },
+    {
+      "id": "geo_value_index",
+      "name": "Geo Value Index",
+      "description": "Scores each geographic region by reach per dollar vs market cost tier. Reveals where you get high volume and value.",
+      "category": "advanced_framework",
+      "function": "simulator_only",
+      "format": "{:.0f}",
+      "unit": "index",
+      "formula": "GVI = (Global avg CPW / Local CPW) * 100. 100 = global avg, >100 = above-avg reach, <100 = premium.",
+      "level": [
+        "continent",
+        "topic"
+      ],
+      "input": {
+        "datasets": [
+          "external_geo_ad_cost"
+        ],
+        "columns": {
+          "local_cpw": {
+            "description": "Local cost per watch-hour ($)",
+            "default": "Local_CPW",
+            "dtype": "numeric"
+          },
+          "global_avg_cpw": {
+            "description": "Global average CPW ($)",
+            "default": "Global_Avg_CPW",
+            "dtype": "numeric"
+          }
+        }
+      },
+      "output": {
+        "type": "float",
+        "description": "Geo value index. 100=global avg, higher=better value"
+      },
+      "interpretation": {
+        "high_reach": "GVI >= 300: High-reach market.",
+        "good_value": "GVI 150-300: Good value.",
+        "average": "GVI 70-150: Near global average.",
+        "premium": "GVI < 70: Premium market."
+      },
+      "benchmark_data": {
+        "global_avg_cpw": 2.0,
+        "continent_cpw": [
+          {
+            "continent": "North America",
+            "cpw": 6.72
+          },
+          {
+            "continent": "Europe",
+            "cpw": 4.8
+          },
+          {
+            "continent": "Oceania",
+            "cpw": 7.68
+          },
+          {
+            "continent": "East Asia",
+            "cpw": 3.84
+          },
+          {
+            "continent": "Middle East",
+            "cpw": 2.4
+          },
+          {
+            "continent": "Latin America",
+            "cpw": 1.2
+          },
+          {
+            "continent": "South Asia",
+            "cpw": 0.58
+          },
+          {
+            "continent": "Africa",
+            "cpw": 1.2
+          }
+        ]
+      },
+      "note": "Interactive simulator in Explorer > KPI Framework > GVI tab."
     }
   ],
-
   "how_to_add_new_chart": {
     "step1": "Add chart definition below in 'chart_data' array",
     "step2": "Specify dataset, columns to extract, output_keys for JSON",
@@ -867,8 +1805,16 @@
       "name": "My New Chart",
       "description": "What this chart shows",
       "dataset": "dataset_role_name",
-      "columns": ["col1", "col2", "col3"],
-      "output_keys": ["label", "value1", "value2"],
+      "columns": [
+        "col1",
+        "col2",
+        "col3"
+      ],
+      "output_keys": [
+        "label",
+        "value1",
+        "value2"
+      ],
       "type": "table|pie|funnel|platform_aggregate",
       "compute_fields": [
         {
@@ -880,15 +1826,30 @@
       ]
     }
   },
-
   "chart_data": [
     {
       "id": "monthly_trends",
       "name": "Monthly Volume Trends",
       "description": "Upload, Process, Publish over months with durations",
       "dataset": "monthly",
-      "columns": ["month_label", "monthly_uploaded", "monthly_created", "monthly_published", "uploaded_duration", "created_duration", "published_duration"],
-      "output_keys": ["month", "uploaded", "created", "published", "uploadedDuration", "createdDuration", "publishedDuration"],
+      "columns": [
+        "month_label",
+        "monthly_uploaded",
+        "monthly_created",
+        "monthly_published",
+        "uploaded_duration",
+        "created_duration",
+        "published_duration"
+      ],
+      "output_keys": [
+        "month",
+        "uploaded",
+        "created",
+        "published",
+        "uploadedDuration",
+        "createdDuration",
+        "publishedDuration"
+      ],
       "compute_fields": [
         {
           "name": "publishRate",
@@ -903,8 +1864,18 @@
       "name": "Channel Performance",
       "description": "Per-channel metrics",
       "dataset": "channel_summary",
-      "columns": ["channel_name", "uploaded_count", "created_count", "published_count"],
-      "output_keys": ["name", "uploaded", "created", "published"],
+      "columns": [
+        "channel_name",
+        "uploaded_count",
+        "created_count",
+        "published_count"
+      ],
+      "output_keys": [
+        "name",
+        "uploaded",
+        "created",
+        "published"
+      ],
       "compute_fields": [
         {
           "name": "rate",
@@ -931,9 +1902,18 @@
       "dataset": "channel_summary",
       "type": "funnel",
       "stages": [
-        {"name": "Uploaded", "column": "uploaded_count"},
-        {"name": "Processed", "column": "created_count"},
-        {"name": "Published", "column": "published_count"}
+        {
+          "name": "Uploaded",
+          "column": "uploaded_count"
+        },
+        {
+          "name": "Processed",
+          "column": "created_count"
+        },
+        {
+          "name": "Published",
+          "column": "published_count"
+        }
       ]
     },
     {
@@ -941,28 +1921,71 @@
       "name": "Output Type Distribution",
       "description": "Breakdown by output type",
       "dataset": "output_type",
-      "columns": ["output_type_name", "created_count"],
-      "output_keys": ["name", "value"],
+      "columns": [
+        "output_type_name",
+        "created_count"
+      ],
+      "output_keys": [
+        "name",
+        "value"
+      ],
       "type": "pie",
-      "colors": ["#4F46E5", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"]
+      "colors": [
+        "#4F46E5",
+        "#06B6D4",
+        "#10B981",
+        "#F59E0B",
+        "#EF4444",
+        "#8B5CF6",
+        "#EC4899"
+      ]
     },
     {
       "id": "input_type_mix",
       "name": "Input Type Distribution",
       "description": "Breakdown by input type",
       "dataset": "input_type",
-      "columns": ["input_type_name", "uploaded_count"],
-      "output_keys": ["name", "value"],
+      "columns": [
+        "input_type_name",
+        "uploaded_count"
+      ],
+      "output_keys": [
+        "name",
+        "value"
+      ],
       "type": "pie",
-      "colors": ["#4F46E5", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#14B8A6", "#F97316", "#6366F1", "#D946EF", "#84CC16"]
+      "colors": [
+        "#4F46E5",
+        "#06B6D4",
+        "#10B981",
+        "#F59E0B",
+        "#EF4444",
+        "#8B5CF6",
+        "#EC4899",
+        "#14B8A6",
+        "#F97316",
+        "#6366F1",
+        "#D946EF",
+        "#84CC16"
+      ]
     },
     {
       "id": "input_type_performance",
       "name": "Input Type Performance",
       "description": "Per-input-type uploaded, created, published breakdown",
       "dataset": "input_type",
-      "columns": ["input_type_name", "uploaded_count", "created_count", "published_count"],
-      "output_keys": ["type", "uploaded", "created", "published"],
+      "columns": [
+        "input_type_name",
+        "uploaded_count",
+        "created_count",
+        "published_count"
+      ],
+      "output_keys": [
+        "type",
+        "uploaded",
+        "created",
+        "published"
+      ],
       "type": "table",
       "compute_fields": [
         {
@@ -992,28 +2015,74 @@
       "name": "Language Breakdown",
       "description": "Metrics broken down by language",
       "dataset": "language",
-      "columns": ["language_name", "uploaded_count", "created_count", "published_count"],
-      "output_keys": ["lang", "uploaded", "created", "published"],
+      "columns": [
+        "language_name",
+        "uploaded_count",
+        "created_count",
+        "published_count"
+      ],
+      "output_keys": [
+        "lang",
+        "uploaded",
+        "created",
+        "published"
+      ],
       "type": "table",
-      "compute_fields": [{"name": "publishRate", "formula": "published / created * 100", "numerator": "published_count", "denominator": "created_count"}]
+      "compute_fields": [
+        {
+          "name": "publishRate",
+          "formula": "published / created * 100",
+          "numerator": "published_count",
+          "denominator": "created_count"
+        }
+      ]
     },
     {
       "id": "user_performance",
       "name": "User Performance",
       "description": "Per-user metrics breakdown",
       "dataset": "user_summary",
-      "columns": ["user_name", "uploaded_count", "created_count", "published_count"],
-      "output_keys": ["user", "uploaded", "created", "published"],
+      "columns": [
+        "user_name",
+        "uploaded_count",
+        "created_count",
+        "published_count"
+      ],
+      "output_keys": [
+        "user",
+        "uploaded",
+        "created",
+        "published"
+      ],
       "type": "table",
-      "compute_fields": [{"name": "rate", "formula": "published / created * 100", "numerator": "published_count", "denominator": "created_count"}]
+      "compute_fields": [
+        {
+          "name": "rate",
+          "formula": "published / created * 100",
+          "numerator": "published_count",
+          "denominator": "created_count"
+        }
+      ]
     },
     {
       "id": "channel_user_breakdown",
       "name": "Channel User Breakdown",
       "description": "Per-channel per-user activity",
       "dataset": "channel_user",
-      "columns": ["channel_name", "user_name", "uploaded_count", "created_count", "published_count"],
-      "output_keys": ["channel", "user", "uploaded", "created", "published"],
+      "columns": [
+        "channel_name",
+        "user_name",
+        "uploaded_count",
+        "created_count",
+        "published_count"
+      ],
+      "output_keys": [
+        "channel",
+        "user",
+        "uploaded",
+        "created",
+        "published"
+      ],
       "type": "table"
     },
     {
@@ -1021,18 +2090,50 @@
       "name": "Language Distribution",
       "description": "Language distribution by created count",
       "dataset": "language",
-      "columns": ["language_name", "created_count"],
-      "output_keys": ["name", "value"],
+      "columns": [
+        "language_name",
+        "created_count"
+      ],
+      "output_keys": [
+        "name",
+        "value"
+      ],
       "type": "pie",
-      "colors": ["#4F46E5", "#06B6D4", "#10B981", "#F59E0B", "#EF4444"]
+      "colors": [
+        "#4F46E5",
+        "#06B6D4",
+        "#10B981",
+        "#F59E0B",
+        "#EF4444"
+      ]
     },
     {
       "id": "channel_platform_heatmap",
       "name": "Channel Platform Heatmap",
       "description": "Per-channel publishing counts by platform for heatmap",
       "dataset": "channel_platform",
-      "columns": ["channel_name", "facebook_count", "instagram_count", "linkedin_count", "youtube_count", "x_count", "shorts_count", "reels_count", "threads_count"],
-      "output_keys": ["channel", "facebook", "instagram", "linkedin", "youtube", "x", "shorts", "reels", "threads"],
+      "columns": [
+        "channel_name",
+        "facebook_count",
+        "instagram_count",
+        "linkedin_count",
+        "youtube_count",
+        "x_count",
+        "shorts_count",
+        "reels_count",
+        "threads_count"
+      ],
+      "output_keys": [
+        "channel",
+        "facebook",
+        "instagram",
+        "linkedin",
+        "youtube",
+        "x",
+        "shorts",
+        "reels",
+        "threads"
+      ],
       "type": "table"
     }
   ]

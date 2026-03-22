@@ -1,31 +1,31 @@
 [
   {
-    "name": "ar",
-    "value": 16927,
-    "color": "#EF4444"
-  },
-  {
     "name": "en",
-    "value": 15619,
+    "value": 8861,
     "color": "#4F46E5"
   },
   {
-    "name": "mr",
-    "value": 14566
+    "name": "hi",
+    "value": 6021,
+    "color": "#06B6D4"
   },
   {
     "name": "mix",
-    "value": 11741,
+    "value": 29,
     "color": "#10B981"
   },
   {
     "name": "es",
-    "value": 8798,
+    "value": 1,
     "color": "#F59E0B"
   },
   {
-    "name": "hi",
-    "value": 4919,
-    "color": "#06B6D4"
+    "name": "ar",
+    "value": 1,
+    "color": "#EF4444"
+  },
+  {
+    "name": "mr",
+    "value": 1
   }
 ]

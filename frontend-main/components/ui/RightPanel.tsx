@@ -7,6 +7,72 @@ import { ANOMALIES, SAVED_VIEWS, STORY_PRESETS, M } from '@/lib/constants';
 import { sendChatMessage } from '@/lib/api';
 import useChartJs from '../charts/ChartJSWrapper';
 
+function coerceNumber(value) {
+  if (value === null || value === undefined) return 0;
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  const n = Number(String(value).replace(/,/g, ""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function inferYKeys(data, xKey, yKeys) {
+  if (Array.isArray(yKeys) && yKeys.length) return yKeys;
+  const first = Array.isArray(data) && data.length ? data[0] : null;
+  if (!first) return [];
+  return Object.keys(first).filter((k) => k !== xKey);
+}
+
+function CopilotChart({ artifact, id }) {
+  const palette = ["#ff4757","#3EC98A","#7C83FF","#F7B731","#32A1FF","#FF8A5B"];
+  const config = useMemo(() => {
+    const data = Array.isArray(artifact?.data) ? artifact.data : [];
+    const xKey = artifact?.xKey || "name";
+    const keys = inferYKeys(data, xKey, artifact?.yKeys);
+    const labels = data.map((d, i) => {
+      const label = d?.[xKey];
+      return label === undefined || label === null ? String(i + 1) : String(label);
+    });
+    const rawType = String(artifact?.chartType || "bar").toLowerCase();
+    const normalizedType = rawType === "stacked_bar" || rawType === "stacked" || rawType === "column" ? "bar" : rawType;
+    const chartType = ["bar","line","area","pie","donut"].includes(normalizedType) ? normalizedType : "bar";
+    const isPie = chartType === "pie" || chartType === "donut";
+    const primaryKey = keys[0] || "value";
+    const datasets = isPie
+      ? [{ label: primaryKey, data: data.map(d => coerceNumber(d?.[primaryKey])), backgroundColor: labels.map((_, i) => palette[i % palette.length]), borderColor: "rgba(0,0,0,0.15)", borderWidth: 1 }]
+      : keys.map((k, i) => ({ label: k, data: data.map(d => coerceNumber(d?.[k])), borderColor: palette[i % palette.length], backgroundColor: chartType === "bar" ? `${palette[i % palette.length]}B3` : `${palette[i % palette.length]}55`, borderWidth: 2, tension: 0.3, fill: chartType === "area" }));
+    return {
+      type: isPie ? "pie" : chartType === "area" ? "line" : chartType,
+      data: { labels, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, labels: { color: "rgba(245,245,247,0.7)", font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" } } },
+          tooltip: { backgroundColor: "rgba(14,15,17,0.95)", titleColor: "#f5f5f7", bodyColor: "rgba(245,245,247,0.65)" },
+        },
+        scales: isPie ? undefined : {
+          x: { ticks: { color: "rgba(245,245,247,0.65)", font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" }, maxRotation: 45 }, grid: { color: "rgba(255,255,255,0.06)" }, border: { display: false } },
+          y: { ticks: { color: "rgba(245,245,247,0.65)", font: { size: 10, family: "var(--font-ibm-plex-mono,monospace)" }, callback: v => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v }, grid: { color: "rgba(255,255,255,0.06)" }, border: { display: false }, beginAtZero: true },
+        },
+      },
+    };
+  }, [artifact]);
+  const canvasRef = useChartJs(id, config, [id, config]);
+  return <div style={{ position: "relative", width: "100%", height: 200 }}><canvas ref={canvasRef} /></div>;
+}
+
+function CopilotTable({ artifact }) {
+  const rows = Array.isArray(artifact?.data) ? artifact.data : [];
+  const columns = Array.isArray(artifact?.columns) && artifact.columns.length ? artifact.columns : rows.length ? Object.keys(rows[0]) : [];
+  if (!rows.length || !columns.length) return null;
+  return (
+    <div style={{ overflowX: "auto", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6 }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11 }}>
+        <thead><tr>{columns.map(col => <th key={col} style={{ textAlign: "left", padding: "6px 8px", borderBottom: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)", fontFamily: "var(--font-mono)", whiteSpace: "nowrap" }}>{col}</th>)}</tr></thead>
+        <tbody>{rows.map((row, i) => <tr key={i}>{columns.map(col => <td key={col} style={{ padding: "6px 8px", borderBottom: "1px solid rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.75)", whiteSpace: "nowrap" }}>{row?.[col] ?? ""}</td>)}</tr>)}</tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function RightPanel({ open, activeTab, setActiveTab, onClose, attachedData, onRemoveData }: any) {
   const dash = useDash();
 
@@ -204,12 +270,20 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
   const handleSend = async (txt?: string) => {
     const userMsg = (txt ?? input).trim();
     if (!userMsg || loading) return;
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    const updatedMessages = [...messages, { role: 'user' as const, text: userMsg }];
+    setMessages(updatedMessages);
     setInput('');
     setLoading(true);
     const attachedSources = sources.map((s: any) => ({ name: s.name, data: s.data }));
+
+    // Build conversation_context from last few messages as fallback for backend
+    const recentMsgs = updatedMessages.slice(-10);
+    const conversationContext = recentMsgs
+      .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.text.slice(0, 300)}`)
+      .join('\n');
+
     try {
-      const chatRes = await fetch('http://34.60.183.121/chat', {
+      const chatRes = await fetch('/api/proxy/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -217,6 +291,7 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
           attached_sources: attachedSources,
           context: hasContext ? sel : undefined,
           mode: chatMode,
+          conversation_context: conversationContext,
         }),
       });
       if (!chatRes.ok) throw new Error('Chat request failed');
@@ -318,20 +393,27 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
                 whiteSpace:'pre-wrap', wordBreak:'break-word',
               }}>{msg.text}</p>
 
-              {/* Artifact pills */}
+              {/* Artifacts — charts & tables */}
               {Array.isArray(msg.artifacts) && msg.artifacts.length > 0 && (
-                <div style={{marginTop:10,display:'flex',flexDirection:'column',gap:5}}>
+                <div style={{marginTop:10,display:'flex',flexDirection:'column',gap:10}}>
                   {msg.artifacts.map((a:any,idx:number)=>(
                     <div key={idx} style={{
-                      display:'flex',alignItems:'center',gap:7,
-                      padding:'6px 10px',
-                      background:'rgba(255,71,87,0.06)',border:'0.5px solid rgba(255,71,87,0.18)',
-                      borderRadius:7,
+                      background:'rgba(255,255,255,0.02)',border:'0.5px solid rgba(255,255,255,0.08)',
+                      borderRadius:10, overflow:'hidden',
                     }}>
-                      <span style={{fontSize:10,color:'rgba(255,71,87,0.65)'}}>◈</span>
-                      <span style={{fontSize:11,color:'rgba(255,255,255,0.55)',fontFamily:'var(--font-mono)'}}>
-                        {a.type||'artifact'}{a.title?` — ${a.title}`:''}
-                      </span>
+                      {a.title && (
+                        <div style={{padding:'8px 12px',borderBottom:'0.5px solid rgba(255,255,255,0.06)',display:'flex',alignItems:'center',gap:6}}>
+                          <span style={{fontSize:10,color:'rgba(255,71,87,0.65)'}}>◈</span>
+                          <span style={{fontSize:11,color:'rgba(255,255,255,0.55)',fontFamily:'var(--font-mono)',letterSpacing:'0.03em'}}>{a.title}</span>
+                        </div>
+                      )}
+                      <div style={{padding:'10px 12px'}}>
+                        {a.type === 'chart' && <CopilotChart artifact={a} id={`cop-chart-${i}-${idx}`} />}
+                        {a.type === 'table' && <CopilotTable artifact={a} />}
+                        {a.type !== 'chart' && a.type !== 'table' && (
+                          <span style={{fontSize:11,color:'rgba(255,255,255,0.4)',fontFamily:'var(--font-mono)'}}>{a.type||'artifact'}</span>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

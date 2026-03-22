@@ -124,20 +124,6 @@ def compute_kpi_by_id(kpi_id: str) -> Optional[Dict[str, Any]]:
 
 def answer_kpi_query(query: str, conversation_context: str = "") -> Dict[str, Any]:
     """Answer a KPI question by computing the KPI result."""
-    try:
-        from analytics_summary_agent import should_run as should_run_summary, answer_summary
-        if should_run_summary(query, conversation_context=conversation_context):
-            return answer_summary(query, conversation_context=conversation_context)
-    except Exception as e:
-        logger.debug(f"Summary agent unavailable: {e}")
-
-    try:
-        from recommendation_agent import should_run as should_run_recs, answer_recommendations
-        if should_run_recs(query, conversation_context=conversation_context):
-            return answer_recommendations(query, conversation_context=conversation_context)
-    except Exception as e:
-        logger.debug(f"Recommendation agent unavailable: {e}")
-
     match = classify_kpi(query, conversation_context=conversation_context)
     if not match.get("match"):
         return {

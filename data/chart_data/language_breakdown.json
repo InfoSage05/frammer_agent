@@ -1,44 +1,44 @@
 [
   {
     "lang": "en",
-    "uploaded": 2144,
-    "created": 15619,
-    "published": 115,
-    "publishRate": 0.74
+    "uploaded": 2647,
+    "created": 8861,
+    "published": 91,
+    "publishRate": 1.03
   },
   {
     "lang": "hi",
-    "uploaded": 2063,
-    "created": 4919,
-    "published": 8,
-    "publishRate": 0.16
+    "uploaded": 1792,
+    "created": 6021,
+    "published": 20,
+    "publishRate": 0.33
   },
   {
     "lang": "mix",
-    "uploaded": 2603,
-    "created": 11741,
-    "published": 104,
-    "publishRate": 0.89
+    "uploaded": 11,
+    "created": 29,
+    "published": 0,
+    "publishRate": 0.0
   },
   {
     "lang": "es",
-    "uploaded": 1977,
-    "created": 8798,
-    "published": 77,
-    "publishRate": 0.88
+    "uploaded": 1,
+    "created": 1,
+    "published": 0,
+    "publishRate": 0.0
   },
   {
     "lang": "ar",
-    "uploaded": 375,
-    "created": 16927,
-    "published": 160,
-    "publishRate": 0.95
+    "uploaded": 1,
+    "created": 1,
+    "published": 0,
+    "publishRate": 0.0
   },
   {
     "lang": "mr",
-    "uploaded": 741,
-    "created": 14566,
-    "published": 86,
-    "publishRate": 0.59
+    "uploaded": 1,
+    "created": 1,
+    "published": 0,
+    "publishRate": 0.0
   }
 ]

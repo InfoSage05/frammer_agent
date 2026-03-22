@@ -276,6 +276,7 @@ class ChatRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
     mode: Optional[str] = None
+    conversation_context: Optional[str] = None
 
 
 class ChatResponse(BaseModel):
@@ -333,8 +334,10 @@ async def chat(request: ChatRequest):
         from conversation_memory import get_session_memory
         session_memory = get_session_memory(session_id)
 
-        # Get conversation context for the planner
+        # Get conversation context — prefer server-side memory, fallback to frontend-sent context
         conversation_context = session_memory.get_context_for_llm(include_last_n=5)
+        if not conversation_context and request.conversation_context:
+            conversation_context = request.conversation_context
 
         # Route to explanation, recommendation, KPI, or analytics using LangGraph
         from orchestrator.langgraph_orchestrator import run_chat_graph

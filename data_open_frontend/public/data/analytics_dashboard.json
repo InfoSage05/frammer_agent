@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-03-22T03:08:38.501147",
+  "generated_at": "2026-03-22T12:32:09.633952",
   "from_cache": false,
   "change_type": "none",
   "metrics": [
     {
       "id": "total_uploaded",
       "name": "Total Uploaded",
-      "value": 27854,
-      "formatted": "27,854",
+      "value": 4453,
+      "formatted": "4,453",
       "category": "volume",
       "description": "Total videos uploaded by users",
       "unit": "videos",
@@ -19,8 +19,8 @@
     {
       "id": "total_processed",
       "name": "Total Processed",
-      "value": 77295,
-      "formatted": "77,295",
+      "value": 14914,
+      "formatted": "14,914",
       "category": "volume",
       "description": "Total clips created by AI",
       "unit": "outputs",
@@ -32,8 +32,8 @@
     {
       "id": "total_published",
       "name": "Total Published",
-      "value": 1052,
-      "formatted": "1,052",
+      "value": 48,
+      "formatted": "48",
       "category": "volume",
       "description": "Total clips published to platforms",
       "unit": "videos",
@@ -71,8 +71,8 @@
     {
       "id": "publish_rate",
       "name": "Publish Rate",
-      "value": 1.36,
-      "formatted": "1.36%",
+      "value": 0.32,
+      "formatted": "0.32%",
       "category": "conversion",
       "description": "Percentage of processed clips published",
       "unit": "percent",
@@ -84,8 +84,8 @@
     {
       "id": "top_performing_channel",
       "name": "Top Channel",
-      "value": "E (14.06%)",
-      "formatted": "E (14.06%)",
+      "value": "E (0.62%)",
+      "formatted": "E (0.62%)",
       "category": "conversion",
       "description": "Channel with highest publish rate",
       "unit": "",
@@ -97,8 +97,8 @@
     {
       "id": "amplification_ratio",
       "name": "Amplification Ratio",
-      "value": 2.78,
-      "formatted": "2.78x",
+      "value": 3.35,
+      "formatted": "3.35x",
       "category": "efficiency",
       "description": "Output clips per uploaded video",
       "unit": "ratio",
@@ -110,8 +110,8 @@
     {
       "id": "process_rate",
       "name": "Process Rate",
-      "value": 277.5,
-      "formatted": "277.50%",
+      "value": 334.92,
+      "formatted": "334.92%",
       "category": "efficiency",
       "description": "Processing rate as percentage",
       "unit": "percent",
@@ -123,8 +123,8 @@
     {
       "id": "peak_upload_month",
       "name": "Peak Upload Month",
-      "value": "Jan, 2026",
-      "formatted": "Jan, 2026",
+      "value": "Feb, 2026",
+      "formatted": "Feb, 2026",
       "category": "efficiency",
       "description": "Month with highest upload volume",
       "unit": "",
@@ -136,8 +136,8 @@
     {
       "id": "uploaded_hours",
       "name": "Uploaded Hours",
-      "value": 429.63,
-      "formatted": "429.63h",
+      "value": 807.67,
+      "formatted": "807.67h",
       "category": "duration",
       "description": "Total duration of uploaded videos in hours",
       "unit": "hours",
@@ -149,8 +149,8 @@
     {
       "id": "processed_hours",
       "name": "Processed Hours",
-      "value": 636.78,
-      "formatted": "636.78h",
+      "value": 1355.17,
+      "formatted": "1355.17h",
       "category": "duration",
       "description": "Total duration of processed clips in hours",
       "unit": "hours",
@@ -162,8 +162,8 @@
     {
       "id": "published_hours",
       "name": "Published Hours",
-      "value": 60.84,
-      "formatted": "60.84h",
+      "value": 4.38,
+      "formatted": "4.38h",
       "category": "duration",
       "description": "Total duration of published clips in hours",
       "unit": "hours",
@@ -175,8 +175,8 @@
     {
       "id": "avg_upload_min",
       "name": "Avg Upload Duration",
-      "value": 0.93,
-      "formatted": "0.93 min",
+      "value": 10.88,
+      "formatted": "10.88 min",
       "category": "duration",
       "description": "Average duration per uploaded video in minutes",
       "unit": "minutes",
@@ -188,8 +188,8 @@
     {
       "id": "top_output_type",
       "name": "Top Output Type",
-      "value": "Chapters",
-      "formatted": "Chapters",
+      "value": "Key moments",
+      "formatted": "Key moments",
       "category": "content_mix",
       "description": "Output type with highest created count",
       "unit": "",
@@ -201,8 +201,8 @@
     {
       "id": "top_input_type",
       "name": "Top Input Type",
-      "value": "press conference",
-      "formatted": "press conference",
+      "value": "interview",
+      "formatted": "interview",
       "category": "content_mix",
       "description": "Input type with highest uploaded count",
       "unit": "",
@@ -227,8 +227,8 @@
     {
       "id": "bottom_performing_channel",
       "name": "Lowest Channel",
-      "value": "O (0.00%)",
-      "formatted": "O (0.00%)",
+      "value": "D (0.00%)",
+      "formatted": "D (0.00%)",
       "category": "conversion",
       "description": "Channel with lowest publish rate",
       "unit": "",
@@ -240,8 +240,8 @@
     {
       "id": "output_type_publish_rate",
       "name": "Best Output Publish Rate",
-      "value": "Full package (0.72%)",
-      "formatted": "Full package (0.72%)",
+      "value": "My Key moments (2.59%)",
+      "formatted": "My Key moments (2.59%)",
       "category": "conversion",
       "description": "Output type with highest publish rate",
       "unit": "",
@@ -253,8 +253,8 @@
     {
       "id": "mom_upload_growth",
       "name": "MoM Upload Growth",
-      "value": 21.81,
-      "formatted": "21.81%",
+      "value": -33.82,
+      "formatted": "-33.82%",
       "category": "growth",
       "description": "Month-over-month upload growth percentage",
       "unit": "percent",
@@ -266,8 +266,8 @@
     {
       "id": "peak_publish_month",
       "name": "Peak Publish Month",
-      "value": "Nov, 2025",
-      "formatted": "Nov, 2025",
+      "value": "Apr, 2025",
+      "formatted": "Apr, 2025",
       "category": "growth",
       "description": "Month with highest publish volume",
       "unit": "",
@@ -279,8 +279,8 @@
     {
       "id": "top_platform",
       "name": "Top Platform",
-      "value": "youtube_count (640)",
-      "formatted": "youtube_count (640)",
+      "value": "youtube_count (35)",
+      "formatted": "youtube_count (35)",
       "category": "platform",
       "description": "Platform with highest total published count",
       "unit": "",
@@ -292,8 +292,8 @@
     {
       "id": "publish_dropoff",
       "name": "Publish Drop-off",
-      "value": 76243,
-      "formatted": "76,243",
+      "value": 14866,
+      "formatted": "14,866",
       "category": "conversion",
       "description": "Number of created clips that were not published",
       "unit": "videos",
@@ -305,8 +305,8 @@
     {
       "id": "zero_pub_channel_count",
       "name": "Zero-Pub Channels",
-      "value": 1,
-      "formatted": "1",
+      "value": 12,
+      "formatted": "12",
       "category": "conversion",
       "description": "Number of channels with zero published clips",
       "unit": "channels",
@@ -331,8 +331,8 @@
     {
       "id": "publishing_channel_count",
       "name": "Publishing Channels",
-      "value": 17,
-      "formatted": "17",
+      "value": 6,
+      "formatted": "6",
       "category": "volume",
       "description": "Number of channels that have published at least one clip",
       "unit": "channels",
@@ -344,8 +344,8 @@
     {
       "id": "zero_pub_month_count",
       "name": "Zero-Pub Months",
-      "value": 0,
-      "formatted": "0",
+      "value": 3,
+      "formatted": "3",
       "category": "growth",
       "description": "Number of months with zero published output",
       "unit": "months",
@@ -357,8 +357,8 @@
     {
       "id": "mom_created_growth",
       "name": "MoM Created Growth",
-      "value": -38.33,
-      "formatted": "-38.33%",
+      "value": -34.61,
+      "formatted": "-34.61%",
       "category": "growth",
       "description": "Month-over-month growth in created clips",
       "unit": "percent",
@@ -370,8 +370,8 @@
     {
       "id": "channel_publish_concentration",
       "name": "Channel Publish Concentration",
-      "value": 12.64,
-      "formatted": "12.64%",
+      "value": 39.58,
+      "formatted": "39.58%",
       "category": "conversion",
       "description": "Percentage of total publishes from the top channel",
       "unit": "percent",
@@ -383,8 +383,8 @@
     {
       "id": "top_user_by_created",
       "name": "Top Creator",
-      "value": "QA-Bhargavi",
-      "formatted": "QA-Bhargavi",
+      "value": "Chandan",
+      "formatted": "Chandan",
       "category": "content_mix",
       "description": "User with the most created clips",
       "unit": "",
@@ -396,8 +396,8 @@
     {
       "id": "top_user_by_published",
       "name": "Top Publisher",
-      "value": "parakh",
-      "formatted": "parakh",
+      "value": "Chandan",
+      "formatted": "Chandan",
       "category": "content_mix",
       "description": "User with the most published clips",
       "unit": "",
@@ -409,8 +409,8 @@
     {
       "id": "zero_pub_user_count",
       "name": "Zero-Pub Users",
-      "value": 1,
-      "formatted": "1",
+      "value": 26,
+      "formatted": "26",
       "category": "content_mix",
       "description": "Number of users with zero published clips",
       "unit": "users",
@@ -422,8 +422,8 @@
     {
       "id": "top_language",
       "name": "Top Language",
-      "value": "ar",
-      "formatted": "ar",
+      "value": "en",
+      "formatted": "en",
       "category": "content_mix",
       "description": "Language with the most created clips",
       "unit": "",
@@ -435,8 +435,8 @@
     {
       "id": "english_publish_rate",
       "name": "English Publish Rate",
-      "value": 0.74,
-      "formatted": "0.74%",
+      "value": 1.03,
+      "formatted": "1.03%",
       "category": "content_mix",
       "description": "Publish rate for English content",
       "unit": "percent",
@@ -490,8 +490,8 @@
       {
         "id": "total_uploaded",
         "name": "Total Uploaded",
-        "value": 27854,
-        "formatted": "27,854",
+        "value": 4453,
+        "formatted": "4,453",
         "category": "volume",
         "description": "Total videos uploaded by users",
         "unit": "videos",
@@ -503,8 +503,8 @@
       {
         "id": "total_processed",
         "name": "Total Processed",
-        "value": 77295,
-        "formatted": "77,295",
+        "value": 14914,
+        "formatted": "14,914",
         "category": "volume",
         "description": "Total clips created by AI",
         "unit": "outputs",
@@ -516,8 +516,8 @@
       {
         "id": "total_published",
         "name": "Total Published",
-        "value": 1052,
-        "formatted": "1,052",
+        "value": 48,
+        "formatted": "48",
         "category": "volume",
         "description": "Total clips published to platforms",
         "unit": "videos",
@@ -568,8 +568,8 @@
       {
         "id": "publishing_channel_count",
         "name": "Publishing Channels",
-        "value": 17,
-        "formatted": "17",
+        "value": 6,
+        "formatted": "6",
         "category": "volume",
         "description": "Number of channels that have published at least one clip",
         "unit": "channels",
@@ -583,8 +583,8 @@
       {
         "id": "publish_rate",
         "name": "Publish Rate",
-        "value": 1.36,
-        "formatted": "1.36%",
+        "value": 0.32,
+        "formatted": "0.32%",
         "category": "conversion",
         "description": "Percentage of processed clips published",
         "unit": "percent",
@@ -596,8 +596,8 @@
       {
         "id": "top_performing_channel",
         "name": "Top Channel",
-        "value": "E (14.06%)",
-        "formatted": "E (14.06%)",
+        "value": "E (0.62%)",
+        "formatted": "E (0.62%)",
         "category": "conversion",
         "description": "Channel with highest publish rate",
         "unit": "",
@@ -609,8 +609,8 @@
       {
         "id": "bottom_performing_channel",
         "name": "Lowest Channel",
-        "value": "O (0.00%)",
-        "formatted": "O (0.00%)",
+        "value": "D (0.00%)",
+        "formatted": "D (0.00%)",
         "category": "conversion",
         "description": "Channel with lowest publish rate",
         "unit": "",
@@ -622,8 +622,8 @@
       {
         "id": "output_type_publish_rate",
         "name": "Best Output Publish Rate",
-        "value": "Full package (0.72%)",
-        "formatted": "Full package (0.72%)",
+        "value": "My Key moments (2.59%)",
+        "formatted": "My Key moments (2.59%)",
         "category": "conversion",
         "description": "Output type with highest publish rate",
         "unit": "",
@@ -635,8 +635,8 @@
       {
         "id": "publish_dropoff",
         "name": "Publish Drop-off",
-        "value": 76243,
-        "formatted": "76,243",
+        "value": 14866,
+        "formatted": "14,866",
         "category": "conversion",
         "description": "Number of created clips that were not published",
         "unit": "videos",
@@ -648,8 +648,8 @@
       {
         "id": "zero_pub_channel_count",
         "name": "Zero-Pub Channels",
-        "value": 1,
-        "formatted": "1",
+        "value": 12,
+        "formatted": "12",
         "category": "conversion",
         "description": "Number of channels with zero published clips",
         "unit": "channels",
@@ -661,8 +661,8 @@
       {
         "id": "channel_publish_concentration",
         "name": "Channel Publish Concentration",
-        "value": 12.64,
-        "formatted": "12.64%",
+        "value": 39.58,
+        "formatted": "39.58%",
         "category": "conversion",
         "description": "Percentage of total publishes from the top channel",
         "unit": "percent",
@@ -676,8 +676,8 @@
       {
         "id": "amplification_ratio",
         "name": "Amplification Ratio",
-        "value": 2.78,
-        "formatted": "2.78x",
+        "value": 3.35,
+        "formatted": "3.35x",
         "category": "efficiency",
         "description": "Output clips per uploaded video",
         "unit": "ratio",
@@ -689,8 +689,8 @@
       {
         "id": "process_rate",
         "name": "Process Rate",
-        "value": 277.5,
-        "formatted": "277.50%",
+        "value": 334.92,
+        "formatted": "334.92%",
         "category": "efficiency",
         "description": "Processing rate as percentage",
         "unit": "percent",
@@ -702,8 +702,8 @@
       {
         "id": "peak_upload_month",
         "name": "Peak Upload Month",
-        "value": "Jan, 2026",
-        "formatted": "Jan, 2026",
+        "value": "Feb, 2026",
+        "formatted": "Feb, 2026",
         "category": "efficiency",
         "description": "Month with highest upload volume",
         "unit": "",
@@ -717,8 +717,8 @@
       {
         "id": "uploaded_hours",
         "name": "Uploaded Hours",
-        "value": 429.63,
-        "formatted": "429.63h",
+        "value": 807.67,
+        "formatted": "807.67h",
         "category": "duration",
         "description": "Total duration of uploaded videos in hours",
         "unit": "hours",
@@ -730,8 +730,8 @@
       {
         "id": "processed_hours",
         "name": "Processed Hours",
-        "value": 636.78,
-        "formatted": "636.78h",
+        "value": 1355.17,
+        "formatted": "1355.17h",
         "category": "duration",
         "description": "Total duration of processed clips in hours",
         "unit": "hours",
@@ -743,8 +743,8 @@
       {
         "id": "published_hours",
         "name": "Published Hours",
-        "value": 60.84,
-        "formatted": "60.84h",
+        "value": 4.38,
+        "formatted": "4.38h",
         "category": "duration",
         "description": "Total duration of published clips in hours",
         "unit": "hours",
@@ -756,8 +756,8 @@
       {
         "id": "avg_upload_min",
         "name": "Avg Upload Duration",
-        "value": 0.93,
-        "formatted": "0.93 min",
+        "value": 10.88,
+        "formatted": "10.88 min",
         "category": "duration",
         "description": "Average duration per uploaded video in minutes",
         "unit": "minutes",
@@ -771,8 +771,8 @@
       {
         "id": "top_output_type",
         "name": "Top Output Type",
-        "value": "Chapters",
-        "formatted": "Chapters",
+        "value": "Key moments",
+        "formatted": "Key moments",
         "category": "content_mix",
         "description": "Output type with highest created count",
         "unit": "",
@@ -784,8 +784,8 @@
       {
         "id": "top_input_type",
         "name": "Top Input Type",
-        "value": "press conference",
-        "formatted": "press conference",
+        "value": "interview",
+        "formatted": "interview",
         "category": "content_mix",
         "description": "Input type with highest uploaded count",
         "unit": "",
@@ -810,8 +810,8 @@
       {
         "id": "top_user_by_created",
         "name": "Top Creator",
-        "value": "QA-Bhargavi",
-        "formatted": "QA-Bhargavi",
+        "value": "Chandan",
+        "formatted": "Chandan",
         "category": "content_mix",
         "description": "User with the most created clips",
         "unit": "",
@@ -823,8 +823,8 @@
       {
         "id": "top_user_by_published",
         "name": "Top Publisher",
-        "value": "parakh",
-        "formatted": "parakh",
+        "value": "Chandan",
+        "formatted": "Chandan",
         "category": "content_mix",
         "description": "User with the most published clips",
         "unit": "",
@@ -836,8 +836,8 @@
       {
         "id": "zero_pub_user_count",
         "name": "Zero-Pub Users",
-        "value": 1,
-        "formatted": "1",
+        "value": 26,
+        "formatted": "26",
         "category": "content_mix",
         "description": "Number of users with zero published clips",
         "unit": "users",
@@ -849,8 +849,8 @@
       {
         "id": "top_language",
         "name": "Top Language",
-        "value": "ar",
-        "formatted": "ar",
+        "value": "en",
+        "formatted": "en",
         "category": "content_mix",
         "description": "Language with the most created clips",
         "unit": "",
@@ -862,8 +862,8 @@
       {
         "id": "english_publish_rate",
         "name": "English Publish Rate",
-        "value": 0.74,
-        "formatted": "0.74%",
+        "value": 1.03,
+        "formatted": "1.03%",
         "category": "content_mix",
         "description": "Publish rate for English content",
         "unit": "percent",
@@ -877,8 +877,8 @@
       {
         "id": "mom_upload_growth",
         "name": "MoM Upload Growth",
-        "value": 21.81,
-        "formatted": "21.81%",
+        "value": -33.82,
+        "formatted": "-33.82%",
         "category": "growth",
         "description": "Month-over-month upload growth percentage",
         "unit": "percent",
@@ -890,8 +890,8 @@
       {
         "id": "peak_publish_month",
         "name": "Peak Publish Month",
-        "value": "Nov, 2025",
-        "formatted": "Nov, 2025",
+        "value": "Apr, 2025",
+        "formatted": "Apr, 2025",
         "category": "growth",
         "description": "Month with highest publish volume",
         "unit": "",
@@ -903,8 +903,8 @@
       {
         "id": "zero_pub_month_count",
         "name": "Zero-Pub Months",
-        "value": 0,
-        "formatted": "0",
+        "value": 3,
+        "formatted": "3",
         "category": "growth",
         "description": "Number of months with zero published output",
         "unit": "months",
@@ -916,8 +916,8 @@
       {
         "id": "mom_created_growth",
         "name": "MoM Created Growth",
-        "value": -38.33,
-        "formatted": "-38.33%",
+        "value": -34.61,
+        "formatted": "-34.61%",
         "category": "growth",
         "description": "Month-over-month growth in created clips",
         "unit": "percent",
@@ -931,8 +931,8 @@
       {
         "id": "top_platform",
         "name": "Top Platform",
-        "value": "youtube_count (640)",
-        "formatted": "youtube_count (640)",
+        "value": "youtube_count (35)",
+        "formatted": "youtube_count (35)",
         "category": "platform",
         "description": "Platform with highest total published count",
         "unit": "",
@@ -989,2750 +989,2738 @@
     "monthly_trends": [
       {
         "month": "Apr, 2025",
-        "uploaded": 408,
-        "created": 3378,
-        "published": 9,
-        "uploadedDuration": "59:36:39",
-        "createdDuration": "82:45:31",
-        "publishedDuration": "05:11:12",
-        "publishRate": 0.27
+        "uploaded": 533,
+        "created": 1656,
+        "published": 44,
+        "uploadedDuration": "65:28:28",
+        "createdDuration": "98:01:05",
+        "publishedDuration": "01:05:42",
+        "publishRate": 2.66
       },
       {
         "month": "Aug, 2025",
-        "uploaded": 111,
-        "created": 392,
-        "published": 5,
-        "uploadedDuration": "24:21:01",
-        "createdDuration": "57:50:01",
-        "publishedDuration": "01:47:30",
-        "publishRate": 1.28
+        "uploaded": 256,
+        "created": 699,
+        "published": 7,
+        "uploadedDuration": "39:56:34",
+        "createdDuration": "64:31:04",
+        "publishedDuration": "00:06:33",
+        "publishRate": 1.0
       },
       {
         "month": "Dec, 2025",
-        "uploaded": 596,
-        "created": 4541,
-        "published": 61,
-        "uploadedDuration": "31:54:20",
-        "createdDuration": "11:18:14",
-        "publishedDuration": "02:46:37",
-        "publishRate": 1.34
+        "uploaded": 194,
+        "created": 644,
+        "published": 7,
+        "uploadedDuration": "38:15:27",
+        "createdDuration": "71:41:50",
+        "publishedDuration": "00:14:38",
+        "publishRate": 1.09
       },
       {
         "month": "Feb, 2026",
-        "uploaded": 650,
-        "created": 341,
-        "published": 4,
-        "uploadedDuration": "46:31:13",
-        "createdDuration": "207:44:15",
-        "publishedDuration": "04:38:18",
-        "publishRate": 1.17
+        "uploaded": 676,
+        "created": 2756,
+        "published": 14,
+        "uploadedDuration": "161:52:11",
+        "createdDuration": "301:30:46",
+        "publishedDuration": "00:56:12",
+        "publishRate": 0.51
       },
       {
         "month": "Jan, 2026",
-        "uploaded": 1062,
-        "created": 132,
-        "published": 69,
-        "uploadedDuration": "45:51:16",
-        "createdDuration": "78:42:37",
-        "publishedDuration": "00:53:12",
-        "publishRate": 52.27
+        "uploaded": 492,
+        "created": 1492,
+        "published": 20,
+        "uploadedDuration": "121:59:42",
+        "createdDuration": "191:27:32",
+        "publishedDuration": "01:26:44",
+        "publishRate": 1.34
       },
       {
         "month": "Jul, 2025",
-        "uploaded": 104,
-        "created": 264,
-        "published": 62,
-        "uploadedDuration": "21:17:56",
-        "createdDuration": "47:30:35",
-        "publishedDuration": "02:14:23",
-        "publishRate": 23.48
+        "uploaded": 284,
+        "created": 892,
+        "published": 0,
+        "uploadedDuration": "33:36:59",
+        "createdDuration": "66:50:11",
+        "publishedDuration": "00:00:00",
+        "publishRate": 0.0
       },
       {
         "month": "Jun, 2025",
-        "uploaded": 323,
-        "created": 4188,
-        "published": 55,
-        "uploadedDuration": "38:44:56",
-        "createdDuration": "67:22:27",
-        "publishedDuration": "01:19:00",
-        "publishRate": 1.31
+        "uploaded": 239,
+        "created": 907,
+        "published": 3,
+        "uploadedDuration": "47:10:45",
+        "createdDuration": "84:09:19",
+        "publishedDuration": "00:11:48",
+        "publishRate": 0.33
       },
       {
         "month": "Mar, 2025",
-        "uploaded": 991,
-        "created": 1685,
-        "published": 58,
-        "uploadedDuration": "35:35:00",
-        "createdDuration": "140:21:22",
-        "publishedDuration": "05:34:08",
-        "publishRate": 3.44
+        "uploaded": 639,
+        "created": 2555,
+        "published": 0,
+        "uploadedDuration": "122:03:35",
+        "createdDuration": "176:16:55",
+        "publishedDuration": "00:00:00",
+        "publishRate": 0.0
       },
       {
         "month": "May, 2025",
-        "uploaded": 428,
-        "created": 1434,
-        "published": 62,
-        "uploadedDuration": "33:12:05",
-        "createdDuration": "58:17:19",
-        "publishedDuration": "02:02:03",
-        "publishRate": 4.32
+        "uploaded": 217,
+        "created": 642,
+        "published": 4,
+        "uploadedDuration": "46:56:53",
+        "createdDuration": "64:26:46",
+        "publishedDuration": "00:03:52",
+        "publishRate": 0.62
       },
       {
         "month": "Nov, 2025",
-        "uploaded": 634,
-        "created": 1660,
-        "published": 88,
-        "uploadedDuration": "15:46:26",
-        "createdDuration": "32:14:07",
-        "publishedDuration": "04:18:44",
-        "publishRate": 5.3
+        "uploaded": 353,
+        "created": 943,
+        "published": 2,
+        "uploadedDuration": "48:06:54",
+        "createdDuration": "83:22:47",
+        "publishedDuration": "00:02:13",
+        "publishRate": 0.21
       },
       {
         "month": "Oct, 2025",
-        "uploaded": 729,
-        "created": 3817,
-        "published": 58,
-        "uploadedDuration": "31:35:48",
-        "createdDuration": "92:12:20",
-        "publishedDuration": "01:40:55",
-        "publishRate": 1.52
+        "uploaded": 343,
+        "created": 1046,
+        "published": 10,
+        "uploadedDuration": "47:51:24",
+        "createdDuration": "94:17:09",
+        "publishedDuration": "00:14:55",
+        "publishRate": 0.96
       },
       {
         "month": "Sep, 2025",
-        "uploaded": 888,
-        "created": 2354,
-        "published": 50,
-        "uploadedDuration": "15:44:30",
-        "createdDuration": "07:47:34",
-        "publishedDuration": "03:06:55",
-        "publishRate": 2.12
+        "uploaded": 227,
+        "created": 684,
+        "published": 0,
+        "uploadedDuration": "34:21:14",
+        "createdDuration": "58:38:05",
+        "publishedDuration": "00:00:00",
+        "publishRate": 0.0
       }
     ],
     "channel_performance": [
       {
         "name": "Channel A",
-        "uploaded": 18,
-        "created": 2939,
-        "published": 16,
-        "rate": 0.54,
-        "amp": 163.28
+        "uploaded": 1470,
+        "created": 4725,
+        "published": 8,
+        "rate": 0.17,
+        "amp": 3.21
       },
       {
         "name": "Channel B",
-        "uploaded": 1249,
-        "created": 7096,
-        "published": 49,
-        "rate": 0.69,
-        "amp": 5.68
+        "uploaded": 1293,
+        "created": 4251,
+        "published": 19,
+        "rate": 0.45,
+        "amp": 3.29
       },
       {
         "name": "Channel C",
-        "uploaded": 2928,
-        "created": 5765,
-        "published": 36,
-        "rate": 0.62,
-        "amp": 1.97
+        "uploaded": 765,
+        "created": 2631,
+        "published": 14,
+        "rate": 0.53,
+        "amp": 3.44
       },
       {
         "name": "Channel D",
-        "uploaded": 1616,
-        "created": 1031,
-        "published": 117,
-        "rate": 11.35,
-        "amp": 0.64
+        "uploaded": 221,
+        "created": 701,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 3.17
       },
       {
         "name": "Channel E",
-        "uploaded": 2222,
-        "created": 562,
-        "published": 79,
-        "rate": 14.06,
-        "amp": 0.25
+        "uploaded": 201,
+        "created": 807,
+        "published": 5,
+        "rate": 0.62,
+        "amp": 4.01
       },
       {
         "name": "Channel F",
-        "uploaded": 1245,
-        "created": 340,
-        "published": 10,
-        "rate": 2.94,
-        "amp": 0.27
+        "uploaded": 130,
+        "created": 320,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 2.46
       },
       {
         "name": "Channel G",
-        "uploaded": 1638,
-        "created": 4567,
-        "published": 133,
-        "rate": 2.91,
-        "amp": 2.79
+        "uploaded": 106,
+        "created": 351,
+        "published": 1,
+        "rate": 0.28,
+        "amp": 3.31
       },
       {
         "name": "Channel H",
-        "uploaded": 53,
-        "created": 7862,
-        "published": 122,
-        "rate": 1.55,
-        "amp": 148.34
+        "uploaded": 89,
+        "created": 329,
+        "published": 1,
+        "rate": 0.3,
+        "amp": 3.7
       },
       {
         "name": "Channel I",
-        "uploaded": 2742,
-        "created": 2296,
-        "published": 34,
-        "rate": 1.48,
-        "amp": 0.84
+        "uploaded": 59,
+        "created": 262,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 4.44
       },
       {
         "name": "Channel J",
-        "uploaded": 2910,
-        "created": 234,
-        "published": 32,
-        "rate": 13.68,
-        "amp": 0.08
+        "uploaded": 37,
+        "created": 145,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 3.92
       },
       {
         "name": "Channel K",
-        "uploaded": 1426,
-        "created": 5202,
-        "published": 17,
-        "rate": 0.33,
-        "amp": 3.65
+        "uploaded": 29,
+        "created": 83,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 2.86
       },
       {
         "name": "Channel L",
-        "uploaded": 2396,
-        "created": 9308,
-        "published": 12,
-        "rate": 0.13,
-        "amp": 3.88
+        "uploaded": 17,
+        "created": 216,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 12.71
       },
       {
         "name": "Channel M",
-        "uploaded": 442,
-        "created": 1291,
-        "published": 89,
-        "rate": 6.89,
-        "amp": 2.92
+        "uploaded": 8,
+        "created": 14,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 1.75
       },
       {
         "name": "Channel N",
-        "uploaded": 2880,
-        "created": 4727,
-        "published": 109,
-        "rate": 2.31,
-        "amp": 1.64
+        "uploaded": 8,
+        "created": 21,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 2.62
       },
       {
         "name": "Channel O",
-        "uploaded": 579,
-        "created": 8720,
+        "uploaded": 7,
+        "created": 18,
         "published": 0,
         "rate": 0.0,
-        "amp": 15.06
+        "amp": 2.57
       },
       {
         "name": "Channel P",
-        "uploaded": 281,
-        "created": 2939,
-        "published": 62,
-        "rate": 2.11,
-        "amp": 10.46
+        "uploaded": 5,
+        "created": 14,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 2.8
       },
       {
         "name": "Channel Q",
-        "uploaded": 2407,
-        "created": 5435,
-        "published": 33,
-        "rate": 0.61,
-        "amp": 2.26
+        "uploaded": 5,
+        "created": 19,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 3.8
       },
       {
         "name": "Channel R",
-        "uploaded": 822,
-        "created": 6981,
-        "published": 102,
-        "rate": 1.46,
-        "amp": 8.49
+        "uploaded": 3,
+        "created": 7,
+        "published": 0,
+        "rate": 0.0,
+        "amp": 2.33
       }
     ],
     "funnel_data": [
       {
         "stage": "Uploaded",
-        "value": 27854
+        "value": 4453
       },
       {
         "stage": "Processed",
-        "value": 77295
+        "value": 14914
       },
       {
         "stage": "Published",
-        "value": 1052
+        "value": 48
       }
     ],
     "output_type_mix": [
       {
-        "name": "Chapters",
-        "value": 11362,
-        "color": "#10B981"
-      },
-      {
         "name": "Key moments",
-        "value": 10931,
+        "value": 6377,
         "color": "#06B6D4"
       },
       {
-        "name": "Summary",
-        "value": 10147,
-        "color": "#EF4444"
+        "name": "Full package",
+        "value": 4453,
+        "color": "#4F46E5"
+      },
+      {
+        "name": "Chapters",
+        "value": 2007,
+        "color": "#10B981"
       },
       {
         "name": "My Key moments",
-        "value": 10057,
+        "value": 1237,
         "color": "#F59E0B"
       },
       {
-        "name": "Full package",
-        "value": 9591,
-        "color": "#4F46E5"
+        "name": "Summary",
+        "value": 840,
+        "color": "#EF4444"
       }
     ],
     "input_type_mix": [
       {
-        "name": "press conference",
-        "value": 2169,
-        "color": "#8B5CF6"
-      },
-      {
-        "name": "drama",
-        "value": 2135,
-        "color": "#D946EF"
-      },
-      {
-        "name": "debate",
-        "value": 1638,
-        "color": "#EF4444"
-      },
-      {
-        "name": "podcast",
-        "value": 1482,
-        "color": "#6366F1"
+        "name": "interview",
+        "value": 1299,
+        "color": "#4F46E5"
       },
       {
         "name": "news bulletin",
-        "value": 1294,
+        "value": 1026,
         "color": "#06B6D4"
       },
       {
-        "name": "sports show",
-        "value": 1238,
-        "color": "#14B8A6"
-      },
-      {
         "name": "special reports",
-        "value": 1130,
+        "value": 755,
         "color": "#10B981"
       },
       {
         "name": "speech",
-        "value": 1095,
+        "value": 742,
         "color": "#F59E0B"
       },
       {
-        "name": "interview",
-        "value": 860,
-        "color": "#4F46E5"
+        "name": "debate",
+        "value": 290,
+        "color": "#EF4444"
+      },
+      {
+        "name": "press conference",
+        "value": 280,
+        "color": "#8B5CF6"
       },
       {
         "name": "discussion-show",
-        "value": 466,
+        "value": 19,
         "color": "#EC4899"
       },
       {
+        "name": "sports show",
+        "value": 17,
+        "color": "#14B8A6"
+      },
+      {
         "name": "Unknown",
-        "value": 330,
+        "value": 12,
         "color": "#F97316"
       },
       {
+        "name": "podcast",
+        "value": 8,
+        "color": "#6366F1"
+      },
+      {
+        "name": "drama",
+        "value": 4,
+        "color": "#D946EF"
+      },
+      {
         "name": "in-brief",
-        "value": 130,
+        "value": 1,
         "color": "#84CC16"
       }
     ],
     "input_type_performance": [
       {
         "type": "interview",
-        "uploaded": 860,
-        "created": 1685,
-        "published": 58,
-        "publishRate": 6.74,
-        "amp": 1.96
+        "uploaded": 1299,
+        "created": 4972,
+        "published": 35,
+        "publishRate": 2.69,
+        "amp": 3.83
       },
       {
         "type": "news bulletin",
-        "uploaded": 1294,
-        "created": 769,
-        "published": 41,
-        "publishRate": 3.17,
-        "amp": 0.59
+        "uploaded": 1026,
+        "created": 3238,
+        "published": 39,
+        "publishRate": 3.8,
+        "amp": 3.16
       },
       {
         "type": "special reports",
-        "uploaded": 1130,
-        "created": 6949,
-        "published": 59,
-        "publishRate": 5.22,
-        "amp": 6.15
+        "uploaded": 755,
+        "created": 2129,
+        "published": 15,
+        "publishRate": 1.99,
+        "amp": 2.82
       },
       {
         "type": "speech",
-        "uploaded": 1095,
-        "created": 2433,
-        "published": 14,
-        "publishRate": 1.28,
-        "amp": 2.22
+        "uploaded": 742,
+        "created": 2390,
+        "published": 12,
+        "publishRate": 1.62,
+        "amp": 3.22
       },
       {
         "type": "debate",
-        "uploaded": 1638,
-        "created": 5311,
-        "published": 61,
-        "publishRate": 3.72,
-        "amp": 3.24
+        "uploaded": 290,
+        "created": 1074,
+        "published": 5,
+        "publishRate": 1.72,
+        "amp": 3.7
       },
       {
         "type": "press conference",
-        "uploaded": 2169,
-        "created": 5051,
-        "published": 61,
-        "publishRate": 2.81,
-        "amp": 2.33
+        "uploaded": 280,
+        "created": 973,
+        "published": 2,
+        "publishRate": 0.71,
+        "amp": 3.48
       },
       {
         "type": "discussion-show",
-        "uploaded": 466,
-        "created": 6420,
-        "published": 46,
-        "publishRate": 9.87,
-        "amp": 13.78
+        "uploaded": 19,
+        "created": 79,
+        "published": 3,
+        "publishRate": 15.79,
+        "amp": 4.16
       },
       {
         "type": "sports show",
-        "uploaded": 1238,
-        "created": 1184,
-        "published": 61,
-        "publishRate": 4.93,
-        "amp": 0.96
+        "uploaded": 17,
+        "created": 19,
+        "published": 0,
+        "publishRate": 0.0,
+        "amp": 1.12
       },
       {
         "type": "Unknown",
-        "uploaded": 330,
-        "created": 4555,
-        "published": 50,
-        "publishRate": 15.15,
-        "amp": 13.8
+        "uploaded": 12,
+        "created": 12,
+        "published": 0,
+        "publishRate": 0.0,
+        "amp": 1.0
       },
       {
         "type": "podcast",
-        "uploaded": 1482,
-        "created": 3385,
-        "published": 54,
-        "publishRate": 3.64,
-        "amp": 2.28
+        "uploaded": 8,
+        "created": 21,
+        "published": 0,
+        "publishRate": 0.0,
+        "amp": 2.62
       },
       {
         "type": "drama",
-        "uploaded": 2135,
-        "created": 6396,
-        "published": 63,
-        "publishRate": 2.95,
-        "amp": 3.0
+        "uploaded": 4,
+        "created": 4,
+        "published": 0,
+        "publishRate": 0.0,
+        "amp": 1.0
       },
       {
         "type": "in-brief",
-        "uploaded": 130,
-        "created": 8666,
-        "published": 2,
-        "publishRate": 1.54,
-        "amp": 66.66
+        "uploaded": 1,
+        "created": 3,
+        "published": 0,
+        "publishRate": 0.0,
+        "amp": 3.0
       }
     ],
     "platform_distribution": [
       {
         "name": "youtube_count",
-        "value": 640
-      },
-      {
-        "name": "shorts_count",
-        "value": 350
+        "value": 35
       },
       {
         "name": "reels_count",
-        "value": 231
+        "value": 33
       },
       {
-        "name": "facebook_count",
-        "value": 174
+        "name": "shorts_count",
+        "value": 23
       },
       {
         "name": "instagram_count",
-        "value": 173
+        "value": 11
       },
       {
-        "name": "threads_count",
-        "value": 110
-      },
-      {
-        "name": "linkedin_count",
-        "value": 89
-      },
-      {
-        "name": "x_count",
-        "value": 80
+        "name": "facebook_count",
+        "value": 9
       }
     ],
     "language_breakdown": [
       {
         "lang": "en",
-        "uploaded": 2144,
-        "created": 15619,
-        "published": 115,
-        "publishRate": 0.74
+        "uploaded": 2647,
+        "created": 8861,
+        "published": 91,
+        "publishRate": 1.03
       },
       {
         "lang": "hi",
-        "uploaded": 2063,
-        "created": 4919,
-        "published": 8,
-        "publishRate": 0.16
+        "uploaded": 1792,
+        "created": 6021,
+        "published": 20,
+        "publishRate": 0.33
       },
       {
         "lang": "mix",
-        "uploaded": 2603,
-        "created": 11741,
-        "published": 104,
-        "publishRate": 0.89
+        "uploaded": 11,
+        "created": 29,
+        "published": 0,
+        "publishRate": 0.0
       },
       {
         "lang": "es",
-        "uploaded": 1977,
-        "created": 8798,
-        "published": 77,
-        "publishRate": 0.88
+        "uploaded": 1,
+        "created": 1,
+        "published": 0,
+        "publishRate": 0.0
       },
       {
         "lang": "ar",
-        "uploaded": 375,
-        "created": 16927,
-        "published": 160,
-        "publishRate": 0.95
+        "uploaded": 1,
+        "created": 1,
+        "published": 0,
+        "publishRate": 0.0
       },
       {
         "lang": "mr",
-        "uploaded": 741,
-        "created": 14566,
-        "published": 86,
-        "publishRate": 0.59
+        "uploaded": 1,
+        "created": 1,
+        "published": 0,
+        "publishRate": 0.0
       }
     ],
     "user_performance": [
       {
         "user": "Chandan",
-        "uploaded": 501,
-        "created": 761,
-        "published": 8,
-        "rate": 1.05
+        "uploaded": 489,
+        "created": 2152,
+        "published": 19,
+        "rate": 0.88
       },
       {
         "user": "QA-Purushottam",
-        "uploaded": 649,
-        "created": 3185,
-        "published": 35,
-        "rate": 1.1
+        "uploaded": 309,
+        "created": 1227,
+        "published": 13,
+        "rate": 1.06
       },
       {
         "user": "vikas.s@moolya.com",
-        "uploaded": 491,
-        "created": 25,
-        "published": 8,
-        "rate": 32.0
+        "uploaded": 265,
+        "created": 1094,
+        "published": 4,
+        "rate": 0.37
       },
       {
         "user": "Sandeep Belaki",
-        "uploaded": 20,
-        "created": 1806,
-        "published": 15,
-        "rate": 0.83
+        "uploaded": 253,
+        "created": 1039,
+        "published": 7,
+        "rate": 0.67
       },
       {
         "user": "Nitesh",
-        "uploaded": 233,
-        "created": 4157,
-        "published": 35,
-        "rate": 0.84
-      },
-      {
-        "user": "Abhishek",
-        "uploaded": 713,
-        "created": 3659,
-        "published": 32,
-        "rate": 0.87
-      },
-      {
-        "user": "Auto Upload",
-        "uploaded": 790,
-        "created": 1525,
-        "published": 30,
-        "rate": 1.97
-      },
-      {
-        "user": "Subhesh",
-        "uploaded": 642,
-        "created": 760,
-        "published": 5,
-        "rate": 0.66
-      },
-      {
-        "user": "Trivendra",
-        "uploaded": 415,
-        "created": 594,
-        "published": 9,
-        "rate": 1.52
-      },
-      {
-        "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 147,
-        "created": 1055,
-        "published": 15,
-        "rate": 1.42
-      },
-      {
-        "user": "vinay singh",
-        "uploaded": 969,
-        "created": 1854,
-        "published": 3,
-        "rate": 0.16
-      },
-      {
-        "user": "Neha",
-        "uploaded": 28,
-        "created": 3083,
-        "published": 21,
-        "rate": 0.68
-      },
-      {
-        "user": "Subhash (moolya)",
-        "uploaded": 360,
-        "created": 3916,
-        "published": 12,
-        "rate": 0.31
-      },
-      {
-        "user": "Adarsh (Frammer)",
-        "uploaded": 307,
-        "created": 3675,
-        "published": 15,
-        "rate": 0.41
-      },
-      {
-        "user": "Anamika Singh",
-        "uploaded": 882,
-        "created": 2048,
-        "published": 28,
-        "rate": 1.37
-      },
-      {
-        "user": "AB",
-        "uploaded": 941,
-        "created": 1458,
-        "published": 5,
-        "rate": 0.34
-      },
-      {
-        "user": "Divyanshu Dutta Roy",
-        "uploaded": 161,
-        "created": 1219,
-        "published": 25,
-        "rate": 2.05
-      },
-      {
-        "user": "Ashween",
-        "uploaded": 868,
-        "created": 4228,
-        "published": 10,
-        "rate": 0.24
-      },
-      {
-        "user": "Vaibhav",
-        "uploaded": 851,
-        "created": 4181,
-        "published": 23,
-        "rate": 0.55
-      },
-      {
-        "user": "Alok Rai",
-        "uploaded": 60,
-        "created": 1499,
-        "published": 28,
-        "rate": 1.87
-      },
-      {
-        "user": "sukhleen",
-        "uploaded": 124,
-        "created": 1830,
-        "published": 2,
-        "rate": 0.11
-      },
-      {
-        "user": "Shadab",
-        "uploaded": 455,
-        "created": 3395,
-        "published": 9,
-        "rate": 0.27
-      },
-      {
-        "user": "Abhishek Sri",
-        "uploaded": 70,
-        "created": 1203,
+        "uploaded": 224,
+        "created": 959,
         "published": 0,
         "rate": 0.0
       },
       {
-        "user": "QA-Bhargavi",
-        "uploaded": 837,
-        "created": 4270,
-        "published": 25,
-        "rate": 0.59
+        "user": "Abhishek",
+        "uploaded": 201,
+        "created": 408,
+        "published": 8,
+        "rate": 1.96
       },
       {
-        "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 906,
-        "created": 2810,
-        "published": 11,
-        "rate": 0.39
+        "user": "Auto Upload",
+        "uploaded": 185,
+        "created": 220,
+        "published": 0,
+        "rate": 0.0
       },
       {
-        "user": "Prithviraj",
-        "uploaded": 875,
-        "created": 3092,
-        "published": 13,
-        "rate": 0.42
-      },
-      {
-        "user": "Rakesh (devops@frammer.com)",
-        "uploaded": 465,
-        "created": 3044,
-        "published": 24,
-        "rate": 0.79
-      },
-      {
-        "user": "Harish",
-        "uploaded": 242,
-        "created": 3514,
+        "user": "Subhesh",
+        "uploaded": 184,
+        "created": 489,
         "published": 7,
-        "rate": 0.2
+        "rate": 1.43
       },
       {
-        "user": "QA-Ankith",
-        "uploaded": 489,
-        "created": 1798,
+        "user": "Trivendra",
+        "uploaded": 179,
+        "created": 825,
         "published": 3,
-        "rate": 0.17
+        "rate": 0.36
       },
       {
-        "user": "Ravi Pratap Rai",
-        "uploaded": 760,
-        "created": 2575,
-        "published": 27,
-        "rate": 1.05
+        "user": "Dheeraj Pareek(QA theveritycorp.com)",
+        "uploaded": 166,
+        "created": 482,
+        "published": 2,
+        "rate": 0.41
       },
       {
-        "user": "QA-Aniket",
-        "uploaded": 220,
-        "created": 144,
-        "published": 6,
-        "rate": 4.17
+        "user": "vinay singh",
+        "uploaded": 161,
+        "created": 530,
+        "published": 3,
+        "rate": 0.57
       },
       {
-        "user": "Kallol Pratim",
-        "uploaded": 472,
-        "created": 3926,
-        "published": 9,
-        "rate": 0.23
+        "user": "Neha",
+        "uploaded": 158,
+        "created": 510,
+        "published": 10,
+        "rate": 1.96
       },
       {
-        "user": "Ritwik",
-        "uploaded": 958,
-        "created": 1377,
-        "published": 35,
-        "rate": 2.54
+        "user": "Subhash (moolya)",
+        "uploaded": 154,
+        "created": 457,
+        "published": 0,
+        "rate": 0.0
       },
       {
-        "user": "Richa",
-        "uploaded": 532,
-        "created": 3146,
+        "user": "Adarsh (Frammer)",
+        "uploaded": 141,
+        "created": 262,
+        "published": 5,
+        "rate": 1.91
+      },
+      {
+        "user": "Anamika Singh",
+        "uploaded": 121,
+        "created": 567,
+        "published": 2,
+        "rate": 0.35
+      },
+      {
+        "user": "AB",
+        "uploaded": 101,
+        "created": 368,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Divyanshu Dutta Roy",
+        "uploaded": 95,
+        "created": 380,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Ashween",
+        "uploaded": 95,
+        "created": 99,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Vaibhav",
+        "uploaded": 94,
+        "created": 268,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Alok Rai",
+        "uploaded": 86,
+        "created": 143,
+        "published": 4,
+        "rate": 2.8
+      },
+      {
+        "user": "sukhleen",
+        "uploaded": 84,
+        "created": 221,
         "published": 1,
-        "rate": 0.03
-      },
-      {
-        "user": "deleteme@frammer.com",
-        "uploaded": 493,
-        "created": 1825,
-        "published": 25,
-        "rate": 1.37
-      },
-      {
-        "user": "Kawaljit Singh Bedi",
-        "uploaded": 898,
-        "created": 793,
-        "published": 13,
-        "rate": 1.64
-      },
-      {
-        "user": "Safdar",
-        "uploaded": 81,
-        "created": 1601,
-        "published": 15,
-        "rate": 0.94
-      },
-      {
-        "user": "Arun J",
-        "uploaded": 855,
-        "created": 1110,
-        "published": 16,
-        "rate": 1.44
-      },
-      {
-        "user": "QA-Amit",
-        "uploaded": 878,
-        "created": 4053,
-        "published": 21,
-        "rate": 0.52
-      },
-      {
-        "user": "Test User",
-        "uploaded": 521,
-        "created": 3937,
-        "published": 3,
-        "rate": 0.08
-      },
-      {
-        "user": "Arijit Chatterjee",
-        "uploaded": 922,
-        "created": 3963,
-        "published": 18,
         "rate": 0.45
       },
       {
-        "user": "swathi.bharadwaj@moolya.com",
-        "uploaded": 11,
-        "created": 782,
+        "user": "Shadab",
+        "uploaded": 83,
+        "created": 219,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Abhishek Sri",
+        "uploaded": 81,
+        "created": 372,
         "published": 1,
-        "rate": 0.13
+        "rate": 0.27
+      },
+      {
+        "user": "QA-Bhargavi",
+        "uploaded": 75,
+        "created": 271,
+        "published": 6,
+        "rate": 2.21
+      },
+      {
+        "user": "Deepika Uniyal (QA testaing.com)",
+        "uploaded": 72,
+        "created": 416,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Prithviraj",
+        "uploaded": 66,
+        "created": 97,
+        "published": 6,
+        "rate": 6.19
+      },
+      {
+        "user": "Rakesh (devops@frammer.com)",
+        "uploaded": 45,
+        "created": 74,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Harish",
+        "uploaded": 41,
+        "created": 166,
+        "published": 7,
+        "rate": 4.22
+      },
+      {
+        "user": "QA-Ankith",
+        "uploaded": 40,
+        "created": 106,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Ravi Pratap Rai",
+        "uploaded": 39,
+        "created": 52,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "QA-Aniket",
+        "uploaded": 37,
+        "created": 149,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Kallol Pratim",
+        "uploaded": 34,
+        "created": 91,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Ritwik",
+        "uploaded": 24,
+        "created": 25,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Richa",
+        "uploaded": 18,
+        "created": 36,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "deleteme@frammer.com",
+        "uploaded": 16,
+        "created": 38,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Kawaljit Singh Bedi",
+        "uploaded": 8,
+        "created": 9,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Safdar",
+        "uploaded": 8,
+        "created": 25,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Arun J",
+        "uploaded": 5,
+        "created": 13,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "QA-Amit",
+        "uploaded": 5,
+        "created": 22,
+        "published": 3,
+        "rate": 13.64
+      },
+      {
+        "user": "Test User",
+        "uploaded": 4,
+        "created": 14,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "Arijit Chatterjee",
+        "uploaded": 2,
+        "created": 3,
+        "published": 0,
+        "rate": 0.0
+      },
+      {
+        "user": "swathi.bharadwaj@moolya.com",
+        "uploaded": 2,
+        "created": 2,
+        "published": 0,
+        "rate": 0.0
       },
       {
         "user": "parakh",
-        "uploaded": 262,
-        "created": 1116,
-        "published": 38,
-        "rate": 3.41
+        "uploaded": 2,
+        "created": 6,
+        "published": 0,
+        "rate": 0.0
       },
       {
         "user": "Dheerendra Kumar",
-        "uploaded": 656,
-        "created": 1750,
-        "published": 8,
-        "rate": 0.46
+        "uploaded": 1,
+        "created": 3,
+        "published": 0,
+        "rate": 0.0
       },
       {
         "user": "Sumit (Frammer)",
-        "uploaded": 448,
-        "created": 2576,
-        "published": 18,
-        "rate": 0.7
+        "uploaded": 0,
+        "created": 5,
+        "published": 0,
+        "rate": 0.0
       }
     ],
     "channel_user_breakdown": [
       {
         "channel": "A",
         "user": "Chandan",
-        "uploaded": 265,
-        "created": 1277,
-        "published": 29
+        "uploaded": 247,
+        "created": 1029,
+        "published": 18
       },
       {
         "channel": "B",
         "user": "Auto Upload",
-        "uploaded": 127,
-        "created": 965,
-        "published": 3
+        "uploaded": 176,
+        "created": 176,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Sandeep Belaki",
-        "uploaded": 211,
-        "created": 1900,
-        "published": 1
+        "uploaded": 133,
+        "created": 560,
+        "published": 3
       },
       {
         "channel": "A",
         "user": "Adarsh (Frammer)",
-        "uploaded": 262,
-        "created": 700,
+        "uploaded": 104,
+        "created": 182,
         "published": 2
       },
       {
         "channel": "B",
         "user": "Nitesh",
-        "uploaded": 311,
-        "created": 510,
-        "published": 20
+        "uploaded": 103,
+        "created": 487,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Nitesh",
-        "uploaded": 79,
-        "created": 1283,
-        "published": 5
+        "uploaded": 99,
+        "created": 367,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "QA-Purushottam",
-        "uploaded": 164,
-        "created": 583,
-        "published": 17
+        "uploaded": 93,
+        "created": 392,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "QA-Purushottam",
-        "uploaded": 412,
-        "created": 983,
-        "published": 4
+        "uploaded": 91,
+        "created": 346,
+        "published": 1
       },
       {
         "channel": "B",
         "user": "Trivendra",
-        "uploaded": 251,
-        "created": 458,
-        "published": 8
+        "uploaded": 91,
+        "created": 406,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Chandan",
-        "uploaded": 11,
-        "created": 1905,
-        "published": 19
+        "uploaded": 87,
+        "created": 408,
+        "published": 1
       },
       {
         "channel": "A",
         "user": "vikas.s@moolya.com",
-        "uploaded": 400,
-        "created": 815,
-        "published": 27
+        "uploaded": 85,
+        "created": 321,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Anamika Singh",
-        "uploaded": 303,
-        "created": 246,
-        "published": 25
+        "uploaded": 84,
+        "created": 410,
+        "published": 2
       },
       {
         "channel": "A",
         "user": "Ashween",
-        "uploaded": 211,
-        "created": 729,
-        "published": 17
+        "uploaded": 80,
+        "created": 84,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Abhishek",
-        "uploaded": 281,
-        "created": 416,
-        "published": 18
+        "uploaded": 74,
+        "created": 144,
+        "published": 3
       },
       {
         "channel": "A",
         "user": "QA-Purushottam",
-        "uploaded": 111,
-        "created": 1054,
-        "published": 2
+        "uploaded": 72,
+        "created": 270,
+        "published": 10
       },
       {
         "channel": "B",
         "user": "Subhesh",
-        "uploaded": 210,
-        "created": 367,
-        "published": 8
+        "uploaded": 70,
+        "created": 146,
+        "published": 4
       },
       {
         "channel": "B",
         "user": "AB",
-        "uploaded": 377,
-        "created": 107,
-        "published": 35
+        "uploaded": 67,
+        "created": 227,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Chandan",
-        "uploaded": 238,
-        "created": 838,
-        "published": 30
+        "uploaded": 67,
+        "created": 274,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Neha",
-        "uploaded": 267,
-        "created": 417,
-        "published": 16
+        "uploaded": 67,
+        "created": 201,
+        "published": 7
       },
       {
         "channel": "C",
         "user": "vinay singh",
-        "uploaded": 404,
-        "created": 1643,
-        "published": 22
+        "uploaded": 66,
+        "created": 247,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Trivendra",
-        "uploaded": 297,
-        "created": 820,
-        "published": 33
+        "uploaded": 64,
+        "created": 306,
+        "published": 1
       },
       {
         "channel": "B",
         "user": "Abhishek",
-        "uploaded": 316,
-        "created": 1421,
-        "published": 4
+        "uploaded": 54,
+        "created": 97,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 57,
-        "created": 682,
-        "published": 14
-      },
-      {
-        "channel": "A",
-        "user": "Vaibhav",
-        "uploaded": 437,
-        "created": 255,
+        "uploaded": 53,
+        "created": 155,
         "published": 2
       },
       {
         "channel": "A",
+        "user": "Vaibhav",
+        "uploaded": 52,
+        "created": 149,
+        "published": 0
+      },
+      {
+        "channel": "A",
         "user": "Prithviraj",
-        "uploaded": 33,
-        "created": 837,
-        "published": 18
+        "uploaded": 51,
+        "created": 69,
+        "published": 2
       },
       {
         "channel": "C",
         "user": "Divyanshu Dutta Roy",
-        "uploaded": 262,
-        "created": 552,
-        "published": 27
+        "uploaded": 50,
+        "created": 267,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Subhesh",
-        "uploaded": 364,
-        "created": 180,
+        "uploaded": 50,
+        "created": 90,
         "published": 2
       },
       {
         "channel": "B",
         "user": "vinay singh",
-        "uploaded": 34,
-        "created": 156,
-        "published": 3
+        "uploaded": 46,
+        "created": 181,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Chandan",
-        "uploaded": 270,
-        "created": 1477,
-        "published": 23
+        "uploaded": 46,
+        "created": 231,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Rakesh (devops@frammer.com)",
-        "uploaded": 448,
-        "created": 570,
-        "published": 30
+        "uploaded": 45,
+        "created": 74,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Sandeep Belaki",
-        "uploaded": 473,
-        "created": 856,
-        "published": 10
+        "uploaded": 44,
+        "created": 167,
+        "published": 4
       },
       {
         "channel": "B",
         "user": "vikas.s@moolya.com",
-        "uploaded": 226,
-        "created": 1784,
-        "published": 36
+        "uploaded": 42,
+        "created": 148,
+        "published": 1
       },
       {
         "channel": "D",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 24,
-        "created": 1727,
+        "uploaded": 42,
+        "created": 115,
         "published": 0
       },
       {
         "channel": "A",
         "user": "Subhash (moolya)",
-        "uploaded": 233,
-        "created": 1047,
-        "published": 8
-      },
-      {
-        "channel": "C",
-        "user": "vikas.s@moolya.com",
-        "uploaded": 58,
-        "created": 1496,
-        "published": 16
-      },
-      {
-        "channel": "H",
-        "user": "vikas.s@moolya.com",
-        "uploaded": 250,
-        "created": 1423,
+        "uploaded": 40,
+        "created": 119,
         "published": 0
       },
       {
         "channel": "C",
+        "user": "vikas.s@moolya.com",
+        "uploaded": 38,
+        "created": 176,
+        "published": 0
+      },
+      {
+        "channel": "H",
+        "user": "vikas.s@moolya.com",
+        "uploaded": 37,
+        "created": 169,
+        "published": 1
+      },
+      {
+        "channel": "C",
         "user": "Abhishek",
-        "uploaded": 334,
-        "created": 591,
-        "published": 2
+        "uploaded": 36,
+        "created": 74,
+        "published": 5
       },
       {
         "channel": "C",
         "user": "Subhesh",
-        "uploaded": 85,
-        "created": 420,
-        "published": 25
+        "uploaded": 35,
+        "created": 117,
+        "published": 1
       },
       {
         "channel": "C",
         "user": "Alok Rai",
-        "uploaded": 250,
-        "created": 347,
-        "published": 30
+        "uploaded": 35,
+        "created": 40,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "QA-Bhargavi",
-        "uploaded": 389,
-        "created": 165,
-        "published": 25
+        "uploaded": 34,
+        "created": 111,
+        "published": 1
       },
       {
         "channel": "D",
         "user": "Shadab",
-        "uploaded": 179,
-        "created": 936,
-        "published": 22
+        "uploaded": 34,
+        "created": 86,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "AB",
-        "uploaded": 206,
-        "created": 347,
-        "published": 29
+        "uploaded": 33,
+        "created": 136,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "QA-Ankith",
-        "uploaded": 343,
-        "created": 397,
-        "published": 9
+        "uploaded": 32,
+        "created": 84,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 148,
-        "created": 582,
-        "published": 7
+        "uploaded": 32,
+        "created": 198,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Alok Rai",
-        "uploaded": 70,
-        "created": 1600,
-        "published": 24
+        "uploaded": 31,
+        "created": 71,
+        "published": 1
       },
       {
         "channel": "C",
         "user": "Abhishek Sri",
-        "uploaded": 120,
-        "created": 307,
-        "published": 21
+        "uploaded": 29,
+        "created": 113,
+        "published": 1
       },
       {
         "channel": "B",
         "user": "Divyanshu Dutta Roy",
-        "uploaded": 252,
-        "created": 98,
-        "published": 14
+        "uploaded": 28,
+        "created": 82,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "vinay singh",
-        "uploaded": 92,
-        "created": 1265,
-        "published": 9
+        "uploaded": 28,
+        "created": 62,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 255,
-        "created": 157,
-        "published": 19
+        "uploaded": 28,
+        "created": 113,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Harish",
-        "uploaded": 253,
-        "created": 553,
-        "published": 22
+        "uploaded": 27,
+        "created": 82,
+        "published": 6
       },
       {
         "channel": "B",
         "user": "QA-Bhargavi",
-        "uploaded": 351,
-        "created": 650,
+        "uploaded": 26,
+        "created": 113,
         "published": 0
       },
       {
         "channel": "E",
         "user": "vikas.s@moolya.com",
-        "uploaded": 287,
-        "created": 1068,
+        "uploaded": 26,
+        "created": 110,
         "published": 1
       },
       {
         "channel": "C",
         "user": "Sandeep Belaki",
-        "uploaded": 308,
-        "created": 1495,
-        "published": 18
+        "uploaded": 26,
+        "created": 87,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Abhishek Sri",
-        "uploaded": 58,
-        "created": 1878,
-        "published": 13
+        "uploaded": 26,
+        "created": 199,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Subhash (moolya)",
-        "uploaded": 68,
-        "created": 733,
-        "published": 7
+        "uploaded": 25,
+        "created": 92,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Shadab",
-        "uploaded": 445,
-        "created": 1950,
-        "published": 11
+        "uploaded": 25,
+        "created": 74,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Neha",
-        "uploaded": 387,
-        "created": 91,
-        "published": 25
+        "uploaded": 25,
+        "created": 98,
+        "published": 3
       },
       {
         "channel": "C",
         "user": "Vaibhav",
-        "uploaded": 85,
-        "created": 1627,
-        "published": 26
+        "uploaded": 25,
+        "created": 70,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Neha",
-        "uploaded": 273,
-        "created": 1215,
-        "published": 28
+        "uploaded": 23,
+        "created": 76,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "QA-Purushottam",
-        "uploaded": 226,
-        "created": 1100,
-        "published": 14
+        "uploaded": 22,
+        "created": 95,
+        "published": 2
       },
       {
         "channel": "B",
         "user": "Ravi Pratap Rai",
-        "uploaded": 80,
-        "created": 1304,
+        "uploaded": 22,
+        "created": 26,
         "published": 0
       },
       {
         "channel": "B",
         "user": "Adarsh (Frammer)",
-        "uploaded": 113,
-        "created": 1387,
-        "published": 27
+        "uploaded": 22,
+        "created": 50,
+        "published": 3
       },
       {
         "channel": "A",
         "user": "Shadab",
-        "uploaded": 183,
-        "created": 178,
-        "published": 2
+        "uploaded": 22,
+        "created": 57,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 279,
-        "created": 279,
-        "published": 17
+        "uploaded": 21,
+        "created": 52,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "sukhleen",
-        "uploaded": 321,
-        "created": 1042,
-        "published": 33
+        "uploaded": 21,
+        "created": 73,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Neha",
-        "uploaded": 396,
-        "created": 1618,
-        "published": 31
+        "uploaded": 21,
+        "created": 58,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "QA-Purushottam",
-        "uploaded": 317,
-        "created": 370,
-        "published": 28
+        "uploaded": 17,
+        "created": 60,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "QA-Aniket",
-        "uploaded": 53,
-        "created": 1800,
-        "published": 24
+        "uploaded": 17,
+        "created": 74,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "sukhleen",
-        "uploaded": 398,
-        "created": 1703,
-        "published": 25
+        "uploaded": 17,
+        "created": 27,
+        "published": 1
       },
       {
         "channel": "C",
         "user": "Chandan",
-        "uploaded": 196,
-        "created": 303,
-        "published": 7
+        "uploaded": 17,
+        "created": 78,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Anamika Singh",
-        "uploaded": 386,
-        "created": 1348,
-        "published": 18
+        "uploaded": 17,
+        "created": 115,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Abhishek",
-        "uploaded": 292,
-        "created": 1460,
-        "published": 21
+        "uploaded": 16,
+        "created": 29,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "Sandeep Belaki",
-        "uploaded": 292,
-        "created": 1193,
-        "published": 28
+        "uploaded": 16,
+        "created": 79,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Kallol Pratim",
-        "uploaded": 484,
-        "created": 668,
-        "published": 32
+        "uploaded": 16,
+        "created": 62,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Vaibhav",
-        "uploaded": 386,
-        "created": 499,
-        "published": 34
+        "uploaded": 16,
+        "created": 46,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "deleteme@frammer.com",
-        "uploaded": 446,
-        "created": 1414,
-        "published": 2
+        "uploaded": 16,
+        "created": 38,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Ritwik",
-        "uploaded": 290,
-        "created": 1572,
-        "published": 18
+        "uploaded": 15,
+        "created": 16,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Subhesh",
-        "uploaded": 179,
-        "created": 529,
-        "published": 9
+        "uploaded": 14,
+        "created": 24,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Ashween",
-        "uploaded": 470,
-        "created": 2006,
-        "published": 26
+        "uploaded": 14,
+        "created": 14,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Chandan",
-        "uploaded": 379,
-        "created": 1219,
-        "published": 14
+        "uploaded": 14,
+        "created": 85,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "QA-Aniket",
-        "uploaded": 411,
-        "created": 754,
-        "published": 10
+        "uploaded": 13,
+        "created": 41,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Abhishek",
-        "uploaded": 221,
-        "created": 814,
-        "published": 25
+        "uploaded": 13,
+        "created": 41,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Harish",
-        "uploaded": 273,
-        "created": 726,
-        "published": 23
+        "uploaded": 13,
+        "created": 40,
+        "published": 1
       },
       {
         "channel": "J",
         "user": "Sandeep Belaki",
-        "uploaded": 377,
-        "created": 730,
-        "published": 12
+        "uploaded": 13,
+        "created": 82,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Trivendra",
-        "uploaded": 243,
-        "created": 827,
-        "published": 31
+        "uploaded": 13,
+        "created": 77,
+        "published": 2
       },
       {
         "channel": "A",
         "user": "Ravi Pratap Rai",
-        "uploaded": 419,
-        "created": 1331,
-        "published": 36
+        "uploaded": 12,
+        "created": 21,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Sandeep Belaki",
-        "uploaded": 416,
-        "created": 2046,
-        "published": 3
+        "uploaded": 12,
+        "created": 40,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Subhash (moolya)",
-        "uploaded": 447,
-        "created": 874,
-        "published": 12
+        "uploaded": 12,
+        "created": 23,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Subhash (moolya)",
-        "uploaded": 153,
-        "created": 2003,
-        "published": 8
+        "uploaded": 12,
+        "created": 38,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "sukhleen",
-        "uploaded": 303,
-        "created": 1677,
-        "published": 33
+        "uploaded": 12,
+        "created": 21,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Anamika Singh",
-        "uploaded": 423,
-        "created": 607,
-        "published": 36
+        "uploaded": 12,
+        "created": 21,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "vikas.s@moolya.com",
-        "uploaded": 272,
-        "created": 1477,
-        "published": 6
+        "uploaded": 11,
+        "created": 57,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Richa",
-        "uploaded": 423,
-        "created": 634,
+        "uploaded": 11,
+        "created": 19,
         "published": 0
       },
       {
         "channel": "G",
         "user": "Neha",
-        "uploaded": 134,
-        "created": 1209,
-        "published": 11
+        "uploaded": 11,
+        "created": 32,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Alok Rai",
-        "uploaded": 312,
-        "created": 483,
-        "published": 20
+        "uploaded": 10,
+        "created": 12,
+        "published": 3
       },
       {
         "channel": "A",
         "user": "Divyanshu Dutta Roy",
-        "uploaded": 7,
-        "created": 1074,
-        "published": 10
+        "uploaded": 10,
+        "created": 23,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "vinay singh",
-        "uploaded": 127,
-        "created": 1914,
-        "published": 13
+        "uploaded": 10,
+        "created": 22,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Nitesh",
-        "uploaded": 372,
-        "created": 2052,
-        "published": 33
+        "uploaded": 10,
+        "created": 16,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Abhishek Sri",
-        "uploaded": 55,
-        "created": 588,
-        "published": 33
+        "uploaded": 10,
+        "created": 23,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Subhash (moolya)",
-        "uploaded": 125,
-        "created": 1228,
-        "published": 24
+        "uploaded": 10,
+        "created": 20,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 158,
-        "created": 1973,
-        "published": 3
+        "uploaded": 10,
+        "created": 27,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 58,
-        "created": 948,
-        "published": 25
+        "uploaded": 10,
+        "created": 59,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 57,
-        "created": 2055,
-        "published": 15
+        "uploaded": 10,
+        "created": 43,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "sukhleen",
-        "uploaded": 139,
-        "created": 2007,
-        "published": 9
+        "uploaded": 10,
+        "created": 23,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 175,
-        "created": 1741,
-        "published": 1
+        "uploaded": 10,
+        "created": 51,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "QA-Bhargavi",
-        "uploaded": 414,
-        "created": 386,
-        "published": 34
+        "uploaded": 9,
+        "created": 27,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Ritwik",
-        "uploaded": 107,
-        "created": 1251,
-        "published": 18
+        "uploaded": 9,
+        "created": 9,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "QA-Purushottam",
-        "uploaded": 210,
-        "created": 1790,
-        "published": 5
+        "uploaded": 9,
+        "created": 44,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "vikas.s@moolya.com",
-        "uploaded": 446,
-        "created": 1498,
-        "published": 18
+        "uploaded": 9,
+        "created": 58,
+        "published": 1
       },
       {
         "channel": "H",
         "user": "Chandan",
-        "uploaded": 73,
-        "created": 206,
-        "published": 7
+        "uploaded": 9,
+        "created": 42,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Subhesh",
-        "uploaded": 166,
-        "created": 1818,
-        "published": 13
+        "uploaded": 9,
+        "created": 21,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Adarsh (Frammer)",
-        "uploaded": 459,
-        "created": 1780,
-        "published": 9
+        "uploaded": 9,
+        "created": 24,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "QA-Ankith",
-        "uploaded": 403,
-        "created": 792,
-        "published": 2
+        "uploaded": 8,
+        "created": 22,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Auto Upload",
-        "uploaded": 356,
-        "created": 1724,
-        "published": 28
+        "uploaded": 8,
+        "created": 43,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Subhash (moolya)",
-        "uploaded": 303,
-        "created": 1005,
-        "published": 14
+        "uploaded": 8,
+        "created": 22,
+        "published": 0
       },
       {
         "channel": "M",
         "user": "Subhash (moolya)",
-        "uploaded": 232,
-        "created": 941,
-        "published": 22
+        "uploaded": 8,
+        "created": 14,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 326,
-        "created": 1165,
-        "published": 22
+        "uploaded": 8,
+        "created": 12,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Prithviraj",
-        "uploaded": 371,
-        "created": 1677,
-        "published": 17
+        "uploaded": 7,
+        "created": 12,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Kallol Pratim",
-        "uploaded": 181,
-        "created": 448,
-        "published": 18
+        "uploaded": 7,
+        "created": 11,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "vikas.s@moolya.com",
-        "uploaded": 121,
-        "created": 591,
-        "published": 27
+        "uploaded": 7,
+        "created": 20,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "Subhash (moolya)",
-        "uploaded": 333,
-        "created": 81,
-        "published": 25
+        "uploaded": 7,
+        "created": 38,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "sukhleen",
-        "uploaded": 202,
-        "created": 1406,
-        "published": 9
+        "uploaded": 7,
+        "created": 18,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Abhishek Sri",
-        "uploaded": 454,
-        "created": 1480,
-        "published": 3
+        "uploaded": 7,
+        "created": 15,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Anamika Singh",
-        "uploaded": 28,
-        "created": 1079,
-        "published": 1
+        "uploaded": 7,
+        "created": 15,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "Abhishek",
-        "uploaded": 201,
-        "created": 418,
-        "published": 2
+        "uploaded": 6,
+        "created": 20,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Subhash (moolya)",
-        "uploaded": 92,
-        "created": 87,
-        "published": 6
+        "uploaded": 6,
+        "created": 15,
+        "published": 0
       },
       {
         "channel": "O",
         "user": "Subhash (moolya)",
-        "uploaded": 328,
-        "created": 214,
-        "published": 15
+        "uploaded": 6,
+        "created": 15,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Kawaljit Singh Bedi",
-        "uploaded": 355,
-        "created": 1758,
-        "published": 30
+        "uploaded": 6,
+        "created": 7,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "sukhleen",
-        "uploaded": 175,
-        "created": 1520,
-        "published": 9
+        "uploaded": 6,
+        "created": 28,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "sukhleen",
-        "uploaded": 329,
-        "created": 1717,
-        "published": 18
+        "uploaded": 6,
+        "created": 13,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Trivendra",
-        "uploaded": 210,
-        "created": 1501,
-        "published": 27
+        "uploaded": 6,
+        "created": 17,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Ravi Pratap Rai",
-        "uploaded": 183,
-        "created": 308,
-        "published": 16
+        "uploaded": 5,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "QA-Bhargavi",
-        "uploaded": 94,
-        "created": 230,
-        "published": 27
+        "uploaded": 5,
+        "created": 19,
+        "published": 5
       },
       {
         "channel": "F",
         "user": "vinay singh",
-        "uploaded": 272,
-        "created": 154,
-        "published": 18
+        "uploaded": 5,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Prithviraj",
-        "uploaded": 136,
-        "created": 1198,
-        "published": 36
+        "uploaded": 5,
+        "created": 9,
+        "published": 4
       },
       {
         "channel": "A",
         "user": "vinay singh",
-        "uploaded": 236,
-        "created": 114,
-        "published": 22
+        "uploaded": 5,
+        "created": 12,
+        "published": 3
       },
       {
         "channel": "F",
         "user": "vikas.s@moolya.com",
-        "uploaded": 352,
-        "created": 1413,
-        "published": 19
+        "uploaded": 5,
+        "created": 13,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Kallol Pratim",
-        "uploaded": 417,
-        "created": 310,
-        "published": 12
+        "uploaded": 5,
+        "created": 7,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "vikas.s@moolya.com",
-        "uploaded": 428,
-        "created": 992,
-        "published": 12
+        "uploaded": 5,
+        "created": 22,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Divyanshu Dutta Roy",
-        "uploaded": 471,
-        "created": 1041,
-        "published": 10
+        "uploaded": 5,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Arun J",
-        "uploaded": 264,
-        "created": 11,
-        "published": 14
+        "uploaded": 5,
+        "created": 13,
+        "published": 0
       },
       {
         "channel": "Q",
         "user": "Subhash (moolya)",
-        "uploaded": 134,
-        "created": 1427,
-        "published": 16
+        "uploaded": 5,
+        "created": 19,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Subhash (moolya)",
-        "uploaded": 143,
-        "created": 2013,
-        "published": 27
+        "uploaded": 5,
+        "created": 12,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Sandeep Belaki",
-        "uploaded": 18,
-        "created": 729,
-        "published": 18
+        "uploaded": 5,
+        "created": 19,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "sukhleen",
-        "uploaded": 230,
-        "created": 1301,
-        "published": 3
+        "uploaded": 5,
+        "created": 18,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Adarsh (Frammer)",
-        "uploaded": 133,
-        "created": 1376,
-        "published": 21
+        "uploaded": 5,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Safdar",
-        "uploaded": 113,
-        "created": 2036,
-        "published": 21
+        "uploaded": 5,
+        "created": 14,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Nitesh",
-        "uploaded": 138,
-        "created": 540,
-        "published": 36
+        "uploaded": 4,
+        "created": 65,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Nitesh",
-        "uploaded": 124,
-        "created": 76,
-        "published": 33
+        "uploaded": 4,
+        "created": 15,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Dheeraj Pareek(QA theveritycorp.com)",
-        "uploaded": 203,
-        "created": 23,
-        "published": 32
+        "uploaded": 4,
+        "created": 8,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Abhishek Sri",
-        "uploaded": 60,
-        "created": 1038,
-        "published": 32
+        "uploaded": 4,
+        "created": 11,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 249,
-        "created": 675,
-        "published": 11
+        "uploaded": 4,
+        "created": 9,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Neha",
-        "uploaded": 297,
-        "created": 171,
-        "published": 1
+        "uploaded": 4,
+        "created": 10,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Richa",
-        "uploaded": 12,
-        "created": 1892,
-        "published": 27
+        "uploaded": 4,
+        "created": 11,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "QA-Purushottam",
-        "uploaded": 395,
-        "created": 488,
-        "published": 9
+        "uploaded": 3,
+        "created": 10,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Test User",
-        "uploaded": 254,
-        "created": 1485,
-        "published": 21
+        "uploaded": 3,
+        "created": 10,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Alok Rai",
-        "uploaded": 84,
-        "created": 756,
-        "published": 16
+        "uploaded": 3,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "QA-Amit",
-        "uploaded": 457,
-        "created": 154,
-        "published": 25
+        "uploaded": 3,
+        "created": 20,
+        "published": 3
       },
       {
         "channel": "G",
         "user": "Alok Rai",
-        "uploaded": 19,
-        "created": 256,
-        "published": 2
+        "uploaded": 3,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Prithviraj",
-        "uploaded": 49,
-        "created": 1779,
-        "published": 6
+        "uploaded": 3,
+        "created": 6,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Subhash (moolya)",
-        "uploaded": 163,
-        "created": 673,
-        "published": 7
+        "uploaded": 3,
+        "created": 7,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Abhishek Sri",
-        "uploaded": 91,
-        "created": 672,
-        "published": 19
+        "uploaded": 3,
+        "created": 6,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 87,
-        "created": 1472,
-        "published": 11
+        "uploaded": 3,
+        "created": 8,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 68,
-        "created": 258,
-        "published": 34
+        "uploaded": 3,
+        "created": 45,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Neha",
-        "uploaded": 36,
-        "created": 306,
-        "published": 16
+        "uploaded": 3,
+        "created": 20,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Safdar",
-        "uploaded": 252,
-        "created": 1118,
-        "published": 27
+        "uploaded": 3,
+        "created": 11,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Alok Rai",
-        "uploaded": 251,
-        "created": 245,
-        "published": 9
+        "uploaded": 3,
+        "created": 12,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Trivendra",
-        "uploaded": 139,
-        "created": 1658,
-        "published": 21
+        "uploaded": 3,
+        "created": 13,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "QA-Aniket",
-        "uploaded": 354,
-        "created": 186,
-        "published": 32
+        "uploaded": 2,
+        "created": 9,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "QA-Aniket",
-        "uploaded": 380,
-        "created": 1797,
-        "published": 21
+        "uploaded": 2,
+        "created": 10,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Nitesh",
-        "uploaded": 167,
-        "created": 924,
-        "published": 36
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "QA-Amit",
-        "uploaded": 53,
-        "created": 784,
-        "published": 12
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "swathi.bharadwaj@moolya.com",
-        "uploaded": 385,
-        "created": 1595,
-        "published": 26
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "P",
         "user": "Divyanshu Dutta Roy",
-        "uploaded": 177,
-        "created": 1360,
-        "published": 14
+        "uploaded": 2,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "QA-Aniket",
-        "uploaded": 296,
-        "created": 340,
-        "published": 21
+        "uploaded": 2,
+        "created": 12,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Arijit Chatterjee",
-        "uploaded": 300,
-        "created": 562,
-        "published": 29
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Kawaljit Singh Bedi",
-        "uploaded": 358,
-        "created": 650,
-        "published": 36
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Kallol Pratim",
-        "uploaded": 105,
-        "created": 1193,
-        "published": 33
+        "uploaded": 2,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Kallol Pratim",
-        "uploaded": 136,
-        "created": 68,
-        "published": 33
+        "uploaded": 2,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Abhishek Sri",
-        "uploaded": 189,
-        "created": 1583,
-        "published": 34
+        "uploaded": 2,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "P",
         "user": "Subhash (moolya)",
-        "uploaded": 127,
-        "created": 1300,
-        "published": 18
+        "uploaded": 2,
+        "created": 10,
+        "published": 0
       },
       {
         "channel": "R",
         "user": "Subhash (moolya)",
-        "uploaded": 341,
-        "created": 1122,
-        "published": 7
+        "uploaded": 2,
+        "created": 6,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Subhash (moolya)",
-        "uploaded": 46,
-        "created": 915,
-        "published": 32
+        "uploaded": 2,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Sandeep Belaki",
-        "uploaded": 4,
-        "created": 460,
-        "published": 27
+        "uploaded": 2,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Subhesh",
-        "uploaded": 459,
-        "created": 843,
-        "published": 36
+        "uploaded": 2,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Nitesh",
-        "uploaded": 256,
-        "created": 573,
-        "published": 24
+        "uploaded": 2,
+        "created": 7,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Richa",
-        "uploaded": 299,
-        "created": 118,
-        "published": 35
+        "uploaded": 2,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Chandan",
-        "uploaded": 149,
-        "created": 645,
-        "published": 16
+        "uploaded": 2,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Neha",
-        "uploaded": 293,
-        "created": 1478,
-        "published": 23
+        "uploaded": 2,
+        "created": 9,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Trivendra",
-        "uploaded": 242,
-        "created": 1513,
-        "published": 20
+        "uploaded": 2,
+        "created": 6,
+        "published": 0
       },
       {
         "channel": "O",
         "user": "QA-Purushottam",
-        "uploaded": 274,
-        "created": 2031,
-        "published": 1
+        "uploaded": 1,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "R",
         "user": "vinay singh",
-        "uploaded": 207,
-        "created": 1031,
-        "published": 30
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Auto Upload",
-        "uploaded": 414,
-        "created": 968,
-        "published": 32
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "parakh",
-        "uploaded": 114,
-        "created": 2010,
-        "published": 29
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "QA-Bhargavi",
-        "uploaded": 194,
-        "created": 1539,
-        "published": 11
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Ashween",
-        "uploaded": 342,
-        "created": 1511,
-        "published": 11
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "parakh",
-        "uploaded": 169,
-        "created": 1048,
-        "published": 23
+        "uploaded": 1,
+        "created": 4,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Harish",
-        "uploaded": 378,
-        "created": 654,
-        "published": 23
+        "uploaded": 1,
+        "created": 44,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "QA-Purushottam",
-        "uploaded": 81,
-        "created": 1954,
-        "published": 10
+        "uploaded": 1,
+        "created": 7,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "QA-Aniket",
-        "uploaded": 153,
-        "created": 554,
-        "published": 12
+        "uploaded": 1,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "AB",
-        "uploaded": 140,
-        "created": 424,
-        "published": 26
+        "uploaded": 1,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Kallol Pratim",
-        "uploaded": 313,
-        "created": 292,
-        "published": 7
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Sandeep Belaki",
-        "uploaded": 145,
-        "created": 1208,
-        "published": 9
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Kallol Pratim",
-        "uploaded": 322,
-        "created": 430,
-        "published": 7
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Alok Rai",
-        "uploaded": 121,
-        "created": 316,
-        "published": 19
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Test User",
-        "uploaded": 251,
-        "created": 397,
-        "published": 7
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "Subhash (moolya)",
-        "uploaded": 342,
-        "created": 1347,
-        "published": 8
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "H",
         "user": "Shadab",
-        "uploaded": 386,
-        "created": 1588,
-        "published": 6
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "Sandeep Belaki",
-        "uploaded": 310,
-        "created": 595,
-        "published": 13
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Abhishek",
-        "uploaded": 88,
-        "created": 1943,
-        "published": 27
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Abhishek",
-        "uploaded": 474,
-        "created": 915,
-        "published": 1
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "P",
         "user": "Subhesh",
-        "uploaded": 57,
-        "created": 1255,
-        "published": 7
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Shadab",
-        "uploaded": 491,
-        "created": 975,
-        "published": 12
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Adarsh (Frammer)",
-        "uploaded": 62,
-        "created": 1075,
-        "published": 20
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "Subhesh",
-        "uploaded": 346,
-        "created": 1244,
-        "published": 27
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Richa",
-        "uploaded": 307,
-        "created": 1451,
-        "published": 34
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "N",
         "user": "Neha",
-        "uploaded": 486,
-        "created": 1166,
-        "published": 22
+        "uploaded": 1,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Neha",
-        "uploaded": 472,
-        "created": 2028,
-        "published": 14
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Vaibhav",
-        "uploaded": 381,
-        "created": 362,
-        "published": 1
+        "uploaded": 1,
+        "created": 3,
+        "published": 0
       },
       {
         "channel": "L",
         "user": "Subhesh",
-        "uploaded": 279,
-        "created": 233,
-        "published": 11
+        "uploaded": 1,
+        "created": 81,
+        "published": 0
       },
       {
         "channel": "G",
         "user": "Subhesh",
-        "uploaded": 71,
-        "created": 1731,
-        "published": 35
+        "uploaded": 1,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Dheerendra Kumar",
-        "uploaded": 8,
-        "created": 26,
-        "published": 2
+        "uploaded": 1,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Anamika Singh",
-        "uploaded": 365,
-        "created": 1494,
-        "published": 4
+        "uploaded": 1,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Sumit (Frammer)",
-        "uploaded": 420,
-        "created": 92,
-        "published": 2
+        "uploaded": 0,
+        "created": 5,
+        "published": 0
       },
       {
         "channel": "B",
         "user": "Test User",
-        "uploaded": 93,
-        "created": 308,
-        "published": 18
+        "uploaded": 0,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "C",
         "user": "Neha",
-        "uploaded": 372,
-        "created": 51,
-        "published": 1
+        "uploaded": 0,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "I",
         "user": "Subhesh",
-        "uploaded": 338,
-        "created": 318,
-        "published": 36
+        "uploaded": 0,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 436,
-        "created": 1992,
-        "published": 16
+        "uploaded": 0,
+        "created": 2,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Arijit Chatterjee",
-        "uploaded": 335,
-        "created": 180,
-        "published": 13
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "A",
         "user": "Dheerendra Kumar",
-        "uploaded": 151,
-        "created": 1592,
-        "published": 27
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "F",
         "user": "Prithviraj",
-        "uploaded": 491,
-        "created": 646,
-        "published": 26
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Subhesh",
-        "uploaded": 404,
-        "created": 1961,
-        "published": 9
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "E",
         "user": "Anamika Singh",
-        "uploaded": 355,
-        "created": 1283,
-        "published": 2
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "K",
         "user": "Alok Rai",
-        "uploaded": 39,
-        "created": 2024,
-        "published": 35
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "J",
         "user": "Deepika Uniyal (QA testaing.com)",
-        "uploaded": 358,
-        "created": 335,
-        "published": 24
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       },
       {
         "channel": "D",
         "user": "Abhishek",
-        "uploaded": 494,
-        "created": 1576,
-        "published": 21
+        "uploaded": 0,
+        "created": 1,
+        "published": 0
       }
     ],
     "language_pie": [
       {
-        "name": "ar",
-        "value": 16927,
-        "color": "#EF4444"
-      },
-      {
         "name": "en",
-        "value": 15619,
+        "value": 8861,
         "color": "#4F46E5"
       },
       {
-        "name": "mr",
-        "value": 14566
+        "name": "hi",
+        "value": 6021,
+        "color": "#06B6D4"
       },
       {
         "name": "mix",
-        "value": 11741,
+        "value": 29,
         "color": "#10B981"
       },
       {
         "name": "es",
-        "value": 8798,
+        "value": 1,
         "color": "#F59E0B"
       },
       {
-        "name": "hi",
-        "value": 4919,
-        "color": "#06B6D4"
+        "name": "ar",
+        "value": 1,
+        "color": "#EF4444"
+      },
+      {
+        "name": "mr",
+        "value": 1
       }
     ],
     "channel_platform_heatmap": [
       {
         "channel": "A",
-        "facebook": 15,
+        "facebook": 1,
         "instagram": 7,
         "linkedin": 0,
-        "youtube": 43,
-        "x": 8,
-        "shorts": 5,
-        "reels": 26,
-        "threads": 10
+        "youtube": 5,
+        "x": 0,
+        "shorts": 1,
+        "reels": 5,
+        "threads": 0
       },
       {
         "channel": "B",
-        "facebook": 6,
-        "instagram": 13,
-        "linkedin": 9,
-        "youtube": 13,
-        "x": 1,
-        "shorts": 23,
-        "reels": 13,
-        "threads": 4
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "C",
-        "facebook": 14,
-        "instagram": 11,
-        "linkedin": 2,
-        "youtube": 45,
-        "x": 3,
-        "shorts": 22,
-        "reels": 13,
-        "threads": 7
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "D",
-        "facebook": 10,
-        "instagram": 9,
-        "linkedin": 7,
-        "youtube": 7,
-        "x": 1,
-        "shorts": 9,
-        "reels": 11,
-        "threads": 2
+        "facebook": 6,
+        "instagram": 3,
+        "linkedin": 0,
+        "youtube": 29,
+        "x": 0,
+        "shorts": 18,
+        "reels": 15,
+        "threads": 0
       },
       {
         "channel": "E",
         "facebook": 0,
-        "instagram": 12,
-        "linkedin": 5,
-        "youtube": 54,
-        "x": 4,
-        "shorts": 15,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
         "reels": 0,
-        "threads": 6
+        "threads": 0
       },
       {
         "channel": "F",
-        "facebook": 4,
-        "instagram": 14,
-        "linkedin": 6,
-        "youtube": 36,
-        "x": 2,
-        "shorts": 10,
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
         "reels": 0,
-        "threads": 1
+        "threads": 0
       },
       {
         "channel": "G",
-        "facebook": 12,
-        "instagram": 7,
-        "linkedin": 1,
-        "youtube": 18,
-        "x": 9,
-        "shorts": 31,
+        "facebook": 1,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 2,
         "reels": 11,
-        "threads": 2
+        "threads": 0
       },
       {
         "channel": "H",
-        "facebook": 13,
-        "instagram": 9,
-        "linkedin": 5,
-        "youtube": 27,
-        "x": 1,
-        "shorts": 5,
-        "reels": 19,
-        "threads": 1
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "I",
-        "facebook": 8,
-        "instagram": 2,
-        "linkedin": 7,
-        "youtube": 45,
-        "x": 8,
-        "shorts": 23,
-        "reels": 20,
-        "threads": 4
+        "facebook": 1,
+        "instagram": 1,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 2,
+        "reels": 1,
+        "threads": 0
       },
       {
         "channel": "J",
-        "facebook": 16,
-        "instagram": 2,
-        "linkedin": 7,
-        "youtube": 40,
-        "x": 4,
-        "shorts": 32,
-        "reels": 14,
-        "threads": 6
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "K",
-        "facebook": 14,
-        "instagram": 4,
-        "linkedin": 3,
-        "youtube": 29,
-        "x": 9,
-        "shorts": 11,
-        "reels": 3,
-        "threads": 10
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "L",
-        "facebook": 6,
-        "instagram": 15,
-        "linkedin": 5,
-        "youtube": 6,
-        "x": 4,
-        "shorts": 26,
-        "reels": 6,
-        "threads": 9
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "M",
-        "facebook": 11,
-        "instagram": 16,
-        "linkedin": 4,
-        "youtube": 58,
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
         "x": 0,
-        "shorts": 17,
-        "reels": 15,
-        "threads": 10
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "N",
-        "facebook": 5,
-        "instagram": 5,
-        "linkedin": 8,
-        "youtube": 57,
-        "x": 5,
-        "shorts": 12,
-        "reels": 2,
-        "threads": 10
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "O",
-        "facebook": 15,
-        "instagram": 15,
-        "linkedin": 7,
-        "youtube": 25,
-        "x": 6,
-        "shorts": 29,
-        "reels": 6,
-        "threads": 10
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       },
       {
         "channel": "P",
-        "facebook": 4,
-        "instagram": 1,
-        "linkedin": 1,
-        "youtube": 39,
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
         "x": 0,
-        "shorts": 12,
-        "reels": 28,
-        "threads": 9
+        "shorts": 0,
+        "reels": 1,
+        "threads": 0
       },
       {
         "channel": "Q",
-        "facebook": 8,
-        "instagram": 14,
-        "linkedin": 6,
-        "youtube": 45,
-        "x": 8,
-        "shorts": 33,
-        "reels": 23,
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 1,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
         "threads": 0
       },
       {
         "channel": "R",
-        "facebook": 13,
-        "instagram": 17,
-        "linkedin": 6,
-        "youtube": 53,
-        "x": 7,
-        "shorts": 35,
-        "reels": 21,
-        "threads": 9
+        "facebook": 0,
+        "instagram": 0,
+        "linkedin": 0,
+        "youtube": 0,
+        "x": 0,
+        "shorts": 0,
+        "reels": 0,
+        "threads": 0
       }
     ]
   },

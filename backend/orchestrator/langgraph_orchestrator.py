@@ -1,5 +1,7 @@
 """
 LangGraph orchestrator for chat routing.
+
+Uses LLM-based intent classification for semantic understanding.
 """
 from typing import Any, Dict, List, Optional, TypedDict
 
@@ -13,63 +15,44 @@ class ChatState(TypedDict, total=False):
     route: str
     visualize_intent: bool
     kpi_decision: Dict[str, Any]
+    entities: Dict[str, Any]
     result: Dict[str, Any]
 
 
 def _route_query(state: ChatState) -> ChatState:
+    """Route query using LLM-based intent classification."""
     query = state.get("query", "")
     context = state.get("conversation_context", "")
     forced_route = (state.get("forced_route") or "").lower().strip()
 
+    # Handle forced routes (from frontend mode selection)
     if forced_route:
         if forced_route == "analytics":
-            forced_route = "analyze"
-        allowed = {"explain", "kpi", "analyze", "summary", "recommend"}
+            forced_route = "planner"
+        allowed = {"explain", "kpi", "planner", "summary", "recommend"}
         if forced_route in allowed:
             return {
                 "route": forced_route,
                 "kpi_decision": {"match": False, "kpi_id": "", "confidence": 0.0},
                 "visualize_intent": False,
+                "entities": {},
             }
 
-    from planner import classify_task, TaskType
-    from explanation_agent import classify_route
-    from kpi_agent import classify_kpi
-    from recommendation_agent import should_run as should_run_recs
-    from analytics_summary_agent import should_run as should_run_summary
+    # Use LLM-based intent router
+    from intent_router import route_query
 
-    task_type = classify_task(query)
-    if task_type == TaskType.GREETING:
-        return {
-            "route": "analyze",
-            "kpi_decision": {"match": False, "kpi_id": "", "confidence": 0.0},
-            "visualize_intent": False,
-        }
+    routing = route_query(query, conversation_context=context)
+    route = routing["route"]
+    entities = routing.get("entities", {})
 
-    route_decision = classify_route(query, conversation_context=context)
-    route = route_decision.get("route", "analyze")
-    kpi_decision = classify_kpi(query, conversation_context=context)
-
-    visualize_intent = any(
-        t in query.lower()
-        for t in ["chart", "plot", "graph", "visualize", "show me"]
-    )
-
-    if route == "explain":
-        resolved_route = "explain"
-    elif should_run_summary(query, conversation_context=context):
-        resolved_route = "summary"
-    elif should_run_recs(query, conversation_context=context):
-        resolved_route = "recommend"
-    elif kpi_decision.get("match") and float(kpi_decision.get("confidence", 0.0)) >= 0.6:
-        resolved_route = "kpi"
-    else:
-        resolved_route = "analyze"
+    # Check for visualization intent from entities
+    visualize_intent = bool(entities.get("chart_type")) or bool(entities.get("top_n"))
 
     return {
-        "route": resolved_route,
-        "kpi_decision": kpi_decision,
+        "route": route,
+        "kpi_decision": {"match": False, "kpi_id": "", "confidence": 0.0},
         "visualize_intent": visualize_intent,
+        "entities": entities,
     }
 
 
@@ -103,37 +86,8 @@ def _planner_node(state: ChatState) -> ChatState:
     return {"result": result}
 
 
-def _combine_kpi_viz(state: ChatState) -> ChatState:
-    from planner import run_planner
-    from kpi_agent import answer_kpi_query
-
-    planner_result = run_planner(state.get("query", ""), conversation_context=state.get("conversation_context", ""))
-    kpi_result = answer_kpi_query(state.get("query", ""), conversation_context=state.get("conversation_context", ""))
-
-    combined_answer = planner_result.get("answer", "")
-    kpi_payload = kpi_result.get("kpi") or {}
-    kpi_name = kpi_payload.get("name") or "KPI"
-    kpi_value = kpi_payload.get("formatted") or kpi_payload.get("value")
-    kpi_desc = kpi_payload.get("description") or ""
-    if kpi_value is not None:
-        kpi_line = f"{kpi_name}: {kpi_value}"
-        if kpi_desc:
-            kpi_line += f". {kpi_desc}"
-        combined_answer = f"{combined_answer}\n\nKPI highlights: {kpi_line}"
-
-    datasets_used = list({*(planner_result.get("datasets_used", [])), *(kpi_result.get("datasets_used", []))})
-
-    result = {
-        "answer": combined_answer.strip(),
-        "artifacts": planner_result.get("artifacts", []),
-        "datasets_used": datasets_used,
-        "suggestions": planner_result.get("suggestions", []),
-    }
-    return {"result": result}
-
-
 def _route_to_node(state: ChatState) -> str:
-    route = state.get("route", "analyze")
+    route = state.get("route", "planner")
     if route == "explain":
         return "explain"
     if route == "summary":
@@ -141,14 +95,8 @@ def _route_to_node(state: ChatState) -> str:
     if route == "recommend":
         return "recommend"
     if route == "kpi":
-        return "kpi_or_combo"
+        return "kpi"
     return "planner"
-
-
-def _route_kpi_combo(state: ChatState) -> str:
-    if state.get("visualize_intent"):
-        return "combine"
-    return "kpi"
 
 
 def build_graph():
@@ -160,7 +108,6 @@ def build_graph():
     graph.add_node("recommend", _recommend_node)
     graph.add_node("kpi", _kpi_node)
     graph.add_node("planner", _planner_node)
-    graph.add_node("combine", _combine_kpi_viz)
 
     graph.set_entry_point("route")
 
@@ -168,20 +115,15 @@ def build_graph():
         "explain": "explain",
         "summary": "summary",
         "recommend": "recommend",
-        "kpi_or_combo": "kpi",
+        "kpi": "kpi",
         "planner": "planner",
-    })
-
-    graph.add_conditional_edges("kpi", _route_kpi_combo, {
-        "combine": "combine",
-        "kpi": END,
     })
 
     graph.add_edge("explain", END)
     graph.add_edge("summary", END)
     graph.add_edge("recommend", END)
+    graph.add_edge("kpi", END)
     graph.add_edge("planner", END)
-    graph.add_edge("combine", END)
 
     return graph.compile()
 
@@ -202,7 +144,8 @@ def run_chat_graph(query: str, conversation_context: str = "", forced_route: str
     output = _GRAPH.invoke(state)
     return {
         "result": output.get("result", {}),
-        "route": output.get("route", "analyze"),
+        "route": output.get("route", "planner"),
         "kpi_decision": output.get("kpi_decision", {}),
         "visualize_intent": output.get("visualize_intent", False),
+        "entities": output.get("entities", {}),
     }

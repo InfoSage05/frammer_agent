@@ -47,5 +47,8 @@ data/saved_analytics/
 data/merged/
 data/chroma/
 data/models/
+data/chart_data/
 
-
+# Frontend runtime data
+frontend-main/.next/
+frontend-main/node_modules/
