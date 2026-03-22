@@ -554,91 +554,93 @@ export default function App(props: any) {
                 )}
               </div>
 
-              <div className="nav-grp">SECTIONS</div>
-              <nav className="nav-list">
-                {ALL_SECTIONS.filter(s => s.k !== "client").map((s) => (
-                  <div
-                    key={s.k}
-                    className={`nav-item${activeSection === s.k ? " active" : ""}`}
-                    onClick={() => scrollToSection(s.k)}
-                  >
-                    <span className="nav-icon">{NAV_ICONS[s.k] || s.icon}</span>
-                    <span className="nav-label">{pageTitles[s.k] || s.label}</span>
-                  </div>
-                ))}
-              </nav>
-
-              <div style={{ margin: "16px 0 8px" }}>
-                <div className="nav-grp">TOOLS</div>
-                <div
-                  onClick={() => { window.location.href = '/analyze'; }}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    margin: '4px 8px', padding: '9px 14px',
-                    borderRadius: 8,
-                    background: 'rgba(48,201,120,0.10)',
-                    border: '1px solid rgba(48,201,120,0.28)',
-                    cursor: 'pointer',
-                    transition: 'all 0.18s ease',
-                    boxShadow: '0 0 14px rgba(48,201,120,0.08)',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(48,201,120,0.17)';
-                    e.currentTarget.style.borderColor = 'rgba(48,201,120,0.45)';
-                    e.currentTarget.style.boxShadow = '0 0 20px rgba(48,201,120,0.15)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = 'rgba(48,201,120,0.10)';
-                    e.currentTarget.style.borderColor = 'rgba(48,201,120,0.28)';
-                    e.currentTarget.style.boxShadow = '0 0 14px rgba(48,201,120,0.08)';
-                  }}
-                >
-                  <span style={{
-                    width: 20, height: 20, display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', flexShrink: 0, color: 'rgba(72,220,140,0.90)',
-                  }}>
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M7.5 1.5V10M7.5 1.5L4.5 4.5M7.5 1.5L10.5 4.5" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M2 11V12.5C2 13.05 2.45 13.5 3 13.5H12C12.55 13.5 13 13.05 13 12.5V11" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round"/>
-                    </svg>
-                  </span>
-                  <span style={{
-                    flex: 1, fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
-                    color: 'rgba(72,220,140,0.92)', letterSpacing: '0.01em',
-                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }}>
-                    Upload &amp; Analyze
-                  </span>
-                  <span style={{
-                    width: 6, height: 6, borderRadius: '50%',
-                    background: 'rgba(72,220,140,0.85)', flexShrink: 0,
-                    boxShadow: '0 0 6px rgba(72,220,140,0.60)',
-                  }} />
-                </div>
-              </div>
-
-              <div style={{ margin: "16px 0 8px" }}>
-                <div className="nav-grp">WORKSPACE</div>
+              <div className="sidebar-body">
+                <div className="nav-grp">SECTIONS</div>
                 <nav className="nav-list">
-                  <div className={`nav-item${panelOpen && panelTab === 'copilot' ? ' active' : ''}`} onClick={() => openPanel('copilot')}>
-                    <span className="nav-icon">{NAV_ICONS.copilot}</span>
-                    <span className="nav-label">Copilot</span>
-                  </div>
+                  {ALL_SECTIONS.filter(s => s.k !== "client").map((s) => (
+                    <div
+                      key={s.k}
+                      className={`nav-item${activeSection === s.k ? " active" : ""}`}
+                      onClick={() => scrollToSection(s.k)}
+                    >
+                      <span className="nav-icon">{NAV_ICONS[s.k] || s.icon}</span>
+                      <span className="nav-label">{pageTitles[s.k] || s.label}</span>
+                    </div>
+                  ))}
                 </nav>
-              </div>
-              <div className="sb-stats">
-                <div className="nav-grp" style={{ paddingTop: 12 }}>
-                  Platform
-                </div>
-                {(shellData?.sidebar?.platformKpis || []).map((s) => (
-                  <div key={s.l} className="sb-row">
-                    <span className="sb-lbl">{s.l}</span>
-                    <span className="sb-val" style={{ color: s.c }}>{s.v}</span>
+
+                <div style={{ margin: "16px 0 8px" }}>
+                  <div className="nav-grp">TOOLS</div>
+                  <div
+                    onClick={() => { window.location.href = '/analyze'; }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      margin: '4px 8px', padding: '9px 14px',
+                      borderRadius: 8,
+                      background: 'rgba(48,201,120,0.10)',
+                      border: '1px solid rgba(48,201,120,0.28)',
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      boxShadow: '0 0 14px rgba(48,201,120,0.08)',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = 'rgba(48,201,120,0.17)';
+                      e.currentTarget.style.borderColor = 'rgba(48,201,120,0.45)';
+                      e.currentTarget.style.boxShadow = '0 0 20px rgba(48,201,120,0.15)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'rgba(48,201,120,0.10)';
+                      e.currentTarget.style.borderColor = 'rgba(48,201,120,0.28)';
+                      e.currentTarget.style.boxShadow = '0 0 14px rgba(48,201,120,0.08)';
+                    }}
+                  >
+                    <span style={{
+                      width: 20, height: 20, display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', flexShrink: 0, color: 'rgba(72,220,140,0.90)',
+                    }}>
+                      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.5 1.5V10M7.5 1.5L4.5 4.5M7.5 1.5L10.5 4.5" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 11V12.5C2 13.05 2.45 13.5 3 13.5H12C12.55 13.5 13 13.05 13 12.5V11" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round"/>
+                      </svg>
+                    </span>
+                    <span style={{
+                      flex: 1, fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
+                      color: 'rgba(72,220,140,0.92)', letterSpacing: '0.01em',
+                      whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                    }}>
+                      Upload &amp; Analyze
+                    </span>
+                    <span style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: 'rgba(72,220,140,0.85)', flexShrink: 0,
+                      boxShadow: '0 0 6px rgba(72,220,140,0.60)',
+                    }} />
                   </div>
-                ))}
-              </div>
-              <div className="sb-foot">
-                v19 · <span style={{ color: 'var(--suc)', opacity: 0.9 }}>● live</span>
+                </div>
+
+                <div style={{ margin: "16px 0 8px" }}>
+                  <div className="nav-grp">WORKSPACE</div>
+                  <nav className="nav-list">
+                    <div className={`nav-item${panelOpen && panelTab === 'copilot' ? ' active' : ''}`} onClick={() => openPanel('copilot')}>
+                      <span className="nav-icon">{NAV_ICONS.copilot}</span>
+                      <span className="nav-label">Copilot</span>
+                    </div>
+                  </nav>
+                </div>
+                <div className="sb-stats">
+                  <div className="nav-grp" style={{ paddingTop: 12 }}>
+                    Platform
+                  </div>
+                  {(shellData?.sidebar?.platformKpis || []).map((s) => (
+                    <div key={s.l} className="sb-row">
+                      <span className="sb-lbl">{s.l}</span>
+                      <span className="sb-val" style={{ color: s.c }}>{s.v}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="sb-foot">
+                  v19 · <span style={{ color: 'var(--suc)', opacity: 0.9 }}>● live</span>
+                </div>
               </div>
             </ResizableSidebar>
 
