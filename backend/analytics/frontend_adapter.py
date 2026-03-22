@@ -144,8 +144,8 @@ def build_executive_view(dashboard: Dict) -> Dict:
             "totalCreated": total_created,
             "totalUploaded": total_uploaded,
             "totalPublished": total_published,
-            "publishRate": f"{publish_rate:.1f}",
-            "multiplier": f"{multiplier:.1f}",
+            "publishRate": round(publish_rate, 1),
+            "multiplier": round(multiplier, 1),
             "activeChannels": active_channels,
         },
         "strategicSignals": signals,
@@ -179,6 +179,7 @@ def build_executive_view(dashboard: Dict) -> Dict:
             {"label": "Unpublished", "value": drop_off, "color": "#6a1818"},
             {"label": "Published", "value": total_published, "color": "#30b060"},
         ],
+        "toasts": [],
     }
 
 
@@ -338,8 +339,8 @@ def build_funnel_view(dashboard: Dict) -> Dict:
             "totalUploaded": total_uploaded,
             "totalCreated": total_created,
             "totalPublished": total_published,
-            "publishRate": f"{publish_rate:.1f}",
-            "multiplier": f"{multiplier:.1f}",
+            "publishRate": round(publish_rate, 1),
+            "multiplier": round(multiplier, 1),
         },
         "sankey": {
             "funnel": sankey_funnel,
@@ -350,6 +351,12 @@ def build_funnel_view(dashboard: Dict) -> Dict:
             {"c": "var(--green)", "l": f"Published: {total_published:,} ({publish_rate:.1f}%)"},
             {"c": "#6a1818", "l": f"Unpublished: {unpublished:,} ({100-publish_rate:.1f}%)"},
         ],
+        "dataQualityAlerts": [
+            {"c": "warn", "t": f"Only {publish_rate:.1f}% of AI-created content reaches publication."},
+            {"c": "crit" if unpublished > 1000 else "info", "t": f"{unpublished:,} items created but never published."},
+        ],
+        "typeTreemapColors": ["#d4952a", "#8B5CF6", "#3EC98A", "#45aaf2", "#ff6b7a", "#f0b84a"],
+        "sankeyTypeOptions": [["funnel", "Upload→Publish"], ["channel", "Channel→Platform"], ["content", "Content→Language"]],
     }
 
 
@@ -385,6 +392,11 @@ def build_trends_view(dashboard: Dict) -> Dict:
             "colors": ["#1a1614", "#4a2a08", "#7a4a10", "#b87514", "#d4952a", "#f0b84a"],
             "label": "Low → Peak creation"
         },
+        "durationLegend": [
+            ["Uploaded Duration", "var(--ink3)"],
+            ["Created Duration", "var(--gold)"],
+            ["Published Duration", "var(--green)"],
+        ],
     }
 
 
@@ -441,11 +453,22 @@ def build_explorer_view(dashboard: Dict) -> Dict:
             "published": row.get("published", 0),
         })
     
+    # Platform heatmap data
+    platform_dist = chart_data.get("platform_distribution", [])
+    platform_names = [p.get("name", "") for p in platform_dist if p.get("value", 0) > 0]
+    platform_heatmap = []
+    for ch in channel_perf:
+        ch_name = ch.get("name", "")
+        ch_published = ch.get("published", 0)
+        total_plat_val = sum(p.get("value", 0) for p in platform_dist) or 1
+        values = [round(ch_published * p.get("value", 0) / total_plat_val) for p in platform_dist if p.get("value", 0) > 0]
+        platform_heatmap.append({"channel": ch_name, "values": values})
+
     # Data quality metrics
     unknown_team_rate = get_metric_value(metrics, "unknown_team_rate", 0)
     null_platform_rate = get_metric_value(metrics, "null_platform_rate", 0)
     data_quality_score = get_metric_value(metrics, "data_quality_score", 0)
-    
+
     return {
         "meta": {
             "tag": "VIDEO EXPLORER & DATA QUALITY",
@@ -456,7 +479,7 @@ def build_explorer_view(dashboard: Dict) -> Dict:
             ["users", "User Rankings"],
             ["channels", "Channel Drilldown"],
             ["quality", "Data Quality"],
-            ["kpi_tree", "KPI Framework"],
+            ["advanced_kpi", "KPI Framework"],
         ],
         "userSortOptions": [["created", "Created"], ["published", "Published"], ["uploaded", "Uploaded"]],
         "users": users,
@@ -464,14 +487,34 @@ def build_explorer_view(dashboard: Dict) -> Dict:
         "inputTypes": input_types,
         "channelMetrics": channel_metrics,
         "dataQualityRows": [
-            {"l": "Team Name Unknown", "v": f"{unknown_team_rate:.1f}%", "c": "var(--red-lt)" if unknown_team_rate > 50 else "var(--green-lt)"},
-            {"l": "Platform NULL (published)", "v": f"{null_platform_rate:.1f}%", "c": "var(--red-lt)" if null_platform_rate > 50 else "var(--green-lt)"},
-            {"l": "Data Quality Score", "v": f"{data_quality_score:.1f}%", "c": "var(--green-lt)" if data_quality_score > 70 else "var(--amber-lt)"},
+            {
+                "l": "Team Name Unknown", "v": f"{unknown_team_rate:.1f}%",
+                "c": "var(--red-lt)" if unknown_team_rate > 50 else "var(--green-lt)",
+                "severity": "critical" if unknown_team_rate > 50 else "warning",
+                "detail": f"Team name field is missing or unknown in {unknown_team_rate:.1f}% of records, blocking team-level attribution.",
+                "pct": int(unknown_team_rate),
+            },
+            {
+                "l": "Platform NULL (published)", "v": f"{null_platform_rate:.1f}%",
+                "c": "var(--red-lt)" if null_platform_rate > 50 else "var(--green-lt)",
+                "severity": "critical" if null_platform_rate > 50 else "warning",
+                "detail": f"Platform field is NULL on {null_platform_rate:.1f}% of published rows, undermining distribution analysis.",
+                "pct": int(null_platform_rate),
+            },
+            {
+                "l": "Data Quality Score", "v": f"{data_quality_score:.1f}%",
+                "c": "var(--green-lt)" if data_quality_score > 70 else "var(--amber-lt)",
+                "severity": "warning" if data_quality_score < 70 else "info",
+                "detail": f"Overall data quality score is {data_quality_score:.1f}% based on field completeness and integrity checks.",
+                "pct": int(data_quality_score),
+            },
         ],
         "completenessRings": [
             {"label": "Overall", "pct": int(data_quality_score), "color": "var(--amber)", "size": 68},
             {"label": "Core Fields", "pct": 98, "color": "var(--green)", "size": 54},
         ],
+        "platformNames": platform_names,
+        "platformHeatmap": platform_heatmap,
     }
 
 

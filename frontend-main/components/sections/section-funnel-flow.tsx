@@ -779,7 +779,7 @@ function SectionFunnel({ theme, onAskAI }) {
   return (
     <div className="fade-up">
       <div className="sub-tabs">
-        {sectionData.subTabs.map(([k, l]) => (
+        {(sectionData.subTabs || []).map(([k, l]) => (
           <div
             key={k}
             className={`sub-tab${subView === k ? " active" : ""}`}
@@ -1317,7 +1317,7 @@ function SectionFunnel({ theme, onAskAI }) {
                   <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)' }}>DATA QUALITY ALERTS</div>
                 </div>
                 <div style={{ padding: '10px 14px 14px', display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  {sectionData.dataQualityAlerts.map((a, i) => (
+                  {(sectionData.dataQualityAlerts || []).map((a, i) => (
                     <div key={i} className={`callout callout-${a.c}`} style={{ padding: '10px 14px', borderRadius: 9 }}>
                       <div className="c-text" style={{ fontFamily: SF, fontSize: 12.5, fontWeight: 400, marginBottom: 0, lineHeight: 1.5 }}>{a.t}</div>
                     </div>
@@ -1399,6 +1399,94 @@ function SectionFunnel({ theme, onAskAI }) {
       })()}
 
       {subView === "channels" && <ByChannelTab channels={CHANNELS} />}
+
+      {subView === "types" && (
+        <div className="g2">
+          <div className="card" style={{ padding: "14px 16px" }}>
+            <div
+              style={{
+                fontSize: 8,
+                fontFamily: "var(--font-mono)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--ink3)",
+                marginBottom: 12,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>TOP TYPES BY CREATION VOLUME</span>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.topTypes}
+                onToggleInsights={() => toggleInsights("topTypes")}
+                onAskAI={() =>
+                  onAskAI &&
+                  onAskAI("Top Types By Creation Volume", INPUT_TYPES)
+                }
+              />
+            </div>
+            <GraphFlip
+              flipped={!!insightsOpen.topTypes}
+              minHeight={220}
+              front={
+                <>
+                  {INPUT_TYPES.slice(0, 6).map((t) => (
+                    <BarRow
+                      key={t.type}
+                      label={t.type}
+                      value={t.created}
+                      max={Math.max(...INPUT_TYPES.map((x) => x.created))}
+                      fillClass="bf-gold"
+                    />
+                  ))}
+                </>
+              }
+              back={<GraphInsights title="Top Types By Creation Volume" />}
+            />
+          </div>
+          <div className="card" style={{ padding: "14px 16px" }}>
+            <div
+              style={{
+                fontSize: 8,
+                fontFamily: "var(--font-mono)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--ink3)",
+                marginBottom: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>TYPE VOLUME TREEMAP</span>
+              <GraphActionButtons
+                insightsOpen={!!insightsOpen.typeTreemap}
+                onToggleInsights={() => toggleInsights("typeTreemap")}
+                onAskAI={() =>
+                  onAskAI && onAskAI("Type Volume Treemap", INPUT_TYPES)
+                }
+              />
+            </div>
+            <GraphFlip
+              flipped={!!insightsOpen.typeTreemap}
+              minHeight={220}
+              front={
+                <Treemap
+                  data={INPUT_TYPES.slice(0, 6).map((t, i) => ({
+                    label: t.type.substring(0, 11),
+                    value: t.created,
+                    color: sectionData.typeTreemapColors[i],
+                    note: `${t.published} published`,
+                  }))}
+                  height={220}
+                />
+              }
+              back={<GraphInsights title="Type Volume Treemap" />}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

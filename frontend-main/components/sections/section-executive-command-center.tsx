@@ -341,7 +341,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
               background: "rgba(9,9,9,0.97)",
             }}
           >
-            {data.contextStrip.map((s, i) => (
+            {(data.contextStrip || []).map((s, i) => (
               <div
                 key={i}
                 style={{
@@ -611,7 +611,7 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                 <>
                   <StackedBarChart data={MONTHLY_DATA} height={240} theme={theme} />
                   <div className="legend" style={{ marginTop: 12, gap: 16 }}>
-                    {data.monthlyChart.legend.map(([l, c]) => (
+                    {(data.monthlyChart?.legend || []).map(([l, c]) => (
                       <div key={l} className="leg-item">
                         <div className="leg-dot" style={{ background: c, width: 10, height: 10, borderRadius: 2 }} />
                         <span>{l}</span>

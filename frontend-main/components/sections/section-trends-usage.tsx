@@ -398,7 +398,7 @@ function SectionTrends({ theme, onAskAI }) {
         <div className="filter-group">
           <div className="filter-group-label">Metric</div>
           <div className="dim-row">
-            {sectionData.metricOptions.map(([k, l]) => (
+            {(sectionData.metricOptions || []).map(([k, l]) => (
               <button
                 key={k}
                 className={`dim-opt${metric === k ? " active" : ""}`}
@@ -412,7 +412,7 @@ function SectionTrends({ theme, onAskAI }) {
         <div className="filter-group">
           <div className="filter-group-label">Time Period</div>
           <div className="dim-row">
-            {sectionData.timeOptions.map(([k, l]) => (
+            {(sectionData.timeOptions || []).map(([k, l]) => (
               <button
                 key={k}
                 className={`dim-opt${monthRange === k ? " active" : ""}`}
@@ -494,7 +494,7 @@ function SectionTrends({ theme, onAskAI }) {
                   <canvas ref={durCanvasRef} />
                 </div>
                 <div className="legend" style={{ marginTop: 10 }}>
-                  {sectionData.durationLegend.map(([l, c]) => (
+                  {(sectionData.durationLegend || []).map(([l, c]) => (
                     <div key={l} className="leg-item">
                       <div className="leg-dot" style={{ background: c }} />
                       {l}
@@ -561,7 +561,7 @@ function SectionTrends({ theme, onAskAI }) {
                     marginTop: 12,
                   }}
                 >
-                  {sectionData.heatLegend.colors.map((c, i) => (
+                  {(sectionData.heatLegend?.colors || []).map((c, i) => (
                     <div
                       key={i}
                       style={{

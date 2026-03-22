@@ -904,7 +904,7 @@ function SectionExplorer({ theme, onAskAI }) {
   return (
     <div className="fade-up">
       <div className="sub-tabs">
-        {data.subTabs.map(([k, l]) => (
+        {(data.subTabs || []).map(([k, l]) => (
           <div
             key={k}
             className={`sub-tab${subView === k ? " active" : ""}${k === "advanced_kpi" ? " premium" : ""}`}
@@ -921,7 +921,7 @@ function SectionExplorer({ theme, onAskAI }) {
             <div className="filter-group">
               <div className="filter-group-label">Sort by</div>
               <div className="dim-row">
-                {data.userSortOptions.map(([k, l]) => (
+                {(data.userSortOptions || []).map(([k, l]) => (
                   <button
                     key={k}
                     className={`dim-opt${userSort === k ? " active" : ""}`}
@@ -1351,6 +1351,41 @@ function SectionExplorer({ theme, onAskAI }) {
                 { type: 'info',    heading: 'Ch-D shows the broadest platform diversity', body: 'Ch-D distributes across 5 distinct platforms — the only channel with true multi-platform presence. All other active channels concentrate on 1–2 platforms, limiting audience reach and reducing distribution resilience.' },
               ]} />}
             />
+          </div>
+        </div>
+      )}
+
+      {subView === "quality" && (
+        <div className="stack">
+          <div className="card" style={{ padding: "20px 22px" }}>
+            <div style={{ fontSize: 8, fontFamily: "var(--font-mono)", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--ink3)", marginBottom: 14 }}>
+              DATA QUALITY DIAGNOSTICS
+            </div>
+            <div style={{ display: "flex", gap: 16, marginBottom: 20 }}>
+              {(data?.completenessRings || []).map((ring, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ position: "relative", width: ring.size || 54, height: ring.size || 54 }}>
+                    <svg width={ring.size || 54} height={ring.size || 54} viewBox={`0 0 ${ring.size || 54} ${ring.size || 54}`}>
+                      <circle cx={(ring.size || 54) / 2} cy={(ring.size || 54) / 2} r={(ring.size || 54) / 2 - 4} fill="none" stroke="var(--line-lt)" strokeWidth={3} />
+                      <circle cx={(ring.size || 54) / 2} cy={(ring.size || 54) / 2} r={(ring.size || 54) / 2 - 4} fill="none" stroke={ring.color} strokeWidth={3}
+                        strokeDasharray={`${(ring.pct / 100) * Math.PI * ((ring.size || 54) - 8)} ${Math.PI * ((ring.size || 54) - 8)}`}
+                        strokeLinecap="round" transform={`rotate(-90 ${(ring.size || 54) / 2} ${(ring.size || 54) / 2})`} />
+                    </svg>
+                    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: ring.color }}>{ring.pct}%</div>
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--ink3)" }}>{ring.label}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              {dataQualityRows.map((row, i) => (
+                <div key={i} className={`callout callout-${row.severity === "critical" ? "crit" : "warn"}`} style={{ padding: "12px 14px", borderRadius: 10 }}>
+                  <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", letterSpacing: "0.10em", textTransform: "uppercase", color: row.c, marginBottom: 6, fontWeight: 700 }}>{row.l}</div>
+                  <div style={{ fontSize: 22, fontWeight: 600, color: row.c, marginBottom: 4 }}>{row.v}</div>
+                  {row.detail && <div style={{ fontSize: 11, color: "var(--ink4)", lineHeight: 1.4 }}>{row.detail}</div>}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

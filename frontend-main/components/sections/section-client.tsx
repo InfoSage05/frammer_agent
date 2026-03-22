@@ -254,7 +254,7 @@ export default function SectionClient({ onClose, onAskAI }) {
 
           {/* ── Stat Capsules (2×2) ── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
-            {data.summaryCards.map(m => {
+            {(data.summaryCards || []).map(m => {
               const cfg = iconAccent[m.l] || { color: 'rgba(232,67,45,0.70)', valueColor: 'rgba(255,255,255,0.88)' };
               return <StatCapsule key={m.l} icon={m.icon} label={m.l} value={m.v} valueColor={cfg.valueColor} accent={cfg.color} />;
             })}
@@ -269,7 +269,7 @@ export default function SectionClient({ onClose, onAskAI }) {
                 <div style={{ fontFamily: MONO, fontSize: 10, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 4 }}>PIPELINE SUMMARY</div>
                 <div style={{ fontFamily: SF, fontSize: 12.5, color: 'rgba(255,255,255,0.32)', fontWeight: 400 }}>Upload → Process → Distribute</div>
               </div>
-              {data.pipelineSummary.map(r => <PipelineRow key={r.l} r={r} />)}
+              {(data.pipelineSummary || []).map(r => <PipelineRow key={r.l} r={r} />)}
             </div>
 
             {/* Key Signals */}

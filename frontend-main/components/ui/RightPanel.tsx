@@ -209,7 +209,7 @@ function CopilotTab({ dash, attachedData, onRemoveData }: any) {
     setLoading(true);
     const attachedSources = sources.map((s: any) => ({ name: s.name, data: s.data }));
     try {
-      const chatRes = await fetch('http://localhost:8000/chat', {
+      const chatRes = await fetch('http://34.60.183.121/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
