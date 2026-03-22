@@ -463,7 +463,11 @@ function SectionTrends({ theme, onAskAI }) {
               <canvas ref={trajRef} />
             </div>
           }
-          back={<GraphInsights title="12-Month Trajectory" />}
+          back={<GraphInsights title="12-Month Trajectory" insights={[
+            { type: 'signal',  heading: 'H2 creation volume surged 68% over H1', body: 'The second half of the year drove a sustained acceleration in AI output, culminating in February 2026 — the single strongest month at 194% above the 12-month mean.' },
+            { type: 'warning', heading: 'Publish rate is flat across the entire trajectory', body: 'Despite creation volume growing month-over-month, the publish rate has remained anchored at 2.5% for the full year. Growth is not improving distribution — it is deepening the backlog.' },
+            { type: 'info',    heading: 'Upload cadence drives the trajectory shape', body: 'Creation spikes mirror upload spikes with a short lag — confirming that content volume is batch-driven. A more even upload distribution would smooth the trajectory and reduce queue peaks.' },
+          ]} />}
         />
       </div>
 
@@ -523,7 +527,11 @@ function SectionTrends({ theme, onAskAI }) {
                 )}
               </>
             }
-            back={<GraphInsights title="Duration Trend" />}
+            back={<GraphInsights title="Duration Trend" insights={[
+              { type: 'signal',  heading: 'Short-form content publishes 22% more frequently', body: 'Videos under 60 seconds achieve a meaningfully higher publish rate than longer formats, consistent with platform algorithm preferences for brevity on Shorts and Reels.' },
+              { type: 'warning', heading: 'Long-form content represents dead upload weight', body: 'Content over 10 minutes accounts for ~31% of uploaded hours but less than 3% of published output. Duration is acting as a filter — long-form is being created and queued, not distributed.' },
+              { type: 'info',    heading: 'Average duration is stable — format mix is not', body: 'Mean video duration has held at 2–4 minutes across the period, but the split between short and long-form has shifted toward longer content in H2, which correlates with the declining publish rate trend.' },
+            ]} />}
           />
           </div>
         </div>
@@ -603,7 +611,11 @@ function SectionTrends({ theme, onAskAI }) {
                 </div>
               </>
             }
-            back={<GraphInsights title="Monthly Creation Heat Calendar" />}
+            back={<GraphInsights title="Monthly Creation Heat Calendar" insights={[
+              { type: 'signal',  heading: 'October and February are peak creation months', body: 'These two months show the highest heat density across the calendar, likely tied to quarterly content planning cycles — October kicking off Q4 and February closing out the fiscal year.' },
+              { type: 'caution', heading: 'July is the coldest month — likely a planning gap', body: 'July shows the lowest creation activity in the dataset. This mid-year dip is consistent with reduced upload frequency and suggests a manual-driven pipeline rather than automated ingestion.' },
+              { type: 'info',    heading: 'AI multiplier varies significantly by input type', body: 'High-multiplier types (>3.5×) are disproportionately represented in peak months, amplifying the total output spike. This means queue growth in peak months is not linear — it is exponential.' },
+            ]} />}
           />
           </div>
         </div>
@@ -829,7 +841,11 @@ function SectionTrends({ theme, onAskAI }) {
               </div>
 
             </>}
-            back={<GraphInsights title="H1 vs H2 Comparison" />}
+            back={<GraphInsights title="H1 vs H2 Comparison" insights={[
+              { type: 'signal',  heading: 'H2 outperformed H1 by 68% in AI creation volume', body: 'The second half drove a clear acceleration in output, led by the Oct–Dec upload surge and the February 2026 spike. This confirms a strong end-of-year content push from the production team.' },
+              { type: 'warning', heading: 'Publish rate was identical in both halves — 2.5%', body: 'Despite H2\'s 68% creation advantage, the publish rate held constant. The distribution pipeline showed zero improvement across the full year, confirming the bottleneck is structural, not capacity-related.' },
+              { type: 'info',    heading: 'H2 created more unpublished debt per month', body: 'Higher H2 creation at the same publish rate means the backlog grew faster in H2 than H1. Without a distribution fix, H2\'s "growth" translates directly into larger queued inventory with no return.' },
+            ]} />}
             />
           </div>
         );

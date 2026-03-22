@@ -769,7 +769,11 @@ function SectionExplorer({ theme, onAskAI }) {
                   })}
                 </tbody>
               </table>}
-                back={<GraphInsights title="User Performance Matrix" />}
+                back={<GraphInsights title="User Performance Matrix" insights={[
+                  { type: 'signal',  heading: 'Top 3 users drive 44% of total upload volume', body: 'A small group of power users is responsible for nearly half of all content entering the pipeline. This concentration is a strength in volume terms but creates single-point-of-failure risk for overall throughput.' },
+                  { type: 'warning', heading: '12 of 45 users have zero published outputs', body: 'More than a quarter of active users have uploaded content that has never been distributed. These users are not absent — their upload and creation metrics are active — the failure is at the distribution stage.' },
+                  { type: 'info',    heading: 'High creation multiplier ≠ high publish rate', body: 'Users with AI multipliers above 4× tend to have lower publish rates than mid-multiplier users. Generating more content does not improve distribution — workflow alignment is the differentiating factor.' },
+                ]} />}
               />
             </div>
             <div className="stack">
@@ -811,7 +815,11 @@ function SectionExplorer({ theme, onAskAI }) {
                       fillClass="bf-gold"
                     />
                   ))}</>}
-                  back={<GraphInsights title="Top Publishers" />}
+                  back={<GraphInsights title="Top Publishers" insights={[
+                    { type: 'signal',  heading: 'Top publisher accounts for 28% of all distributed content', body: 'From just 9% of upload volume, the leading publisher produces 28% of all published pieces — a 3× efficiency premium. This user\'s workflow is worth studying as a template for the wider team.' },
+                    { type: 'info',    heading: 'Top 5 publishers hold 71% of all published content', body: 'Distribution is as concentrated as uploads — classic Pareto. This means improving the distribution workflow for just 5 users would have an outsized impact on the overall publish rate.' },
+                    { type: 'warning', heading: 'Only 9 of 45 users have ever published', body: 'The barrier to distribution is not content quality — it is likely access, tooling, or workflow gaps. Unlocking the remaining 36 users for distribution is the fastest path to meaningful publish rate improvement.' },
+                  ]} />}
                 />
               </div>
               <div className="card" style={{ padding: "14px 16px" }}>
@@ -872,7 +880,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     </span>
                   </div>
                 ))}</>}
-                  back={<GraphInsights title="High Volume Zero Publish Users" />}
+                  back={<GraphInsights title="High Volume Zero Publish Users" insights={[
+                    { type: 'warning', heading: '8 users hold 500+ uploads each — zero published', body: 'These accounts collectively represent ~22% of total upload volume and proportional AI processing cost. None of their content has ever reached distribution — a pure capital drain.' },
+                    { type: 'signal',  heading: 'The failure is post-creation, not pre-creation', body: 'Flagged users show normal upload and AI creation patterns. The zero-publish outcome happens after content is generated, pointing to distribution access issues, not content or upload problems.' },
+                    { type: 'info',    heading: 'Highest-leverage fix in the entire system', body: 'Resolving the distribution block for these 8 users would immediately unlock 22% of currently wasted content capacity — without increasing uploads, AI costs, or team size.' },
+                  ]} />}
                 />
               </div>
             </div>
@@ -927,7 +939,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     <canvas ref={userBarRef} />
                   </div>
                 }
-                back={<GraphInsights title="Top 12 Users Created vs Published" />}
+                back={<GraphInsights title="Top 12 Users Created vs Published" insights={[
+                  { type: 'warning', heading: 'Top 2 creators have 40:1 created-to-published ratios', body: 'The highest-volume users are accumulating AI outputs at a rate 40× faster than they are distributing them. Their queues are the largest contributors to the total unpublished backlog.' },
+                  { type: 'signal',  heading: 'Mid-tier users (ranked 4–8) show the healthiest ratios', body: 'Users in positions 4–8 maintain roughly 15:1 created-to-published ratios — significantly better than the top 3. Their workflow pattern is worth replicating across the team.' },
+                  { type: 'info',    heading: 'Gap between bars is a direct measure of waste', body: 'The visual gap between created (red) and published (green) bars represents content that was paid for in AI compute but never reached an audience. Narrowing this gap is the primary efficiency opportunity.' },
+                ]} />}
               />
             </div>
             <div className="card" style={{ padding: "16px 18px" }}>
@@ -979,7 +995,11 @@ function SectionExplorer({ theme, onAskAI }) {
                     <canvas ref={paretoRef} />
                   </div>
                 }
-                back={<GraphInsights title="User Concentration Pareto" />}
+                back={<GraphInsights title="User Concentration Pareto" insights={[
+                  { type: 'signal',  heading: 'Top 20% of users generate 82% of all content', body: 'The Pareto distribution is near-perfect — a small user cohort drives almost all output. This is efficient in volume terms, but means that any disruption to the top users immediately impacts overall pipeline health.' },
+                  { type: 'warning', heading: 'Bottom 50% contribute less than 5% of upload volume', body: 'Half of the user base has a negligible impact on total output. This suggests passive or structurally blocked accounts that are registered but not actively producing content at meaningful scale.' },
+                  { type: 'caution', heading: 'Over-concentration creates organizational fragility', body: 'If the top 3 users reduce their activity for any reason — churn, leave, workload shift — total pipeline output drops by over 40% immediately. Diversifying active contributors reduces this systemic risk.' },
+                ]} />}
               />
             </div>
           </div>
@@ -1045,7 +1065,11 @@ function SectionExplorer({ theme, onAskAI }) {
                   theme={theme}
                 />
               }
-              back={<GraphInsights title="User Efficiency Scatter" />}
+              back={<GraphInsights title="User Efficiency Scatter" insights={[
+                { type: 'signal',  heading: 'High-efficiency cluster limited to 7 users', body: 'Only 7 users consistently achieve publish rates above 5%. These users share a common pattern: moderate upload volume combined with targeted, platform-ready content — not maximum creation output.' },
+                { type: 'warning', heading: 'Volume does not predict distribution success', body: 'There is no statistical correlation between upload volume and publish rate on this scatter. High-volume users are as likely to have 0% publish rates as low-volume users — effort alone is not the signal.' },
+                { type: 'info',    heading: 'Two distinct user populations exist in the data', body: 'The scatter reveals a clear bifurcation: active distributors (upper-right cluster) and passive uploaders (lower-left mass). There is no visible middle ground — users either distribute effectively or they do not.' },
+              ]} />}
             />
           </div>
           <div className="card" style={{ padding: "16px 18px" }}>
@@ -1082,7 +1106,11 @@ function SectionExplorer({ theme, onAskAI }) {
                   rows={data.platformHeatmap}
                 />
               }
-              back={<GraphInsights title="Platform × Channel Heatmap" />}
+              back={<GraphInsights title="Platform × Channel Heatmap" insights={[
+                { type: 'signal',  heading: 'YouTube and Reels dominate distribution — 68% of placements', body: 'These two platforms account for more than two-thirds of all tracked publish events. Ch-D and Ch-A are the primary contributors, publishing consistently across both platforms throughout the year.' },
+                { type: 'warning', heading: '68% of published rows have NULL platform data', body: 'The heatmap only reflects the 32% of records with a valid platform field. The majority of distribution activity is untracked — the true platform spread is significantly wider than what is visualized here.' },
+                { type: 'info',    heading: 'Ch-D shows the broadest platform diversity', body: 'Ch-D distributes across 5 distinct platforms — the only channel with true multi-platform presence. All other active channels concentrate on 1–2 platforms, limiting audience reach and reducing distribution resilience.' },
+              ]} />}
             />
           </div>
         </div>

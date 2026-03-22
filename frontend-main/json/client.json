@@ -8,7 +8,7 @@
   "summaryCards": [
     {
       "l": "Client ID",
-      "v": "[Anon]",
+      "v": "---",
       "c": "var(--ink)",
       "icon": "◎"
     },

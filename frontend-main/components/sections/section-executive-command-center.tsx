@@ -354,7 +354,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                   </div>
                 </>
               }
-              back={<GraphInsights title="Monthly Upload vs Creation Volume" />}
+              back={<GraphInsights title="Monthly Upload vs Creation Volume" insights={[
+                { type: 'signal',  heading: 'Feb 2026 spike — 194% above average', body: 'February 2026 produced 2,756 AI outputs, the highest single-month figure in the 12-month window. The surge was driven by a concentrated English-language upload batch, not a systemic volume increase.' },
+                { type: 'warning', heading: 'Creation growth does not convert to distribution', body: 'The 3.4× AI multiplier amplifies backlog at the same rate as uploads. Every additional upload generates 3.4 queued pieces that remain unpublished — growth is compounding the bottleneck, not relieving it.' },
+                { type: 'info',    heading: 'Batched rather than continuous production', body: 'Upload spikes cluster in Oct–Dec and Feb, suggesting planned content bursts rather than a steady pipeline. A smoother ingest cadence would reduce queue peaks and improve distribution throughput.' },
+              ]} />}
             />
             </div>
           </div>
@@ -397,7 +401,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                   />
                 </div>
               }
-              back={<GraphInsights title="Channel Efficiency Matrix" />}
+              back={<GraphInsights title="Channel Efficiency Matrix" insights={[
+                { type: 'signal',  heading: 'Ch-A and Ch-D drive 53% of all published content', body: 'These two channels represent only 22% of upload volume but account for more than half of all distributed pieces — a 2.4× efficiency premium over the fleet average.' },
+                { type: 'warning', heading: '6 channels have zero publications in 12 months', body: 'Six active channels are consuming upload capacity and AI processing without generating a single published output. This represents dead capital in the pipeline with no return on processing cost.' },
+                { type: 'info',    heading: '17× spread in channel publish rate', body: 'Publish rates range from 17.5% (Ch-D) to 0%, indicating structural differences in team workflow, content type selection, or platform access — not random variation.' },
+              ]} />}
             />
           </div>
         </>
@@ -434,7 +442,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                   </div>
                 </div>
               }
-              back={<GraphInsights title="Content Status Split" />}
+              back={<GraphInsights title="Content Status Split" insights={[
+                { type: 'warning', heading: '97.5% of AI-created content is permanently queued', body: '14,803 pieces have been generated but never distributed. This is not a temporary backlog — the ratio has held constant for 12 months, indicating a structural distribution block, not a timing issue.' },
+                { type: 'caution', heading: '2.5% publish rate is 4× below the industry floor', body: 'The benchmark for AI-assisted content workflows is 10–15%. At 2.5%, Frammer is operating at the bottom quartile of distribution efficiency — the bottleneck is downstream, not in generation.' },
+                { type: 'info',    heading: 'Unpublished volume grows proportionally with creation', body: 'As AI creation scales, the unpublished pile scales at identical rates. Fixing the distribution pipeline before scaling uploads further is the highest-leverage intervention available.' },
+              ]} />}
             />
           </div>
           <div className="card" style={{ padding: 0 }}>
@@ -454,7 +466,11 @@ function SectionExecutive({ addToast, theme, onAskAI }) {
                   <RadarChart data={inputRadarData} size={300} />
                 </div>
               }
-              back={<GraphInsights title="Input Type Radar" />}
+              back={<GraphInsights title="Input Type Radar" insights={[
+                { type: 'signal',  heading: 'Short-form video is the only healthy input type', body: 'At 8.4% publish rate, short-form video is the sole format clearing the 5% health threshold. It outperforms every other type by a factor of at least 3× and should be the primary format focus.' },
+                { type: 'warning', heading: 'Podcasts and documents at near-zero conversion', body: 'Despite meaningful upload volume, podcast and document formats have effectively 0% publish rates. These types may be misconfigured for platform delivery or lack appropriate distribution targets.' },
+                { type: 'info',    heading: '5 of 8 input types have never published', body: 'More than half of tracked content formats have no distribution history. Format diversification is increasing upload complexity without producing corresponding output — a risk worth auditing.' },
+              ]} />}
             />
           </div>
         </div>

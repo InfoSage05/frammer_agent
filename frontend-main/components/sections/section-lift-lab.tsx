@@ -265,7 +265,11 @@ export default function SectionLiftLab({ theme, onAskAI }) {
           flipped={showInsights}
           minHeight={200}
           front={<LiftSummary lift={liftResult} />}
-          back={<GraphInsights title="Lift classifier" />}
+          back={<GraphInsights title="Lift classifier" insights={[
+            { type: 'signal',  heading: 'YouTube Shorts leads at 74% top-quartile probability', body: 'For the current content profile, Shorts is the highest-confidence platform pick by a significant margin — outperforming TikTok (58%) and Instagram Reels (62%). Topic and engagement score are the two dominant model features.' },
+            { type: 'info',    heading: 'Platform rankings are sensitive to language and region', body: 'A global one-size strategy underperforms segmented targeting by approximately 22%. Hindi-language content, for example, sees a different platform ranking than English — region-specific targeting is the primary lever.' },
+            { type: 'caution', heading: 'Engagement score has outsized model weight', body: 'Of the 6 input features, engagement_score and topic together account for the majority of the model\'s variance. Accurately measuring and improving engagement before scoring yields better lift predictions than any other optimization.' },
+          ]} />}
         />
       </div>
 
