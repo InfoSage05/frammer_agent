@@ -5,7 +5,7 @@
  * It supports both server-side and client-side fetching.
  */
 
-const BACKEND_URL = "http://34.60.183.121";
+const BACKEND_URL = "/api/proxy";
 
 export interface MetricData {
   id: string;
