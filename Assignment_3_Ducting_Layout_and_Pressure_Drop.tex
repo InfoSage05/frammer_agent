@@ -1,0 +1,501 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=20mm,headheight=14pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amsmath,array,booktabs,tabularx,longtable,xcolor,fancyhdr,hyperref}
+\definecolor{navy}{RGB}{14,33,58}
+\definecolor{accent}{RGB}{23,140,165}
+\definecolor{blue}{RGB}{32,91,151}
+\definecolor{soft}{RGB}{239,246,249}
+\definecolor{amber}{RGB}{248,239,210}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\pagestyle{fancy}\fancyhf{}
+\lhead{\small Assignment 3: Ducting Layout and Pressure Drop}
+\rhead{\small Preliminary design}
+\cfoot{\small\thepage}
+\newcommand{\nodebox}[2]{\fcolorbox{accent}{soft}{\begin{minipage}[c][11mm][c]{24mm}\centering\footnotesize\textbf{#1}\\[-1mm]\scriptsize #2\end{minipage}}}
+\newenvironment{assumptionbox}{\begin{center}\begin{minipage}{0.94\textwidth}\colorbox{amber}{\begin{minipage}{0.95\textwidth}\small\textbf{Assumption boundary.} }{\end{minipage}\end{minipage}\end{center}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{document}
+\begin{titlepage}
+\pagecolor{navy}\color{white}
+\vspace*{22mm}
+{\color{accent}\Large\bfseries ASSIGNMENT 3\par}
+\vspace{8mm}
+{\Huge\bfseries DUCTING LAYOUT\par}
+\vspace{2mm}
+{\Huge\bfseries AND PRESSURE-DROP\par}
+\vspace{2mm}
+{\Huge\bfseries CALCULATION\par}
+\vspace{12mm}
+{\large Industrial dust-extraction design based on the supplied plant drawings\par}
+\vspace{18mm}
+\fcolorbox{accent}{navy}{\begin{minipage}{0.87\textwidth}\color{white}\large
+Three representative systems \quad|\quad Darcy--Colebrook method\\[3mm]
+Critical-path loss \quad|\quad Branch balancing \quad|\quad Fan and motor duty
+\end{minipage}}
+\vfill
+\begin{tabular}{p{48mm}p{95mm}}
+Name: & \hrulefill\\[7mm]
+Roll No.: & \hrulefill\\[7mm]
+Course / Instructor: & \hrulefill\\[7mm]
+Submission date: & \hrulefill
+\end{tabular}
+\vspace{12mm}
+
+{\small Prepared September 2026}
+\end{titlepage}
+\nopagecolor\color{black}
+
+\section*{Scope statement}
+The supplied drawings are low-resolution plant layouts. They establish equipment order and approximate topology, but many dimensions and labels are unreadable. This report therefore presents a transparent preliminary design using stated industrial assumptions. It is suitable as an academic assignment and design basis. A field survey is required before fabrication or purchase.
+
+\section{Design summary}
+\begin{center}\small
+\begin{tabular}{clrrrrr}
+\toprule
+System & Duty & Flow & Critical & Required & Selected & Motor\\
+ & & m$^3$/h & path & FTP (Pa) & FTP (Pa) & kW\\
+\midrule
+A & Conveyor extraction & 10000 & A3 & 3402 & 3750 & 18.5 \\
+B & Multi-level extraction & 15000 & B1 & 3380 & 3750 & 30.0 \\
+C & Cooler and bin extraction & 44000 & C2 & 4690 & 5200 & 110.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+System A is governed by branch A3, System B by B1, and System C by the new-cooler branch G2. FTP denotes fan total pressure at the design flow. Fan static pressure is estimated separately by subtracting the stack outlet velocity pressure.
+
+\section{Drawing interpretation and calculation plan}
+\begin{tabularx}{\textwidth}{l X X}
+\toprule
+Drawing & Readable process intent & Representative model\\
+\midrule
+1 & Conveyor hoods, collecting duct, bag collector, fan and stack & Four equal pickups in two submains; 10,000 m$^3$/h\\
+2 & Multi-level pickups and risers feeding collector, fan and stack & Four elevated pickups in two submains; 15,000 m$^3$/h\\
+3 & Existing/new cooler and bin zones, collector/fan and old-fan tie-in & Six equivalent zones; existing/new submains; 44,000 m$^3$/h\\
+\bottomrule
+\end{tabularx}
+
+The calculation sequence is: define simultaneous hood flows; choose diameters; compute velocity and Reynolds number; solve Colebrook for Darcy friction factor; add friction and fitting losses; compare complete source-to-stack routes; balance the shorter routes; add pressure margin; and calculate fan and motor duty.
+
+\clearpage
+\section{Design basis and assumptions}
+\begin{tabularx}{\textwidth}{>{\bfseries}l l X}
+\toprule
+Item & Adopted value & Use\\
+\midrule
+Air density & 1.20 kg/m$^3$ & Velocity pressure and Reynolds number\\
+Dynamic viscosity & $1.81\times10^{-5}$ Pa\,s & Reynolds number\\
+Steel roughness & 0.15 mm & Colebrook friction factor\\
+Dusty transport velocity & $\geq18$ m/s & Branch, submain and dirty-main sizing\\
+Collector differential pressure & 1200 Pa & Base filter allowance\\
+Fan total efficiency & 65\% & Shaft power\\
+Motor efficiency & 90\% & Electrical input\\
+Operation & All pickups simultaneous & No diversity, leakage or buoyancy credit\\
+Geometry & Circular internal diameter & Area and hydraulic diameter\\
+System C old-fan tie-in & Isolated & No reverse or parallel flow\\
+\bottomrule
+\end{tabularx}
+
+\subsection{Local-loss coefficients}
+\begin{tabularx}{\textwidth}{X r X}
+\toprule
+Component & $K$ & Reference boundary\\
+\midrule
+Simple hood entry, Systems A and B & 0.50 & Own branch velocity\\
+Equivalent collection zone, System C & 2.00 & Own branch velocity; includes unresolved pickup resistance\\
+Long-radius $90^\circ$ bend & 0.25 each & Velocity in its section\\
+Incoming combining junction & 0.50 & Incoming-section velocity\\
+External gradual adapter & 0.15 & Assigned section velocity\\
+Stack terminal including exit & 1.50 & Stack velocity\\
+\bottomrule
+\end{tabularx}
+These are preliminary assumptions, not certified coefficients for the blurred fittings. Exact values depend on geometry and the chosen reference velocity.
+
+\section{Governing equations}
+\[
+Q=\frac{Q_h}{3600},\qquad A=\frac{\pi D^2}{4},\qquad V=\frac{Q}{A}
+\]
+\[
+Re=\frac{\rho V D}{\mu},\qquad p_v=\frac{\rho V^2}{2}
+\]
+\[
+\frac{1}{\sqrt f}=-2\log_{10}\left(\frac{\epsilon}{3.7D}+\frac{2.51}{Re\sqrt f}\right)
+\]
+\[
+\Delta p_{\rm section}=\left[f\frac{L}{D}+\sum K\right]p_v
+\]
+Series losses are added. Parallel branch losses are not added together. Each branch route is compared from its pickup to the same stack terminal.
+\[
+\Delta p_{\rm FTP,req}=\max(\Delta p_{\rm route}),\qquad
+K_{\rm bal}=\frac{\Delta p_{\rm crit}-\Delta p_{\rm route}}{p_{v,\rm branch}}
+\]
+The selected FTP is 10\% above the required value and rounded upward to 50 Pa.
+\[
+P_{\rm shaft}=\frac{Q\,\Delta p_{\rm FTP}}{1000\,\eta_f},\qquad
+P_{\rm input}=\frac{P_{\rm shaft}}{\eta_m}
+\]
+
+
+\clearpage
+\section{System A: Conveyor extraction}
+\subsection{Interpreted duct layout}
+
+\begin{center}
+\begin{tabular}{ccccc}
+\nodebox{A1}{2500 m$^3$/h} & $\searrow$ & \nodebox{AS1}{5000 m$^3$/h} & $\searrow$ & \nodebox{Main}{10000 m$^3$/h}\\[2mm]
+\nodebox{A2}{2500 m$^3$/h} & $\nearrow$ & & & $\downarrow$\\[4mm]
+\nodebox{A3}{2500 m$^3$/h} & $\searrow$ & \nodebox{AS2}{5000 m$^3$/h} & $\nearrow$ & \nodebox{Collector}{1200 Pa}\\[2mm]
+\nodebox{A4}{2500 m$^3$/h} & $\nearrow$ & & & $\downarrow$\\
+\end{tabular}
+
+\vspace{3mm}
+\nodebox{Clean duct}{450 mm}
+$\longrightarrow$
+\nodebox{Fan}{3750 Pa}
+$\longrightarrow$
+\nodebox{Stack}{400 mm}
+\end{center}
+\begin{assumptionbox}
+The diagram represents the calculation topology inferred from the scan. It is not an as-built reproduction. Straight lengths, diameters, bend counts and flow allocations are declared design assumptions.
+\end{assumptionbox}
+
+\subsection{Section schedule}
+\begin{center}\scriptsize
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ID & $Q_h$ & $D$ & $L$ & $V$ & $f$ & $K$ & $\Delta p_f$ & $\Delta p_K$ & $\Delta p$\\
+ & m$^3$/h & mm & m & m/s & & & Pa & Pa & Pa\\
+\midrule
+A1 & 2500 & 200 & 8.0 & 22.10 & 0.0195 & 1.50 & 229.0 & 439.8 & 668.7 \\
+A2 & 2500 & 200 & 6.0 & 22.10 & 0.0195 & 1.25 & 171.7 & 366.5 & 538.2 \\
+A3 & 2500 & 200 & 10.0 & 22.10 & 0.0195 & 1.75 & 286.2 & 513.1 & 799.2 \\
+A4 & 2500 & 200 & 5.0 & 22.10 & 0.0195 & 1.25 & 143.1 & 366.5 & 509.6 \\
+AS1 & 5000 & 300 & 12.0 & 19.65 & 0.0179 & 0.75 & 165.9 & 173.7 & 339.6 \\
+AS2 & 5000 & 300 & 6.0 & 19.65 & 0.0179 & 0.75 & 82.9 & 173.7 & 256.7 \\
+AM & 10000 & 400 & 10.0 & 22.10 & 0.0167 & 0.65 & 122.3 & 190.6 & 312.8 \\
+ACL & 10000 & 450 & 4.0 & 17.47 & 0.0165 & 0.40 & 26.8 & 73.2 & 100.0 \\
+AE & 10000 & 400 & 12.0 & 22.10 & 0.0167 & 2.00 & 146.7 & 586.3 & 733.1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+All dusty sections lie between \textbf{NaN} and \textbf{NaN m/s}; hence the adopted 18 m/s minimum is satisfied.
+
+\clearpage
+\subsection{Complete route comparison and balancing}
+\begin{center}\small
+\begin{tabular}{llrrr}
+\toprule
+Source & Route & Total (Pa) & Add (Pa) & $K_{\rm bal}$\\
+\midrule
+A1 & A1 -- AS1 -- AM -- FILTER -- ACL -- AE & 3354.2 & 47.6 & 0.16 \\
+A2 & A2 -- AS1 -- AM -- FILTER -- ACL -- AE & 3223.7 & 178.1 & 0.61 \\
+A3 & A3 -- AS2 -- AM -- FILTER -- ACL -- AE & 3401.8 & 0.0 & 0.00 \\
+A4 & A4 -- AS2 -- AM -- FILTER -- ACL -- AE & 3112.2 & 289.7 & 0.99 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The governing route is
+\[
+\boxed{\text{A3 -- AS2 -- AM -- FILTER -- ACL -- AE}}
+\]
+and its calculated resistance is \textbf{3401.8 Pa}. The balancing pressure in the table is $\Delta p_{\rm crit}-\Delta p_{\rm route}$ at the prescribed branch flow.
+
+\subsection{Fan duty}
+\begin{center}
+\begin{tabularx}{0.82\textwidth}{>{\bfseries}l X}
+\toprule
+Quantity & Value\\
+\midrule
+Volume flow & 2.778 m$^3$/s (10000 m$^3$/h)\\
+Required fan total pressure & 3401.8 Pa\\
+Selected fan total pressure & 3750 Pa\\
+Estimated fan static pressure & 3456.8 Pa\\
+Shaft power at 65\% efficiency & 16.03 kW\\
+Electrical input at 90\% motor efficiency & 17.81 kW\\
+Recommended nominal motor & 18.5 kW\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\clearpage
+\section{System B: Multi-level extraction}
+\subsection{Interpreted duct layout}
+
+\begin{center}
+\begin{tabular}{ccccc}
+\nodebox{B1}{3750 m$^3$/h} & $\searrow$ & \nodebox{BS1}{7500 m$^3$/h} & $\searrow$ & \nodebox{Main}{15000 m$^3$/h}\\[2mm]
+\nodebox{B2}{3750 m$^3$/h} & $\nearrow$ & & & $\downarrow$\\[4mm]
+\nodebox{B3}{3750 m$^3$/h} & $\searrow$ & \nodebox{BS2}{7500 m$^3$/h} & $\nearrow$ & \nodebox{Collector}{1200 Pa}\\[2mm]
+\nodebox{B4}{3750 m$^3$/h} & $\nearrow$ & & & $\downarrow$\\
+\end{tabular}
+
+\vspace{3mm}
+\nodebox{Clean duct}{560 mm}
+$\longrightarrow$
+\nodebox{Fan}{3750 Pa}
+$\longrightarrow$
+\nodebox{Stack}{500 mm}
+\end{center}
+\begin{assumptionbox}
+The diagram represents the calculation topology inferred from the scan. It is not an as-built reproduction. Straight lengths, diameters, bend counts and flow allocations are declared design assumptions.
+\end{assumptionbox}
+
+\subsection{Section schedule}
+\begin{center}\scriptsize
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ID & $Q_h$ & $D$ & $L$ & $V$ & $f$ & $K$ & $\Delta p_f$ & $\Delta p_K$ & $\Delta p$\\
+ & m$^3$/h & mm & m & m/s & & & Pa & Pa & Pa\\
+\midrule
+B1 & 3750 & 250 & 16.0 & 21.22 & 0.0186 & 1.75 & 321.2 & 472.8 & 794.1 \\
+B2 & 3750 & 250 & 12.0 & 21.22 & 0.0186 & 1.50 & 240.9 & 405.3 & 646.2 \\
+B3 & 3750 & 250 & 10.0 & 21.22 & 0.0186 & 1.50 & 200.8 & 405.3 & 606.0 \\
+B4 & 3750 & 250 & 8.0 & 21.22 & 0.0186 & 1.25 & 160.6 & 337.7 & 498.3 \\
+BS1 & 7500 & 350 & 8.0 & 21.65 & 0.0172 & 1.00 & 110.6 & 281.3 & 391.9 \\
+BS2 & 7500 & 350 & 6.0 & 21.65 & 0.0172 & 0.75 & 82.9 & 211.0 & 293.9 \\
+BM & 15000 & 500 & 8.0 & 21.22 & 0.0159 & 0.65 & 68.9 & 175.6 & 244.5 \\
+BCL & 15000 & 560 & 5.0 & 16.92 & 0.0158 & 0.40 & 24.2 & 68.7 & 92.9 \\
+BE & 15000 & 500 & 13.5 & 21.22 & 0.0159 & 2.00 & 116.2 & 540.4 & 656.6 \\
+\bottomrule
+\end{tabular}
+\end{center}
+All dusty sections lie between \textbf{NaN} and \textbf{NaN m/s}; hence the adopted 18 m/s minimum is satisfied.
+
+\clearpage
+\subsection{Complete route comparison and balancing}
+\begin{center}\small
+\begin{tabular}{llrrr}
+\toprule
+Source & Route & Total (Pa) & Add (Pa) & $K_{\rm bal}$\\
+\midrule
+B1 & B1 -- BS1 -- BM -- FILTER -- BCL -- BE & 3379.9 & 0.0 & 0.00 \\
+B2 & B2 -- BS1 -- BM -- FILTER -- BCL -- BE & 3232.1 & 147.9 & 0.55 \\
+B3 & B3 -- BS2 -- BM -- FILTER -- BCL -- BE & 3094.0 & 286.0 & 1.06 \\
+B4 & B4 -- BS2 -- BM -- FILTER -- BCL -- BE & 2986.3 & 393.7 & 1.46 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The governing route is
+\[
+\boxed{\text{B1 -- BS1 -- BM -- FILTER -- BCL -- BE}}
+\]
+and its calculated resistance is \textbf{3379.9 Pa}. The balancing pressure in the table is $\Delta p_{\rm crit}-\Delta p_{\rm route}$ at the prescribed branch flow.
+
+\subsection{Fan duty}
+\begin{center}
+\begin{tabularx}{0.82\textwidth}{>{\bfseries}l X}
+\toprule
+Quantity & Value\\
+\midrule
+Volume flow & 4.167 m$^3$/s (15000 m$^3$/h)\\
+Required fan total pressure & 3379.9 Pa\\
+Selected fan total pressure & 3750 Pa\\
+Estimated fan static pressure & 3479.8 Pa\\
+Shaft power at 65\% efficiency & 24.04 kW\\
+Electrical input at 90\% motor efficiency & 26.71 kW\\
+Recommended nominal motor & 30.0 kW\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\clearpage
+\section{System C: Cooler and bin extraction}
+\subsection{Interpreted duct layout}
+
+\begin{center}
+\begin{tabular}{ccccc}
+\nodebox{G1, G3, G5}{Existing zones} & $\longrightarrow$ & \nodebox{CS1}{22000 m$^3$/h} & $\searrow$ & \nodebox{Main}{44000 m$^3$/h}\\[5mm]
+\nodebox{G2, G4, G6}{New zones} & $\longrightarrow$ & \nodebox{CS2}{22000 m$^3$/h} & $\nearrow$ & \nodebox{Collector}{1200 Pa}
+\end{tabular}
+
+\vspace{4mm}
+\nodebox{Clean duct}{900 mm}
+$\longrightarrow$
+\nodebox{Fan}{5200 Pa}
+$\longrightarrow$
+\nodebox{Stack}{850 mm}
+\end{center}
+\begin{assumptionbox}
+The diagram represents the calculation topology inferred from the scan. It is not an as-built reproduction. Straight lengths, diameters, bend counts and flow allocations are declared design assumptions.
+\end{assumptionbox}
+
+\subsection{Section schedule}
+\begin{center}\scriptsize
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ID & $Q_h$ & $D$ & $L$ & $V$ & $f$ & $K$ & $\Delta p_f$ & $\Delta p_K$ & $\Delta p$\\
+ & m$^3$/h & mm & m & m/s & & & Pa & Pa & Pa\\
+\midrule
+C1 & 6000 & 300 & 38.0 & 23.58 & 0.0177 & 3.25 & 748.7 & 1084.1 & 1832.8 \\
+C2 & 6000 & 300 & 44.0 & 23.58 & 0.0177 & 3.50 & 866.9 & 1167.5 & 2034.4 \\
+C3 & 12000 & 450 & 22.0 & 20.96 & 0.0163 & 3.25 & 210.1 & 856.6 & 1066.7 \\
+C4 & 12000 & 450 & 28.0 & 20.96 & 0.0163 & 3.50 & 267.4 & 922.5 & 1189.9 \\
+C5 & 4000 & 250 & 18.0 & 22.64 & 0.0185 & 3.00 & 409.7 & 922.2 & 1332.0 \\
+C6 & 4000 & 250 & 24.0 & 22.64 & 0.0185 & 3.25 & 546.3 & 999.1 & 1545.4 \\
+CS1 & 22000 & 625 & 20.0 & 19.92 & 0.0153 & 1.00 & 116.2 & 238.1 & 354.3 \\
+CS2 & 22000 & 625 & 16.0 & 19.92 & 0.0153 & 1.00 & 93.0 & 238.1 & 331.0 \\
+CM & 44000 & 850 & 40.0 & 21.54 & 0.0143 & 0.65 & 186.8 & 180.9 & 367.7 \\
+CCL & 44000 & 900 & 8.0 & 19.21 & 0.0142 & 0.40 & 27.9 & 88.6 & 116.5 \\
+CE & 44000 & 850 & 18.0 & 21.54 & 0.0143 & 2.00 & 84.1 & 556.7 & 640.8 \\
+\bottomrule
+\end{tabular}
+\end{center}
+All dusty sections lie between \textbf{NaN} and \textbf{NaN m/s}; hence the adopted 18 m/s minimum is satisfied.
+
+\clearpage
+\subsection{Complete route comparison and balancing}
+\begin{center}\small
+\begin{tabular}{llrrr}
+\toprule
+Source & Route & Total (Pa) & Add (Pa) & $K_{\rm bal}$\\
+\midrule
+C1 & C1 -- CS1 -- CM -- FILTER -- CCL -- CE & 4512.1 & 178.4 & 0.53 \\
+C2 & C2 -- CS2 -- CM -- FILTER -- CCL -- CE & 4690.4 & 0.0 & 0.00 \\
+C3 & C3 -- CS1 -- CM -- FILTER -- CCL -- CE & 3746.0 & 944.5 & 3.58 \\
+C4 & C4 -- CS2 -- CM -- FILTER -- CCL -- CE & 3845.9 & 844.5 & 3.20 \\
+C5 & C5 -- CS1 -- CM -- FILTER -- CCL -- CE & 4011.2 & 679.2 & 2.21 \\
+C6 & C6 -- CS2 -- CM -- FILTER -- CCL -- CE & 4201.4 & 489.0 & 1.59 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The governing route is
+\[
+\boxed{\text{C2 -- CS2 -- CM -- FILTER -- CCL -- CE}}
+\]
+and its calculated resistance is \textbf{4690.4 Pa}. The balancing pressure in the table is $\Delta p_{\rm crit}-\Delta p_{\rm route}$ at the prescribed branch flow.
+
+\subsection{Fan duty}
+\begin{center}
+\begin{tabularx}{0.82\textwidth}{>{\bfseries}l X}
+\toprule
+Quantity & Value\\
+\midrule
+Volume flow & 12.222 m$^3$/s (44000 m$^3$/h)\\
+Required fan total pressure & 4690.4 Pa\\
+Selected fan total pressure & 5200 Pa\\
+Estimated fan static pressure & 4921.6 Pa\\
+Shaft power at 65\% efficiency & 97.78 kW\\
+Electrical input at 90\% motor efficiency & 108.64 kW\\
+Recommended nominal motor & 110.0 kW\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\clearpage
+\section{Fully worked branch: A3}
+For A3, $Q_h=2500$ m$^3$/h, $D=0.200$ m, $L=10$ m and there are three bends.
+\[
+Q=\frac{2500}{3600}=0.694444\ {\rm m^3/s}
+\]
+\[
+A=\frac{\pi(0.200)^2}{4}=0.03141593\ {\rm m^2},\qquad
+V=\frac{0.694444}{0.03141593}=22.1049\ {\rm m/s}
+\]
+\[
+Re=\frac{(1.20)(22.1049)(0.200)}{1.81\times10^{-5}}=293103
+\]
+\[
+p_v=\frac{(1.20)(22.1049)^2}{2}=293.1747\ {\rm Pa}
+\]
+With $\epsilon/D=0.00015/0.200=0.000750$, the iterated Colebrook equation gives $f=0.01952358$.
+\[
+\Delta p_f=(0.01952358)\frac{10}{0.200}(293.1747)=286.191\ {\rm Pa}
+\]
+\[
+K=0.50_{\rm hood}+0.50_{\rm junction}+3(0.25_{\rm bend})=1.75
+\]
+\[
+\Delta p_K=(1.75)(293.1747)=513.056\ {\rm Pa}
+\]
+\[
+\boxed{\Delta p_{A3}=286.191+513.056=799.247\ {\rm Pa}}
+\]
+The complete critical route is
+\[
+799.247+256.660+312.828+1200+100.033+733.067
+=\boxed{3401.834\ {\rm Pa}}
+\]
+
+\clearpage
+\section{Complete balancing schedule}
+\begin{center}\small
+\begin{longtable}{llrrrr}
+\toprule
+System & Branch & Flow & Unbalanced & Add & $K_{\rm bal}$\\
+ & & m$^3$/h & Pa & Pa &\\
+\midrule
+\endhead
+A & A1 & 2500 & 3354.2 & 47.6 & 0.16 \\
+A & A2 & 2500 & 3223.7 & 178.1 & 0.61 \\
+A & A3 & 2500 & 3401.8 & 0.0 & 0.00 \\
+A & A4 & 2500 & 3112.2 & 289.7 & 0.99 \\
+B & B1 & 3750 & 3379.9 & 0.0 & 0.00 \\
+B & B2 & 3750 & 3232.1 & 147.9 & 0.55 \\
+B & B3 & 3750 & 3094.0 & 286.0 & 1.06 \\
+B & B4 & 3750 & 2986.3 & 393.7 & 1.46 \\
+C & C1 & 6000 & 4512.1 & 178.4 & 0.53 \\
+C & C2 & 6000 & 4690.4 & 0.0 & 0.00 \\
+C & C3 & 12000 & 3746.0 & 944.5 & 3.58 \\
+C & C4 & 12000 & 3845.9 & 844.5 & 3.20 \\
+C & C5 & 4000 & 4011.2 & 679.2 & 2.21 \\
+C & C6 & 4000 & 4201.4 & 489.0 & 1.59 \\
+\bottomrule
+\end{longtable}
+\end{center}
+Commissioning should use measured branch flow rather than damper blade angle alone. Adjust the lowest-resistance branches after the collector reaches its normal operating condition, then repeat the traverse until scheduled flows are obtained.
+
+\section{Collector sensitivity}
+\begin{center}
+\begin{tabular}{crrr}
+\toprule
+System & Collector $\Delta p$ & Required FTP & Rounded FTP with 10\%\\
+ & Pa & Pa & Pa\\
+\midrule
+A & 800 & 3001.8 & 3350 \\
+A & 1200 & 3401.8 & 3750 \\
+A & 1600 & 3801.8 & 4200 \\
+B & 800 & 2979.9 & 3300 \\
+B & 1200 & 3379.9 & 3750 \\
+B & 1600 & 3779.9 & 4200 \\
+C & 800 & 4290.4 & 4750 \\
+C & 1200 & 4690.4 & 5200 \\
+C & 1600 & 5090.4 & 5600 \\
+\bottomrule
+\end{tabular}
+\end{center}
+A dirtier collector raises system resistance almost one-for-one. Fan control and cleaning strategy must cover the expected differential-pressure band.
+
+\section{Checks, limitations and conclusion}
+\begin{itemize}
+\item Every dusty section meets the adopted 18 m/s transport criterion.
+\item Flow is conserved at all combining junctions.
+\item The maximum prescribed-flow route defines each fan duty.
+\item Balancing losses use the correct branch velocity-pressure reference.
+\item Fan static and total pressure are reported separately.
+\item The 10\% design allowance is applied before upward rounding.
+\end{itemize}
+
+The resulting preliminary selections are 3750 Pa with an 18.5 kW motor for System A, 3750 Pa with a 30 kW motor for System B, and 5200 Pa with a 110 kW motor for System C. The calculations are internally consistent with the stated topology and assumptions.
+
+Before fabrication, verify every route length, internal diameter, branch angle, elbow radius, hood type and equipment loss. Obtain the collector clean, normal and dirty differential-pressure band and confirm the final operating point on the supplier fan curve at the actual air density.
+
+\section*{References}
+\begin{enumerate}
+\item NIOSH, \emph{Handbook for Dust Control in Mining}.
+\item McGill AirFlow, \emph{Design Advisory 01: Airflow, Friction and Pressure Fundamentals}.
+\item McGill AirFlow, \emph{Design Advisory 02: Critical Path and Balancing}.
+\item ASHRAE / SMACNA, \emph{Duct Design Fundamentals}.
+\item Figueroa et al., hood entry-loss relationship for local exhaust systems.
+\item Donaldson, \emph{Differential Pressure in Dust Collectors}.
+\end{enumerate}
+
+\begin{assumptionbox}
+This submission intentionally separates observed drawing intent from assumed numerical inputs. Replace the assumed values with field measurements and vendor data before procurement.
+\end{assumptionbox}
+\end{document}
