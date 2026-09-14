@@ -1,0 +1,2178 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R] /Count 16 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1775 >>
+stream
+0.055 0.130 0.230 rg 0 0 595 842 re f
+0.130 0.550 0.660 rg 0 0 14 842 re f
+0.100 0.350 0.600 rg 48 574 88 5 re f
+BT /F2 12 Tf 0.500 0.780 0.900 rg 48.0 672.0 Td (ASSIGNMENT 3) Tj ET
+BT /F2 29 Tf 1.000 1.000 1.000 rg 48.0 622.0 Td (DUCTING LAYOUT) Tj ET
+BT /F2 29 Tf 1.000 1.000 1.000 rg 48.0 584.0 Td (AND PRESSURE-DROP) Tj ET
+BT /F2 29 Tf 1.000 1.000 1.000 rg 48.0 546.0 Td (CALCULATION) Tj ET
+BT /F1 10.5 Tf 0.780 0.850 0.910 rg 48.0 509.0 Td (Industrial dust-extraction design based on the supplied plant drawings) Tj ET
+0.075 0.170 0.290 rg 0.180 0.420 0.600 RG 1 w 48 332.0 499 120 re B
+BT /F2 8 Tf 0.500 0.780 0.900 rg 68.0 425.0 Td (DESIGN OUTPUT) Tj ET
+BT /F1 11 Tf 1.000 1.000 1.000 rg 68.0 394.0 Td (Three representative duct systems | Darcy-Colebrook method) Tj ET
+BT /F1 11 Tf 1.000 1.000 1.000 rg 68.0 370.0 Td (Critical-path pressure loss | Branch balancing | Fan and motor duty) Tj ET
+BT /F1 8.5 Tf 0.780 0.850 0.910 rg 68.0 346.0 Td (All unverified dimensions and coefficients are explicitly declared assumptions.) Tj ET
+BT /F1 10 Tf 1.000 1.000 1.000 rg 48.0 192.0 Td (Name: ______________________________) Tj ET
+BT /F1 10 Tf 1.000 1.000 1.000 rg 48.0 165.0 Td (Roll No.: ___________________________) Tj ET
+BT /F1 10 Tf 1.000 1.000 1.000 rg 48.0 138.0 Td (Course / Instructor: __________________________________________) Tj ET
+BT /F1 10 Tf 1.000 1.000 1.000 rg 48.0 111.0 Td (Submission date: ____________________) Tj ET
+BT /F1 7.5 Tf 0.550 0.660 0.750 rg 48.0 49.0 Td (Prepared September 2026) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (1 / 16) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 5923 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Design summary and governing results) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 638.0 499 86 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 706.0 Td (Scope statement) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 690.0 Td (The supplied drawings are low-resolution plant layouts. They establish equipment order) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 679.0 Td (and approximate topology, but many dimensions and labels are unreadable. This report) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 668.0 Td (therefore presents a transparent preliminary design using stated industrial assumptions.) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 657.0 Td (It is suitable as an academic assignment and design basis; a field survey is required) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 646.0 Td (before fabrication or purchase.) Tj ET
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 605.0 499 23 re B
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 52.0 613.0 Td (System) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 90.0 613.0 Td (Duty) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 202.0 613.0 Td (Flow) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 278.0 613.0 Td (Critical path) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 356.0 613.0 Td (Req. FTP) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 424.0 613.0 Td (Selected FTP) Tj ET
+BT /F2 7.1 Tf 1.000 1.000 1.000 rg 496.0 613.0 Td (Motor) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 579.0 499 26 re B
+BT /F2 7.1 Tf 0.055 0.130 0.230 rg 52.0 592.0 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 86 605.0 m 86 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 90.0 592.0 Td (Conveyor extraction) Tj ET
+0.750 0.800 0.850 RG .35 w 198 605.0 m 198 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 202.0 592.0 Td (10000 m3/h) Tj ET
+0.750 0.800 0.850 RG .35 w 274 605.0 m 274 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 278.0 592.0 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 352 605.0 m 352 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 356.0 592.0 Td (3402 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 420 605.0 m 420 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 424.0 592.0 Td (3750 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 492 605.0 m 492 579.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 496.0 592.0 Td (18.5 kW) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 553.0 499 26 re B
+BT /F2 7.1 Tf 0.055 0.130 0.230 rg 52.0 566.0 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 86 579.0 m 86 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 90.0 566.0 Td (Multi-level extraction) Tj ET
+0.750 0.800 0.850 RG .35 w 198 579.0 m 198 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 202.0 566.0 Td (15000 m3/h) Tj ET
+0.750 0.800 0.850 RG .35 w 274 579.0 m 274 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 278.0 566.0 Td (B1) Tj ET
+0.750 0.800 0.850 RG .35 w 352 579.0 m 352 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 356.0 566.0 Td (3380 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 420 579.0 m 420 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 424.0 566.0 Td (3750 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 492 579.0 m 492 553.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 496.0 566.0 Td (30.0 kW) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 527.0 499 26 re B
+BT /F2 7.1 Tf 0.055 0.130 0.230 rg 52.0 540.0 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 86 553.0 m 86 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 90.0 540.0 Td (Cooler and bin extraction) Tj ET
+0.750 0.800 0.850 RG .35 w 198 553.0 m 198 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 202.0 540.0 Td (44000 m3/h) Tj ET
+0.750 0.800 0.850 RG .35 w 274 553.0 m 274 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 278.0 540.0 Td (C2) Tj ET
+0.750 0.800 0.850 RG .35 w 352 553.0 m 352 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 356.0 540.0 Td (4690 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 420 553.0 m 420 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 424.0 540.0 Td (5200 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 492 553.0 m 492 527.0 l S
+BT /F1 7.1 Tf 0.100 0.130 0.170 rg 496.0 540.0 Td (110.0 kW) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 518.0 Td (Main conclusions) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 504.0 m 88 504.0 l S
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 495.0 Td (System A is governed by branch A3. The calculated fan total pressure is 3402 Pa, so 3750 Pa is selected. The) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 482.5 Td (calculated shaft power is 16.03 kW and the next practical motor size is 18.5 kW.) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 465.0 Td (System B is governed by branch B1. The calculated fan total pressure is 3380 Pa, so 3750 Pa is selected. The) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 452.5 Td (calculated shaft power is 24.04 kW and a 30 kW motor is selected.) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 435.0 Td (System C is governed by the new-cooler branch C2. The calculated fan total pressure is 4690 Pa, so 5200 Pa) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 422.5 Td (is selected. The calculated shaft power is 97.78 kW and a 110 kW motor is selected.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.480 0.320 RG 1.1 w 48 341.0 499 64 re B
+BT /F2 9 Tf 0.100 0.480 0.320 rg 60.0 387.0 Td (Interpretation) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 371.0 Td (FTP means fan total pressure at the design flow. FSP is estimated as FTP minus the stack) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 360.0 Td (outlet velocity pressure. Final selection must use the supplier fan curve at the stated) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 349.0 Td (air density and include sound, erosion, dust loading, and motor service requirements.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (2 / 16) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 4809 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Drawing interpretation and solution plan) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (What was extracted from the drawings) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 499 23 re B
+BT /F2 7.4 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (Drawing) Tj ET
+BT /F2 7.4 Tf 1.000 1.000 1.000 rg 97.0 686.0 Td (Readable process intent) Tj ET
+BT /F2 7.4 Tf 1.000 1.000 1.000 rg 287.0 686.0 Td (Representative model adopted) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 640.0 499 38 re B
+BT /F2 7.4 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (1) Tj ET
+0.750 0.800 0.850 RG .35 w 93 678.0 m 93 640.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 97.0 665.0 Td (Conveyor hoods, collecting duct, bag collector, fan and stack) Tj ET
+0.750 0.800 0.850 RG .35 w 283 678.0 m 283 640.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 287.0 665.0 Td (Four equal pickups in two submains; 10,000 m3/h) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 602.0 499 38 re B
+BT /F2 7.4 Tf 0.055 0.130 0.230 rg 52.0 627.0 Td (2) Tj ET
+0.750 0.800 0.850 RG .35 w 93 640.0 m 93 602.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 97.0 627.0 Td (Multi-level pickups and risers feeding collector, fan and stack) Tj ET
+0.750 0.800 0.850 RG .35 w 283 640.0 m 283 602.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 287.0 627.0 Td (Four elevated pickups in two submains; 15,000 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 564.0 499 38 re B
+BT /F2 7.4 Tf 0.055 0.130 0.230 rg 52.0 589.0 Td (3) Tj ET
+0.750 0.800 0.850 RG .35 w 93 602.0 m 93 564.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 97.0 589.0 Td (Existing/new cooler and bin zones, collector/fan and old-fan tie-in) Tj ET
+0.750 0.800 0.850 RG .35 w 283 602.0 m 283 564.0 l S
+BT /F1 7.4 Tf 0.100 0.130 0.170 rg 287.0 589.0 Td (Six equivalent zones; existing/new submains; 44,000 m3/h) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 555.0 Td (Calculation sequence) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 541.0 m 88 541.0 l S
+0.130 0.550 0.660 rg 0.130 0.550 0.660 RG 0.8 w 48 506.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 515.0 Td (1) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 515.0 Td (Define simultaneous hood flows and assumed straight lengths.) Tj ET
+0.100 0.350 0.600 rg 0.100 0.350 0.600 RG 0.8 w 48 472.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 481.0 Td (2) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 481.0 Td (Select circular duct sizes to keep dusty-air velocity at or above 18 m/s.) Tj ET
+0.130 0.550 0.660 rg 0.130 0.550 0.660 RG 0.8 w 48 438.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 447.0 Td (3) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 447.0 Td (Calculate velocity, Reynolds number, Darcy friction factor and velocity pressure.) Tj ET
+0.100 0.350 0.600 rg 0.100 0.350 0.600 RG 0.8 w 48 404.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 413.0 Td (4) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 413.0 Td (Add straight-duct friction and local fitting losses section by section.) Tj ET
+0.130 0.550 0.660 rg 0.130 0.550 0.660 RG 0.8 w 48 370.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 379.0 Td (5) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 379.0 Td (Sum each complete source-to-stack route and identify the largest total.) Tj ET
+0.100 0.350 0.600 rg 0.100 0.350 0.600 RG 0.8 w 48 336.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 345.0 Td (6) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 345.0 Td (Balance all shorter routes to the critical route at their design flows.) Tj ET
+0.130 0.550 0.660 rg 0.130 0.550 0.660 RG 0.8 w 48 302.0 30 26 re B
+BT /F2 9 Tf 1.000 1.000 1.000 rg 59.0 311.0 Td (7) Tj ET
+BT /F1 8.4 Tf 0.100 0.130 0.170 rg 90.0 311.0 Td (Add 10% pressure margin, round upward, and calculate fan and motor duty.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 219.0 499 75 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 276.0 Td (Boundary of confidence) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 260.0 Td (No blurred drawing dimension is treated as verified. Duct lengths, diameters, hood) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 249.0 Td (flows, bend counts, junction coefficients and collector loss are calculation) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 238.0 Td (assumptions. Each is shown so the design can be updated directly after field) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 227.0 Td (measurement.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (3 / 16) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 8182 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Design basis and declared assumptions) Tj ET
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 701.0 499 23 re B
+BT /F2 7.5 Tf 1.000 1.000 1.000 rg 52.0 709.0 Td (Item) Tj ET
+BT /F2 7.5 Tf 1.000 1.000 1.000 rg 187.0 709.0 Td (Adopted value) Tj ET
+BT /F2 7.5 Tf 1.000 1.000 1.000 rg 307.0 709.0 Td (Use in calculation) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 676.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 688.0 Td (Air density) Tj ET
+0.750 0.800 0.850 RG .35 w 183 701.0 m 183 676.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 688.0 Td (1.20 kg/m3) Tj ET
+0.750 0.800 0.850 RG .35 w 303 701.0 m 303 676.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 688.0 Td (Velocity pressure and Reynolds number) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 651.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 663.0 Td (Dynamic viscosity) Tj ET
+0.750 0.800 0.850 RG .35 w 183 676.0 m 183 651.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 663.0 Td (1.81 x 10^-5 Pa.s) Tj ET
+0.750 0.800 0.850 RG .35 w 303 676.0 m 303 651.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 663.0 Td (Reynolds number) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 626.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 638.0 Td (Steel roughness) Tj ET
+0.750 0.800 0.850 RG .35 w 183 651.0 m 183 626.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 638.0 Td (0.15 mm) Tj ET
+0.750 0.800 0.850 RG .35 w 303 651.0 m 303 626.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 638.0 Td (Colebrook friction factor) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 601.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 613.0 Td (Dusty transport velocity) Tj ET
+0.750 0.800 0.850 RG .35 w 183 626.0 m 183 601.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 613.0 Td (>= 18 m/s) Tj ET
+0.750 0.800 0.850 RG .35 w 303 626.0 m 303 601.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 613.0 Td (Branch, submain and dirty main sizing) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 576.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 588.0 Td (Collector allowance) Tj ET
+0.750 0.800 0.850 RG .35 w 183 601.0 m 183 576.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 588.0 Td (1200 Pa) Tj ET
+0.750 0.800 0.850 RG .35 w 303 601.0 m 303 576.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 588.0 Td (Base differential pressure) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 551.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 563.0 Td (Fan total efficiency) Tj ET
+0.750 0.800 0.850 RG .35 w 183 576.0 m 183 551.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 563.0 Td (65%) Tj ET
+0.750 0.800 0.850 RG .35 w 303 576.0 m 303 551.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 563.0 Td (Shaft power) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 526.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 538.0 Td (Motor efficiency) Tj ET
+0.750 0.800 0.850 RG .35 w 183 551.0 m 183 526.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 538.0 Td (90%) Tj ET
+0.750 0.800 0.850 RG .35 w 303 551.0 m 303 526.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 538.0 Td (Input power) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 501.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 513.0 Td (Operation) Tj ET
+0.750 0.800 0.850 RG .35 w 183 526.0 m 183 501.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 513.0 Td (All pickups simultaneous) Tj ET
+0.750 0.800 0.850 RG .35 w 303 526.0 m 303 501.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 513.0 Td (No diversity or leakage allowance) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 476.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 488.0 Td (Duct geometry) Tj ET
+0.750 0.800 0.850 RG .35 w 183 501.0 m 183 476.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 488.0 Td (Circular internal diameter) Tj ET
+0.750 0.800 0.850 RG .35 w 303 501.0 m 303 476.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 488.0 Td (Area and D in equations) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 451.0 499 25 re B
+BT /F2 7.5 Tf 0.055 0.130 0.230 rg 52.0 463.0 Td (Old-fan tie-in in C) Tj ET
+0.750 0.800 0.850 RG .35 w 183 476.0 m 183 451.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 187.0 463.0 Td (Closed/isolated) Tj ET
+0.750 0.800 0.850 RG .35 w 303 476.0 m 303 451.0 l S
+BT /F1 7.5 Tf 0.100 0.130 0.170 rg 307.0 463.0 Td (No reverse or parallel flow) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 442.0 Td (Preliminary fitting coefficients) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 428.0 m 88 428.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 396.0 499 23 re B
+BT /F2 7.3 Tf 1.000 1.000 1.000 rg 52.0 404.0 Td (Component) Tj ET
+BT /F2 7.3 Tf 1.000 1.000 1.000 rg 272.0 404.0 Td (K) Tj ET
+BT /F2 7.3 Tf 1.000 1.000 1.000 rg 327.0 404.0 Td (Reference velocity / boundary) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 367.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 383.0 Td (Simple hood entry \(A and B\)) Tj ET
+0.750 0.800 0.850 RG .35 w 268 396.0 m 268 367.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 383.0 Td (0.50) Tj ET
+0.750 0.800 0.850 RG .35 w 323 396.0 m 323 367.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 383.0 Td (Own branch velocity) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 338.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 354.0 Td (Equivalent collection zone \(C\)) Tj ET
+0.750 0.800 0.850 RG .35 w 268 367.0 m 268 338.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 354.0 Td (2.00) Tj ET
+0.750 0.800 0.850 RG .35 w 323 367.0 m 323 338.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 354.0 Td (Own branch velocity; includes unresolved pickup resistance) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 309.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 325.0 Td (Long-radius 90-degree bend) Tj ET
+0.750 0.800 0.850 RG .35 w 268 338.0 m 268 309.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 325.0 Td (0.25 each) Tj ET
+0.750 0.800 0.850 RG .35 w 323 338.0 m 323 309.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 325.0 Td (Velocity in its duct section) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 280.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 296.0 Td (Incoming combining junction) Tj ET
+0.750 0.800 0.850 RG .35 w 268 309.0 m 268 280.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 296.0 Td (0.50) Tj ET
+0.750 0.800 0.850 RG .35 w 323 309.0 m 323 280.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 296.0 Td (Velocity of the incoming section) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 251.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 267.0 Td (External gradual adapter) Tj ET
+0.750 0.800 0.850 RG .35 w 268 280.0 m 268 251.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 267.0 Td (0.15) Tj ET
+0.750 0.800 0.850 RG .35 w 323 280.0 m 323 251.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 267.0 Td (Velocity of assigned section) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 222.0 499 29 re B
+BT /F2 7.3 Tf 0.055 0.130 0.230 rg 52.0 238.0 Td (Stack terminal including exit) Tj ET
+0.750 0.800 0.850 RG .35 w 268 251.0 m 268 222.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 272.0 238.0 Td (1.50) Tj ET
+0.750 0.800 0.850 RG .35 w 323 251.0 m 323 222.0 l S
+BT /F1 7.3 Tf 0.100 0.130 0.170 rg 327.0 238.0 Td (Stack velocity) Tj ET
+0.960 0.980 1.000 rg 0.900 0.550 0.100 RG 1.1 w 48 149.0 499 64 re B
+BT /F2 9 Tf 0.900 0.550 0.100 rg 60.0 195.0 Td (Coefficient status) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 179.0 Td (These K values are declared preliminary design assumptions. Exact coefficients depend on) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 168.0 Td (elbow radius, area ratio, branch angle, vane construction and the reference velocity) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 157.0 Td (used by the selected fitting table.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (4 / 16) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 2699 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Pressure-drop method) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Flow and velocity) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+BT /F4 9.4 Tf 0.100 0.130 0.170 rg 48.0 701.0 Td (Q = Q_h / 3600 A = pi D^2 / 4 V = Q / A) Tj ET
+BT /F4 9.4 Tf 0.100 0.130 0.170 rg 48.0 682.0 Td (Re = rho V D / mu p_v = rho V^2 / 2) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 663.0 Td (Darcy-Colebrook friction) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 649.0 m 88 649.0 l S
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 640.0 Td (1/sqrt\(f\) = -2 log10[ epsilon/\(3.7D\) + 2.51/\(Re sqrt\(f\)\) ]) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 621.0 Td (The Colebrook equation was iterated until the numerical residual was below 1 x 10^-10. The Darcy factor is) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 608.5 Td (then used directly; no Fanning-factor conversion is required.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 591.0 Td (Section loss) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 577.0 m 88 577.0 l S
+BT /F4 9.4 Tf 0.100 0.130 0.170 rg 48.0 568.0 Td (Delta p_f = f \(L/D\) p_v Delta p_K = K p_v) Tj ET
+BT /F4 9.4 Tf 0.100 0.130 0.170 rg 48.0 549.0 Td (Delta p_section = [ f\(L/D\) + sum K ] p_v) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 530.0 Td (Critical route and fan) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 516.0 m 88 516.0 l S
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 507.0 Td (Delta p_route = sum\(duct and fitting losses\) + Delta p_collector) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 488.0 Td (Required FTP = max\(Delta p_route\). Selected FTP = the required value increased by 10% and rounded upward to) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 475.5 Td (the next 50 Pa.) Tj ET
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 458.0 Td (P_shaft = Q x FTP / eta_fan P_input = P_shaft / eta_motor) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 375.0 499 64 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 421.0 Td (Network rule) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 405.0 Td (Losses in series are added. Parallel branch losses are not added together. At the design) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 394.0 Td (flows, each active branch route is balanced to the same source-to-discharge pressure) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 383.0 Td (difference.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (5 / 16) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 18 0 R >>
+endobj
+18 0 obj
+<< /Length 16672 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (SYSTEM LAYOUT) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System A: Conveyor extraction) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 680.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 702.0 Td (H1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 688.0 Td (2500 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 622.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 644.0 Td (H2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 630.0 Td (2500 m3/h) Tj ET
+0.930 0.980 0.980 rg 0.130 0.550 0.660 RG 1 w 166 648.0 64 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 173.0 674.0 Td (J1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 173.0 660.0 Td (5000 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 116 699.0 m 166 679.0 l S
+0.100 0.350 0.600 rg 166 679.0 m 159.0 678.5 l 161.3 684.2 l h f
+0.100 0.350 0.600 RG 1.4 w 116 641.0 m 166 663.0 l S
+0.100 0.350 0.600 rg 166 663.0 m 161.5 657.7 l 159.0 663.2 l h f
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 540.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 562.0 Td (H3) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 548.0 Td (2500 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 482.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 504.0 Td (H4) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 490.0 Td (2500 m3/h) Tj ET
+0.930 0.980 0.980 rg 0.130 0.550 0.660 RG 1 w 166 508.0 64 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 173.0 534.0 Td (J2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 173.0 520.0 Td (5000 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 116 559.0 m 166 539.0 l S
+0.100 0.350 0.600 rg 166 539.0 m 159.0 538.5 l 161.3 544.2 l h f
+0.100 0.350 0.600 RG 1.4 w 116 501.0 m 166 523.0 l S
+0.100 0.350 0.600 rg 166 523.0 m 161.5 517.7 l 159.0 523.2 l h f
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 282 577.0 68 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 289.0 605.0 Td (Main) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 289.0 591.0 Td (10000 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 230 669.0 m 282 609.0 l S
+0.100 0.350 0.600 rg 282 609.0 m 275.6 611.8 l 280.2 615.8 l h f
+0.100 0.350 0.600 RG 1.4 w 230 529.0 m 282 589.0 l S
+0.100 0.350 0.600 rg 282 589.0 m 280.2 582.2 l 275.6 586.2 l h f
+0.990 0.970 0.910 rg 0.900 0.550 0.100 RG 1 w 385 577.0 74 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 392.0 605.0 Td (Collector) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 392.0 591.0 Td (1200 Pa) Tj ET
+0.100 0.350 0.600 RG 1.4 w 350 599.0 m 385 599.0 l S
+0.100 0.350 0.600 rg 385 599.0 m 378.7 596.0 l 378.7 602.0 l h f
+0.940 0.980 0.950 rg 0.100 0.480 0.320 RG 1 w 477 641.0 62 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 484.0 667.0 Td (Fan) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 484.0 653.0 Td (3750 Pa) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 477 515.0 62 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 484.0 541.0 Td (Stack) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 484.0 527.0 Td (400 mm) Tj ET
+0.100 0.350 0.600 RG 1.4 w 459 599.0 m 477 662.0 l S
+0.100 0.350 0.600 rg 477 662.0 m 478.2 655.1 l 472.3 656.8 l h f
+0.100 0.350 0.600 RG 1.4 w 508 641.0 m 508 557.0 l S
+0.100 0.350 0.600 rg 508 557.0 m 505.0 563.3 l 511.0 563.3 l h f
+BT /F1 7.3 Tf 0.360 0.410 0.470 rg 54.0 458.0 Td (Critical route shown by the highest calculated total; branch balancing is added separately.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 440.0 Td (Assumed geometry and calculated section performance) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 426.0 m 88 426.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 394.0 455 23 re B
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 52.0 402.0 Td (ID) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 86.0 402.0 Td (Qh) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 137.0 402.0 Td (D) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 172.0 402.0 Td (L) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 206.0 402.0 Td (V) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 246.0 402.0 Td (Re/1e3) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 290.0 402.0 Td (f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 332.0 402.0 Td (K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 366.0 402.0 Td (dp_f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 412.0 402.0 Td (dp_K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 458.0 402.0 Td (dp) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 376.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 381.0 Td (A1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 394.0 m 82 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 381.0 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 394.0 m 133 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 381.0 Td (200) Tj ET
+0.750 0.800 0.850 RG .35 w 168 394.0 m 168 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 381.0 Td (8.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 394.0 m 202 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 381.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 394.0 m 242 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 381.0 Td (293) Tj ET
+0.750 0.800 0.850 RG .35 w 286 394.0 m 286 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 381.0 Td (0.0195) Tj ET
+0.750 0.800 0.850 RG .35 w 328 394.0 m 328 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 381.0 Td (1.50) Tj ET
+0.750 0.800 0.850 RG .35 w 362 394.0 m 362 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 381.0 Td (229.0) Tj ET
+0.750 0.800 0.850 RG .35 w 408 394.0 m 408 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 381.0 Td (439.8) Tj ET
+0.750 0.800 0.850 RG .35 w 454 394.0 m 454 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 381.0 Td (668.7) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 358.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 363.0 Td (A2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 376.0 m 82 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 363.0 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 376.0 m 133 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 363.0 Td (200) Tj ET
+0.750 0.800 0.850 RG .35 w 168 376.0 m 168 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 363.0 Td (6.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 376.0 m 202 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 363.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 376.0 m 242 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 363.0 Td (293) Tj ET
+0.750 0.800 0.850 RG .35 w 286 376.0 m 286 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 363.0 Td (0.0195) Tj ET
+0.750 0.800 0.850 RG .35 w 328 376.0 m 328 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 363.0 Td (1.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 376.0 m 362 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 363.0 Td (171.7) Tj ET
+0.750 0.800 0.850 RG .35 w 408 376.0 m 408 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 363.0 Td (366.5) Tj ET
+0.750 0.800 0.850 RG .35 w 454 376.0 m 454 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 363.0 Td (538.2) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 340.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 345.0 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 82 358.0 m 82 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 345.0 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 358.0 m 133 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 345.0 Td (200) Tj ET
+0.750 0.800 0.850 RG .35 w 168 358.0 m 168 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 345.0 Td (10.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 358.0 m 202 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 345.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 358.0 m 242 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 345.0 Td (293) Tj ET
+0.750 0.800 0.850 RG .35 w 286 358.0 m 286 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 345.0 Td (0.0195) Tj ET
+0.750 0.800 0.850 RG .35 w 328 358.0 m 328 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 345.0 Td (1.75) Tj ET
+0.750 0.800 0.850 RG .35 w 362 358.0 m 362 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 345.0 Td (286.2) Tj ET
+0.750 0.800 0.850 RG .35 w 408 358.0 m 408 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 345.0 Td (513.1) Tj ET
+0.750 0.800 0.850 RG .35 w 454 358.0 m 454 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 345.0 Td (799.2) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 322.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 327.0 Td (A4) Tj ET
+0.750 0.800 0.850 RG .35 w 82 340.0 m 82 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 327.0 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 340.0 m 133 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 327.0 Td (200) Tj ET
+0.750 0.800 0.850 RG .35 w 168 340.0 m 168 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 327.0 Td (5.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 340.0 m 202 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 327.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 340.0 m 242 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 327.0 Td (293) Tj ET
+0.750 0.800 0.850 RG .35 w 286 340.0 m 286 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 327.0 Td (0.0195) Tj ET
+0.750 0.800 0.850 RG .35 w 328 340.0 m 328 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 327.0 Td (1.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 340.0 m 362 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 327.0 Td (143.1) Tj ET
+0.750 0.800 0.850 RG .35 w 408 340.0 m 408 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 327.0 Td (366.5) Tj ET
+0.750 0.800 0.850 RG .35 w 454 340.0 m 454 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 327.0 Td (509.6) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 304.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 309.0 Td (AS1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 322.0 m 82 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 309.0 Td (5000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 322.0 m 133 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 309.0 Td (300) Tj ET
+0.750 0.800 0.850 RG .35 w 168 322.0 m 168 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 309.0 Td (12.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 322.0 m 202 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 309.0 Td (19.65) Tj ET
+0.750 0.800 0.850 RG .35 w 242 322.0 m 242 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 309.0 Td (391) Tj ET
+0.750 0.800 0.850 RG .35 w 286 322.0 m 286 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 309.0 Td (0.0179) Tj ET
+0.750 0.800 0.850 RG .35 w 328 322.0 m 328 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 309.0 Td (0.75) Tj ET
+0.750 0.800 0.850 RG .35 w 362 322.0 m 362 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 309.0 Td (165.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 322.0 m 408 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 309.0 Td (173.7) Tj ET
+0.750 0.800 0.850 RG .35 w 454 322.0 m 454 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 309.0 Td (339.6) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 286.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 291.0 Td (AS2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 304.0 m 82 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 291.0 Td (5000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 304.0 m 133 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 291.0 Td (300) Tj ET
+0.750 0.800 0.850 RG .35 w 168 304.0 m 168 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 291.0 Td (6.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 304.0 m 202 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 291.0 Td (19.65) Tj ET
+0.750 0.800 0.850 RG .35 w 242 304.0 m 242 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 291.0 Td (391) Tj ET
+0.750 0.800 0.850 RG .35 w 286 304.0 m 286 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 291.0 Td (0.0179) Tj ET
+0.750 0.800 0.850 RG .35 w 328 304.0 m 328 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 291.0 Td (0.75) Tj ET
+0.750 0.800 0.850 RG .35 w 362 304.0 m 362 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 291.0 Td (82.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 304.0 m 408 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 291.0 Td (173.7) Tj ET
+0.750 0.800 0.850 RG .35 w 454 304.0 m 454 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 291.0 Td (256.7) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 268.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 273.0 Td (AM) Tj ET
+0.750 0.800 0.850 RG .35 w 82 286.0 m 82 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 273.0 Td (10000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 286.0 m 133 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 273.0 Td (400) Tj ET
+0.750 0.800 0.850 RG .35 w 168 286.0 m 168 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 273.0 Td (10.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 286.0 m 202 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 273.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 286.0 m 242 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 273.0 Td (586) Tj ET
+0.750 0.800 0.850 RG .35 w 286 286.0 m 286 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 273.0 Td (0.0167) Tj ET
+0.750 0.800 0.850 RG .35 w 328 286.0 m 328 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 273.0 Td (0.65) Tj ET
+0.750 0.800 0.850 RG .35 w 362 286.0 m 362 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 273.0 Td (122.3) Tj ET
+0.750 0.800 0.850 RG .35 w 408 286.0 m 408 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 273.0 Td (190.6) Tj ET
+0.750 0.800 0.850 RG .35 w 454 286.0 m 454 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 273.0 Td (312.8) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 250.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 255.0 Td (ACL) Tj ET
+0.750 0.800 0.850 RG .35 w 82 268.0 m 82 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 255.0 Td (10000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 268.0 m 133 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 255.0 Td (450) Tj ET
+0.750 0.800 0.850 RG .35 w 168 268.0 m 168 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 255.0 Td (4.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 268.0 m 202 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 255.0 Td (17.47) Tj ET
+0.750 0.800 0.850 RG .35 w 242 268.0 m 242 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 255.0 Td (521) Tj ET
+0.750 0.800 0.850 RG .35 w 286 268.0 m 286 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 255.0 Td (0.0165) Tj ET
+0.750 0.800 0.850 RG .35 w 328 268.0 m 328 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 255.0 Td (0.40) Tj ET
+0.750 0.800 0.850 RG .35 w 362 268.0 m 362 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 255.0 Td (26.8) Tj ET
+0.750 0.800 0.850 RG .35 w 408 268.0 m 408 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 255.0 Td (73.2) Tj ET
+0.750 0.800 0.850 RG .35 w 454 268.0 m 454 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 255.0 Td (100.0) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 232.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 237.0 Td (AE) Tj ET
+0.750 0.800 0.850 RG .35 w 82 250.0 m 82 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 237.0 Td (10000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 250.0 m 133 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 237.0 Td (400) Tj ET
+0.750 0.800 0.850 RG .35 w 168 250.0 m 168 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 237.0 Td (12.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 250.0 m 202 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 237.0 Td (22.10) Tj ET
+0.750 0.800 0.850 RG .35 w 242 250.0 m 242 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 237.0 Td (586) Tj ET
+0.750 0.800 0.850 RG .35 w 286 250.0 m 286 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 237.0 Td (0.0167) Tj ET
+0.750 0.800 0.850 RG .35 w 328 250.0 m 328 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 237.0 Td (2.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 250.0 m 362 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 237.0 Td (146.7) Tj ET
+0.750 0.800 0.850 RG .35 w 408 250.0 m 408 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 237.0 Td (586.3) Tj ET
+0.750 0.800 0.850 RG .35 w 454 250.0 m 454 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 237.0 Td (733.1) Tj ET
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 223.0 Td (Units: Qh in m3/h; D in mm; L in m; V in m/s; pressure losses in Pa.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 156.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 191.0 Td (Sizing check) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 175.0 Td (Dusty sections range from NaN to NaN m/s. The minimum exceeds the adopted 18 m/s) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 164.0 Td (transport criterion.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (6 / 16) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 20 0 R >>
+endobj
+20 0 obj
+<< /Length 6118 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (PRESSURE-DROP RESULTS) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System A: route totals and fan duty) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Complete source-to-stack routes) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 458 23 re B
+BT /F2 7 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (Source) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 104.0 686.0 Td (Route) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 262.0 686.0 Td (Route total) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 350.0 686.0 Td (Balance dp) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 438.0 686.0 Td (Added K) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 650.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (A1) Tj ET
+0.750 0.800 0.850 RG .35 w 100 678.0 m 100 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 665.0 Td (A1-AS1-AM-FILTER-ACL-AE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 678.0 m 258 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 665.0 Td (3354.2) Tj ET
+0.750 0.800 0.850 RG .35 w 346 678.0 m 346 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 665.0 Td (47.6) Tj ET
+0.750 0.800 0.850 RG .35 w 434 678.0 m 434 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 665.0 Td (0.16) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 622.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 637.0 Td (A2) Tj ET
+0.750 0.800 0.850 RG .35 w 100 650.0 m 100 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 637.0 Td (A2-AS1-AM-FILTER-ACL-AE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 650.0 m 258 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 637.0 Td (3223.7) Tj ET
+0.750 0.800 0.850 RG .35 w 346 650.0 m 346 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 637.0 Td (178.1) Tj ET
+0.750 0.800 0.850 RG .35 w 434 650.0 m 434 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 637.0 Td (0.61) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 594.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 609.0 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 100 622.0 m 100 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 609.0 Td (A3-AS2-AM-FILTER-ACL-AE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 622.0 m 258 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 609.0 Td (3401.8) Tj ET
+0.750 0.800 0.850 RG .35 w 346 622.0 m 346 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 609.0 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 434 622.0 m 434 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 609.0 Td (0.00) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 566.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 581.0 Td (A4) Tj ET
+0.750 0.800 0.850 RG .35 w 100 594.0 m 100 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 581.0 Td (A4-AS2-AM-FILTER-ACL-AE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 594.0 m 258 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 581.0 Td (3112.2) Tj ET
+0.750 0.800 0.850 RG .35 w 346 594.0 m 346 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 581.0 Td (289.7) Tj ET
+0.750 0.800 0.850 RG .35 w 434 594.0 m 434 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 581.0 Td (0.99) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 504.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 539.0 Td (Critical route) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 523.0 Td (A3 -> AS2 -> AM -> FILTER -> ACL -> AE gives 3401.8 Pa. Other branches require the) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 512.0 Td (balancing losses listed above so all prescribed flows can coexist.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 494.0 Td (Fan selection) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 480.0 m 88 480.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 448.0 499 23 re B
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 52.0 456.0 Td (Quantity) Tj ET
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 272.0 456.0 Td (Calculated / selected value) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 420.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 435.0 Td (System volume flow) Tj ET
+0.750 0.800 0.850 RG .35 w 268 448.0 m 268 420.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 435.0 Td (2.778 m3/s \(10000 m3/h\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 392.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 407.0 Td (Required fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 420.0 m 268 392.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 407.0 Td (3401.8 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 364.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 379.0 Td (Selected fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 392.0 m 268 364.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 379.0 Td (3750 Pa \(10% allowance, rounded upward\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 336.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 351.0 Td (Estimated fan static pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 364.0 m 268 336.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 351.0 Td (3456.8 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 308.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 323.0 Td (Fan shaft power) Tj ET
+0.750 0.800 0.850 RG .35 w 268 336.0 m 268 308.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 323.0 Td (16.03 kW at 65% total efficiency) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 280.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 295.0 Td (Electrical input) Tj ET
+0.750 0.800 0.850 RG .35 w 268 308.0 m 268 280.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 295.0 Td (17.81 kW at 90% motor efficiency) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 252.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 267.0 Td (Recommended motor rating) Tj ET
+0.750 0.800 0.850 RG .35 w 268 280.0 m 268 252.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 267.0 Td (18.5 kW) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (7 / 16) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 22 0 R >>
+endobj
+22 0 obj
+<< /Length 16673 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (SYSTEM LAYOUT) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System B: Multi-level extraction) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 680.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 702.0 Td (H1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 688.0 Td (3750 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 622.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 644.0 Td (H2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 630.0 Td (3750 m3/h) Tj ET
+0.930 0.980 0.980 rg 0.130 0.550 0.660 RG 1 w 166 648.0 64 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 173.0 674.0 Td (J1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 173.0 660.0 Td (7500 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 116 699.0 m 166 679.0 l S
+0.100 0.350 0.600 rg 166 679.0 m 159.0 678.5 l 161.3 684.2 l h f
+0.100 0.350 0.600 RG 1.4 w 116 641.0 m 166 663.0 l S
+0.100 0.350 0.600 rg 166 663.0 m 161.5 657.7 l 159.0 663.2 l h f
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 540.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 562.0 Td (H3) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 548.0 Td (3750 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 54 482.0 62 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 61.0 504.0 Td (H4) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 61.0 490.0 Td (3750 m3/h) Tj ET
+0.930 0.980 0.980 rg 0.130 0.550 0.660 RG 1 w 166 508.0 64 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 173.0 534.0 Td (J2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 173.0 520.0 Td (7500 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 116 559.0 m 166 539.0 l S
+0.100 0.350 0.600 rg 166 539.0 m 159.0 538.5 l 161.3 544.2 l h f
+0.100 0.350 0.600 RG 1.4 w 116 501.0 m 166 523.0 l S
+0.100 0.350 0.600 rg 166 523.0 m 161.5 517.7 l 159.0 523.2 l h f
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 282 577.0 68 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 289.0 605.0 Td (Main) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 289.0 591.0 Td (15000 m3/h) Tj ET
+0.100 0.350 0.600 RG 1.4 w 230 669.0 m 282 609.0 l S
+0.100 0.350 0.600 rg 282 609.0 m 275.6 611.8 l 280.2 615.8 l h f
+0.100 0.350 0.600 RG 1.4 w 230 529.0 m 282 589.0 l S
+0.100 0.350 0.600 rg 282 589.0 m 280.2 582.2 l 275.6 586.2 l h f
+0.990 0.970 0.910 rg 0.900 0.550 0.100 RG 1 w 385 577.0 74 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 392.0 605.0 Td (Collector) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 392.0 591.0 Td (1200 Pa) Tj ET
+0.100 0.350 0.600 RG 1.4 w 350 599.0 m 385 599.0 l S
+0.100 0.350 0.600 rg 385 599.0 m 378.7 596.0 l 378.7 602.0 l h f
+0.940 0.980 0.950 rg 0.100 0.480 0.320 RG 1 w 477 641.0 62 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 484.0 667.0 Td (Fan) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 484.0 653.0 Td (3750 Pa) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 477 515.0 62 42 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 484.0 541.0 Td (Stack) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 484.0 527.0 Td (500 mm) Tj ET
+0.100 0.350 0.600 RG 1.4 w 459 599.0 m 477 662.0 l S
+0.100 0.350 0.600 rg 477 662.0 m 478.2 655.1 l 472.3 656.8 l h f
+0.100 0.350 0.600 RG 1.4 w 508 641.0 m 508 557.0 l S
+0.100 0.350 0.600 rg 508 557.0 m 505.0 563.3 l 511.0 563.3 l h f
+BT /F1 7.3 Tf 0.360 0.410 0.470 rg 54.0 458.0 Td (Critical route shown by the highest calculated total; branch balancing is added separately.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 440.0 Td (Assumed geometry and calculated section performance) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 426.0 m 88 426.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 394.0 455 23 re B
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 52.0 402.0 Td (ID) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 86.0 402.0 Td (Qh) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 137.0 402.0 Td (D) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 172.0 402.0 Td (L) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 206.0 402.0 Td (V) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 246.0 402.0 Td (Re/1e3) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 290.0 402.0 Td (f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 332.0 402.0 Td (K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 366.0 402.0 Td (dp_f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 412.0 402.0 Td (dp_K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 458.0 402.0 Td (dp) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 376.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 381.0 Td (B1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 394.0 m 82 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 381.0 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 133 394.0 m 133 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 381.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 394.0 m 168 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 381.0 Td (16.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 394.0 m 202 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 381.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 394.0 m 242 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 381.0 Td (352) Tj ET
+0.750 0.800 0.850 RG .35 w 286 394.0 m 286 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 381.0 Td (0.0186) Tj ET
+0.750 0.800 0.850 RG .35 w 328 394.0 m 328 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 381.0 Td (1.75) Tj ET
+0.750 0.800 0.850 RG .35 w 362 394.0 m 362 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 381.0 Td (321.2) Tj ET
+0.750 0.800 0.850 RG .35 w 408 394.0 m 408 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 381.0 Td (472.8) Tj ET
+0.750 0.800 0.850 RG .35 w 454 394.0 m 454 376.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 381.0 Td (794.1) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 358.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 363.0 Td (B2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 376.0 m 82 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 363.0 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 133 376.0 m 133 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 363.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 376.0 m 168 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 363.0 Td (12.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 376.0 m 202 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 363.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 376.0 m 242 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 363.0 Td (352) Tj ET
+0.750 0.800 0.850 RG .35 w 286 376.0 m 286 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 363.0 Td (0.0186) Tj ET
+0.750 0.800 0.850 RG .35 w 328 376.0 m 328 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 363.0 Td (1.50) Tj ET
+0.750 0.800 0.850 RG .35 w 362 376.0 m 362 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 363.0 Td (240.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 376.0 m 408 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 363.0 Td (405.3) Tj ET
+0.750 0.800 0.850 RG .35 w 454 376.0 m 454 358.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 363.0 Td (646.2) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 340.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 345.0 Td (B3) Tj ET
+0.750 0.800 0.850 RG .35 w 82 358.0 m 82 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 345.0 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 133 358.0 m 133 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 345.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 358.0 m 168 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 345.0 Td (10.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 358.0 m 202 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 345.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 358.0 m 242 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 345.0 Td (352) Tj ET
+0.750 0.800 0.850 RG .35 w 286 358.0 m 286 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 345.0 Td (0.0186) Tj ET
+0.750 0.800 0.850 RG .35 w 328 358.0 m 328 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 345.0 Td (1.50) Tj ET
+0.750 0.800 0.850 RG .35 w 362 358.0 m 362 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 345.0 Td (200.8) Tj ET
+0.750 0.800 0.850 RG .35 w 408 358.0 m 408 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 345.0 Td (405.3) Tj ET
+0.750 0.800 0.850 RG .35 w 454 358.0 m 454 340.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 345.0 Td (606.0) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 322.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 327.0 Td (B4) Tj ET
+0.750 0.800 0.850 RG .35 w 82 340.0 m 82 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 327.0 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 133 340.0 m 133 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 327.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 340.0 m 168 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 327.0 Td (8.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 340.0 m 202 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 327.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 340.0 m 242 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 327.0 Td (352) Tj ET
+0.750 0.800 0.850 RG .35 w 286 340.0 m 286 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 327.0 Td (0.0186) Tj ET
+0.750 0.800 0.850 RG .35 w 328 340.0 m 328 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 327.0 Td (1.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 340.0 m 362 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 327.0 Td (160.6) Tj ET
+0.750 0.800 0.850 RG .35 w 408 340.0 m 408 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 327.0 Td (337.7) Tj ET
+0.750 0.800 0.850 RG .35 w 454 340.0 m 454 322.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 327.0 Td (498.3) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 304.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 309.0 Td (BS1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 322.0 m 82 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 309.0 Td (7500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 322.0 m 133 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 309.0 Td (350) Tj ET
+0.750 0.800 0.850 RG .35 w 168 322.0 m 168 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 309.0 Td (8.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 322.0 m 202 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 309.0 Td (21.65) Tj ET
+0.750 0.800 0.850 RG .35 w 242 322.0 m 242 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 309.0 Td (502) Tj ET
+0.750 0.800 0.850 RG .35 w 286 322.0 m 286 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 309.0 Td (0.0172) Tj ET
+0.750 0.800 0.850 RG .35 w 328 322.0 m 328 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 309.0 Td (1.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 322.0 m 362 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 309.0 Td (110.6) Tj ET
+0.750 0.800 0.850 RG .35 w 408 322.0 m 408 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 309.0 Td (281.3) Tj ET
+0.750 0.800 0.850 RG .35 w 454 322.0 m 454 304.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 309.0 Td (391.9) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 286.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 291.0 Td (BS2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 304.0 m 82 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 291.0 Td (7500) Tj ET
+0.750 0.800 0.850 RG .35 w 133 304.0 m 133 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 291.0 Td (350) Tj ET
+0.750 0.800 0.850 RG .35 w 168 304.0 m 168 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 291.0 Td (6.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 304.0 m 202 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 291.0 Td (21.65) Tj ET
+0.750 0.800 0.850 RG .35 w 242 304.0 m 242 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 291.0 Td (502) Tj ET
+0.750 0.800 0.850 RG .35 w 286 304.0 m 286 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 291.0 Td (0.0172) Tj ET
+0.750 0.800 0.850 RG .35 w 328 304.0 m 328 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 291.0 Td (0.75) Tj ET
+0.750 0.800 0.850 RG .35 w 362 304.0 m 362 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 291.0 Td (82.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 304.0 m 408 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 291.0 Td (211.0) Tj ET
+0.750 0.800 0.850 RG .35 w 454 304.0 m 454 286.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 291.0 Td (293.9) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 268.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 273.0 Td (BM) Tj ET
+0.750 0.800 0.850 RG .35 w 82 286.0 m 82 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 273.0 Td (15000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 286.0 m 133 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 273.0 Td (500) Tj ET
+0.750 0.800 0.850 RG .35 w 168 286.0 m 168 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 273.0 Td (8.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 286.0 m 202 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 273.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 286.0 m 242 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 273.0 Td (703) Tj ET
+0.750 0.800 0.850 RG .35 w 286 286.0 m 286 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 273.0 Td (0.0159) Tj ET
+0.750 0.800 0.850 RG .35 w 328 286.0 m 328 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 273.0 Td (0.65) Tj ET
+0.750 0.800 0.850 RG .35 w 362 286.0 m 362 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 273.0 Td (68.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 286.0 m 408 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 273.0 Td (175.6) Tj ET
+0.750 0.800 0.850 RG .35 w 454 286.0 m 454 268.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 273.0 Td (244.5) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 250.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 255.0 Td (BCL) Tj ET
+0.750 0.800 0.850 RG .35 w 82 268.0 m 82 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 255.0 Td (15000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 268.0 m 133 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 255.0 Td (560) Tj ET
+0.750 0.800 0.850 RG .35 w 168 268.0 m 168 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 255.0 Td (5.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 268.0 m 202 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 255.0 Td (16.92) Tj ET
+0.750 0.800 0.850 RG .35 w 242 268.0 m 242 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 255.0 Td (628) Tj ET
+0.750 0.800 0.850 RG .35 w 286 268.0 m 286 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 255.0 Td (0.0158) Tj ET
+0.750 0.800 0.850 RG .35 w 328 268.0 m 328 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 255.0 Td (0.40) Tj ET
+0.750 0.800 0.850 RG .35 w 362 268.0 m 362 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 255.0 Td (24.2) Tj ET
+0.750 0.800 0.850 RG .35 w 408 268.0 m 408 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 255.0 Td (68.7) Tj ET
+0.750 0.800 0.850 RG .35 w 454 268.0 m 454 250.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 255.0 Td (92.9) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 232.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 237.0 Td (BE) Tj ET
+0.750 0.800 0.850 RG .35 w 82 250.0 m 82 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 237.0 Td (15000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 250.0 m 133 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 237.0 Td (500) Tj ET
+0.750 0.800 0.850 RG .35 w 168 250.0 m 168 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 237.0 Td (13.5) Tj ET
+0.750 0.800 0.850 RG .35 w 202 250.0 m 202 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 237.0 Td (21.22) Tj ET
+0.750 0.800 0.850 RG .35 w 242 250.0 m 242 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 237.0 Td (703) Tj ET
+0.750 0.800 0.850 RG .35 w 286 250.0 m 286 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 237.0 Td (0.0159) Tj ET
+0.750 0.800 0.850 RG .35 w 328 250.0 m 328 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 237.0 Td (2.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 250.0 m 362 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 237.0 Td (116.2) Tj ET
+0.750 0.800 0.850 RG .35 w 408 250.0 m 408 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 237.0 Td (540.4) Tj ET
+0.750 0.800 0.850 RG .35 w 454 250.0 m 454 232.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 237.0 Td (656.6) Tj ET
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 223.0 Td (Units: Qh in m3/h; D in mm; L in m; V in m/s; pressure losses in Pa.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 156.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 191.0 Td (Sizing check) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 175.0 Td (Dusty sections range from NaN to NaN m/s. The minimum exceeds the adopted 18 m/s) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 164.0 Td (transport criterion.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (8 / 16) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 24 0 R >>
+endobj
+24 0 obj
+<< /Length 6119 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (PRESSURE-DROP RESULTS) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System B: route totals and fan duty) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Complete source-to-stack routes) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 458 23 re B
+BT /F2 7 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (Source) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 104.0 686.0 Td (Route) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 262.0 686.0 Td (Route total) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 350.0 686.0 Td (Balance dp) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 438.0 686.0 Td (Added K) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 650.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (B1) Tj ET
+0.750 0.800 0.850 RG .35 w 100 678.0 m 100 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 665.0 Td (B1-BS1-BM-FILTER-BCL-BE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 678.0 m 258 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 665.0 Td (3379.9) Tj ET
+0.750 0.800 0.850 RG .35 w 346 678.0 m 346 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 665.0 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 434 678.0 m 434 650.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 665.0 Td (0.00) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 622.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 637.0 Td (B2) Tj ET
+0.750 0.800 0.850 RG .35 w 100 650.0 m 100 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 637.0 Td (B2-BS1-BM-FILTER-BCL-BE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 650.0 m 258 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 637.0 Td (3232.1) Tj ET
+0.750 0.800 0.850 RG .35 w 346 650.0 m 346 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 637.0 Td (147.9) Tj ET
+0.750 0.800 0.850 RG .35 w 434 650.0 m 434 622.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 637.0 Td (0.55) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 594.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 609.0 Td (B3) Tj ET
+0.750 0.800 0.850 RG .35 w 100 622.0 m 100 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 609.0 Td (B3-BS2-BM-FILTER-BCL-BE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 622.0 m 258 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 609.0 Td (3094.0) Tj ET
+0.750 0.800 0.850 RG .35 w 346 622.0 m 346 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 609.0 Td (286.0) Tj ET
+0.750 0.800 0.850 RG .35 w 434 622.0 m 434 594.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 609.0 Td (1.06) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 566.0 458 28 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 581.0 Td (B4) Tj ET
+0.750 0.800 0.850 RG .35 w 100 594.0 m 100 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 581.0 Td (B4-BS2-BM-FILTER-BCL-BE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 594.0 m 258 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 581.0 Td (2986.3) Tj ET
+0.750 0.800 0.850 RG .35 w 346 594.0 m 346 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 581.0 Td (393.7) Tj ET
+0.750 0.800 0.850 RG .35 w 434 594.0 m 434 566.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 581.0 Td (1.46) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 504.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 539.0 Td (Critical route) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 523.0 Td (B1 -> BS1 -> BM -> FILTER -> BCL -> BE gives 3379.9 Pa. Other branches require the) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 512.0 Td (balancing losses listed above so all prescribed flows can coexist.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 494.0 Td (Fan selection) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 480.0 m 88 480.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 448.0 499 23 re B
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 52.0 456.0 Td (Quantity) Tj ET
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 272.0 456.0 Td (Calculated / selected value) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 420.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 435.0 Td (System volume flow) Tj ET
+0.750 0.800 0.850 RG .35 w 268 448.0 m 268 420.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 435.0 Td (4.167 m3/s \(15000 m3/h\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 392.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 407.0 Td (Required fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 420.0 m 268 392.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 407.0 Td (3379.9 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 364.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 379.0 Td (Selected fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 392.0 m 268 364.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 379.0 Td (3750 Pa \(10% allowance, rounded upward\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 336.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 351.0 Td (Estimated fan static pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 364.0 m 268 336.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 351.0 Td (3479.8 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 308.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 323.0 Td (Fan shaft power) Tj ET
+0.750 0.800 0.850 RG .35 w 268 336.0 m 268 308.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 323.0 Td (24.04 kW at 65% total efficiency) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 280.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 295.0 Td (Electrical input) Tj ET
+0.750 0.800 0.850 RG .35 w 268 308.0 m 268 280.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 295.0 Td (26.71 kW at 90% motor efficiency) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 252.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 267.0 Td (Recommended motor rating) Tj ET
+0.750 0.800 0.850 RG .35 w 268 280.0 m 268 252.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 267.0 Td (30.0 kW) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (9 / 16) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 26 0 R >>
+endobj
+26 0 obj
+<< /Length 19769 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (SYSTEM LAYOUT) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System C: Cooler and bin extraction) Tj ET
+0.940 0.980 0.960 rg 0.100 0.480 0.320 RG 1 w 51 692.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 706.0 Td (G1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 692.0 Td (6000 m3/h) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1 w 51 649.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 663.0 Td (G2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 649.0 Td (6000 m3/h) Tj ET
+0.940 0.980 0.960 rg 0.100 0.480 0.320 RG 1 w 51 606.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 620.0 Td (G3) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 606.0 Td (12000 m3/h) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1 w 51 563.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 577.0 Td (G4) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 563.0 Td (12000 m3/h) Tj ET
+0.940 0.980 0.960 rg 0.100 0.480 0.320 RG 1 w 51 520.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 534.0 Td (G5) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 520.0 Td (4000 m3/h) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1 w 51 477.0 100 30 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 58.0 491.0 Td (G6) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 58.0 477.0 Td (4000 m3/h) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 205 632.0 70 48 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 212.0 664.0 Td (J1) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 212.0 650.0 Td (Existing) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 205 502.0 70 48 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 212.0 534.0 Td (J2) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 212.0 520.0 Td (New) Tj ET
+0.100 0.480 0.320 RG 1.1 w 151 707.0 m 205 665.0 l S
+0.100 0.480 0.320 rg 205 665.0 m 198.2 666.5 l 201.9 671.3 l h f
+0.100 0.480 0.320 RG 1.1 w 151 621.0 m 205 658.0 l S
+0.100 0.480 0.320 rg 205 658.0 m 201.5 651.9 l 198.1 656.9 l h f
+0.100 0.480 0.320 RG 1.1 w 151 535.0 m 205 651.0 l S
+0.100 0.480 0.320 rg 205 651.0 m 205.1 644.0 l 199.6 646.6 l h f
+0.100 0.350 0.600 RG 1.1 w 151 664.0 m 205 535.0 l S
+0.100 0.350 0.600 rg 205 535.0 m 199.8 539.6 l 205.4 542.0 l h f
+0.100 0.350 0.600 RG 1.1 w 151 578.0 m 205 528.0 l S
+0.100 0.350 0.600 rg 205 528.0 m 198.3 530.0 l 202.4 534.5 l h f
+0.100 0.350 0.600 RG 1.1 w 151 492.0 m 205 521.0 l S
+0.100 0.350 0.600 rg 205 521.0 m 200.9 515.3 l 198.0 520.7 l h f
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 318 572.0 64 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 325.0 600.0 Td (Main) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 325.0 586.0 Td (44000 m3/h) Tj ET
+0.100 0.480 0.320 RG 1.4 w 275 656.0 m 318 604.0 l S
+0.100 0.480 0.320 rg 318 604.0 m 311.6 606.9 l 316.3 610.8 l h f
+0.100 0.350 0.600 RG 1.4 w 275 526.0 m 318 586.0 l S
+0.100 0.350 0.600 rg 318 586.0 m 316.8 579.1 l 311.9 582.7 l h f
+0.990 0.970 0.910 rg 0.900 0.550 0.100 RG 1 w 414 572.0 74 44 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 421.0 600.0 Td (Collector) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 421.0 586.0 Td (1200 Pa) Tj ET
+0.100 0.350 0.600 RG 1.4 w 382 594.0 m 414 594.0 l S
+0.100 0.350 0.600 rg 414 594.0 m 407.7 591.0 l 407.7 597.0 l h f
+0.940 0.980 0.950 rg 0.100 0.480 0.320 RG 1 w 510 623.0 54 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 517.0 645.0 Td (Fan) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 517.0 631.0 Td (5200 Pa) Tj ET
+0.940 0.960 0.980 rg 0.100 0.350 0.600 RG 1 w 510 506.0 54 38 re B
+BT /F2 8 Tf 0.055 0.130 0.230 rg 517.0 528.0 Td (Stack) Tj ET
+BT /F1 6.5 Tf 0.360 0.410 0.470 rg 517.0 514.0 Td (850 mm) Tj ET
+0.100 0.350 0.600 RG 1.4 w 488 594.0 m 510 642.0 l S
+0.100 0.350 0.600 rg 510 642.0 m 510.1 635.0 l 504.6 637.5 l h f
+0.100 0.350 0.600 RG 1.4 w 537 623.0 m 537 544.0 l S
+0.100 0.350 0.600 rg 537 544.0 m 534.0 550.3 l 540.0 550.3 l h f
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 452.0 Td (Assumed geometry and calculated section performance) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 438.0 m 88 438.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 406.0 455 23 re B
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 52.0 414.0 Td (ID) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 86.0 414.0 Td (Qh) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 137.0 414.0 Td (D) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 172.0 414.0 Td (L) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 206.0 414.0 Td (V) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 246.0 414.0 Td (Re/1e3) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 290.0 414.0 Td (f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 332.0 414.0 Td (K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 366.0 414.0 Td (dp_f) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 412.0 414.0 Td (dp_K) Tj ET
+BT /F2 6.05 Tf 1.000 1.000 1.000 rg 458.0 414.0 Td (dp) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 388.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 393.0 Td (C1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 406.0 m 82 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 393.0 Td (6000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 406.0 m 133 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 393.0 Td (300) Tj ET
+0.750 0.800 0.850 RG .35 w 168 406.0 m 168 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 393.0 Td (38.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 406.0 m 202 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 393.0 Td (23.58) Tj ET
+0.750 0.800 0.850 RG .35 w 242 406.0 m 242 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 393.0 Td (469) Tj ET
+0.750 0.800 0.850 RG .35 w 286 406.0 m 286 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 393.0 Td (0.0177) Tj ET
+0.750 0.800 0.850 RG .35 w 328 406.0 m 328 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 393.0 Td (3.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 406.0 m 362 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 393.0 Td (748.7) Tj ET
+0.750 0.800 0.850 RG .35 w 408 406.0 m 408 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 393.0 Td (1084.1) Tj ET
+0.750 0.800 0.850 RG .35 w 454 406.0 m 454 388.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 393.0 Td (1832.8) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 370.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 375.0 Td (C2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 388.0 m 82 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 375.0 Td (6000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 388.0 m 133 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 375.0 Td (300) Tj ET
+0.750 0.800 0.850 RG .35 w 168 388.0 m 168 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 375.0 Td (44.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 388.0 m 202 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 375.0 Td (23.58) Tj ET
+0.750 0.800 0.850 RG .35 w 242 388.0 m 242 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 375.0 Td (469) Tj ET
+0.750 0.800 0.850 RG .35 w 286 388.0 m 286 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 375.0 Td (0.0177) Tj ET
+0.750 0.800 0.850 RG .35 w 328 388.0 m 328 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 375.0 Td (3.50) Tj ET
+0.750 0.800 0.850 RG .35 w 362 388.0 m 362 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 375.0 Td (866.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 388.0 m 408 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 375.0 Td (1167.5) Tj ET
+0.750 0.800 0.850 RG .35 w 454 388.0 m 454 370.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 375.0 Td (2034.4) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 352.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 357.0 Td (C3) Tj ET
+0.750 0.800 0.850 RG .35 w 82 370.0 m 82 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 357.0 Td (12000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 370.0 m 133 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 357.0 Td (450) Tj ET
+0.750 0.800 0.850 RG .35 w 168 370.0 m 168 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 357.0 Td (22.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 370.0 m 202 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 357.0 Td (20.96) Tj ET
+0.750 0.800 0.850 RG .35 w 242 370.0 m 242 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 357.0 Td (625) Tj ET
+0.750 0.800 0.850 RG .35 w 286 370.0 m 286 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 357.0 Td (0.0163) Tj ET
+0.750 0.800 0.850 RG .35 w 328 370.0 m 328 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 357.0 Td (3.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 370.0 m 362 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 357.0 Td (210.1) Tj ET
+0.750 0.800 0.850 RG .35 w 408 370.0 m 408 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 357.0 Td (856.6) Tj ET
+0.750 0.800 0.850 RG .35 w 454 370.0 m 454 352.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 357.0 Td (1066.7) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 334.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 339.0 Td (C4) Tj ET
+0.750 0.800 0.850 RG .35 w 82 352.0 m 82 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 339.0 Td (12000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 352.0 m 133 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 339.0 Td (450) Tj ET
+0.750 0.800 0.850 RG .35 w 168 352.0 m 168 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 339.0 Td (28.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 352.0 m 202 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 339.0 Td (20.96) Tj ET
+0.750 0.800 0.850 RG .35 w 242 352.0 m 242 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 339.0 Td (625) Tj ET
+0.750 0.800 0.850 RG .35 w 286 352.0 m 286 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 339.0 Td (0.0163) Tj ET
+0.750 0.800 0.850 RG .35 w 328 352.0 m 328 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 339.0 Td (3.50) Tj ET
+0.750 0.800 0.850 RG .35 w 362 352.0 m 362 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 339.0 Td (267.4) Tj ET
+0.750 0.800 0.850 RG .35 w 408 352.0 m 408 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 339.0 Td (922.5) Tj ET
+0.750 0.800 0.850 RG .35 w 454 352.0 m 454 334.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 339.0 Td (1189.9) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 316.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 321.0 Td (C5) Tj ET
+0.750 0.800 0.850 RG .35 w 82 334.0 m 82 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 321.0 Td (4000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 334.0 m 133 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 321.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 334.0 m 168 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 321.0 Td (18.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 334.0 m 202 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 321.0 Td (22.64) Tj ET
+0.750 0.800 0.850 RG .35 w 242 334.0 m 242 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 321.0 Td (375) Tj ET
+0.750 0.800 0.850 RG .35 w 286 334.0 m 286 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 321.0 Td (0.0185) Tj ET
+0.750 0.800 0.850 RG .35 w 328 334.0 m 328 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 321.0 Td (3.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 334.0 m 362 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 321.0 Td (409.7) Tj ET
+0.750 0.800 0.850 RG .35 w 408 334.0 m 408 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 321.0 Td (922.2) Tj ET
+0.750 0.800 0.850 RG .35 w 454 334.0 m 454 316.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 321.0 Td (1332.0) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 298.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 303.0 Td (C6) Tj ET
+0.750 0.800 0.850 RG .35 w 82 316.0 m 82 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 303.0 Td (4000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 316.0 m 133 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 303.0 Td (250) Tj ET
+0.750 0.800 0.850 RG .35 w 168 316.0 m 168 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 303.0 Td (24.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 316.0 m 202 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 303.0 Td (22.64) Tj ET
+0.750 0.800 0.850 RG .35 w 242 316.0 m 242 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 303.0 Td (375) Tj ET
+0.750 0.800 0.850 RG .35 w 286 316.0 m 286 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 303.0 Td (0.0185) Tj ET
+0.750 0.800 0.850 RG .35 w 328 316.0 m 328 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 303.0 Td (3.25) Tj ET
+0.750 0.800 0.850 RG .35 w 362 316.0 m 362 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 303.0 Td (546.3) Tj ET
+0.750 0.800 0.850 RG .35 w 408 316.0 m 408 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 303.0 Td (999.1) Tj ET
+0.750 0.800 0.850 RG .35 w 454 316.0 m 454 298.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 303.0 Td (1545.4) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 280.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 285.0 Td (CS1) Tj ET
+0.750 0.800 0.850 RG .35 w 82 298.0 m 82 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 285.0 Td (22000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 298.0 m 133 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 285.0 Td (625) Tj ET
+0.750 0.800 0.850 RG .35 w 168 298.0 m 168 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 285.0 Td (20.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 298.0 m 202 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 285.0 Td (19.92) Tj ET
+0.750 0.800 0.850 RG .35 w 242 298.0 m 242 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 285.0 Td (825) Tj ET
+0.750 0.800 0.850 RG .35 w 286 298.0 m 286 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 285.0 Td (0.0153) Tj ET
+0.750 0.800 0.850 RG .35 w 328 298.0 m 328 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 285.0 Td (1.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 298.0 m 362 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 285.0 Td (116.2) Tj ET
+0.750 0.800 0.850 RG .35 w 408 298.0 m 408 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 285.0 Td (238.1) Tj ET
+0.750 0.800 0.850 RG .35 w 454 298.0 m 454 280.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 285.0 Td (354.3) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 262.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 267.0 Td (CS2) Tj ET
+0.750 0.800 0.850 RG .35 w 82 280.0 m 82 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 267.0 Td (22000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 280.0 m 133 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 267.0 Td (625) Tj ET
+0.750 0.800 0.850 RG .35 w 168 280.0 m 168 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 267.0 Td (16.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 280.0 m 202 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 267.0 Td (19.92) Tj ET
+0.750 0.800 0.850 RG .35 w 242 280.0 m 242 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 267.0 Td (825) Tj ET
+0.750 0.800 0.850 RG .35 w 286 280.0 m 286 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 267.0 Td (0.0153) Tj ET
+0.750 0.800 0.850 RG .35 w 328 280.0 m 328 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 267.0 Td (1.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 280.0 m 362 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 267.0 Td (93.0) Tj ET
+0.750 0.800 0.850 RG .35 w 408 280.0 m 408 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 267.0 Td (238.1) Tj ET
+0.750 0.800 0.850 RG .35 w 454 280.0 m 454 262.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 267.0 Td (331.0) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 244.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 249.0 Td (CM) Tj ET
+0.750 0.800 0.850 RG .35 w 82 262.0 m 82 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 249.0 Td (44000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 262.0 m 133 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 249.0 Td (850) Tj ET
+0.750 0.800 0.850 RG .35 w 168 262.0 m 168 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 249.0 Td (40.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 262.0 m 202 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 249.0 Td (21.54) Tj ET
+0.750 0.800 0.850 RG .35 w 242 262.0 m 242 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 249.0 Td (1214) Tj ET
+0.750 0.800 0.850 RG .35 w 286 262.0 m 286 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 249.0 Td (0.0143) Tj ET
+0.750 0.800 0.850 RG .35 w 328 262.0 m 328 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 249.0 Td (0.65) Tj ET
+0.750 0.800 0.850 RG .35 w 362 262.0 m 362 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 249.0 Td (186.8) Tj ET
+0.750 0.800 0.850 RG .35 w 408 262.0 m 408 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 249.0 Td (180.9) Tj ET
+0.750 0.800 0.850 RG .35 w 454 262.0 m 454 244.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 249.0 Td (367.7) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 226.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 231.0 Td (CCL) Tj ET
+0.750 0.800 0.850 RG .35 w 82 244.0 m 82 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 231.0 Td (44000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 244.0 m 133 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 231.0 Td (900) Tj ET
+0.750 0.800 0.850 RG .35 w 168 244.0 m 168 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 231.0 Td (8.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 244.0 m 202 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 231.0 Td (19.21) Tj ET
+0.750 0.800 0.850 RG .35 w 242 244.0 m 242 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 231.0 Td (1146) Tj ET
+0.750 0.800 0.850 RG .35 w 286 244.0 m 286 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 231.0 Td (0.0142) Tj ET
+0.750 0.800 0.850 RG .35 w 328 244.0 m 328 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 231.0 Td (0.40) Tj ET
+0.750 0.800 0.850 RG .35 w 362 244.0 m 362 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 231.0 Td (27.9) Tj ET
+0.750 0.800 0.850 RG .35 w 408 244.0 m 408 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 231.0 Td (88.6) Tj ET
+0.750 0.800 0.850 RG .35 w 454 244.0 m 454 226.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 231.0 Td (116.5) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 208.0 455 18 re B
+BT /F2 6.05 Tf 0.055 0.130 0.230 rg 52.0 213.0 Td (CE) Tj ET
+0.750 0.800 0.850 RG .35 w 82 226.0 m 82 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 86.0 213.0 Td (44000) Tj ET
+0.750 0.800 0.850 RG .35 w 133 226.0 m 133 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 137.0 213.0 Td (850) Tj ET
+0.750 0.800 0.850 RG .35 w 168 226.0 m 168 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 172.0 213.0 Td (18.0) Tj ET
+0.750 0.800 0.850 RG .35 w 202 226.0 m 202 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 206.0 213.0 Td (21.54) Tj ET
+0.750 0.800 0.850 RG .35 w 242 226.0 m 242 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 246.0 213.0 Td (1214) Tj ET
+0.750 0.800 0.850 RG .35 w 286 226.0 m 286 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 290.0 213.0 Td (0.0143) Tj ET
+0.750 0.800 0.850 RG .35 w 328 226.0 m 328 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 332.0 213.0 Td (2.00) Tj ET
+0.750 0.800 0.850 RG .35 w 362 226.0 m 362 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 366.0 213.0 Td (84.1) Tj ET
+0.750 0.800 0.850 RG .35 w 408 226.0 m 408 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 412.0 213.0 Td (556.7) Tj ET
+0.750 0.800 0.850 RG .35 w 454 226.0 m 454 208.0 l S
+BT /F1 6.05 Tf 0.100 0.130 0.170 rg 458.0 213.0 Td (640.8) Tj ET
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 199.0 Td (Units: Qh in m3/h; D in mm; L in m; V in m/s; pressure losses in Pa.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 132.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 167.0 Td (Sizing check) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 151.0 Td (Dusty sections range from NaN to NaN m/s. The minimum exceeds the adopted 18 m/s) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 140.0 Td (transport criterion.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (10 / 16) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 28 0 R >>
+endobj
+28 0 obj
+<< /Length 7333 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (PRESSURE-DROP RESULTS) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (System C: route totals and fan duty) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Complete source-to-stack routes) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 458 23 re B
+BT /F2 7 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (Source) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 104.0 686.0 Td (Route) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 262.0 686.0 Td (Route total) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 350.0 686.0 Td (Balance dp) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 438.0 686.0 Td (Added K) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 655.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (C1) Tj ET
+0.750 0.800 0.850 RG .35 w 100 678.0 m 100 655.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 665.0 Td (C1-CS1-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 678.0 m 258 655.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 665.0 Td (4512.1) Tj ET
+0.750 0.800 0.850 RG .35 w 346 678.0 m 346 655.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 665.0 Td (178.4) Tj ET
+0.750 0.800 0.850 RG .35 w 434 678.0 m 434 655.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 665.0 Td (0.53) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 632.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 642.0 Td (C2) Tj ET
+0.750 0.800 0.850 RG .35 w 100 655.0 m 100 632.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 642.0 Td (C2-CS2-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 655.0 m 258 632.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 642.0 Td (4690.4) Tj ET
+0.750 0.800 0.850 RG .35 w 346 655.0 m 346 632.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 642.0 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 434 655.0 m 434 632.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 642.0 Td (0.00) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 609.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 619.0 Td (C3) Tj ET
+0.750 0.800 0.850 RG .35 w 100 632.0 m 100 609.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 619.0 Td (C3-CS1-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 632.0 m 258 609.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 619.0 Td (3746.0) Tj ET
+0.750 0.800 0.850 RG .35 w 346 632.0 m 346 609.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 619.0 Td (944.5) Tj ET
+0.750 0.800 0.850 RG .35 w 434 632.0 m 434 609.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 619.0 Td (3.58) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 586.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 596.0 Td (C4) Tj ET
+0.750 0.800 0.850 RG .35 w 100 609.0 m 100 586.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 596.0 Td (C4-CS2-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 609.0 m 258 586.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 596.0 Td (3845.9) Tj ET
+0.750 0.800 0.850 RG .35 w 346 609.0 m 346 586.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 596.0 Td (844.5) Tj ET
+0.750 0.800 0.850 RG .35 w 434 609.0 m 434 586.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 596.0 Td (3.20) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 563.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 573.0 Td (C5) Tj ET
+0.750 0.800 0.850 RG .35 w 100 586.0 m 100 563.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 573.0 Td (C5-CS1-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 586.0 m 258 563.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 573.0 Td (4011.2) Tj ET
+0.750 0.800 0.850 RG .35 w 346 586.0 m 346 563.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 573.0 Td (679.2) Tj ET
+0.750 0.800 0.850 RG .35 w 434 586.0 m 434 563.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 573.0 Td (2.21) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 540.0 458 23 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 550.0 Td (C6) Tj ET
+0.750 0.800 0.850 RG .35 w 100 563.0 m 100 540.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 104.0 550.0 Td (C6-CS2-CM-FILTER-CCL-CE) Tj ET
+0.750 0.800 0.850 RG .35 w 258 563.0 m 258 540.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 262.0 550.0 Td (4201.4) Tj ET
+0.750 0.800 0.850 RG .35 w 346 563.0 m 346 540.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 350.0 550.0 Td (489.0) Tj ET
+0.750 0.800 0.850 RG .35 w 434 563.0 m 434 540.0 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 438.0 550.0 Td (1.59) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 478.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 513.0 Td (Critical route) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 497.0 Td (C2 -> CS2 -> CM -> FILTER -> CCL -> CE gives 4690.4 Pa. Other branches require the) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 486.0 Td (balancing losses listed above so all prescribed flows can coexist.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 468.0 Td (Fan selection) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 454.0 m 88 454.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 422.0 499 23 re B
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 52.0 430.0 Td (Quantity) Tj ET
+BT /F2 7.8 Tf 1.000 1.000 1.000 rg 272.0 430.0 Td (Calculated / selected value) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 394.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 409.0 Td (System volume flow) Tj ET
+0.750 0.800 0.850 RG .35 w 268 422.0 m 268 394.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 409.0 Td (12.222 m3/s \(44000 m3/h\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 366.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 381.0 Td (Required fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 394.0 m 268 366.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 381.0 Td (4690.4 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 338.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 353.0 Td (Selected fan total pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 366.0 m 268 338.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 353.0 Td (5200 Pa \(10% allowance, rounded upward\)) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 310.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 325.0 Td (Estimated fan static pressure) Tj ET
+0.750 0.800 0.850 RG .35 w 268 338.0 m 268 310.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 325.0 Td (4921.6 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 282.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 297.0 Td (Fan shaft power) Tj ET
+0.750 0.800 0.850 RG .35 w 268 310.0 m 268 282.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 297.0 Td (97.78 kW at 65% total efficiency) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 254.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 269.0 Td (Electrical input) Tj ET
+0.750 0.800 0.850 RG .35 w 268 282.0 m 268 254.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 269.0 Td (108.64 kW at 90% motor efficiency) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 226.0 499 28 re B
+BT /F2 7.8 Tf 0.055 0.130 0.230 rg 52.0 241.0 Td (Recommended motor rating) Tj ET
+0.750 0.800 0.850 RG .35 w 268 254.0 m 268 226.0 l S
+BT /F1 7.8 Tf 0.100 0.130 0.170 rg 272.0 241.0 Td (110.0 kW) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (11 / 16) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 30 0 R >>
+endobj
+30 0 obj
+<< /Length 4108 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Fully worked example: System A branch A3) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 724.0 Td (Branch A3 is shown in full so the result can be reproduced. Values are retained during calculation and) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 711.5 Td (rounded only for presentation.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 694.0 Td (1. Flow, area and velocity) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 680.0 m 88 680.0 l S
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 671.0 Td (Q = 2500/3600 = 0.694444 m3/s) Tj ET
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 653.5 Td (A = pi\(0.200\)^2/4 = 0.03141593 m2) Tj ET
+BT /F4 9.2 Tf 0.100 0.130 0.170 rg 48.0 636.0 Td (V = Q/A = 22.105 m/s) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 618.5 Td (2. Reynolds number and velocity pressure) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 604.5 m 88 604.5 l S
+BT /F4 9 Tf 0.100 0.130 0.170 rg 48.0 595.5 Td (Re = \(1.20\)\(22.104853\)\(0.200\)/\(1.81 x 10^-5\) = 293103) Tj ET
+BT /F4 9 Tf 0.100 0.130 0.170 rg 48.0 578.0 Td (p_v = \(1.20\)\(22.104853\)^2/2 = 293.175 Pa) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 560.5 Td (3. Friction and fitting loss) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 546.5 m 88 546.5 l S
+BT /F4 8.8 Tf 0.100 0.130 0.170 rg 48.0 537.5 Td (epsilon/D = 0.00015/0.200 = 0.000750; Colebrook gives f = 0.01952358.) Tj ET
+BT /F4 8.8 Tf 0.100 0.130 0.170 rg 48.0 520.0 Td (Delta p_f = 0.01952358\(10/0.200\)\(293.175\) = 286.19 Pa) Tj ET
+BT /F4 8.8 Tf 0.100 0.130 0.170 rg 48.0 502.5 Td (K = 0.50 hood + 0.50 junction + 3\(0.25 bends\) = 1.75) Tj ET
+BT /F4 8.8 Tf 0.100 0.130 0.170 rg 48.0 485.0 Td (Delta p_K = 1.75\(293.175\) = 513.06 Pa) Tj ET
+BT /F4 9 Tf 0.100 0.130 0.170 rg 48.0 467.5 Td (Delta p_A3 = 286.19 + 513.06 = 799.25 Pa) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 450.0 Td (4. Complete critical path) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 436.0 m 88 436.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 404.0 390 23 re B
+BT /F2 8.2 Tf 1.000 1.000 1.000 rg 52.0 412.0 Td (Component) Tj ET
+BT /F2 8.2 Tf 1.000 1.000 1.000 rg 282.0 412.0 Td (Pressure loss) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 379.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 391.0 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 278 404.0 m 278 379.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 391.0 Td (799.25 Pa) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 354.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 366.0 Td (AS2) Tj ET
+0.750 0.800 0.850 RG .35 w 278 379.0 m 278 354.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 366.0 Td (256.66 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 329.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 341.0 Td (AM) Tj ET
+0.750 0.800 0.850 RG .35 w 278 354.0 m 278 329.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 341.0 Td (312.83 Pa) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 304.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 316.0 Td (FILTER) Tj ET
+0.750 0.800 0.850 RG .35 w 278 329.0 m 278 304.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 316.0 Td (1200.00 Pa) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 279.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 291.0 Td (ACL) Tj ET
+0.750 0.800 0.850 RG .35 w 278 304.0 m 278 279.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 291.0 Td (100.03 Pa) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 254.0 390 25 re B
+BT /F2 8.2 Tf 0.055 0.130 0.230 rg 52.0 266.0 Td (AE) Tj ET
+0.750 0.800 0.850 RG .35 w 278 279.0 m 278 254.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 282.0 266.0 Td (733.07 Pa) Tj ET
+BT /F4 8.6 Tf 0.100 0.130 0.170 rg 48.0 245.0 Td (Total = 799.25 + 256.66 + 312.83 + 1200.00 + 100.03 + 733.07 = 3401.83 Pa.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (12 / 16) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 32 0 R >>
+endobj
+32 0 obj
+<< /Length 8129 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Critical-path loss breakdown) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (System A) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 370 23 re B
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (Component) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 222.0 686.0 Td (Loss \(Pa\)) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 332.0 686.0 Td (Share) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 658.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 218 678.0 m 218 658.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 665.0 Td (799.2) Tj ET
+0.750 0.800 0.850 RG .35 w 328 678.0 m 328 658.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 665.0 Td (23.5%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 638.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 645.0 Td (AS2) Tj ET
+0.750 0.800 0.850 RG .35 w 218 658.0 m 218 638.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 645.0 Td (256.7) Tj ET
+0.750 0.800 0.850 RG .35 w 328 658.0 m 328 638.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 645.0 Td (7.5%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 618.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 625.0 Td (AM) Tj ET
+0.750 0.800 0.850 RG .35 w 218 638.0 m 218 618.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 625.0 Td (312.8) Tj ET
+0.750 0.800 0.850 RG .35 w 328 638.0 m 328 618.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 625.0 Td (9.2%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 598.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 605.0 Td (FILTER) Tj ET
+0.750 0.800 0.850 RG .35 w 218 618.0 m 218 598.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 605.0 Td (1200.0) Tj ET
+0.750 0.800 0.850 RG .35 w 328 618.0 m 328 598.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 605.0 Td (35.3%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 578.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 585.0 Td (ACL) Tj ET
+0.750 0.800 0.850 RG .35 w 218 598.0 m 218 578.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 585.0 Td (100.0) Tj ET
+0.750 0.800 0.850 RG .35 w 328 598.0 m 328 578.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 585.0 Td (2.9%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 558.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 565.0 Td (AE) Tj ET
+0.750 0.800 0.850 RG .35 w 218 578.0 m 218 558.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 565.0 Td (733.1) Tj ET
+0.750 0.800 0.850 RG .35 w 328 578.0 m 328 558.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 565.0 Td (21.5%) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 549.0 Td (System B) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 535.0 m 88 535.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 503.0 370 23 re B
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 52.0 511.0 Td (Component) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 222.0 511.0 Td (Loss \(Pa\)) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 332.0 511.0 Td (Share) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 483.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 490.0 Td (B1) Tj ET
+0.750 0.800 0.850 RG .35 w 218 503.0 m 218 483.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 490.0 Td (794.1) Tj ET
+0.750 0.800 0.850 RG .35 w 328 503.0 m 328 483.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 490.0 Td (23.5%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 463.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 470.0 Td (BS1) Tj ET
+0.750 0.800 0.850 RG .35 w 218 483.0 m 218 463.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 470.0 Td (391.9) Tj ET
+0.750 0.800 0.850 RG .35 w 328 483.0 m 328 463.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 470.0 Td (11.6%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 443.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 450.0 Td (BM) Tj ET
+0.750 0.800 0.850 RG .35 w 218 463.0 m 218 443.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 450.0 Td (244.5) Tj ET
+0.750 0.800 0.850 RG .35 w 328 463.0 m 328 443.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 450.0 Td (7.2%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 423.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 430.0 Td (FILTER) Tj ET
+0.750 0.800 0.850 RG .35 w 218 443.0 m 218 423.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 430.0 Td (1200.0) Tj ET
+0.750 0.800 0.850 RG .35 w 328 443.0 m 328 423.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 430.0 Td (35.5%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 403.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 410.0 Td (BCL) Tj ET
+0.750 0.800 0.850 RG .35 w 218 423.0 m 218 403.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 410.0 Td (92.9) Tj ET
+0.750 0.800 0.850 RG .35 w 328 423.0 m 328 403.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 410.0 Td (2.7%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 383.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 390.0 Td (BE) Tj ET
+0.750 0.800 0.850 RG .35 w 218 403.0 m 218 383.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 390.0 Td (656.6) Tj ET
+0.750 0.800 0.850 RG .35 w 328 403.0 m 328 383.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 390.0 Td (19.4%) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 374.0 Td (System C) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 360.0 m 88 360.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 328.0 370 23 re B
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 52.0 336.0 Td (Component) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 222.0 336.0 Td (Loss \(Pa\)) Tj ET
+BT /F2 7.6 Tf 1.000 1.000 1.000 rg 332.0 336.0 Td (Share) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 308.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 315.0 Td (C2) Tj ET
+0.750 0.800 0.850 RG .35 w 218 328.0 m 218 308.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 315.0 Td (2034.4) Tj ET
+0.750 0.800 0.850 RG .35 w 328 328.0 m 328 308.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 315.0 Td (43.4%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 288.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 295.0 Td (CS2) Tj ET
+0.750 0.800 0.850 RG .35 w 218 308.0 m 218 288.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 295.0 Td (331.0) Tj ET
+0.750 0.800 0.850 RG .35 w 328 308.0 m 328 288.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 295.0 Td (7.1%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 268.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 275.0 Td (CM) Tj ET
+0.750 0.800 0.850 RG .35 w 218 288.0 m 218 268.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 275.0 Td (367.7) Tj ET
+0.750 0.800 0.850 RG .35 w 328 288.0 m 328 268.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 275.0 Td (7.8%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 248.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 255.0 Td (FILTER) Tj ET
+0.750 0.800 0.850 RG .35 w 218 268.0 m 218 248.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 255.0 Td (1200.0) Tj ET
+0.750 0.800 0.850 RG .35 w 328 268.0 m 328 248.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 255.0 Td (25.6%) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 228.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 235.0 Td (CCL) Tj ET
+0.750 0.800 0.850 RG .35 w 218 248.0 m 218 228.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 235.0 Td (116.5) Tj ET
+0.750 0.800 0.850 RG .35 w 328 248.0 m 328 228.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 235.0 Td (2.5%) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 208.0 370 20 re B
+BT /F2 7.6 Tf 0.055 0.130 0.230 rg 52.0 215.0 Td (CE) Tj ET
+0.750 0.800 0.850 RG .35 w 218 228.0 m 218 208.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 222.0 215.0 Td (640.8) Tj ET
+0.750 0.800 0.850 RG .35 w 328 228.0 m 328 208.0 l S
+BT /F1 7.6 Tf 0.100 0.130 0.170 rg 332.0 215.0 Td (13.7%) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (13 / 16) Tj ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 34 0 R >>
+endobj
+34 0 obj
+<< /Length 7604 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Filter-loading sensitivity and design checks) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Sensitivity to collector differential pressure) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 678.0 499 23 re B
+BT /F2 7.7 Tf 1.000 1.000 1.000 rg 52.0 686.0 Td (System) Tj ET
+BT /F2 7.7 Tf 1.000 1.000 1.000 rg 122.0 686.0 Td (Collector dp \(Pa\)) Tj ET
+BT /F2 7.7 Tf 1.000 1.000 1.000 rg 252.0 686.0 Td (Required FTP \(Pa\)) Tj ET
+BT /F2 7.7 Tf 1.000 1.000 1.000 rg 392.0 686.0 Td (Rounded FTP with 10% \(Pa\)) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 653.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 665.0 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 118 678.0 m 118 653.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 665.0 Td (800) Tj ET
+0.750 0.800 0.850 RG .35 w 248 678.0 m 248 653.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 665.0 Td (3002) Tj ET
+0.750 0.800 0.850 RG .35 w 388 678.0 m 388 653.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 665.0 Td (3350) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 628.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 640.0 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 118 653.0 m 118 628.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 640.0 Td (1200) Tj ET
+0.750 0.800 0.850 RG .35 w 248 653.0 m 248 628.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 640.0 Td (3402) Tj ET
+0.750 0.800 0.850 RG .35 w 388 653.0 m 388 628.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 640.0 Td (3750) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 603.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 615.0 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 118 628.0 m 118 603.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 615.0 Td (1600) Tj ET
+0.750 0.800 0.850 RG .35 w 248 628.0 m 248 603.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 615.0 Td (3802) Tj ET
+0.750 0.800 0.850 RG .35 w 388 628.0 m 388 603.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 615.0 Td (4200) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 578.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 590.0 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 118 603.0 m 118 578.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 590.0 Td (800) Tj ET
+0.750 0.800 0.850 RG .35 w 248 603.0 m 248 578.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 590.0 Td (2980) Tj ET
+0.750 0.800 0.850 RG .35 w 388 603.0 m 388 578.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 590.0 Td (3300) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 553.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 565.0 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 118 578.0 m 118 553.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 565.0 Td (1200) Tj ET
+0.750 0.800 0.850 RG .35 w 248 578.0 m 248 553.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 565.0 Td (3380) Tj ET
+0.750 0.800 0.850 RG .35 w 388 578.0 m 388 553.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 565.0 Td (3750) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 528.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 540.0 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 118 553.0 m 118 528.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 540.0 Td (1600) Tj ET
+0.750 0.800 0.850 RG .35 w 248 553.0 m 248 528.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 540.0 Td (3780) Tj ET
+0.750 0.800 0.850 RG .35 w 388 553.0 m 388 528.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 540.0 Td (4200) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 503.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 515.0 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 118 528.0 m 118 503.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 515.0 Td (800) Tj ET
+0.750 0.800 0.850 RG .35 w 248 528.0 m 248 503.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 515.0 Td (4290) Tj ET
+0.750 0.800 0.850 RG .35 w 388 528.0 m 388 503.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 515.0 Td (4750) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 478.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 490.0 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 118 503.0 m 118 478.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 490.0 Td (1200) Tj ET
+0.750 0.800 0.850 RG .35 w 248 503.0 m 248 478.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 490.0 Td (4690) Tj ET
+0.750 0.800 0.850 RG .35 w 388 503.0 m 388 478.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 490.0 Td (5200) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 453.0 499 25 re B
+BT /F2 7.7 Tf 0.055 0.130 0.230 rg 52.0 465.0 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 118 478.0 m 118 453.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 122.0 465.0 Td (1600) Tj ET
+0.750 0.800 0.850 RG .35 w 248 478.0 m 248 453.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 252.0 465.0 Td (5090) Tj ET
+0.750 0.800 0.850 RG .35 w 388 478.0 m 388 453.0 l S
+BT /F1 7.7 Tf 0.100 0.130 0.170 rg 392.0 465.0 Td (5600) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 444.0 Td (The base selection uses 1200 Pa. A dirtier collector raises the system resistance nearly one-for-one. Fan) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 431.5 Td (control and cleaning strategy must therefore be checked against the expected operating differential-pressure) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 419.0 Td (band.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 401.5 Td (Engineering checks) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 387.5 m 88 387.5 l S
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 362.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 367.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 378.5 Td (All dusty sections meet the adopted minimum transport velocity of 18 m/s.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 348.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 353.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 364.5 Td (All calculated flows are conserved at the combining junctions.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 334.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 339.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 350.5 Td (The critical path is the largest prescribed-flow route in each system.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 320.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 325.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 336.5 Td (Balancing K values are based on each branch velocity pressure, matching the stated reference boundary.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 306.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 311.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 322.5 Td (A positive pressure allowance exists above the base calculated resistance.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 292.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 297.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 308.5 Td (Fan static pressure is reported separately from fan total pressure.) Tj ET
+0.100 0.480 0.320 rg 0.100 0.480 0.320 RG 0.8 w 48 278.5 16 16 re B
+BT /F2 5.8 Tf 1.000 1.000 1.000 rg 50.5 283.5 Td (OK) Tj ET
+BT /F1 8.5 Tf 0.100 0.130 0.170 rg 73.0 294.5 Td (Motor selection is based on shaft power and rounded to a practical nominal rating.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (14 / 16) Tj ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 36 0 R >>
+endobj
+36 0 obj
+<< /Length 11587 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Branch balancing schedule) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 724.0 Td (The damper duty is the additional pressure needed to make each non-critical route equal to the critical) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 711.5 Td (route at the stated flow. The K values are preliminary targets for balancing-device selection and) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 699.0 Td (commissioning.) Tj ET
+0.055 0.130 0.230 rg 0.055 0.130 0.230 RG 0 w 48 658.5 475 23 re B
+BT /F2 7 Tf 1.000 1.000 1.000 rg 52.0 666.5 Td (System) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 107.0 666.5 Td (Branch) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 162.0 666.5 Td (Flow m3/h) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 242.0 666.5 Td (Unbalanced Pa) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 347.0 666.5 Td (Add Pa) Tj ET
+BT /F2 7 Tf 1.000 1.000 1.000 rg 437.0 666.5 Td (Target K) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 636.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 645.5 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 103 658.5 m 103 636.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 645.5 Td (A1) Tj ET
+0.750 0.800 0.850 RG .35 w 158 658.5 m 158 636.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 645.5 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 238 658.5 m 238 636.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 645.5 Td (3354.2) Tj ET
+0.750 0.800 0.850 RG .35 w 343 658.5 m 343 636.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 645.5 Td (47.6) Tj ET
+0.750 0.800 0.850 RG .35 w 433 658.5 m 433 636.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 645.5 Td (0.16) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 614.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 623.5 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 103 636.5 m 103 614.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 623.5 Td (A2) Tj ET
+0.750 0.800 0.850 RG .35 w 158 636.5 m 158 614.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 623.5 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 238 636.5 m 238 614.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 623.5 Td (3223.7) Tj ET
+0.750 0.800 0.850 RG .35 w 343 636.5 m 343 614.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 623.5 Td (178.1) Tj ET
+0.750 0.800 0.850 RG .35 w 433 636.5 m 433 614.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 623.5 Td (0.61) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 592.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 601.5 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 103 614.5 m 103 592.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 601.5 Td (A3) Tj ET
+0.750 0.800 0.850 RG .35 w 158 614.5 m 158 592.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 601.5 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 238 614.5 m 238 592.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 601.5 Td (3401.8) Tj ET
+0.750 0.800 0.850 RG .35 w 343 614.5 m 343 592.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 601.5 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 433 614.5 m 433 592.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 601.5 Td (0.00) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 570.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 579.5 Td (A) Tj ET
+0.750 0.800 0.850 RG .35 w 103 592.5 m 103 570.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 579.5 Td (A4) Tj ET
+0.750 0.800 0.850 RG .35 w 158 592.5 m 158 570.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 579.5 Td (2500) Tj ET
+0.750 0.800 0.850 RG .35 w 238 592.5 m 238 570.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 579.5 Td (3112.2) Tj ET
+0.750 0.800 0.850 RG .35 w 343 592.5 m 343 570.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 579.5 Td (289.7) Tj ET
+0.750 0.800 0.850 RG .35 w 433 592.5 m 433 570.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 579.5 Td (0.99) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 548.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 557.5 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 103 570.5 m 103 548.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 557.5 Td (B1) Tj ET
+0.750 0.800 0.850 RG .35 w 158 570.5 m 158 548.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 557.5 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 238 570.5 m 238 548.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 557.5 Td (3379.9) Tj ET
+0.750 0.800 0.850 RG .35 w 343 570.5 m 343 548.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 557.5 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 433 570.5 m 433 548.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 557.5 Td (0.00) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 526.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 535.5 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 103 548.5 m 103 526.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 535.5 Td (B2) Tj ET
+0.750 0.800 0.850 RG .35 w 158 548.5 m 158 526.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 535.5 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 238 548.5 m 238 526.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 535.5 Td (3232.1) Tj ET
+0.750 0.800 0.850 RG .35 w 343 548.5 m 343 526.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 535.5 Td (147.9) Tj ET
+0.750 0.800 0.850 RG .35 w 433 548.5 m 433 526.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 535.5 Td (0.55) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 504.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 513.5 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 103 526.5 m 103 504.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 513.5 Td (B3) Tj ET
+0.750 0.800 0.850 RG .35 w 158 526.5 m 158 504.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 513.5 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 238 526.5 m 238 504.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 513.5 Td (3094.0) Tj ET
+0.750 0.800 0.850 RG .35 w 343 526.5 m 343 504.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 513.5 Td (286.0) Tj ET
+0.750 0.800 0.850 RG .35 w 433 526.5 m 433 504.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 513.5 Td (1.06) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 482.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 491.5 Td (B) Tj ET
+0.750 0.800 0.850 RG .35 w 103 504.5 m 103 482.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 491.5 Td (B4) Tj ET
+0.750 0.800 0.850 RG .35 w 158 504.5 m 158 482.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 491.5 Td (3750) Tj ET
+0.750 0.800 0.850 RG .35 w 238 504.5 m 238 482.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 491.5 Td (2986.3) Tj ET
+0.750 0.800 0.850 RG .35 w 343 504.5 m 343 482.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 491.5 Td (393.7) Tj ET
+0.750 0.800 0.850 RG .35 w 433 504.5 m 433 482.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 491.5 Td (1.46) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 460.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 469.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 482.5 m 103 460.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 469.5 Td (C1) Tj ET
+0.750 0.800 0.850 RG .35 w 158 482.5 m 158 460.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 469.5 Td (6000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 482.5 m 238 460.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 469.5 Td (4512.1) Tj ET
+0.750 0.800 0.850 RG .35 w 343 482.5 m 343 460.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 469.5 Td (178.4) Tj ET
+0.750 0.800 0.850 RG .35 w 433 482.5 m 433 460.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 469.5 Td (0.53) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 438.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 447.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 460.5 m 103 438.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 447.5 Td (C2) Tj ET
+0.750 0.800 0.850 RG .35 w 158 460.5 m 158 438.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 447.5 Td (6000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 460.5 m 238 438.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 447.5 Td (4690.4) Tj ET
+0.750 0.800 0.850 RG .35 w 343 460.5 m 343 438.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 447.5 Td (0.0) Tj ET
+0.750 0.800 0.850 RG .35 w 433 460.5 m 433 438.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 447.5 Td (0.00) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 416.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 425.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 438.5 m 103 416.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 425.5 Td (C3) Tj ET
+0.750 0.800 0.850 RG .35 w 158 438.5 m 158 416.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 425.5 Td (12000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 438.5 m 238 416.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 425.5 Td (3746.0) Tj ET
+0.750 0.800 0.850 RG .35 w 343 438.5 m 343 416.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 425.5 Td (944.5) Tj ET
+0.750 0.800 0.850 RG .35 w 433 438.5 m 433 416.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 425.5 Td (3.58) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 394.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 403.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 416.5 m 103 394.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 403.5 Td (C4) Tj ET
+0.750 0.800 0.850 RG .35 w 158 416.5 m 158 394.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 403.5 Td (12000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 416.5 m 238 394.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 403.5 Td (3845.9) Tj ET
+0.750 0.800 0.850 RG .35 w 343 416.5 m 343 394.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 403.5 Td (844.5) Tj ET
+0.750 0.800 0.850 RG .35 w 433 416.5 m 433 394.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 403.5 Td (3.20) Tj ET
+0.940 0.960 0.980 rg 0.750 0.800 0.850 RG 0.4 w 48 372.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 381.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 394.5 m 103 372.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 381.5 Td (C5) Tj ET
+0.750 0.800 0.850 RG .35 w 158 394.5 m 158 372.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 381.5 Td (4000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 394.5 m 238 372.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 381.5 Td (4011.2) Tj ET
+0.750 0.800 0.850 RG .35 w 343 394.5 m 343 372.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 381.5 Td (679.2) Tj ET
+0.750 0.800 0.850 RG .35 w 433 394.5 m 433 372.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 381.5 Td (2.21) Tj ET
+1.000 1.000 1.000 rg 0.750 0.800 0.850 RG 0.4 w 48 350.5 475 22 re B
+BT /F2 7 Tf 0.055 0.130 0.230 rg 52.0 359.5 Td (C) Tj ET
+0.750 0.800 0.850 RG .35 w 103 372.5 m 103 350.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 107.0 359.5 Td (C6) Tj ET
+0.750 0.800 0.850 RG .35 w 158 372.5 m 158 350.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 162.0 359.5 Td (4000) Tj ET
+0.750 0.800 0.850 RG .35 w 238 372.5 m 238 350.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 242.0 359.5 Td (4201.4) Tj ET
+0.750 0.800 0.850 RG .35 w 343 372.5 m 343 350.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 347.0 359.5 Td (489.0) Tj ET
+0.750 0.800 0.850 RG .35 w 433 372.5 m 433 350.5 l S
+BT /F1 7 Tf 0.100 0.130 0.170 rg 437.0 359.5 Td (1.59) Tj ET
+0.960 0.980 1.000 rg 0.100 0.480 0.320 RG 1.1 w 48 277.5 499 64 re B
+BT /F2 9 Tf 0.100 0.480 0.320 rg 60.0 323.5 Td (Commissioning note) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 307.5 Td (Set dampers by measured branch flow, not solely by blade angle. After the collector) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 296.5 Td (reaches its normal operating condition, traverse accessible straight runs, adjust the) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 285.5 Td (lowest-resistance branches, and repeat until the scheduled flows are obtained.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (15 / 16) Tj ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R >> >> /Contents 38 0 R >>
+endobj
+38 0 obj
+<< /Length 3816 >>
+stream
+0.055 0.130 0.230 rg 0 782 595 60 re f
+BT /F2 8 Tf 0.650 0.820 0.950 rg 48 820 Td (ASSIGNMENT 3) Tj ET
+BT /F2 19 Tf 1 1 1 rg 48 794 Td (Conclusion, limitations and references) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 724.0 Td (Conclusion) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 710.0 m 88 710.0 l S
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 701.0 Td (The three interpreted networks were sized and evaluated with the Darcy-Weisbach equation, iterated Colebrook) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 688.5 Td (friction factors, and explicit local-loss coefficients. At the assumed simultaneous flows, Systems A, B and) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 676.0 Td (C require 3402 Pa, 3380 Pa and 4690 Pa of fan total pressure, respectively. The recommended preliminary) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 663.5 Td (selections are 3750 Pa with an 18.5 kW motor for A, 3750 Pa with a 30 kW motor for B, and 5200 Pa with a 110) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 651.0 Td (kW motor for C.) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 633.5 Td (The pressure totals are internally consistent with the declared topology, lengths and coefficients. The) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 621.0 Td (largest remaining uncertainty is the unreadable information in the scans, especially physical lengths,) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 608.5 Td (fitting geometry, hood resistance and collector operating differential pressure. These inputs should be) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 596.0 Td (replaced by site measurements and vendor data before fabrication.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 578.5 Td (Final verification required) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 564.5 m 88 564.5 l S
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 555.5 Td (Confirm every route length, internal diameter, branch angle, elbow radius, hood type and equipment pressure) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 543.0 Td (loss. Obtain the collector clean/normal/dirty pressure band. Then rerun the same section schedule and select) Tj ET
+BT /F1 9.2 Tf 0.100 0.130 0.170 rg 48.0 530.5 Td (a fan whose stable operating point lies on the supplier curve at the actual air density.) Tj ET
+BT /F2 13 Tf 0.055 0.130 0.230 rg 48.0 513.0 Td (References) Tj ET
+0.130 0.550 0.660 RG 1.8 w 48 499.0 m 88 499.0 l S
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 490.0 Td (1. NIOSH. Handbook for Dust Control in Mining. DHHS \(NIOSH\) Publication.) Tj ET
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 477.0 Td (2. McGill AirFlow. Design Advisory 01: Airflow, friction and pressure fundamentals.) Tj ET
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 464.0 Td (3. McGill AirFlow. Design Advisory 02: System effect, critical path and balancing.) Tj ET
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 451.0 Td (4. ASHRAE Utah Chapter / SMACNA. Duct Design Fundamentals.) Tj ET
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 438.0 Td (5. Figueroa et al. Hood entry-loss relationship for local exhaust systems.) Tj ET
+BT /F1 8.2 Tf 0.100 0.130 0.170 rg 48.0 425.0 Td (6. Donaldson. Differential pressure in dust collectors.) Tj ET
+0.960 0.980 1.000 rg 0.100 0.350 0.600 RG 1.1 w 48 359.0 499 53 re B
+BT /F2 9 Tf 0.100 0.350 0.600 rg 60.0 394.0 Td (Submission note) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 378.0 Td (This document intentionally separates observed drawing intent from assumed numerical) Tj ET
+BT /F1 8.3 Tf 0.100 0.130 0.170 rg 60.0 367.0 Td (inputs. That distinction is essential to a defensible engineering calculation.) Tj ET
+0.750 0.800 0.850 RG 0.5 w 48 36.0 m 547 36.0 l S
+BT /F1 6.8 Tf 0.360 0.410 0.470 rg 48.0 21.0 Td (Assumption-based preliminary design | Verify dimensions and fan curve before procurement) Tj ET
+BT /F2 7 Tf 0.360 0.410 0.470 rg 512.0 21.0 Td (16 / 16) Tj ET
+endstream
+endobj
+xref
+0 39
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000220 00000 n 
+0000000290 00000 n 
+0000000365 00000 n 
+0000000437 00000 n 
+0000000505 00000 n 
+0000000661 00000 n 
+0000002487 00000 n 
+0000002644 00000 n 
+0000008619 00000 n 
+0000008777 00000 n 
+0000013638 00000 n 
+0000013796 00000 n 
+0000022030 00000 n 
+0000022188 00000 n 
+0000024939 00000 n 
+0000025097 00000 n 
+0000041822 00000 n 
+0000041980 00000 n 
+0000048150 00000 n 
+0000048308 00000 n 
+0000065034 00000 n 
+0000065192 00000 n 
+0000071363 00000 n 
+0000071521 00000 n 
+0000091343 00000 n 
+0000091501 00000 n 
+0000098886 00000 n 
+0000099044 00000 n 
+0000103204 00000 n 
+0000103362 00000 n 
+0000111543 00000 n 
+0000111701 00000 n 
+0000119357 00000 n 
+0000119515 00000 n 
+0000131155 00000 n 
+0000131313 00000 n 
+trailer
+<< /Size 39 /Root 1 0 R >>
+startxref
+135181
+%%EOF
